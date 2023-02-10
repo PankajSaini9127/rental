@@ -1,10 +1,10 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Dashboard from './Components/Dashboard'
-import Listing from './Components/Listing'
 
 //components
+import Dashboard from './Components/Dashboard'
 import Login from './Components/Login'
+import Listing from './Components/Listing'
 
 function Router() {
   return (
