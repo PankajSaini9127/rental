@@ -36,10 +36,6 @@ export default function Login() {
 
   return (
     <>
-      {/* <Grid
-        container
-        sx={{ justifyContent: "center", alignItems: "center", height: "100vh" }}
-      > */}
       <Grid item container sx={{ height: "100vh", border: "1px solid red" }}>
         <Grid
           item
@@ -77,7 +73,7 @@ export default function Login() {
           sx={{ justifyContent: "center", alignItems: "center" }}
         >
           <Grid item xs={7}>
-            <Typography variant="body1" fontSize="55px" lineHeight="80px">
+            <Typography variant="body1" fontSize="55px" lineHeight="80px"  color="#03C1F3">
               Hello,
             </Typography>
             <Typography
@@ -96,9 +92,7 @@ export default function Login() {
                     <FormLabel>
                       <Typography
                         variant="body1"
-                        value={username}
-                        name="username"
-                        onChange={handleChange}
+                       
                       >
                         Username/Email
                       </Typography>
@@ -106,6 +100,9 @@ export default function Login() {
                     <TextField
                       variant="outlined"
                       placeholder="Enter Username/Email"
+                      value={username}
+                      name="username"
+                      onChange={handleChange}
                     />
                   </FormControl>
                 </Grid>
@@ -114,15 +111,16 @@ export default function Login() {
                   <FormControl fullWidth>
                     <FormLabel>
                       <Typography
-                        variant="body1"
-                        value={password}
-                        name="password"
-                        onChange={handleChange}
-                      >
+                        variant="body1"                      >
                         Password
                       </Typography>
                     </FormLabel>
-                    <TextField variant="outlined" placeholder="********" />
+                    <TextField 
+                       variant="outlined"
+                       placeholder="********" 
+                        value={password}
+                        name="password"
+                        onChange={handleChange}/>
                   </FormControl>
                 </Grid>
 
@@ -155,7 +153,6 @@ export default function Login() {
           </Grid>
         </Grid>
       </Grid>
-      {/* </Grid> */}
     </>
   );
 }

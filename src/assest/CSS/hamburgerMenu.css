@@ -1,0 +1,17 @@
+.HeroSectionMenu{
+   margin-right: 35px;
+}
+
+.menuItem{
+    text-align: center;
+    font-weight: 500;
+    line-height: 24px;
+    font-size: 18px;
+    position: absolute;
+    top: 24%;
+    left: 25%;
+  }
+
+.ActiveMenu{
+  background-color: white !important;
+}  
