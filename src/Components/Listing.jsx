@@ -49,7 +49,7 @@ function Listing() {
         </Typography>
         </Grid>
 
-        <Grid xs={6} sx={{ minWidth: "100px" }}>
+        <Grid xs={6} md={2}>
           <FormControl fullWidth>
             <Select
               labelId="demo-simple-select-label"
