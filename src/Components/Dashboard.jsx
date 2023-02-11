@@ -10,7 +10,7 @@ import HamburgerMenu from "./HamburgerMenu";
 function Dashboard() {
   const Item = ({ service, value }) => {
     return (
-      <Grid item md={4}>
+      <Grid item md={4} xs={6}>
         <Grid
           container
           sx={{
@@ -30,6 +30,7 @@ function Dashboard() {
               textAlign="center"
               fontWeight="600"
               lineHeight="65px"
+              sx={{'@media(max-width:600px)':{fontSize:"40px"}}}
             >
               {value}
             </Typography>
@@ -39,6 +40,7 @@ function Dashboard() {
               color="white"
               textAlign="center"
               mt="-10px"
+              sx={{'@media(max-width:600px)':{fontSize:"12px"}}}
             >
               {service}
             </Typography>
@@ -60,6 +62,7 @@ function Dashboard() {
         lineHeight="48px" 
         color="#03C1F3"
         ml="55px"
+        sx={{'@media(max-width:600px)':{fontSize:"25px",ml:'40px'}}}
       >
         Dashboard
       </Typography>
@@ -69,7 +72,7 @@ function Dashboard() {
        <HamburgerMenu/>
 
         {/* dashboard content */}
-          <Grid container spacing={4} sx={{ pl: 3, pr: 1 }}>
+          <Grid container spacing={2} sx={{ pl: 2, pr: 1 }}>
             <Item service="Total Agreement" value="10" />
             <Item service="Pending Approval" value="5" />
             <Item service="Approved Agreement" value="5" />

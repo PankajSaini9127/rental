@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
 import {
+  Alert,
   Button,
   FormControl,
   FormLabel,
@@ -9,16 +9,19 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Img from "../assest/pic/login-form.png";
 import logo from "../assest/pic/logo1 1.png";
 
 export default function Login() {
-  const textField = {
-    borderRadious: "35px",
-  };
+  const navigate = useNavigate();
+
+  const data = { username: "Bitwit", password: "Bitwit" };
 
   const [formValue, setFormValue] = useState({ username: "", password: "" });
+
+  const [err, setErr] = useState(false);
 
   const { password, username } = formValue;
 
@@ -31,20 +34,32 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formValue);
+    if (
+      formValue.username === data.username &&
+      formValue.password === data.password
+    ) {
+      setErr(false);
+      navigate("/dashboard");
+    } else {
+      setErr(true);
+    }
   };
 
   return (
     <>
-      <Grid item container sx={{ height: "100vh", border: "1px solid red" }}>
+      <Grid container sx={{ height: "100vh" }}>
         <Grid
           item
           md={6}
+          xs={12}
           sx={{
             height: "100%",
             background: `url(${Img})`,
             backgroundSize: "100% 100%",
             position: "relative",
+            "@media(max-width:600px)": {
+              height: "45vh !important",
+            },
           }}
         >
           <Grid
@@ -72,8 +87,14 @@ export default function Login() {
           md={6}
           sx={{ justifyContent: "center", alignItems: "center" }}
         >
-          <Grid item xs={7}>
-            <Typography variant="body1" fontSize="55px" lineHeight="80px"  color="#03C1F3">
+          <Grid item md={7} xs={11} sx={{'@media(max-width:600px)':{mb:1}}}>
+            <Typography
+              variant="body1"
+              fontSize="55px"
+              lineHeight="80px"
+              color="#03C1F3"
+              sx={{ "@media(max-width:600px)": { textAlign: "center" } }}
+            >
               Hello,
             </Typography>
             <Typography
@@ -81,21 +102,21 @@ export default function Login() {
               fontSize="16px"
               lineHeight="24px"
               color="#C8C8C8"
+              sx={{'@media(max-width:600px)':{
+                textAlign:"center"
+              }}}
             >
               Enter Your Details To Process Further
             </Typography>
 
             <Box component="form" sx={{ mt: 2 }} onSubmit={handleSubmit}>
+              {err ? <Alert severity="error">Invalid Credentials !</Alert> : ""}
+
               <Grid container sx={{ justifyContent: "center" }} spacing={1}>
                 <Grid item xs={12}>
                   <FormControl sx={{ my: 1 }} fullWidth>
                     <FormLabel>
-                      <Typography
-                        variant="body1"
-                       
-                      >
-                        Username/Email
-                      </Typography>
+                      <Typography variant="body1">Username/Email</Typography>
                     </FormLabel>
                     <TextField
                       variant="outlined"
@@ -110,21 +131,20 @@ export default function Login() {
                 <Grid item xs={12}>
                   <FormControl fullWidth>
                     <FormLabel>
-                      <Typography
-                        variant="body1"                      >
-                        Password
-                      </Typography>
+                      <Typography variant="body1">Password</Typography>
                     </FormLabel>
-                    <TextField 
-                       variant="outlined"
-                       placeholder="********" 
-                        value={password}
-                        name="password"
-                        onChange={handleChange}/>
+                    <TextField
+                      type="password"
+                      variant="outlined"
+                      placeholder="********"
+                      value={password}
+                      name="password"
+                      onChange={handleChange}
+                    />
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={3} sx={{ mt: 2 }}>
+                <Grid item xs={6} sx={{ mt: 2 }}>
                   <Button
                     type="submit"
                     variant="contained"
@@ -136,6 +156,7 @@ export default function Login() {
                       fontSize: "25px",
                       lineHeight: "37px",
                       color: "white",
+                      '@media(max-width:600px)':{width:'150px',height:"40px"}
                     }}
                   >
                     <Typography

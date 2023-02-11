@@ -27,13 +27,15 @@ function Listing() {
         lineHeight="48px"
         ml="55px"
         color="#03C1F3"
+        sx={{'@media(max-width:600px)':{ml:"20px",fontSize:"25px",lineHeight:"40px"}}}
       >
         Rental Agreement
       </Typography>
 
       <Divider />
 
-      <Grid container sx={{ px: 2, justifyContent: "space-between", my: 1 }}>
+      <Grid container sx={{ px: 1, justifyContent: "space-between", my: 1 ,alignItems:"center"}}>
+        <Grid item xs={6}>
         <Typography
           variant="body1"
           color="black"
@@ -41,10 +43,13 @@ function Listing() {
           fontWeight="600"
           alignSelf="center"
           lineHeight="30px"
+          sx={{'@media(max-width:600px)':{fontSize:"17px",lineHeight:"25px"}}}
         >
           Rental Agreement
         </Typography>
-        <Box sx={{ minWidth: "100px" }}>
+        </Grid>
+
+        <Grid xs={6} sx={{ minWidth: "100px" }}>
           <FormControl fullWidth>
             <Select
               labelId="demo-simple-select-label"
@@ -59,11 +64,12 @@ function Listing() {
               <MenuItem value={30}>Thirty</MenuItem>
             </Select>
           </FormControl>
-        </Box>
+        </Grid>
       </Grid>
       <Divider />
 
-      <Grid container sx={{ justifyContent: "space-between", p: 4 }}>
+      <Grid container sx={{ justifyContent: "space-between", p: 4, '@media(max-width:600px)':{p:2} }}> 
+        <Grid item xs={7}>
         <TextField
           placeholder="Search By Field Name..."
           InputProps={{
@@ -75,6 +81,7 @@ function Listing() {
           }}
           size="small"
         />
+         </Grid>
 
         <Button
           variant="contained"
