@@ -8,9 +8,12 @@ import "../assest/CSS/dashboard.css";
 import HamburgerMenu from "./HamburgerMenu";
 
 function Dashboard() {
+
+
+
   const Item = ({ service, value }) => {
     return (
-      <Grid item md={4} xs={6}>
+      <Grid item sx={{width:"250px"}}>
         <Grid
           container
           sx={{
@@ -66,13 +69,15 @@ function Dashboard() {
       >
         Dashboard
       </Typography>
-      <Stack sx={{flexDirection:"row"}}>
 
 
-       <HamburgerMenu/>
+      <Stack sx={{flexWrap:"noWrap",flexDirection:"row" }}>
+
+
+       <HamburgerMenu />
 
         {/* dashboard content */}
-          <Grid container spacing={2} sx={{ pl: 2, pr: 1 }}>
+          <Grid container spacing={2} sx={{ pl: 2, pr: 1}}>
             <Item service="Total Agreement" value="10" />
             <Item service="Pending Approval" value="5" />
             <Item service="Approved Agreement" value="5" />

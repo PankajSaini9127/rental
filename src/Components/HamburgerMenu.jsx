@@ -205,9 +205,10 @@ function HamburgerMenu() {
               </Box>
             </>
           ) : (
-            <>
+            <Stack container spacing={2} >
               {/* onclick */}
               <Grid
+              item
                 className="ActiveMenu"
                 sx={{
                   height: "50px",
@@ -248,12 +249,13 @@ function HamburgerMenu() {
                     stroke-linejoin="round"
                   />
                 </svg>
-                <Typography variant="body1" className="menuItem">
+                <Typography variant="body1" className="menuItem" >
                   New Agreement
                 </Typography>
               </Grid>
 
               <Grid
+              item
                 className="ActiveMenu"
                 sx={{
                   height: "50px",
@@ -333,13 +335,14 @@ function HamburgerMenu() {
                     stroke-linejoin="round"
                   />
                 </svg>
-                <Typography variant="body1" className="menuItem">
+                <Typography variant="body1" className="menuItem" >
                   Monthly Payments
                 </Typography>
               </Grid>
 
               {/* onclick */}
               <Grid
+              item
                 className="ActiveMenu"
                 sx={{
                   height: "50px",
@@ -384,7 +387,7 @@ function HamburgerMenu() {
                   Renewal
                 </Typography>
               </Grid>
-            </>
+            </Stack>
           )}
         </Stack>
       </Grid>

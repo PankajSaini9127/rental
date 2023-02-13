@@ -8,6 +8,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -17,9 +18,17 @@ import SearchIcon from "@mui/icons-material/Search";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DataTable from "./DataTable";
 
+import HamburgerMenu from './HamburgerMenu'
+
 function Listing() {
   return (
     <>
+    <Stack sx={{flexWrap:"wap",flexDirection:"row"}}>
+
+      <HamburgerMenu/>
+
+    <Box sx={{ flexGrow: 1 }}>
+
       <Typography
         variant="body1"
         fontSize="31px"
@@ -60,7 +69,7 @@ function Listing() {
               sx={{ border: "1px solid #CACACA" }}
             >
               <MenuItem value={10}>New Agreement</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={20}>50</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
             </Select>
           </FormControl>
@@ -98,7 +107,12 @@ function Listing() {
 
       {/* //table */}
 
+      
      <DataTable/>
+     </Box>
+
+     </Stack>
+
 
     </>
   );

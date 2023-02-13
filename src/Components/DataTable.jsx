@@ -198,18 +198,29 @@ function DataTable() {
         "& .dataGridHeader": {
           color: "#CACACA",
         },
-        "& .statusCell": {
-          color: "#41CF2A",
-        },
         "& .green": {
-          color: "green",
+         backgroundColor: "#E7FFE9",
+         color:"#41CF2A"
         },
         "& .yellow": {
-          color: "yellow",
+          backgroundColor: "#FEFFC8",
+          color:"#C5C05B"
         },
         "& .red": {
-          color: "red",
+          backgroundColor: "#FFEBE7",
+          color:"#CF482A"
         },
+        "& .statusCell":{
+          maxWidth:"92px !important",
+          minWidth:"92px !important",
+          maxHeight:"30px !important",
+          minHeight:"25px !important",
+          alignSelf:"center",
+          mx:"20px !important",
+          textAlign:"center !important",
+          borderRadius:"10px !important"
+        }
+
       }}
     >
       <DataGrid
@@ -218,20 +229,21 @@ function DataTable() {
         pageSize={6}
         rowsPerPageOptions={[6]}
         checkboxSelection
-        sx={{ color: "black !important" }}
+        sx={{ color: "black !important",  minWidth:"50px" }}
         getCellClassName={(parms) => {
+         
           if (parms.field === "status" && parms.row.status === "Approved") {
-            return "green";
+            return "green statusCell";
           } else if (
             parms.field === "status" &&
             parms.row.status === "Pending"
           ) {
-            return "yellow";
+            return "yellow statusCell";
           } else if (
             parms.field === "status" &&
             parms.row.status === "Rejected"
           ) {
-            return "red";
+            return "red statusCell";
           }
         }}
       />

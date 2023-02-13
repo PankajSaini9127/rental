@@ -17,7 +17,7 @@ import logo from "../assest/pic/logo1 1.png";
 export default function Login() {
   const navigate = useNavigate();
 
-  const data = { username: "Bitwit", password: "Bitwit" };
+  const data = { username: "bitwit", password: "Bitwit" };
 
   const [formValue, setFormValue] = useState({ username: "", password: "" });
 
@@ -33,9 +33,10 @@ export default function Login() {
   };
 
   const handleSubmit = (e) => {
+    
     e.preventDefault();
     if (
-      formValue.username === data.username &&
+      formValue.username.toLowerCase() === data.username &&
       formValue.password === data.password
     ) {
       setErr(false);
@@ -57,7 +58,7 @@ export default function Login() {
             background: `url(${Img})`,
             backgroundSize: "100% 100%",
             position: "relative",
-            "@media(max-width:600px)": {
+            "@media(max-width:900px)": {
               height: "45vh !important",
             },
           }}
@@ -87,13 +88,13 @@ export default function Login() {
           md={6}
           sx={{ justifyContent: "center", alignItems: "center" }}
         >
-          <Grid item md={7} xs={11} sx={{'@media(max-width:600px)':{mb:1}}}>
+          <Grid item md={7} xs={11} sx={{'@media(max-width:900px)':{mb:1}}}>
             <Typography
               variant="body1"
               fontSize="55px"
               lineHeight="80px"
               color="#03C1F3"
-              sx={{ "@media(max-width:600px)": { textAlign: "center" } }}
+              sx={{ "@media(max-width:900px)": { textAlign: "center" } }}
             >
               Hello,
             </Typography>
@@ -102,7 +103,7 @@ export default function Login() {
               fontSize="16px"
               lineHeight="24px"
               color="#C8C8C8"
-              sx={{'@media(max-width:600px)':{
+              sx={{'@media(max-width:900px)':{
                 textAlign:"center"
               }}}
             >
@@ -156,7 +157,7 @@ export default function Login() {
                       fontSize: "25px",
                       lineHeight: "37px",
                       color: "white",
-                      '@media(max-width:600px)':{width:'150px',height:"40px"}
+                      '@media(max-width:900px)':{width:'150px',height:"40px"}
                     }}
                   >
                     <Typography
