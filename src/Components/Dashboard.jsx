@@ -1,11 +1,12 @@
-import { Box, Grid, Stack, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { Grid, Stack, Typography } from "@mui/material";
+import React from "react";
 
 //css
 import "../assest/CSS/dashboard.css";
 
 
 import HamburgerMenu from "./HamburgerMenu";
+import { MyHeader } from "./StyledComponent";
 
 function Dashboard() {
 
@@ -58,18 +59,7 @@ function Dashboard() {
 
   return (
     <>
-      <Typography
-        variant="body1"
-        fontSize="31px"
-        fontWeight="700"
-        lineHeight="48px" 
-        color="#03C1F3"
-        ml="55px"
-        sx={{'@media(max-width:600px)':{fontSize:"25px",ml:'40px'}}}
-      >
-        Dashboard
-      </Typography>
-
+<MyHeader>Dashboard</MyHeader>
 
       <Stack sx={{flexWrap:"noWrap",flexDirection:"row" }}>
 

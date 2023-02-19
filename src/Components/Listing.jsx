@@ -19,6 +19,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DataTable from "./DataTable";
 
 import HamburgerMenu from './HamburgerMenu'
+import { MyHeader } from "./StyledComponent";
 
 function Listing() {
   return (
@@ -29,17 +30,9 @@ function Listing() {
 
     <Box sx={{ flexGrow: 1 }}>
 
-      <Typography
-        variant="body1"
-        fontSize="31px"
-        fontWeight="700"
-        lineHeight="48px"
-        ml="55px"
-        color="#03C1F3"
-        sx={{'@media(max-width:600px)':{ml:"20px",fontSize:"25px",lineHeight:"40px"}}}
-      >
-        Rental Agreement
-      </Typography>
+      <MyHeader>Rental Agreement</MyHeader>
+        
+      
 
       <Divider />
 
@@ -101,7 +94,7 @@ function Listing() {
           }}
           startIcon={<UploadFileIcon />}
         >
-          Upload
+   Upload
         </Button>
       </Grid>
 
