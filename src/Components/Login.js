@@ -68,14 +68,14 @@ export default function Login() {
             sx={{ justifyContent: "center", alignItems: "center" }}
             className="loginOverlay"
           >
-            <Grid item sm={6}>
+            <Grid item sx={{justifyContent:"center"}}>
               <Box component="img" src={logo} height="180px" />
               <Typography
                 variant="body1"
                 color="white"
                 textAlign="center"
                 mt="-25px"
-                ml="-122px"
+                sx={{}}
               >
                 Rental Portal
               </Typography>
