@@ -120,8 +120,8 @@ function DialogBox() {
           spacing={4}
         >
           <TextFieldWrapper
-            label="Enter No of Landblord"
-            placeHolder="Enter No of Landblord"
+            label="Enter No of Landlord"
+            placeHolder="Enter No of Landlord"
             width="430px"
             name={"landblord"}
             onChange={handleChange}

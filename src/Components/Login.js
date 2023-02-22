@@ -75,6 +75,7 @@ export default function Login() {
                 color="white"
                 textAlign="center"
                 mt="-25px"
+                ml="-122px"
               >
                 Rental Portal
               </Typography>
