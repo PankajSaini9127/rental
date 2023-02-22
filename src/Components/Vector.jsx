@@ -1,15 +1,27 @@
 import { Box } from "@mui/material"
 
-const Vector1 = ({expand})=>{
+const vectorStyle={
+  backgroundColor:"#FFFFFF",
+  borderRadius:"20px",
+    height: "50px",
+    width: "50px",
+    backgroundSize: "cover",
+    position: "relative",
+  
+}
+
+const Vector1 = ()=>{
     return(
-        <Box>
+      <Box
+      sx={vectorStyle}
+    >
              <svg
                   width="17"
                   height="17"
                   viewBox="0 0 17 17"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className={expand ? "vectorActive" : "vector"}
+                  className={"vector"}
                 >
                   <path
                     d="M15.5 15.5H8.5C3.25 15.5 1.5 13.75 1.5 8.5V1.5L15.5 15.5Z"
@@ -25,7 +37,7 @@ const Vector1 = ({expand})=>{
                   viewBox="0 0 38 38"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  className={expand ? "vectorActive1" : "vector1"}
+                  className={"vector1"}
                 >
                   <path
                     d="M36.5 15.5V24.25C36.5 33 33 36.5 24.25 36.5H13.75C5 36.5 1.5 33 1.5 24.25V13.75C1.5 5 5 1.5 13.75 1.5H22.5"
@@ -36,17 +48,20 @@ const Vector1 = ({expand})=>{
                   />
                 </svg>
         </Box>
+
     )
 }
 
 
-const Vector2 = ({expand})=>{
+const Vector2 = ()=>{
     return(
-        <Box>
+      <Box
+      sx={vectorStyle}
+    >
         <svg
                   width="38"
                   height="30"
-                  className={expand ? "vectorActive21" : "vector21"}
+                  className={ "vector21"}
                   viewBox="0 0 38 30"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
@@ -62,7 +77,7 @@ const Vector2 = ({expand})=>{
                 </svg>
                 <svg
                   width="32"
-                  className={expand ? "vectorActive22" : "vector22"}
+                  className={"vector22"}
                   height="18"
                   viewBox="0 0 32 18"
                   fill="none"
@@ -79,7 +94,7 @@ const Vector2 = ({expand})=>{
                 </svg>
                 <svg
                   width="14"
-                  className={expand ? "vectorActive23" : "vector23"}
+                  className={"vector23"}
                   height="14"
                   viewBox="0 0 14 14"
                   fill="none"
@@ -96,7 +111,7 @@ const Vector2 = ({expand})=>{
                 </svg>
                 <svg
                   width="5"
-                  className={expand ? "vectorActive24" : "vector24"}
+                  className={"vector24"}
                   height="7"
                   viewBox="0 0 5 7"
                   fill="none"
@@ -116,11 +131,13 @@ const Vector2 = ({expand})=>{
 }
 
 
-const Vector3 = ({expand})=>{
+const Vector3 = ()=>{
     return(
-        <Box>
+        <Box
+        sx={vectorStyle}
+        >
              <svg
-                  className={expand ? "vectorActive31" : "vector31"}
+                  className={"vector31"}
                   width="38"
                   height="38"
                   viewBox="0 0 38 38"
@@ -136,7 +153,7 @@ const Vector3 = ({expand})=>{
                   />
                 </svg>
                 <svg
-                  className={expand ? "vectorActive32" : "vector32"}
+                  className={"vector32"}
                   width="22"
                   height="22"
                   viewBox="0 0 22 22"

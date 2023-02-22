@@ -18,19 +18,34 @@ const NavExpand = ({msg, navigateTO,Vector})=>{
   return(
     <Grid
     item
+    container
+    
       className="ActiveMenu"
       sx={{
         height: "50px",
         width: "250px",
         borderRadius: "18px",
         position: "relative",
+        flexDirection:"row",
+        alignItems:"center",
       }}
       onClick={() => {
         navigate(`/${navigateTO}`);
       }}
     >
-     <Vector expand={expand}/>
-      <Typography variant="body1" color="#03C1F3" className="menuItem" >
+
+     <Box sx={{width:"50px"}}><Vector/></Box>
+
+      <Typography variant="body1" component={'span'} color="#03C1F3" className="menuItem"
+      sx={{
+        textAlign: "center",
+    fontWeight: "500",
+    lineHeight: "24px",
+    fontSize: "18px",
+    '@media(ma-width:900px)':{fontSize:"8px",lineHeight:"10px"}
+        
+      }}
+      >
        {msg}
       </Typography>
     </Grid>
@@ -39,17 +54,8 @@ const NavExpand = ({msg, navigateTO,Vector})=>{
 
 const NavItem = ({Vector})=>{
   return(
-    <Box
-                sx={{
-                  background: `url(${Rectangle})`,
-                  height: "50px",
-                  width: "50px",
-                  backgroundSize: "cover",
-                  position: "relative",
-                }}
-              >
-                <Vector expand={expand}/>
-          </Box>
+   
+                <Vector />
   )
 }
 
@@ -57,7 +63,7 @@ const NavItem = ({Vector})=>{
     <>
       {/* hambergur menu  */}
       <Grid
-        sx={{ ml: "15px", minWidth: "50px" }}
+        sx={{ ml: "15px"}}
         className={expand ? "HeroSectionMenu" : ""}
         onMouseEnter={() => setExpand(true)}
         onMouseLeave={() => {
@@ -85,8 +91,8 @@ const NavItem = ({Vector})=>{
             <Stack container  spacing={2} >
               {/* onclick */}
              
-             <NavExpand msg="New Agreement" navigateTO="newAgreement" Vector={Vector1}/>
-             <NavExpand msg="Monthly Payments " navigateTO="listing" Vector={Vector2}/>
+             <NavExpand msg="New Agreement" navigateTO="newAgreement" Vector={Vector1} NavItem={NavItem}/>
+             <NavExpand msg="Monthly Payments" navigateTO="listing" Vector={Vector2}/>
              <NavExpand msg="Renewal" Vector={Vector3}/>
 
             </Stack>

@@ -68,7 +68,7 @@ export default function Login() {
             sx={{ justifyContent: "center", alignItems: "center" }}
             className="loginOverlay"
           >
-            <Grid>
+            <Grid item sm={6}>
               <Box component="img" src={logo} height="180px" />
               <Typography
                 variant="body1"
@@ -85,7 +85,7 @@ export default function Login() {
         <Grid
           item
           container
-          md={6}
+          sm={6}
           sx={{ justifyContent: "center", alignItems: "center" }}
         >
           <Grid item md={7} xs={11} sx={{'@media(max-width:900px)':{mb:1}}}>
@@ -145,7 +145,7 @@ export default function Login() {
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={6} sx={{ mt: 2 }}>
+                <Grid item xs={3} sx={{ mt: 2 }}>
                   <Button
                     type="submit"
                     variant="contained"

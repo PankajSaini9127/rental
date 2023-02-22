@@ -14,16 +14,17 @@ function Dashboard() {
 
   const Item = ({ service, value }) => {
     return (
-      <Grid item sx={{width:"250px"}}>
+      <Grid item md={3.5} container sx={{justifyContent:"space-evenly"}}>
         <Grid
           container
           sx={{
-            height: "150px",
-            width: "100%",
+            height: "181px",
+            // maxWidth:"356px",
             backgroundColor: "#03C1F3",
             borderRadius: "20px",
             justifyContent: "center",
             alignItems: "center",
+            boxShadow:"0px 10px 10px rgba(0, 0, 0, 0.25);"
           }}
         >
           <Grid item>
@@ -67,7 +68,7 @@ function Dashboard() {
        <HamburgerMenu />
 
         {/* dashboard content */}
-          <Grid container spacing={2} sx={{ pl: 2, pr: 1}}>
+          <Grid container spacing={3} sx={{ pl: 2, pr: 1,backgroundColor:"#FFFFF"}} >
             <Item service="Total Agreement" value="10" />
             <Item service="Pending Approval" value="5" />
             <Item service="Approved Agreement" value="5" />

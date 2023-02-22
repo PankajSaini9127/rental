@@ -1,7 +1,5 @@
 import {
   Dialog,
-  DialogContent,
-  DialogActions,
   FormControl,
   FormLabel,
   Grid,
@@ -65,19 +63,26 @@ const TextFieldWrapper = ({
   );
 };
 
-
-const Landblord = ()=>{
-  return(<>
-   <Grid item md={10} container sx={{ justifyContent: "space-evenly" }}>
-            <Grid item md={6}>
-              <TextFieldWrapper label={'Name of Landblord'} placeHolder={'Name of Landblord'}/>
-            </Grid>
-            <Grid item md={6}>
-              <TextFieldWrapper label={'Percentage Share%'} placeHolder={'Percentage Share%'}/>
-            </Grid>
-          </Grid>
-  </>)
-}
+const Landblord = () => {
+  return (
+    <>
+      <Grid item md={10} container sx={{ justifyContent: "space-evenly" }}>
+        <Grid item md={6}>
+          <TextFieldWrapper
+            label={"Name of Landblord"}
+            placeHolder={"Name of Landblord"}
+          />
+        </Grid>
+        <Grid item md={6}>
+          <TextFieldWrapper
+            label={"Percentage Share%"}
+            placeHolder={"Percentage Share%"}
+          />
+        </Grid>
+      </Grid>
+    </>
+  );
+};
 
 function DialogBox() {
   const [open, setOpen] = useState(true);
@@ -87,16 +92,20 @@ function DialogBox() {
     setOpen(false);
   };
 
-
-  const handleChange = (e)=>{
-    setValue(e.target.value)
-    console.log(value)
-  }
+  const handleChange = (e) => {
+    setValue(e.target.value);
+    console.log(value);
+  };
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose}>
-        
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        PaperProps={{
+          style: { borderRadius: 18 },
+        }}
+      >
         <Grid
           container
           sx={{
@@ -114,21 +123,41 @@ function DialogBox() {
             label="Enter No of Landblord"
             placeHolder="Enter No of Landblord"
             width="430px"
-            name={'landblord'}
+            name={"landblord"}
             onChange={handleChange}
           />
 
-         {
-          value > 0 ?<>
-            {Array.from({ length: value }, (_, i) => <Landblord key={i}/>)}
-          </>:""
-         }
-         {
-          value > 0 ? <Grid item xs={4}>
-           <Button variant='contained' onClick={handleClose} sx={{backgroundColor:"#03C1F3",height:"50px",width:"150px",borderRadius:"20px"}}>Submit</Button>
-           </Grid>
-           :""
-         }
+          {value > 0 ? (
+            <>
+              {Array.from({ length: value }, (_, i) => (
+                <Landblord key={i} />
+              ))}
+            </>
+          ) : (
+            ""
+          )}
+          {value > 0 ? (
+            <Grid item xs={4}>
+              <Button
+                variant="contained"
+                onClick={handleClose}
+                sx={{
+                  backgroundColor: "#03C1F3",
+                  height: "50px",
+                  width: "150px",
+                  borderRadius: "20px",
+                  fontSize:"20px",
+                  color:"#FFFFFF",
+                  lineHeight:"38px",
+                  textTransform:"capitalize"
+                }}
+              >
+                Submit
+              </Button>
+            </Grid>
+          ) : (
+            ""
+          )}
         </Grid>
       </Dialog>
     </>

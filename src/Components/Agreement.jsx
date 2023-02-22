@@ -1,17 +1,34 @@
+import React,{ useState } from "react";
+
+// MUI Components
 import {
   Box,
   Button,
+  Container,
   Grid,
   Typography,
+  Stack
 } from "@mui/material";
-import { Stack} from "@mui/system";
-import React from "react";
-import { useState } from "react";
-import DialogBox from "./DialogBox";
+
+
+// Custom Style Component
+
+import { 
+  DocumentUpload, 
+  MyHeader, 
+  SelectComponent,
+  TextFieldWrapper 
+} from "./StyledComponent";
+
+
+// Components
+
 import HamburgerMenu from "./HamburgerMenu";
 import YearlyIncrement from "./IncrementType";
-import { DocumentUpload, MyHeader, SelectComponent } from "./StyledComponent";
-import {TextFieldWrapper} from './StyledComponent'
+import DialogBox from "./DialogBox";
+
+
+// form initial state
 
 const initialState={
   leeseName:"",
@@ -42,14 +59,22 @@ const initialState={
 
 
 function Agreement() {
+
+  // state management form
+
 const [Value, setValue] = useState(initialState)
 
+
+// on field state change
  const handleChange = (e)=>{
   setValue({
     ...Value,
     [e.target.name]:e.target.value
   })
 }
+
+
+// on form submit
 
 const handleSubmit =(e)=>{
   e.preventDefault()
@@ -58,13 +83,21 @@ const handleSubmit =(e)=>{
 
   return (
     <>
+
+    {/* dialog box ( popup box ) */}
     <DialogBox/>
+
+
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
+
+    {/* side nav     */}
         <HamburgerMenu />
 
         <Box sx={{flexGrow:1}}>
           <MyHeader>New Agreement</MyHeader>
 
+
+     {/* agreement form start here */}
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -76,7 +109,11 @@ const handleSubmit =(e)=>{
               maxWidth:"1050px"
             }}
           >
-              <Grid container sx={{px:3 }} spacing={4}>
+            <Container>
+
+{/* Basic details start here */}
+
+              <Grid container sx={{px:3, justifyContent:"space-evenly" }} spacing={4}>
                 <TextFieldWrapper
                   label="Code"
                   placeHolder=""
@@ -190,11 +227,15 @@ const handleSubmit =(e)=>{
                 onChange={e=>handleChange(e)}
                 />
               </Grid>
+
+              {/* basic details end here */}
    
            {/* Increment Yearly */}
           <YearlyIncrement value={Value.yearlyIncrement}/>
 
-          {/* Bank Details */}
+
+
+          {/* Bank Details start here*/}
             <Typography
               variant="body1"
               color="#03C1F3"
@@ -205,7 +246,7 @@ const handleSubmit =(e)=>{
             >
               Bank Detail
             </Typography>
-              <Grid container sx={{px:3}} spacing={2}>
+              <Grid container sx={{px:3,justifyContent:"space-evenly"}} spacing={2}>
                 <TextFieldWrapper
                   label="Bank Name"
                   placeHolder="Enter Bank Name"
@@ -232,8 +273,15 @@ const handleSubmit =(e)=>{
                 />
               </Grid>
 
-            {/* Document */}
-            <Typography
+              {/* Bank Details ends here*/}
+
+           
+          
+
+          {/* Document upload section start here */}
+
+ {/* Document */}
+ <Typography
               variant="body1"
               color="#03C1F3"
               fontSize="25px"
@@ -243,41 +291,64 @@ const handleSubmit =(e)=>{
             >
               Upload Document
             </Typography>
-          
+
               <Grid
                 container
                 spacing={4}
                 sx={{ px:1, justifyContent:"space-evenly"}}
               >
-                <DocumentUpload label="Upload Aadhar Card" />
+
+                <DocumentUpload 
+                label="Upload Aadhar Card" 
+                placeHolder="Upload Aadhar Card" 
+                />
+
                 <DocumentUpload
                   label="Upload GST Certificate"
                   placeHolder="Upload GST Certificate"
                 />
-                <DocumentUpload label="Upload Pan Card" />
+
+                <DocumentUpload 
+                label="Upload Pan Card" 
+                placeHolder={'Upload Pan Card'}
+                />
                 <DocumentUpload
                   label="Upload Draft Agreement"
                   placeHolder="Upload Draft Agreement"
                 />
-                <DocumentUpload label="Upload Electricity Bill" />
+                <DocumentUpload 
+                label="Upload Electricity Bill" 
+                placeHolder={'Upload Electricity Bill'} 
+                />
+
                 <DocumentUpload
                   label="Upload POA(If Applicable)"
                   placeHolder="Upload POA"
                 />
-                <DocumentUpload label="Upload Maintaince Bill" />
+
+                <DocumentUpload 
+                label="Upload Maintaince Bill" 
+                placeHolder={'Upload Maintaince Bill'}
+                />
+
                 <DocumentUpload
                   label="Upload Cencel Bank Cheque"
                   placeHolder="Upload Cencel Bank Cheque"
                 />
-                <DocumentUpload label="Upload Property Tax Receipt" />
+                <DocumentUpload 
+                label="Upload Property Tax Receipt" 
+                placeHolder={'Upload Property Tax Receipt'}
+                />
                 <DocumentUpload
                   label="Upload Noc(If Mutiple Oweners)"
                   placeHolder="Upload GST Certificate"
                 />
               </Grid>
 
+              {/* Document upload section end here */}
 
-            {/* Button */}
+
+            {/* Button Start from here */}
               <Grid
                 container
                 sx={{ justifyContent: "center" ,mt:2}}
@@ -287,11 +358,11 @@ const handleSubmit =(e)=>{
                 <Button
                   variant="contained"
                   type="submit"
+                  color="primary"
                   sx={{
                     height: "80px",
                     width: "100%",
                     borderRadius: "20px",
-                    backgroundColor: "#03C1F3",
                     fontSize: "20px",
                     color: "#FFFFFF",
                     lineHeight: "32px",
@@ -306,12 +377,12 @@ const handleSubmit =(e)=>{
                 <Grid item md={4} xs={8}>
                 <Button
                   variant="outlined"
+                  color="primary"
                   sx={{
                     height: "80px",
                     width: "100%",
                     borderRadius: "20px",
                     fontSize: "20px",
-                    color: "#03C1F3",
                     lineHeight: "32px",
                     textTransform: "capitalize",
                     '@media(max-width:900px)':{fontSize:"10px",lineHeight:"20px",height:"40px"}
@@ -322,7 +393,13 @@ const handleSubmit =(e)=>{
                 </Grid>
             </Grid>
 
+            {/* Button Ends Here */}
+
+            </Container>
           </Box>
+
+          {/* agreemenet from end here */}
+
         </Box>
       </Stack>
     </>
