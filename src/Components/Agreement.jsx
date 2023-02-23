@@ -103,7 +103,7 @@ const handleSubmit =(e)=>{
 
 
           <Grid container sx={{ justifyContent: "center" }}>
-          <Grid item xs={12}>
+          <Grid item xs={12} md={10}>
 
      {/* agreement form start here */}
           <Box
