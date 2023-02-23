@@ -89,7 +89,7 @@ export default function Login() {
           sm={6}
           sx={{ justifyContent: "center", alignItems: "center" }}
         >
-          <Grid item md={7} xs={11} sx={{'@media(max-width:900px)':{mb:1}}}>
+          <Grid item md={7} xs={11} sx={{'@media(max-width:900px)':{mb:2}}}>
             <Typography
               variant="body1"
               fontSize="55px"
@@ -146,14 +146,14 @@ export default function Login() {
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={3} sx={{ mt: 2 }}>
+                <Grid item  sx={{ mt: 2 }}>
                   <Button
                     type="submit"
                     variant="contained"
                     sx={{
                       height: "40px",
-                      width: "100px",
-                      background: "#03C1F3",
+                      width: "100%",
+                      background: "primary",
                       borderRadius: "20px",
                       fontSize: "25px",
                       lineHeight: "37px",

@@ -3,7 +3,6 @@ import React, { useState } from "react";
 
 //icons hero section
 import Logo from "../assest/pic/Dashboard/logo1 2.png";
-import Rectangle from "../assest/pic/Dashboard/Rectangle 34.png";
 
 import "../assest/CSS/hamburgerMenu.css";
 import { useNavigate } from "react-router-dom";
@@ -24,10 +23,10 @@ const NavExpand = ({msg, navigateTO,Vector})=>{
       sx={{
         height: "50px",
         width: "250px",
-        borderRadius: "18px",
         position: "relative",
         flexDirection:"row",
         alignItems:"center",
+        '@media(max-width:900px)':{width:'180px'}
       }}
       onClick={() => {
         navigate(`/${navigateTO}`);
@@ -42,7 +41,7 @@ const NavExpand = ({msg, navigateTO,Vector})=>{
     fontWeight: "500",
     lineHeight: "24px",
     fontSize: "18px",
-    '@media(ma-width:900px)':{fontSize:"8px",lineHeight:"10px"}
+    '@media(max-width:900px)':{fontSize:"12px",lineHeight:"15px"}
         
       }}
       >
@@ -63,7 +62,7 @@ const NavItem = ({Vector})=>{
     <>
       {/* hambergur menu  */}
       <Grid
-        sx={{ ml: "15px"}}
+        sx={{ ml: "10px"}}
         className={expand ? "HeroSectionMenu" : ""}
         onMouseEnter={() => setExpand(true)}
         onMouseLeave={() => {

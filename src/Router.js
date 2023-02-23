@@ -6,6 +6,8 @@ import Dashboard from './Components/Dashboard'
 import Login from './Components/Login'
 import Listing from './Components/Listing'
 import Agreement from './Components/Agreement'
+import NewUser from './Components/NewUser'
+import UserDashboard from './Components/UserDashboard'
 
 function Router() {
   return (
@@ -15,6 +17,8 @@ function Router() {
         <Route exact path='/dashboard' element={<Dashboard/>}/>
         <Route exact path='/newAgreement' element={<Agreement/>}/>
         <Route exact path='/listing' element={<Listing/>}/>
+        <Route exact path='/newUser' element={<NewUser/>}/>
+        <Route exact path='/userDashboard' element={<UserDashboard/>}/>
     </Routes>
     </BrowserRouter>
   )

@@ -10,7 +10,8 @@ import {
 import React, { useState } from "react";
 
 const labelStyle = {
-  fontSize: "18px",
+  fontSize: "15px",
+  lineHeight:"30px",
   color: "#03C1F3",
   fontWeight: "600",
   "@media(max-width:900px)": { fontSize: "10px" },
@@ -22,20 +23,21 @@ const TextFieldWrapper = ({
   value,
   name,
   onChange,
-  width,
+  grid
 }) => {
   const fieldStyle = {
     border: "1px solid #03C1F3",
     borderRadius: "20px",
-    height: "66px",
-    width: { width },
-    p: 2,
+    height: "50px",
+    p: 1,
+    px:2,
+    
     color: "rgba(16, 99, 173, 0.47)",
     "@media(max-width:900px)": { height: "46px", p: 1 },
   };
 
   return (
-    <Grid item md={10} xs={10}>
+    <Grid item  xs={grid}>
       {/* <MyTextfield /> */}
       <FormControl>
         <FormLabel>
@@ -51,6 +53,7 @@ const TextFieldWrapper = ({
             disableUnderline: true,
             style: {
               color: "rgba(16, 99, 173, 0.47)",
+              fontSize:"15px",
             },
           }}
           placeholder={placeHolder}
@@ -66,14 +69,14 @@ const TextFieldWrapper = ({
 const Landblord = () => {
   return (
     <>
-      <Grid item md={10} container sx={{ justifyContent: "space-evenly" }}>
-        <Grid item md={6}>
+      <Grid item md={10} xs={11.5} container sx={{ justifyContent: "space-evenly" }} spacing={1}>
+        <Grid item xs={5.5}>
           <TextFieldWrapper
             label={"Name of Landblord"}
             placeHolder={"Name of Landblord"}
           />
         </Grid>
-        <Grid item md={6}>
+        <Grid item xs={5.5}>
           <TextFieldWrapper
             label={"Percentage Share%"}
             placeHolder={"Percentage Share%"}
@@ -110,19 +113,21 @@ function DialogBox() {
           container
           sx={{
             // height: "345px",
-            width: "600px",
+            width: "500px",
             borderRadious: "30px ",
             backgroundColor: "#FFFFFF",
             justifyContent: "center",
             alignItems: "center",
             py: 10,
+            '@media(max-width:900px)':{width:'300px',py:6}
           }}
           spacing={4}
         >
           <TextFieldWrapper
             label="Enter No of Landlord"
             placeHolder="Enter No of Landlord"
-            width="430px"
+            // width="230px"
+            grid='10'
             name={"landblord"}
             onChange={handleChange}
           />
@@ -137,18 +142,18 @@ function DialogBox() {
             ""
           )}
           {value > 0 ? (
-            <Grid item xs={4}>
+            <Grid item md={4} xs={6}>
               <Button
                 variant="contained"
                 onClick={handleClose}
                 sx={{
                   backgroundColor: "#03C1F3",
-                  height: "50px",
-                  width: "150px",
+                  height: "40px",
+                  width: "100%",
                   borderRadius: "20px",
-                  fontSize:"20px",
+                  fontSize:"16px",
                   color:"#FFFFFF",
-                  lineHeight:"38px",
+                  lineHeight:"32px",
                   textTransform:"capitalize"
                 }}
               >

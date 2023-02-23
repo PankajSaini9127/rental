@@ -71,7 +71,7 @@ function Listing() {
       <Divider />
 
       <Grid container sx={{ justifyContent: "space-between", p: 4, '@media(max-width:600px)':{p:2} }}> 
-        <Grid item xs={7}>
+        <Grid item xs={6}>
         <TextField
           placeholder="Search By Field Name..."
           InputProps={{

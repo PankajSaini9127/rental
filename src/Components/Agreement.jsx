@@ -7,7 +7,10 @@ import {
   Container,
   Grid,
   Typography,
-  Stack
+  Stack,
+  useTheme,
+  useMediaQuery,
+  makeStyles
 } from "@mui/material";
 
 
@@ -56,9 +59,11 @@ const initialState={
 }
 
 
-
-
 function Agreement() {
+
+
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
 
   // state management form
 
@@ -97,6 +102,9 @@ const handleSubmit =(e)=>{
           <MyHeader>New Agreement</MyHeader>
 
 
+          <Grid container sx={{ justifyContent: "center" }}>
+          <Grid item xs={12}>
+
      {/* agreement form start here */}
           <Box
             component="form"
@@ -106,14 +114,14 @@ const handleSubmit =(e)=>{
               backgroundColor: "white",
               mx: 3,
               borderRadius: "15px",
-              maxWidth:"1050px"
+              maxWidth:"1050px",
+              '@media(max-width:900px)':{mx:0}
             }}
           >
-            <Container>
 
 {/* Basic details start here */}
 
-              <Grid container sx={{px:3, justifyContent:"space-evenly" }} spacing={4}>
+              <Grid container sx={{px:3, justifyContent:"space-evenly" }} spacing={isSmall? 1 :4}>
                 <TextFieldWrapper
                   label="Code"
                   placeHolder=""
@@ -271,6 +279,8 @@ const handleSubmit =(e)=>{
                   name='ifscCode'
                 onChange={e=>handleChange(e)}
                 />
+                <Grid item md={3.1} sx={{'@media(max-width:900px)':{display:'none'}}}></Grid>
+                <Grid item md={3.1} sx={{'@media(max-width:900px)':{display:'none'}}}></Grid>
               </Grid>
 
               {/* Bank Details ends here*/}
@@ -354,35 +364,35 @@ const handleSubmit =(e)=>{
                 sx={{ justifyContent: "center" ,mt:2}}
                 spacing={4}
               >
-                <Grid item md={4} xs={8}>
+                <Grid item md={3} xs={6}>
                 <Button
                   variant="contained"
                   type="submit"
                   color="primary"
                   sx={{
-                    height: "80px",
+                    height: "60px",
                     width: "100%",
                     borderRadius: "20px",
-                    fontSize: "20px",
+                    fontSize: "16px",
                     color: "#FFFFFF",
                     lineHeight: "32px",
                     textTransform: "capitalize",
-                    '@media(max-width:900px)':{fontSize:"10px",lineHeight:"20px",height:"40px"}
+                    '@media(max-width:900px)':{fontSize:"11px",lineHeight:"12px",height:"40px"}
                   }}
                 >
                   Submit To Sr Manager
                 </Button>
                 </Grid>
 
-                <Grid item md={4} xs={8}>
+                <Grid item md={3} xs={6}>
                 <Button
                   variant="outlined"
                   color="primary"
                   sx={{
-                    height: "80px",
+                    height: "60px",
                     width: "100%",
                     borderRadius: "20px",
-                    fontSize: "20px",
+                    fontSize: "16px",
                     lineHeight: "32px",
                     textTransform: "capitalize",
                     '@media(max-width:900px)':{fontSize:"10px",lineHeight:"20px",height:"40px"}
@@ -395,10 +405,12 @@ const handleSubmit =(e)=>{
 
             {/* Button Ends Here */}
 
-            </Container>
           </Box>
 
           {/* agreemenet from end here */}
+
+          </Grid>
+          </Grid>
 
         </Box>
       </Stack>
