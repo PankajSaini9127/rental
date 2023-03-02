@@ -21,3 +21,140 @@ top: 0px;
 
 background: rgba(0, 140, 194, 0.78);
 }
+
+
+.vector {
+    position: absolute;
+    left: 52.33%;
+    right: 8.33%;
+    top: 9.33%;
+    bottom: 5.33%;
+  }
+  
+  .vectorActive{
+    position: absolute;
+    left:12.33%;
+    right:10.33%;
+    top:10%;
+    bottom: 15%;
+  }
+  
+  .vector1 {
+    position: absolute;
+    left: 8.33%;
+    right: 8.33%;
+    top: 8.33%;
+    bottom: 8.33%;
+  }
+  
+  .vectorActive1{
+    position: absolute;
+    left:3.33%;
+    right:10.33%;
+    top:10%;
+    bottom: 15%;
+  }
+  
+  .vector21 {
+    position: absolute;
+    left: 8.33%;
+    right: 8.33%;
+    top: 16.67%;
+    bottom: 16.67%;
+  }
+  .vectorActive21{
+    position: absolute;
+    left: 3.33%;
+    right: 8.33%;
+    top: 16.67%;
+    bottom: 16.67%;
+  }
+  
+  
+  .vector22 {
+    position: absolute;
+    left: 8.33%;
+    right: 22.92%;
+    top: 34.58%;
+    bottom: 25.25%;
+  }
+  .vectorActive22{
+    
+    position: absolute;
+    left: 3.33%;
+    right: 22.92%;
+    top: 34.58%;
+    bottom: 25.25%;
+  }
+  .vector23 {
+    position: absolute;
+    left: 6.33%;
+    right: 64.58%;
+    top: 52.5%;
+    bottom: 13.42%;
+  }
+  
+  .vectorActive23{
+    position: absolute;
+    left: 3%;
+    right: 64.58%;
+    top: 54.5%;
+    bottom: 13.42%;
+  }
+  
+  .vector24 {
+    position: absolute;
+    left: 27.34%;
+    right: 64.58%;
+    top: 70.5%;
+    bottom: 8.33%;
+  }
+  .vectorActive24{
+    position: absolute;
+    left: 7.34%;
+    right: 64.58%;
+    top: 72.5%;
+    bottom: 8.33%;
+  }
+  
+  .vector31 {
+    position: absolute;
+    left: 11.33%;
+    right: 8.33%;
+    top: 11.33%;
+    bottom: 8.33%;
+  }
+  .vector32 {
+    position: absolute;
+    left: 27.08%;
+    right: 27.08%;
+    top: 27.08%;
+    bottom: 27.08%;
+  }
+  
+  .vectorActive31{
+    position: absolute;
+    left: 3.33%;
+    right: 8.33%;
+    top: 11.33%;
+    bottom: 8.33%;
+  }
+  .vectorActive32{
+    position: absolute;
+    left: 6.08%;
+    right: 27.08%;
+    top: 27.08%;
+    bottom: 27.08%;
+  }
+  
+.logout1{
+    position: absolute;
+     top:7px; 
+   
+}  
+
+.logout2{
+    position: absolute;
+    
+    left:11px;  
+}

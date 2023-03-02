@@ -6,7 +6,7 @@ import Logo from "../../assest/pic/Dashboard/logo1 2.png";
 
 import "../../assest/CSS/hamburgerMenu.css";
 import { useNavigate } from "react-router-dom";
-import { VectorUser } from "../Vector";
+import { VectorLogout, VectorUser } from "../Vector";
 
 function AdminHamburgerMenu() {
   const [expand, setExpand] = useState(false);
@@ -83,14 +83,14 @@ const NavItem = ({Vector})=>{
           {!expand ? (
             <>
               <NavItem Vector={VectorUser}/>
-              <NavItem Vector={VectorUser}/>
+              <NavItem Vector={VectorLogout}/>
               </>
           ) : (
             <Stack container  spacing={2} >
               {/* onclick */}
              
              <NavExpand msg="User" navigateTO="userManagement" Vector={VectorUser} NavItem={NavItem}/>
-             <NavExpand msg="LogOut" navigateTO="" Vector={VectorUser} NavItem={NavItem}/>
+             <NavExpand msg="LogOut" navigateTO="" Vector={VectorLogout} NavItem={NavItem}/>
 
             </Stack>
           )}
