@@ -2,11 +2,10 @@ import { Box, Grid, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 
 //icons hero section
-import Logo from "../assest/pic/Dashboard/logo1 2.png";
+import Logo from "../../assest/pic/Dashboard/logo1 2.png";
 
-import "../assest/CSS/hamburgerMenu.css";
+import "../../assest/CSS/hamburgerMenu.css";
 import { useNavigate } from "react-router-dom";
-import { Vector1, Vector2, Vector3 } from "./Vector";
 import { VectorUser } from "../Vector";
 
 function AdminHamburgerMenu() {
@@ -78,20 +77,20 @@ const NavItem = ({Vector})=>{
               width: "50px",
               backgroundSize: "cover",
             }} 
-            onClick={()=>navigate('/dashboard')}
+            onClick={()=>navigate('/userDashboard')}
           />
 
           {!expand ? (
             <>
               <NavItem Vector={VectorUser}/>
-              <NavItem Vector={''}/>
-            </>
+              <NavItem Vector={VectorUser}/>
+              </>
           ) : (
             <Stack container  spacing={2} >
               {/* onclick */}
              
-             <NavExpand msg="New User" navigateTO="" Vector={VectorUser} NavItem={NavItem}/>
-             <NavExpand msg="LogOut" navigateTO="" Vector={''}/>
+             <NavExpand msg="User" navigateTO="userManagement" Vector={VectorUser} NavItem={NavItem}/>
+             <NavExpand msg="LogOut" navigateTO="" Vector={VectorUser} NavItem={NavItem}/>
 
             </Stack>
           )}

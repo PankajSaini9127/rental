@@ -2,12 +2,13 @@ import { Box, Grid, Stack } from '@mui/material'
 import React from 'react'
 import HamburgerMenu from '../HamburgerMenu'
 import { DashboardItem, MyHeader } from '../StyledComponent'
+import AdminHamburgerMenu from './AdminHamburgerMenu'
 
 function UserDashboard() {
   return (<>
         <MyHeader>User Dashboard</MyHeader>
     <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        <HamburgerMenu />
+        <AdminHamburgerMenu/>
 
         <Box sx={{flexGrow:1}}>
 

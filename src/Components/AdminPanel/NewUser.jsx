@@ -1,6 +1,7 @@
 
 import { Box, Button, Grid,  Stack } from "@mui/material";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 import { MyHeader, SelectNative, TextFieldWrapper } from "../StyledComponent";
 
@@ -14,12 +15,17 @@ const initialState ={
 
 function NewUser() {
 
+  const navigate =useNavigate()
+
     const [formVal, setFormVal]= useState(initialState)
 
     const {name,email,password,role,mobile} = formVal;
 
     const names =[ "Sr. Manager", 'Manager', 'Operations']
 
+    const handleAddUser =()=>{
+      navigate('/userManagement')
+    }
 
   return (
     <>
@@ -91,7 +97,9 @@ function NewUser() {
                color: "#FFFFFF",
                lineHeight: "32px",
                textTransform: "capitalize",
-            }}>Submit</Button>
+            }}
+            onClick={handleAddUser}
+            >Submit</Button>
           </Grid>
 
 

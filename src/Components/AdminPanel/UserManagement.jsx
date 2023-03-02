@@ -1,8 +1,10 @@
 import { Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
+import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import UserManagementTable from "./UserManagementTable";
 
 const options = ["Sr Manager", "Manager", "Operations"];
@@ -297,6 +299,8 @@ const operationRow = [
 
 function UserManagement() {
 
+  const navigate = useNavigate()
+
     const [SelectValue, setSelectValue] = useState('Sr Manager')
     const [rows, setRows] = useState(srManagerRows)
 
@@ -322,12 +326,18 @@ useEffect(() => {
   dataChange(SelectValue)
 }, [SelectValue])
 
+
+const handleAddUser =()=>{
+  navigate('/newUser')
+}
+
+
   return (
     <>
 
 <Stack sx={{flexWrap:"wap",flexDirection:"row"}}>
 
-<HamburgerMenu/>
+<AdminHamburgerMenu/>
       <ListingComponent
         title="User Management"
         buttonText="Add User"
@@ -336,6 +346,7 @@ useEffect(() => {
         value={SelectValue}
         Table={UserManagementTable}
         rows={rows}
+        onButtonClick={handleAddUser}
       />
 
 </Stack>

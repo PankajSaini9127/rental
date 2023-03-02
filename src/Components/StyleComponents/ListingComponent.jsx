@@ -8,7 +8,7 @@ import UploadFileIcon from "@mui/icons-material/UploadFile";
 
 
 
-function ListingComponent({title,buttonText,options,Table,value,onChange,rows}) {
+function ListingComponent({title,buttonText,options,Table,value,onChange,rows,onButtonClick}) {
   return (
    
 
@@ -77,6 +77,7 @@ function ListingComponent({title,buttonText,options,Table,value,onChange,rows}) 
             textTransform:'capitalize'
           }}
           startIcon={<UploadFileIcon />}
+          onClick={onButtonClick}
         >
    {buttonText}
         </Button>
