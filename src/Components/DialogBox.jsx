@@ -87,9 +87,9 @@ const Landblord = () => {
   );
 };
 
-function DialogBox() {
+function DialogBox({value, setValue}) {
   const [open, setOpen] = useState(true);
-  const [value, setValue] = useState("");
+  
 
   const handleClose = () => {
     setOpen(false);
@@ -97,7 +97,6 @@ function DialogBox() {
 
   const handleChange = (e) => {
     setValue(e.target.value);
-    console.log(value);
   };
 
   return (

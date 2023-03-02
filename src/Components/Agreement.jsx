@@ -1,4 +1,4 @@
-import React,{ useState } from "react";
+import React,{ useEffect, useState } from "react";
 
 // MUI Components
 import {
@@ -27,7 +27,6 @@ import {
 import HamburgerMenu from "./HamburgerMenu";
 import YearlyIncrement from "./IncrementType";
 import DialogBox from "./DialogBox";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 
@@ -62,6 +61,16 @@ const initialState={
 function Agreement() {
   const navigate = useNavigate()
 
+  const [landblord, setLandblord] = useState('');
+
+  const [arrlenght,setArrLength] = useState(1)
+
+  useEffect(() => {
+    if(landblord !== ''){
+      setArrLength(landblord)
+    }
+  }, [landblord])
+  
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
@@ -69,6 +78,7 @@ function Agreement() {
   // state management form
 
 const [Value, setValue] = useState(initialState)
+
 
 
 // on field state change
@@ -99,7 +109,7 @@ const handleSubmit = (e)=>{
     <>
 
     {/* dialog box ( popup box ) */}
-    <DialogBox/>
+    <DialogBox value={landblord} setValue={setLandblord}/>
 
 
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
@@ -139,7 +149,7 @@ const handleSubmit = (e)=>{
                 />
 
 {
-  Array.from({length:2},(_,i)=>{
+  Array.from({length:arrlenght},(_,i)=>{
     return (<>
        <TextFieldWrapper
                   label="Name Of Lesse"
@@ -274,9 +284,9 @@ const handleSubmit = (e)=>{
               
 
                 {
-                  Array.from({length:2},(_,i)=>{
+                  Array.from({length:arrlenght},(_,i)=>{
                     return(<>
-                    <Typography>Landblord Name</Typography>
+                    {arrlenght > 1?<Typography>Landblord Name</Typography>:''}
                     <Grid container sx={{px:3}} spacing={2}>
                     <TextFieldWrapper
                   label="Bank Name"
@@ -330,9 +340,9 @@ const handleSubmit = (e)=>{
 
 
 {
-  Array.from({length:2},(_,i)=>{
+  Array.from({length:arrlenght},(_,i)=>{
     return(<>
-    <Typography>Landblord Name</Typography>
+    {arrlenght > 1?<Typography>Landblord Name</Typography>:''}
       <Grid
       container
       spacing={4}
