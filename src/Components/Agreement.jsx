@@ -4,13 +4,11 @@ import React,{ useState } from "react";
 import {
   Box,
   Button,
-  Container,
   Grid,
   Typography,
   Stack,
   useTheme,
-  useMediaQuery,
-  makeStyles
+  useMediaQuery
 } from "@mui/material";
 
 
@@ -93,12 +91,9 @@ console.log(e.target.files)
 
 const handleSubmit = (e)=>{
   e.preventDefault()
-  
+  navigate('/listing')
 }
 
-const handleSendManger = ()=>{
-    navigate('/listing')
-}
 
   return (
     <>
@@ -142,7 +137,11 @@ const handleSendManger = ()=>{
                   backgroundColor="rgba(3, 193, 243, 0.2);"
                   value="NA000001"
                 />
-                <TextFieldWrapper
+
+{
+  Array.from({length:2},(_,i)=>{
+    return (<>
+       <TextFieldWrapper
                   label="Name Of Lesse"
                   placeHolder="Enter Name Of Lesse"
                   name='leeseName'
@@ -217,6 +216,10 @@ const handleSendManger = ()=>{
                 name='email'
                 onChange={e=>handleChange(e)}
                 />
+    </>)
+  })
+}
+        
                 <TextFieldWrapper
                   label='Lock In Year(If Applicable)'
                   placeHolder="Enter Lock in Year"
@@ -268,8 +271,14 @@ const handleSendManger = ()=>{
             >
               Bank Detail
             </Typography>
-              <Grid container sx={{px:3,justifyContent:"space-evenly"}} spacing={2}>
-                <TextFieldWrapper
+              
+
+                {
+                  Array.from({length:2},(_,i)=>{
+                    return(<>
+                    <Typography>Landblord Name</Typography>
+                    <Grid container sx={{px:3}} spacing={2}>
+                    <TextFieldWrapper
                   label="Bank Name"
                   placeHolder="Enter Bank Name"
                   name='bankName'
@@ -293,9 +302,12 @@ const handleSendManger = ()=>{
                   name='ifscCode'
                 onChange={e=>handleChange(e)}
                 />
-                <Grid item md={3.1} sx={{'@media(max-width:900px)':{display:'none'}}}></Grid>
-                <Grid item md={3.1} sx={{'@media(max-width:900px)':{display:'none'}}}></Grid>
-              </Grid>
+                
+              </Grid>      
+                                          </>)
+                  })
+                }
+                
 
               {/* Bank Details ends here*/}
 
@@ -316,59 +328,69 @@ const handleSendManger = ()=>{
               Upload Document
             </Typography>
 
-              <Grid
-                container
-                spacing={4}
-                sx={{ px:1, justifyContent:"space-evenly"}}
-              >
 
-                <DocumentUpload 
-                label="Upload Aadhar Card" 
-                placeHolder="Upload Aadhar Card" 
-                handleChange={handleChangeFile}
-                />
+{
+  Array.from({length:2},(_,i)=>{
+    return(<>
+    <Typography>Landblord Name</Typography>
+      <Grid
+      container
+      spacing={4}
+      sx={{ px:1, justifyContent:"space-evenly"}}
+    >
 
-                <DocumentUpload
-                  label="Upload GST Certificate"
-                  placeHolder="Upload GST Certificate"
-                />
+      <DocumentUpload 
+      label="Upload Aadhar Card" 
+      placeHolder="Upload Aadhar Card" 
+      handleChange={handleChangeFile}
+      />
 
-                <DocumentUpload 
-                label="Upload Pan Card" 
-                placeHolder={'Upload Pan Card'}
-                />
-                <DocumentUpload
-                  label="Upload Draft Agreement"
-                  placeHolder="Upload Draft Agreement"
-                />
-                <DocumentUpload 
-                label="Upload Electricity Bill" 
-                placeHolder={'Upload Electricity Bill'} 
-                />
+      <DocumentUpload
+        label="Upload GST Certificate"
+        placeHolder="Upload GST Certificate"
+      />
 
-                <DocumentUpload
-                  label="Upload POA(If Applicable)"
-                  placeHolder="Upload POA"
-                />
+      <DocumentUpload 
+      label="Upload Pan Card" 
+      placeHolder={'Upload Pan Card'}
+      />
+      <DocumentUpload
+        label="Upload Draft Agreement"
+        placeHolder="Upload Draft Agreement"
+      />
+      <DocumentUpload 
+      label="Upload Electricity Bill" 
+      placeHolder={'Upload Electricity Bill'} 
+      />
 
-                <DocumentUpload 
-                label="Upload Maintaince Bill" 
-                placeHolder={'Upload Maintaince Bill'}
-                />
+      <DocumentUpload
+        label="Upload POA(If Applicable)"
+        placeHolder="Upload POA"
+      />
 
-                <DocumentUpload
-                  label="Upload Cencel Bank Cheque"
-                  placeHolder="Upload Cencel Bank Cheque"
-                />
-                <DocumentUpload 
-                label="Upload Property Tax Receipt" 
-                placeHolder={'Upload Property Tax Receipt'}
-                />
-                <DocumentUpload
-                  label="Upload Noc(If Mutiple Oweners)"
-                  placeHolder="Upload GST Certificate"
-                />
-              </Grid>
+      <DocumentUpload 
+      label="Upload Maintaince Bill" 
+      placeHolder={'Upload Maintaince Bill'}
+      />
+
+      <DocumentUpload
+        label="Upload Cencel Bank Cheque"
+        placeHolder="Upload Cencel Bank Cheque"
+      />
+      <DocumentUpload 
+      label="Upload Property Tax Receipt" 
+      placeHolder={'Upload Property Tax Receipt'}
+      />
+      <DocumentUpload
+        label="Upload Noc(If Mutiple Oweners)"
+        placeHolder="Upload GST Certificate"
+      />
+    </Grid>
+    </>
+    )
+  })
+}
+              
 
               {/* Document upload section end here */}
 
@@ -394,7 +416,6 @@ const handleSendManger = ()=>{
                     textTransform: "capitalize",
                     '@media(max-width:900px)':{fontSize:"11px",lineHeight:"12px",height:"40px"}
                   }}
-                  onClick={handleSendManger}
                 >
                   Submit To Sr Manager
                 </Button>

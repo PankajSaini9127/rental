@@ -51,7 +51,7 @@ const fieldStyle = {
 
 const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
   return (
-    <Grid item md={3.1} xs={6}>
+    <Grid item md={4} xs={6}>
       <FormControl fullWidth>
         <FormLabel>
           <Typography variant="body1" sx={labelStyle}>
@@ -119,7 +119,7 @@ const DocumentUpload = ({ label, placeHolder,handleChange }) => {
 // Select Field
 const SelectComponent = ({ label, value, name, onChange }) => {
   return (
-    <Grid item md={3.1} xs={6}>
+    <Grid item md={4} xs={6}>
       <FormControl fullWidth>
         <FormLabel>
           <Typography variant="body1" sx={labelStyle}>
