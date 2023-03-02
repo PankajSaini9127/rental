@@ -7,8 +7,9 @@ import Logo from "../assest/pic/Dashboard/logo1 2.png";
 import "../assest/CSS/hamburgerMenu.css";
 import { useNavigate } from "react-router-dom";
 import { Vector1, Vector2, Vector3 } from "./Vector";
+import { VectorUser } from "../Vector";
 
-function HamburgerMenu() {
+function AdminHamburgerMenu() {
   const [expand, setExpand] = useState(false);
 
   const navigate = useNavigate();
@@ -82,17 +83,15 @@ const NavItem = ({Vector})=>{
 
           {!expand ? (
             <>
-              <NavItem Vector={Vector1}/>
-              <NavItem Vector={Vector2}/>
-              <NavItem Vector={Vector3}/>
+              <NavItem Vector={VectorUser}/>
+              <NavItem Vector={''}/>
             </>
           ) : (
             <Stack container  spacing={2} >
               {/* onclick */}
              
-             <NavExpand msg="New Agreement" navigateTO="newAgreement" Vector={Vector1} NavItem={NavItem}/>
-             <NavExpand msg="Monthly Payments" navigateTO="adminLogin" Vector={Vector2}/>
-             <NavExpand msg="Renewal" Vector={Vector3}/>
+             <NavExpand msg="New User" navigateTO="" Vector={VectorUser} NavItem={NavItem}/>
+             <NavExpand msg="LogOut" navigateTO="" Vector={''}/>
 
             </Stack>
           )}
@@ -102,4 +101,4 @@ const NavItem = ({Vector})=>{
   );
 }
 
-export default HamburgerMenu;
+export default AdminHamburgerMenu;

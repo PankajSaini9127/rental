@@ -12,101 +12,45 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 import SearchIcon from "@mui/icons-material/Search";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import DataTable from "./DataTable";
 
-import HamburgerMenu from './HamburgerMenu'
+import HamburgerMenu from "./HamburgerMenu";
 import { MyHeader } from "./StyledComponent";
+import ListingComponent from "./StyleComponents/ListingComponent";
+
+const options = ["New Agreement","Approved Agreement"];
 
 function Listing() {
+
+  const [Select, setSelect] = useState('New Agreement')
+
+  const handleChange = (e)=>{
+     setSelect(e.target.value)
+  }
+  
+
   return (
     <>
-    <Stack sx={{flexWrap:"wap",flexDirection:"row"}}>
+      <Stack sx={{flexWrap:"wap",flexDirection:"row"}}>
 
-      <HamburgerMenu/>
+<HamburgerMenu/>
 
-    <Box sx={{ flexGrow: 1 }}>
+      <ListingComponent
+        title="Rental Agreement"
+        buttonText="Upload"
+        options={options}
+        value={Select}
+        Table={DataTable}
+        onChange={handleChange}
+      />
 
-      <MyHeader>Rental Agreement</MyHeader>
-        
-      
+</Stack>
 
-      <Divider />
-
-      <Grid container sx={{ px: 1, justifyContent: "space-between", my: 1 ,alignItems:"center"}}>
-        <Grid item xs={6}>
-        <Typography
-          variant="body1"
-          color="black"
-          fontSize="20px"
-          fontWeight="600"
-          alignSelf="center"
-          lineHeight="30px"
-          sx={{'@media(max-width:600px)':{fontSize:"17px",lineHeight:"25px"}}}
-        >
-          Rental Agreement
-        </Typography>
-        </Grid>
-
-        <Grid xs={6} md={2}>
-          <FormControl fullWidth>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              label="Age"
-              value={10}
-              size="small"
-              sx={{ border: "1px solid #CACACA" }}
-            >
-              <MenuItem value={10}>New Agreement</MenuItem>
-              <MenuItem value={20}>50</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
-      <Divider />
-
-      <Grid container sx={{ justifyContent: "space-between", p: 4, '@media(max-width:600px)':{p:2} }}> 
-        <Grid item xs={6}>
-        <TextField
-          placeholder="Search By Field Name..."
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            ),
-          }}
-          size="small"
-        />
-         </Grid>
-
-        <Button
-          variant="contained"
-          sx={{
-            borderRadius: "15px",
-            color: "white",
-            backgroundColor: "#03C1F3",
-          }}
-          startIcon={<UploadFileIcon />}
-        >
-   Upload
-        </Button>
-      </Grid>
-
-      {/* //table */}
-
-      
-     <DataTable/>
-     </Box>
-
-     </Stack>
-
-
+     
     </>
   );
 }

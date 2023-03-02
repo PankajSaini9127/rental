@@ -29,6 +29,8 @@ import {
 import HamburgerMenu from "./HamburgerMenu";
 import YearlyIncrement from "./IncrementType";
 import DialogBox from "./DialogBox";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 
 // form initial state
@@ -48,7 +50,7 @@ const initialState={
   email:"",
   lockInYear:"",
   noticePeriod:"",
-  diposite:"",
+  deposite:"",
   monthalyRent:"",
   yearlyIncrement:"1",
   bankName:"",
@@ -60,6 +62,7 @@ const initialState={
 
 
 function Agreement() {
+  const navigate = useNavigate()
 
 
   const theme = useTheme();
@@ -79,11 +82,22 @@ const [Value, setValue] = useState(initialState)
 }
 
 
+// upload document
+const handleChangeFile = (e)=>{
+console.log(e.target.files)
+
+}
+
+
 // on form submit
 
-const handleSubmit =(e)=>{
+const handleSubmit = (e)=>{
   e.preventDefault()
-  console.log(Value)
+  
+}
+
+const handleSendManger = ()=>{
+    navigate('/listing')
 }
 
   return (
@@ -218,7 +232,7 @@ const handleSubmit =(e)=>{
                 <TextFieldWrapper
                   label="Deposite Amount"
                   placeHolder="Enter Deposite Amount"
-                  name='diposite'
+                  name='deposite'
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
@@ -311,6 +325,7 @@ const handleSubmit =(e)=>{
                 <DocumentUpload 
                 label="Upload Aadhar Card" 
                 placeHolder="Upload Aadhar Card" 
+                handleChange={handleChangeFile}
                 />
 
                 <DocumentUpload
@@ -379,6 +394,7 @@ const handleSubmit =(e)=>{
                     textTransform: "capitalize",
                     '@media(max-width:900px)':{fontSize:"11px",lineHeight:"12px",height:"40px"}
                   }}
+                  onClick={handleSendManger}
                 >
                   Submit To Sr Manager
                 </Button>

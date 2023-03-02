@@ -4,6 +4,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 
 import "../assest/CSS/dataGrid.css";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
   {
@@ -190,6 +191,15 @@ const rows = [
 ];
 
 function DataTable() {
+
+  const navigate = useNavigate();
+
+  const onRowsSelectionHandler = (ids) => {
+    const selectRow = ids.map((id) => rows.find((row) => row.id === id));
+    console.log(selectRow)
+      navigate('/agreementApproval')
+  };
+
   return (
     <Box
       sx={{
@@ -246,6 +256,7 @@ function DataTable() {
             return "red statusCell";
           }
         }}
+        onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
       />
     </Box>
   );

@@ -19,7 +19,7 @@ const MyHeader = styled("h5")({
   lineHeight: "48px",
   color: "#03C1F3",
   marginLeft: "55px",
-  "@media(max-width:600px)": { fontSize: "25px", ml: "40px" },
+  "@media(max-width:600px)": { fontSize: "20px", ml: "20px" },
 });
 
 // CSS Style for Label for Text field etc.
@@ -80,7 +80,7 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
 };
 
 // Document Upload
-const DocumentUpload = ({ label, placeHolder }) => {
+const DocumentUpload = ({ label, placeHolder,handleChange }) => {
   return (
     <Grid item md={4.1} xs={6}>
       {/* <MyTextfield /> */}
@@ -107,20 +107,10 @@ const DocumentUpload = ({ label, placeHolder }) => {
         >
           <Typography sx={{fontSize:"16px", textAlign:"left",width:"100%",'@media(max-width:900px)':{fontSize:'10px'}}}> {placeHolder}</Typography>
          
-          <input hidden accept="image/*" multiple type="file" />
+          <input hidden accept="image/*" multiple type="file" onChange={handleChange}/>
         </Button>
 
-        {/* <TextField
-          variant="standard"
-          component={'button'}
-          InputProps={{
-            disableUnderline: true,
-          }}
-          placeholder={placeHolder}
-          type="file"
-          hidden
-          sx={fieldStyle}
-        /> */}
+        
       </FormControl>
     </Grid>
   );
