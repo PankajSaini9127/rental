@@ -36,6 +36,13 @@ const columns = [
       headerAlign: "center",
     },
     {
+      field: "srmanager",
+      headerName: "Sr Manager",
+      width: 170,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
       field: "rentalAmount",
       headerName: "Rental Amount",
       width: 190,
@@ -54,14 +61,14 @@ const columns = [
  
 
 
-function ManagerTable({rows}) {
+function OperationsTable({rows}) {
 
   const navigate = useNavigate()
 
   const onRowsSelectionHandler = (ids) => {
     const selectRow = ids.map((id) => rows.find((row) => row.id === id));
     console.log(selectRow)
-      navigate('/financeTeamApproval')
+      navigate('/operationsApproval')
   };
   return (
     <>
@@ -130,4 +137,4 @@ function ManagerTable({rows}) {
   )
 }
 
-export default ManagerTable;
+export default OperationsTable;

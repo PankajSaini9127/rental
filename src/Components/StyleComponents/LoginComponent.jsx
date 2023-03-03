@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import {
     Alert,
@@ -13,7 +13,6 @@ import {
 
 import Img from "../../assest/pic/login-form.png";
 import logo from "../../assest/pic/logo1 1.png";
-import { useNavigate } from 'react-router-dom';
 
 
 
@@ -136,13 +135,13 @@ function LoginComponent({ title, discription,subTitle,handleSubmit,err,formValue
                   </FormControl>
                 </Grid>
 
-                <Grid item  sx={{ mt: 2 }}>
+                <Grid item sx={{ mt: 2 }}>
                   <Button
                     type="submit"
                     variant="contained"
                     sx={{
-                      height: "40px",
-                      width: "100%",
+                      height: "60px",
+                      width: "160px",
                       background: "primary",
                       borderRadius: "20px",
                       fontSize: "25px",
@@ -154,8 +153,9 @@ function LoginComponent({ title, discription,subTitle,handleSubmit,err,formValue
                     <Typography
                       variant="body1"
                       color="white"
-                      lineHeight="30px"
-                      fontSize="15px"
+                      lineHeight="37px"
+                      fontSize="25px"
+                      textTransform={'capitalize'}
                     >
                       Login
                     </Typography>

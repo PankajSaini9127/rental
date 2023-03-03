@@ -19,12 +19,12 @@ import {
   MyHeader, 
   SelectComponent,
   TextFieldWrapper 
-} from "./StyledComponent";
+} from "../StyledComponent";
 
 
 // Components
 
-import HamburgerMenu from "./HamburgerMenu";
+import HamburgerMenu from "../HamburgerMenu";
 import YearlyIncrement from "./IncrementType";
 import DialogBox from "./DialogBox";
 import { useNavigate } from "react-router-dom";
@@ -101,7 +101,7 @@ console.log(e.target.files)
 
 const handleSubmit = (e)=>{
   e.preventDefault()
-  navigate('/listing')
+  navigate('/srManagerLogin')
 }
 
 

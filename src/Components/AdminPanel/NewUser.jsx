@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 import { MyHeader, SelectNative, TextFieldWrapper } from "../StyledComponent";
+import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
 const initialState ={
     name:"",
@@ -30,7 +31,7 @@ function NewUser() {
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        <HamburgerMenu />
+        <AdminHamburgerMenu/>
 
         <Box sx={{flexGrow:1}}>
 

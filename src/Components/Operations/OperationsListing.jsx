@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import HamburgerMenu from "../HamburgerMenu";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
-import ManagerTable from "./ManagerTable";
+import OperationsTable from "./OperationsTable";
 
-const options = ["New Agreement"];
+const options = ["New Agreement","Monthaly Payment","Rental"];
 
 
 
@@ -19,6 +19,7 @@ const row = [
     location:"Rajsthan",
     manager:"John Doe",
     rentalAmount:10000,
+    srmanager:"Adam"
   },
   {
     id: 2,
@@ -28,6 +29,7 @@ const row = [
     location:"Rajsthan",
     manager:"John Doe",
     rentalAmount:10000,
+    srmanager:"Adam"
   },
   {
     id: 3,
@@ -37,6 +39,7 @@ const row = [
     location:"Rajsthan",
     manager:"John Doe",
     rentalAmount:10000,
+    srmanager:"Adam"
   },
   {
     id: 4,
@@ -46,6 +49,7 @@ const row = [
     location:"Rajsthan",
     manager:"John Doe",
     rentalAmount:10000,
+    srmanager:"Adam"
   },
   {
     id: 5,
@@ -55,6 +59,7 @@ const row = [
     location:"Rajsthan",
     manager:"John Doe",
     rentalAmount:10000,
+    srmanager:"Adam"
   },
   {
     id: 6,
@@ -64,6 +69,7 @@ const row = [
     location:"Rajsthan",
     manager:"John Doe",
     rentalAmount:10000,
+    srmanager:"Adam"
   },
   {
     id: 7,
@@ -73,14 +79,34 @@ const row = [
     location:"Rajsthan",
     manager:"John Doe",
     rentalAmount:10000,
+    srmanager:"Adam"
   }
   
 ];
 
 
 
-function ApprovedByManager() {
+function OperationsListing() {
 
+  const [selectVal, setSelectValue] = useState("New Agreement");
+
+  const [title, setTitle]= useState("New Agreement")
+   
+  const handleChange =(e)=>{
+    setSelectValue(e.target.value)
+  }
+
+  useEffect(()=>{
+      if(selectVal === "New Agreement"){
+        setTitle("New Agreement")
+      }
+      if(selectVal === "Monthaly Payment"){
+        setTitle("Monthaly Payment")
+      }
+      if(selectVal === "Rental"){
+        setTitle("Rental")
+      }
+  },[selectVal])
 
   return (
     <>
@@ -89,12 +115,13 @@ function ApprovedByManager() {
 
 <HamburgerMenu/>
       <ListingComponent
+        title1={title}
         title="Rental Agreement"
         buttonText="Upload"
         options={options}
-        // onChange={handleChange}
-        value={'New Agreement'}
-        Table={ManagerTable}
+        onChange={handleChange}
+        value={selectVal}
+        Table={OperationsTable}
         rows={row}
       />
 
@@ -103,4 +130,4 @@ function ApprovedByManager() {
   );
 }
 
-export default ApprovedByManager;
+export default OperationsListing;

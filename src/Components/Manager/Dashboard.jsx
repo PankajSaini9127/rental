@@ -1,14 +1,12 @@
-import { Grid, Stack, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import { Grid, Stack } from "@mui/material";
+import React from "react";
 
-import axios from 'axios'
 
 //css
-import "../assest/CSS/dashboard.css";
+import "../../assest/CSS/hamburgerMenu.css";
 
-import HamburgerMenu from "./HamburgerMenu";
-import { DashboardItem, MyHeader } from "./StyledComponent";
-import { useState } from "react";
+import HamburgerMenu from "../HamburgerMenu";
+import { DashboardItem, MyHeader } from "../StyledComponent";
 
 function Dashboard() {
 
@@ -35,7 +33,7 @@ function Dashboard() {
       <MyHeader>Dashboard</MyHeader>
 
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-        <HamburgerMenu />
+        <HamburgerMenu  navigateTo={'listing'}/>
 
         {/* dashboard content */}
         <Grid container sx={{ justifyContent: "center" }}>

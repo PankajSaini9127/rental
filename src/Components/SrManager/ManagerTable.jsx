@@ -1,6 +1,7 @@
 import { Box } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 
 const columns = [
@@ -35,13 +36,6 @@ const columns = [
       headerAlign: "center",
     },
     {
-        field: "srManger",
-        headerName: " Sr Manager",
-        width: 170,
-        headerClassName: "dataGridHeader",
-        headerAlign: "center",
-      },
-    {
       field: "rentalAmount",
       headerName: "Rental Amount",
       width: 190,
@@ -60,9 +54,15 @@ const columns = [
  
 
 
-function FinanceTable({rows}) {
+function ManagerTable({rows}) {
 
+  const navigate = useNavigate()
 
+  const onRowsSelectionHandler = (ids) => {
+    const selectRow = ids.map((id) => rows.find((row) => row.id === id));
+    console.log(selectRow)
+      navigate('/agreementApproval')
+  };
   return (
     <>
       <Box
@@ -121,6 +121,7 @@ function FinanceTable({rows}) {
             return "red statusCell";
           }
         }}
+        onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
       >
 
       </DataGrid>
@@ -129,4 +130,4 @@ function FinanceTable({rows}) {
   )
 }
 
-export default FinanceTable;
+export default ManagerTable;

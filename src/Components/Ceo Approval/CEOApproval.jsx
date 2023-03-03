@@ -5,7 +5,6 @@ import HamburgerMenu from "../HamburgerMenu";
 import { DataFieldStyle, YearField } from "../StyleComponents/Rental";
 import { MyHeader } from "../StyledComponent";
 
-import PendingApproval from "../Manager/ManagerApproval";
 
 
 const data =[
@@ -112,7 +111,7 @@ function CEOApproval() {
   const navigate = useNavigate()
 
   const handleCeoApproved = ()=>{
-    navigate('/mangerApproved')
+    navigate('/operationsLogin')
   }
 
 

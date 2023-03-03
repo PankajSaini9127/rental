@@ -3,7 +3,7 @@ import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box } from "@mui/material";
 
-import "../assest/CSS/dataGrid.css";
+import "../../assest/CSS/dataGrid.css";
 import { useNavigate } from "react-router-dom";
 
 const columns = [
@@ -194,11 +194,11 @@ function DataTable() {
 
   const navigate = useNavigate();
 
-  const onRowsSelectionHandler = (ids) => {
-    const selectRow = ids.map((id) => rows.find((row) => row.id === id));
-    console.log(selectRow)
-      navigate('/agreementApproval')
-  };
+  // const onRowsSelectionHandler = (ids) => {
+  //   const selectRow = ids.map((id) => rows.find((row) => row.id === id));
+  //   console.log(selectRow)
+  //     navigate('/agreementApproval')
+  // };
 
   return (
     <Box
@@ -256,7 +256,7 @@ function DataTable() {
             return "red statusCell";
           }
         }}
-        onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+        // onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
       />
     </Box>
   );

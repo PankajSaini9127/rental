@@ -110,11 +110,11 @@ function ApprovalRequest() {
   const navigate = useNavigate()
 
   const handleApproval = ()=>{
-      navigate('/financeStatus')
+      // navigate('/financeStatus')
   }
 
   const handleBack = ()=>{
-       navigate('/financeTeamReject')
+       navigate('/OperationsReject')
   }
 
 

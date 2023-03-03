@@ -29,11 +29,9 @@ const DataFieldStyle = ({ field, value }) => {
         <Typography variant="body1" 
          sx={fieldStyle}
         >
-          {" "}
           {year}
         </Typography>
         <Typography variant="body1" sx={fieldStyle}>
-          {" "}
           {amount}
         </Typography>
       </Grid>

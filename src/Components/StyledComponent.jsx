@@ -164,7 +164,7 @@ const SelectComponent = ({ label, value, name, onChange }) => {
 // native select in user dashboard
 const SelectNative = ({value,names,label})=>{
   return(
-    <Grid item md={3.1} xs={6}>
+    <Grid item md={4} xs={6}>
     <FormControl fullWidth>
       <FormLabel>
         <Typography variant="body1" sx={labelStyle}>

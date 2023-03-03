@@ -37,9 +37,9 @@ const TextFieldWrapper = ({
   };
 
   return (
-    <Grid item  xs={grid}>
+    <Grid item md={10} xs={grid}>
       {/* <MyTextfield /> */}
-      <FormControl>
+      <FormControl fullWidth>
         <FormLabel>
           <Typography variant="body1" sx={labelStyle}>
             {label}
@@ -48,7 +48,9 @@ const TextFieldWrapper = ({
         <TextField
           variant="standard"
           name={name}
+          type={'number'}
           onChange={(e) => onChange(e)}
+          fullWidth
           InputProps={{
             disableUnderline: true,
             style: {
@@ -58,7 +60,6 @@ const TextFieldWrapper = ({
           }}
           placeholder={placeHolder}
           value={value}
-          fullWidth
           sx={fieldStyle}
         />
       </FormControl>
@@ -72,8 +73,8 @@ const Landblord = () => {
       <Grid item md={10} xs={11.5} container sx={{ justifyContent: "space-evenly" }} spacing={1}>
         <Grid item xs={5.5}>
           <TextFieldWrapper
-            label={"Name of Landblord"}
-            placeHolder={"Name of Landblord"}
+            label={"Name of Landlord"}
+            placeHolder={"Name of Landlord"}
           />
         </Grid>
         <Grid item xs={5.5}>

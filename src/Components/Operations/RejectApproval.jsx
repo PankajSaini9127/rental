@@ -1,6 +1,5 @@
 import { Box, Button, Grid, Stack } from '@mui/material'
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react';
 import HamburgerMenu from '../HamburgerMenu'
 import { DataFieldStyle, YearField } from '../StyleComponents/Rental'
 import { MyHeader } from '../StyledComponent'
@@ -11,22 +10,27 @@ import DialogBoxSBM from '../RentalPortal/DialogBoxSBM'
 
 
 
-function PendingApproval() {
+function RejectApproval() {
 
-  const navigate = useNavigate()
 
+  const [open, setOpen] = useState(true)
+
+  const handleClose = ()=>{
+       setOpen(false)
+  }
+
+  const handleReject = ()=>{
+    setOpen(true)
+  }
 
 const handleApproval =()=>{
-    navigate('/ceoApproval')
-}
-
-const handleReject = ()=>{
-    // navigate(-1)
+    
 }
 
 
   return (
     <>
+    <DialogBoxSBM open={open} handleClose={handleClose} sendBack={'send back to operations'}/>
      <Stack sx={{ flexDirection: "row" }}>
         <HamburgerMenu />
 
@@ -125,4 +129,4 @@ const handleReject = ()=>{
   )
 }
 
-export default PendingApproval
+export default RejectApproval
