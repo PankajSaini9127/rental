@@ -114,7 +114,7 @@ function ApprovalRequest() {
   }
 
   const handleBack = ()=>{
-       navigate('/OperationsReject')
+       navigate('/operationsReject')
   }
 
 

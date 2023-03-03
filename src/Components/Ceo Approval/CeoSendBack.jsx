@@ -26,7 +26,7 @@ function CeoSendBack() {
   }
 
 const handleApproval =()=>{
-    navigate('/financeTeamApproval')
+    // navigate()
 }
 
 

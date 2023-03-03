@@ -51,7 +51,7 @@ function Router() {
 
 
         <Route exact path='/operationsApproval' element={<ApprovalRequest/>}/>
-        <Route exact path='/OperationsReject' element={<RejectApproval/>}/>
+        <Route exact path='/operationsReject' element={<RejectApproval/>}/>
         <Route exact path='/financeApproved' element={<ApprovedList/>}/>
         <Route exact path='/financeStatus' element={<FinanceStatus/>}/>
 
