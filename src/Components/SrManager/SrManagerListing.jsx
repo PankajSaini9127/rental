@@ -5,7 +5,7 @@ import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
 import ManagerTable from "./ManagerTable";
 
-const options = ["New Agreement"];
+const options = ["New Agreement","Monthaly Payment","Rental"]
 
 
 

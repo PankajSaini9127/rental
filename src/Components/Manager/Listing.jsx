@@ -6,13 +6,13 @@ import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
 import { Stack } from "@mui/material";
 
-const options = ["New Agreement", "Approved Agreement"];
+const options = ["New Agreement","Monthaly Payment","Rental"]
 
 function Listing() {
   const [Select, setSelect] = useState("New Agreement");
 
   const handleChange = (e) => {
-    setSelect(e.target.value);
+    // setSelect(e.target.value);
   };
 
   return (

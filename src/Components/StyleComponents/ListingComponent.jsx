@@ -130,8 +130,9 @@ function ListingComponent({
 :''
 }
        
+       {/* upload button */}
 
-        <Button
+        {/* <Button
           variant="contained"
           sx={{
             borderRadius: "15px",
@@ -143,7 +144,7 @@ function ListingComponent({
           onClick={onButtonClick}
         >
           {buttonText}
-        </Button>
+        </Button> */}
       </Grid>
 
       <Table rows={rows} />

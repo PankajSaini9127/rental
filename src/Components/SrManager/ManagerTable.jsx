@@ -9,7 +9,7 @@ const columns = [
     {
       field: "code",
       headerName: "Code",
-      width: 110,
+      width: 130,
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -17,35 +17,35 @@ const columns = [
     {
       field: "name",
       headerName: "Name",
-      width: 190,
+      width: 220,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "location",
       headerName: "Location",
-      width: 190,
+      width: 220,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "manager",
       headerName: "Manager",
-      width: 170,
+      width: 210,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "rentalAmount",
       headerName: "Rental Amount",
-      width: 190,
+      width: 210,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
         field: "status",
         headerName: "Status",
-        width: 130,
+        width: 160,
         headerClassName: "dataGridHeader",
         headerAlign: "center",
       },
@@ -95,6 +95,9 @@ function ManagerTable({rows}) {
           textAlign:"center !important",
           borderRadius:"10px !important"
         },
+        "& .allCell":{
+          justifyContent:"center !important"          
+        }
 
       }}
     >
@@ -107,19 +110,23 @@ function ManagerTable({rows}) {
         sx={{ color: "black !important",  minWidth:"50px" }}
         getCellClassName={(parms) => {
          
+          let cellClass = []
           if (parms.field === "status" && parms.row.status === "Approved") {
-            return "green statusCell";
+            cellClass.push("green statusCell") ;
           } else if (
             parms.field === "status" &&
             parms.row.status === "Pending"
           ) {
-            return "yellow statusCell";
+            cellClass.push( "yellow statusCell") ;
           } else if (
             parms.field === "status" &&
             parms.row.status === "Rejected"
           ) {
-            return "red statusCell";
+            cellClass.push("red statusCell")  ;
           }
+          cellClass.push('allCell')
+          
+          return(cellClass)
         }}
         onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
       >
