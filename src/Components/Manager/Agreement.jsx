@@ -286,7 +286,7 @@ const handleSubmit = (e)=>{
                 {
                   Array.from({length:arrlenght},(_,i)=>{
                     return(<>
-                    {arrlenght > 1?<Typography>Landblord Name</Typography>:''}
+                    {arrlenght > 1?<Typography>Landlord Name</Typography>:''}
                     <Grid container sx={{px:3}} spacing={2}>
                     <TextFieldWrapper
                   label="Bank Name"
@@ -342,7 +342,7 @@ const handleSubmit = (e)=>{
 {
   Array.from({length:arrlenght},(_,i)=>{
     return(<>
-    {arrlenght > 1?<Typography>Landblord Name</Typography>:''}
+    {arrlenght > 1?<Typography>Landlord Name</Typography>:''}
       <Grid
       container
       spacing={4}
