@@ -4,7 +4,7 @@ import LoginComponent from "../StyleComponents/LoginComponent";
 import { useNavigate } from "react-router-dom";
 
 export default function Login() {
-  const data = { username: "bitwit", password: "Bitwit" };
+  const data = { username: "manager", password: "manager" };
 
   const navigate = useNavigate();
 
@@ -39,6 +39,7 @@ const handleChange = (e) => {
   return (
     <>
       <LoginComponent
+      buttons={true}
         title="Hello,"
         discription={"Enter Your Details For Further Process"}
         data={data}

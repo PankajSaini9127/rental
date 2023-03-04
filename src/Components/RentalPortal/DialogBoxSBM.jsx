@@ -84,7 +84,7 @@ function DialogBoxSBM({ open, handleClose, sendBack }) {
           <DialogActions sx={{ mt: 2 }}>
             <Button
               variant="contained"
-              sx={{ height: 45, color: "#FFFFFF", borderRadius: "15px" }}
+              sx={{ height: 45, color: "#FFFFFF", borderRadius: "15px",textTransform:'capitalize' }}
               onclick={handleSend}
             >
              {sendBack}
@@ -92,10 +92,10 @@ function DialogBoxSBM({ open, handleClose, sendBack }) {
             </Button>
             <Button
               variant="outlined"
-              sx={{ height: 45, borderRadius: "15px" }}
+              sx={{ height: 45, borderRadius: "15px" ,textTransform:'capitalize'}}
               onClick={handleClose}
             >
-              Cencel
+              Cancel
             </Button>
           </DialogActions>
         </Box>

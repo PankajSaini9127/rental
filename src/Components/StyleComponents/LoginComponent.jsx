@@ -13,6 +13,7 @@ import {
 
 import Img from "../../assest/pic/login-form.png";
 import logo from "../../assest/pic/logo1 1.png";
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -23,6 +24,9 @@ function LoginComponent({ title, discription,subTitle,handleSubmit,err,formValue
 
     
   const { password, username } = formValue;
+
+  const naviagte = useNavigate()
+
    
 
   return (
@@ -67,6 +71,10 @@ function LoginComponent({ title, discription,subTitle,handleSubmit,err,formValue
           sm={6}
           sx={{ justifyContent: "center", alignItems: "center" }}
         >
+          <Button variant='contained' sx={{color:"#FFFFFF", textTransform:'capitalize'}} onClick={()=>naviagte('/srManagerLogin')}>Sr Manager Login</Button>
+          <Button variant='contained' sx={{color:"#FFFFFF", textTransform:'capitalize',mx:2}} onClick={()=>naviagte('/operationsLogin')}>Opertions Login</Button>
+          <Button variant='contained' sx={{color:"#FFFFFF", textTransform:'capitalize'}} onClick={()=>naviagte('/adminLogin')}>Admin Login</Button>
+
           <Grid item md={7} xs={11} sx={{'@media(max-width:900px)':{mb:2}}}>
             <Typography
               variant="body1"

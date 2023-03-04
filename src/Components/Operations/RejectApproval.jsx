@@ -4,6 +4,7 @@ import HamburgerMenu from '../HamburgerMenu'
 import { DataFieldStyle, YearField } from '../StyleComponents/Rental'
 import { MyHeader } from '../StyledComponent'
 import DialogBoxSBM from '../RentalPortal/DialogBoxSBM'
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -11,6 +12,7 @@ import DialogBoxSBM from '../RentalPortal/DialogBoxSBM'
 
 
 function RejectApproval() {
+  const navigate = useNavigate()
 
 
   const [open, setOpen] = useState(true)
@@ -24,6 +26,7 @@ function RejectApproval() {
   }
 
 const handleApproval =()=>{
+  navigate('/operationsListing')
     
 }
 
