@@ -341,6 +341,7 @@ const handleAddUser =()=>{
       <ListingComponent
         title="User Management"
         buttonText="Add User"
+        addUserBtn={true}
         options={options}
         onChange={handleChange}
         value={SelectValue}

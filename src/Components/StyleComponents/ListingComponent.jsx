@@ -31,6 +31,7 @@ function ListingComponent({
   onChange,
   rows,
   onButtonClick,
+  addUserBtn
 }) {
 
   const navigate = useNavigate()
@@ -131,20 +132,24 @@ function ListingComponent({
 }
        
        {/* upload button */}
+  {
+    addUserBtn? <Button
+    variant="contained"
+    sx={{
+      borderRadius: "15px",
+      color: "white",
+      backgroundColor: "#03C1F3",
+      textTransform: "capitalize",
+    }}
+    startIcon={<UploadFileIcon />}
+    onClick={onButtonClick}
+  >
+    {buttonText}
+  </Button>
+  :''
+  }
+       
 
-        {/* <Button
-          variant="contained"
-          sx={{
-            borderRadius: "15px",
-            color: "white",
-            backgroundColor: "#03C1F3",
-            textTransform: "capitalize",
-          }}
-          startIcon={<UploadFileIcon />}
-          onClick={onButtonClick}
-        >
-          {buttonText}
-        </Button> */}
       </Grid>
 
       <Table rows={rows} />
