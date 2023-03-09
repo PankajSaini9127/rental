@@ -12,8 +12,10 @@ import {
   Button,
   InputLabel,
   NativeSelect,
+ 
 } from "@mui/material";
 
+import { withStyles } from '@material-ui/core/styles';
 // header
 const MyHeader = styled("h5")({
   fontSize: "31px",
@@ -45,6 +47,27 @@ const fieldStyle = {
 };
 
 
+const CustomTextField = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: '	#00008b',
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: '	#00008b',
+    },
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: '	#00008b',
+      },
+      '&:hover fieldset': {
+        borderColor: '	#00008b',
+      },
+      '&.Mui-focused fieldset': {
+        borderColor: '	#00008b',
+      },
+    },
+  },
+})(TextField);
 
 // Text Field Style
 const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
@@ -56,7 +79,7 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
             {label}
           </Typography>
         </FormLabel> */}
-        <TextField
+        <CustomTextField
           variant="outlined"
           name={name}
           onChange={(e) => onChange(e)}
@@ -64,7 +87,6 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
           InputProps={{
             style: {
               color: "rgba(16, 99, 173, 0.47) !important/",
-             
               '@media(max-width:900px)':{fontSize:'10px !important'}
             },
           }}
@@ -116,6 +138,8 @@ const DocumentUpload = ({ label, placeHolder,handleChange }) => {
 };
 
 // Select Field
+
+
 const SelectComponent = ({ label, value, name, onChange }) => {
   return (
     <Grid item md={4} xs={6}>
@@ -134,6 +158,18 @@ const SelectComponent = ({ label, value, name, onChange }) => {
           value={value}
           // labelId="demo-simple-select-helper-label"
           sx={{
+            '.MuiOutlinedInput-notchedOutline': {
+              borderColor: '#00008b',
+            },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#00008b',
+            },
+            '&:hover .MuiOutlinedInput-notchedOutline': {
+              borderColor: '#00008b',
+            },
+            '.MuiSvgIcon-root ': {
+              fill: "#00008b !important",
+            },
             // border: "1px solid #03C1F3",
             // borderRadius: "20px",
             // height: "50px",
@@ -185,6 +221,15 @@ const SelectNative = ({value,names,label})=>{
         // border: "1px solid #03C1F3",
         // borderRadius: "20px",
         // height: "50px",
+        '.MuiOutlinedInput-notchedOutline': {
+          borderColor: '#00008b',
+        },
+        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+          borderColor: '#00008b',
+        },
+        '&:hover .MuiOutlinedInput-notchedOutline': {
+          borderColor: '#00008b',
+        },
         mt: "0px !important",
         color: "rgba(16, 99, 173, 0.47)",
         p: 1,
@@ -264,4 +309,4 @@ const DashboardItem = ({ service, value }) => {
 
 
 
-export { MyHeader, TextFieldWrapper, DocumentUpload, SelectComponent,SelectNative,DashboardItem };
+export { MyHeader, TextFieldWrapper, DocumentUpload, SelectComponent,SelectNative,DashboardItem,CustomTextField };

@@ -175,15 +175,17 @@ const labelStyle = {
   fontSize: "20px",
   color: "#03C1F3",
   fontWeight: "600",
+  minheight:"30px",
   "@media(max-width:900px)": { fontSize: "10px" },
 };
 
 const fieldStyle = {
-  border: "1px solid #03C1F3",
-  borderRadius: "20px",
-  height: "66px",
-  p: 2,
+  // border: "1px solid #03C1F3",
+  // borderRadius: "20px",
+  height: "66px !important",
+  // p: 2,
   color: "rgba(16, 99, 173, 0.47)",
+  mt:"30px",
   "@media(max-width:900px)": { height: "46px", p: 1 },
 };
 
@@ -191,19 +193,20 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
   return (
     <Grid item md={4} xs={4}>
       {/* <MyTextfield /> */}
-      <FormControl>
-        <FormLabel>
+      <FormControl fullWidth>
+        {/* <FormLabel>
           <Typography variant="body1" sx={labelStyle}>
-            {label}
+            
           </Typography>
-        </FormLabel>
+        </FormLabel> */}
         <TextField
-          variant="standard"
+          variant="outlined"
           name={name}
+          label={label}
           onChange={(e) => onChange(e)}
-          InputProps={{
-            disableUnderline: true,
-          }}
+          // InputProps={{
+          //   disableUnderline: true,
+          // }}
           placeholder={placeHolder}
           value={value}
           fullWidth

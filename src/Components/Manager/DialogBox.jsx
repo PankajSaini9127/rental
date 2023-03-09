@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { CustomTextField } from "../StyledComponent";
 
 const labelStyle = {
   fontSize: "15px",
@@ -45,7 +46,7 @@ const TextFieldWrapper = ({
             {label}
           </Typography>
         </FormLabel> */}
-        <TextField
+        <CustomTextField
           variant="outlined"
           label={label}
           name={name}
