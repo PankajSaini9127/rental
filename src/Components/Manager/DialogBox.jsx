@@ -26,11 +26,11 @@ const TextFieldWrapper = ({
   grid
 }) => {
   const fieldStyle = {
-    border: "1px solid #03C1F3",
-    borderRadius: "20px",
+    // border: "1px solid #03C1F3",
+    // borderRadius: "20px",
     height: "50px",
-    p: 1,
-    px:2,
+    // p: 1,
+    // px:2,
     
     color: "rgba(16, 99, 173, 0.47)",
     "@media(max-width:900px)": { height: "46px", p: 1 },
@@ -40,13 +40,14 @@ const TextFieldWrapper = ({
     <Grid item md={10} xs={grid}>
       {/* <MyTextfield /> */}
       <FormControl fullWidth>
-        <FormLabel>
+        {/* <FormLabel>
           <Typography variant="body1" sx={labelStyle}>
             {label}
           </Typography>
-        </FormLabel>
+        </FormLabel> */}
         <TextField
-          variant="standard"
+          variant="outlined"
+          label={label}
           name={name}
           type={'number'}
           onChange={(e) => onChange(e)}

@@ -10,6 +10,8 @@ import {
   Typography,
   styled,
   Button,
+  InputLabel,
+  NativeSelect,
 } from "@mui/material";
 
 // header
@@ -32,40 +34,37 @@ const labelStyle = {
 
 // textfield & select CSS style
 const fieldStyle = {
-  border: "1px solid #03C1F3",
-  borderRadius: "20px",
+  // border: "1px solid #03C1F3",
+  // borderRadius: "20px",
   height: "50px",
   width: "100%",
-  p: "8px",
-  pl:"13px",
-  input: { color: "#03C1F3",'&::placeholder':{color:"rgba(16, 99, 173, 0.47)"} },
+  // p: "8px",
+  // pl:"13px",
+  // input: { color: "#03C1F3",'&::placeholder':{color:"rgba(16, 99, 173, 0.47)"} },
   "@media(max-width:900px)": { height: "35px",p:0 , px:'10px'},
 };
 
 
 
-
-
-
 // Text Field Style
-
 const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
   return (
     <Grid item md={4} xs={6}>
       <FormControl fullWidth>
-        <FormLabel>
+        {/* <FormLabel>
           <Typography variant="body1" sx={labelStyle}>
             {label}
           </Typography>
-        </FormLabel>
+        </FormLabel> */}
         <TextField
-          variant="standard"
+          variant="outlined"
           name={name}
           onChange={(e) => onChange(e)}
+          label={label}
           InputProps={{
-            disableUnderline: true,
             style: {
               color: "rgba(16, 99, 173, 0.47) !important/",
+             
               '@media(max-width:900px)':{fontSize:'10px !important'}
             },
           }}
@@ -121,29 +120,31 @@ const SelectComponent = ({ label, value, name, onChange }) => {
   return (
     <Grid item md={4} xs={6}>
       <FormControl fullWidth>
-        <FormLabel>
+        {/* <FormLabel>
           <Typography variant="body1" sx={labelStyle}>
             {label}
           </Typography>
-        </FormLabel>
+        </FormLabel> */}
+        {/* <InputLabel id="demo-simple-select-helper-label">Yearly Increment Type</InputLabel> */}
         <Select
           name={name}
           onChange={(e) => onChange(e)}
-          variant="standard"
+          variant="outlined"
           disableUnderline
           value={value}
+          // labelId="demo-simple-select-helper-label"
           sx={{
-            border: "1px solid #03C1F3",
-            borderRadius: "20px",
-            height: "50px",
+            // border: "1px solid #03C1F3",
+            // borderRadius: "20px",
+            // height: "50px",
             mt: "0px !important",
             color: "rgba(16, 99, 173, 0.47)",
-            p: "8px",
+            // p: "8px",
             width: "100%",
-            px: "13px",
+            // px: "13px",
             boxShadow: "none",
-            input: { '&::placeholder':{color:"rgba(16, 99, 173, 0.47)"} },
-            ".MuiOutlinedInput-notchedOutline": { border: 0 },
+            // input: { '&::placeholder':{color:"rgba(16, 99, 173, 0.47)"} },
+            // ".MuiOutlinedInput-notchedOutline": { border: 0 },
             "@media(max-width:900px)": { height: "35px", width: "35vw" },
             
           }}
@@ -166,35 +167,38 @@ const SelectNative = ({value,names,label})=>{
   return(
     <Grid item md={4} xs={6}>
     <FormControl fullWidth>
-      <FormLabel>
+      {/* <FormLabel>
         <Typography variant="body1" sx={labelStyle}>
           {label}
         </Typography>
-      </FormLabel>
+      </FormLabel> */}
+      <InputLabel id="nativeSelectLabel">Role</InputLabel>
+
       <Select
-      disableUnderline
-      variant="standard"
+      variant="outlined"
+      label="Role"
       multiple
+      autoFocus
        native
+      //  label={'hihihi'}
       sx={{
-        border: "1px solid #03C1F3",
-        borderRadius: "20px",
+        // border: "1px solid #03C1F3",
+        // borderRadius: "20px",
         // height: "50px",
         mt: "0px !important",
         color: "rgba(16, 99, 173, 0.47)",
-        p: 2,
+        p: 1,
         width: "100%",
         px: 2,
         boxShadow: "none",
-        input: { fontSize:"20px",'&::placeholder':{color:"rgba(16, 99, 173, 0.47)"} },
-        ".MuiOutlinedInput-notchedOutline": { border: 0 },
+        input: { fontSize:"23px",'&::placeholder':{color:"rgba(16, 99, 173, 0.47)"} },
+        // ".MuiOutlinedInput-notchedOutline": { border: 0 },
         
       }}
 
 value={value}
 // @ts-ignore Typings are not considering `native`
 // onChange={handleChangeMultiple}
-label={label}
 
 >
 {names.map((name) => (
@@ -203,6 +207,7 @@ label={label}
   </option>
 ))}
 </Select>
+
     </FormControl>
   </Grid>
   )
