@@ -42,7 +42,7 @@ const TextFieldWrapper = ({ placeHolder, value, name, onChange, grid }) => {
             Remark
           </Typography>
         </FormLabel>
-        <CustomTextField
+        <TextField
           variant="standard"
           multiline
           rows={7}

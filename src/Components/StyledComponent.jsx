@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 
 
-import {withStyles} from "@mui/styles"
+// import {withStyles} from "@mui/styles";
 
 // header
 const MyHeader = styled("h5")({
@@ -48,27 +48,27 @@ const fieldStyle = {
 };
 
 
-const CustomTextField = withStyles({
-  root: {
-    '& label.Mui-focused': {
-      color: '	#00008b',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: '	#00008b',
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: '	#00008b',
-      },
-      '&:hover fieldset': {
-        borderColor: '	#00008b',
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: '	#00008b',
-      },
-    },
-  },
-})(TextField);
+// const CustomTextField = withStyles({
+//   root: {
+//     '& label.Mui-focused': {
+//       color: '	#00008b',
+//     },
+//     '& .MuiInput-underline:after': {
+//       borderBottomColor: '	#00008b',
+//     },
+//     '& .MuiOutlinedInput-root': {
+//       '& fieldset': {
+//         borderColor: '	#00008b',
+//       },
+//       '&:hover fieldset': {
+//         borderColor: '	#00008b',
+//       },
+//       '&.Mui-focused fieldset': {
+//         borderColor: '	#00008b',
+//       },
+//     },
+//   },
+// })(TextField);
 
 // Text Field Style
 const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
@@ -80,7 +80,7 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
             {label}
           </Typography>
         </FormLabel> */}
-        <CustomTextField
+        <TextField
           variant="outlined"
           name={name}
           onChange={(e) => onChange(e)}
@@ -310,4 +310,4 @@ const DashboardItem = ({ service, value }) => {
 
 
 
-export { MyHeader, TextFieldWrapper, DocumentUpload, SelectComponent,SelectNative,DashboardItem,CustomTextField };
+export { MyHeader, TextFieldWrapper, DocumentUpload, SelectComponent,SelectNative,DashboardItem };

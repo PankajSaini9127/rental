@@ -46,7 +46,7 @@ const TextFieldWrapper = ({
             {label}
           </Typography>
         </FormLabel> */}
-        <CustomTextField
+        <TextField
           variant="outlined"
           label={label}
           name={name}

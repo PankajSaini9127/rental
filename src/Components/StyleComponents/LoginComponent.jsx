@@ -137,7 +137,7 @@ function LoginComponent({
                   {/* <FormLabel>
                     <Typography variant="body1">Username/Email</Typography>
                   </FormLabel> */}
-                  <CustomTextField
+                  <TextField
                     variant="outlined"
                     placeholder="Enter Username/Email"
                     label="Username/Email"
@@ -153,7 +153,7 @@ function LoginComponent({
                   {/* <FormLabel>
                     <Typography variant="body1">Password</Typography>
                   </FormLabel> */}
-                  <CustomTextField
+                  <TextField
                     type="password"
                     variant="outlined"
                     placeholder="********"
