@@ -133,7 +133,7 @@ function LoginComponent({
 
             <Grid container sx={{ justifyContent: "center" }} spacing={1}>
               <Grid item xs={12}>
-                <FormControl sx={{ my: 1 }} fullWidth>
+                <FormControl sx={{ my: 1 }} fullWidth className="textFieldWrapper">
                   {/* <FormLabel>
                     <Typography variant="body1">Username/Email</Typography>
                   </FormLabel> */}
@@ -149,7 +149,7 @@ function LoginComponent({
               </Grid>
 
               <Grid item xs={12}>
-                <FormControl fullWidth>
+                <FormControl fullWidth className="textFieldWrapper">
                   {/* <FormLabel>
                     <Typography variant="body1">Password</Typography>
                   </FormLabel> */}
