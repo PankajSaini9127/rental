@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/packageLock.json
+.package-lock.json
 /.pnp
 .pnp.js
 
