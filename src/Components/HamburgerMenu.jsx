@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Vector1, Vector2, Vector3 } from "./Vector";
 import { NavExpand, NavItem } from "./StyleComponents/HamburgerStyled";
 
-function HamburgerMenu({navigateTo}) {
+function HamburgerMenu({navigateTo,navigate2}) {
   const [expand, setExpand] = useState(false);
 
    const navigate = useNavigate()
@@ -53,10 +53,10 @@ function HamburgerMenu({navigateTo}) {
               />
               <NavExpand
                 msg="Monthly Payments"
-                navigateTO="adminLogin"
+                navigateTO={'monthaly-payment'}
                 Vector={Vector2}
               />
-              <NavExpand msg="Renewal" Vector={Vector3} />
+              <NavExpand msg="Renewal" Vector={Vector3} navigateTO={'renewal'}/>
             </Stack>
           )}
         </Stack>

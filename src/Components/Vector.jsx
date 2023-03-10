@@ -7,6 +7,8 @@ const vectorStyle={
     width: "50px",
     backgroundSize: "cover",
     position: "relative",
+    display:"grid",
+    placeItems:"center"
   
 }
 
@@ -189,7 +191,9 @@ const VectorUser = ()=>{
 const VectorLogout =()=>{
   return(
     <Box
-    sx={vectorStyle}>
+    sx={{display:"grid",placeItems:"center"}}
+    >
+      <Box sx={vectorStyle}>
       <svg  className={"logout1"} width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M11.574 8.49268L14.9873 5.07935L11.574 1.66602M1.33398 5.07935H14.894" stroke="#03C1F3" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
@@ -197,7 +201,7 @@ const VectorLogout =()=>{
       <svg className={"logout2"} width="13" height="24" viewBox="0 0 13 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M1 1.33398C6.89333 1.33398 11.6667 5.33398 11.6667 12.0007C11.6667 18.6673 6.89333 22.6673 1 22.6673" stroke="#03C1F3" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
-
+</Box>
     </Box>
   )
 }

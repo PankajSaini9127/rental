@@ -48,28 +48,6 @@ const fieldStyle = {
 };
 
 
-// const CustomTextField = withStyles({
-//   root: {
-//     '& label.Mui-focused': {
-//       color: '	#00008b',
-//     },
-//     '& .MuiInput-underline:after': {
-//       borderBottomColor: '	#00008b',
-//     },
-//     '& .MuiOutlinedInput-root': {
-//       '& fieldset': {
-//         borderColor: '	#00008b',
-//       },
-//       '&:hover fieldset': {
-//         borderColor: '	#00008b',
-//       },
-//       '&.Mui-focused fieldset': {
-//         borderColor: '	#00008b',
-//       },
-//     },
-//   },
-// })(TextField);
-
 // Text Field Style
 const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
   return (
@@ -118,7 +96,7 @@ const DocumentUpload = ({ label, placeHolder,handleChange }) => {
         <Button
           variant="outlined"
           sx={{
-            border: "1px solid #03C1F3",
+            border: "1px solid #C8C8C8",
             borderRadius: "20px",
             height: "50px",
             // width: "100%",
@@ -143,35 +121,31 @@ const DocumentUpload = ({ label, placeHolder,handleChange }) => {
 // Select Field
 
 
-const SelectComponent = ({ label, value, name, onChange }) => {
+const SelectComponent = ({ label, value, name, onChange ,options}) => {
   return (
     <Grid item md={4} xs={6}>
-      <FormControl fullWidth>
-        {/* <FormLabel>
-          <Typography variant="body1" sx={labelStyle}>
-            {label}
-          </Typography>
-        </FormLabel> */}
-        {/* <InputLabel id="demo-simple-select-helper-label">Yearly Increment Type</InputLabel> */}
+      <FormControl fullWidth className="textFieldWrapper">
+      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
           name={name}
           onChange={(e) => onChange(e)}
           variant="outlined"
-          disableUnderline
+          labelId="demo-simple-select-label"
           value={value}
+          label={label}
           // labelId="demo-simple-select-helper-label"
           sx={{
             '.MuiOutlinedInput-notchedOutline': {
-              borderColor: '#00008b',
+              borderColor: '#C8C8C8',
             },
             '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#00008b',
+              borderColor: '#C8C8C8',
             },
             '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#00008b',
+              borderColor: '#C8C8C8',
             },
             '.MuiSvgIcon-root ': {
-              fill: "#00008b !important",
+              fill: "#C8C8C8 !important",
             },
             // border: "1px solid #03C1F3",
             // borderRadius: "20px",
@@ -188,9 +162,11 @@ const SelectComponent = ({ label, value, name, onChange }) => {
             
           }}
         >
-          <MenuItem value="1">Select Increment Type</MenuItem>
-          <MenuItem value="percentage">Percentage</MenuItem>
-          <MenuItem value="value">Value</MenuItem>
+          {
+            options.map((item,i)=>{
+              return <MenuItem value={item}>{item}</MenuItem>
+            })
+          }
         </Select>
       </FormControl>
     </Grid>

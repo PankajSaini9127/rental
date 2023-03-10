@@ -45,7 +45,7 @@ const NavExpand = ({msg, navigateTO,Vector})=>{
   const NavItem = ({Vector})=>{
     return(
      
-                  <Vector />
+                  <Vector/>
     )
   }
 

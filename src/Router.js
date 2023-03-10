@@ -26,6 +26,11 @@ import SrManagerListing from './Components/SrManager/SrManagerListing'
 import SrManagerDashboard from './Components/SrManager/SrManagerDashboard'
 import OperationsLogin from './Components/Operations/Login'
 import OperationsListing from './Components/Operations/OperationsListing'
+import MonthalyList from './Components/MonthalyPayment/MonthalyList'
+import RenewalList from './Components/Renewal/RenewalList'
+import ForgotPassword from './Components/ResetPassword/ForgotPassword'
+import EmailVerify from './Components/ResetPassword/EmailVerify'
+import ResetPassword from './Components/ResetPassword/ResetPassword'
 
 function Router() {
   return (
@@ -39,6 +44,8 @@ function Router() {
         <Route exact path='/listing' element={<Listing/>}/>
         <Route exact path='/operationsListing' element={<OperationsListing/>}/>
         <Route exact path='/srManagerDashboard' element={<SrManagerDashboard/>}/>
+        <Route exact path='/monthaly-payment' element={<MonthalyList/>}/>
+        <Route exact path='/renewal' element={<RenewalList/>}/>
 
         <Route exact path='/newUser' element={<NewUser/>}/>
         <Route exact path='/userDashboard' element={<UserDashboard/>}/>
@@ -58,6 +65,10 @@ function Router() {
 
         <Route exact path='/adminLogin' element={<AdminLogin/>}/>
 
+
+        <Route path={'/resetPassword'} element={<ForgotPassword/>} />
+        <Route path={'/emailVerify'} element={<EmailVerify/>} />
+        <Route path={'/newPassword'} element={<ResetPassword/>} />
 
     </Routes>
     </BrowserRouter>

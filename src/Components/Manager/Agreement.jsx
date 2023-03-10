@@ -29,6 +29,11 @@ import YearlyIncrement from "./IncrementType";
 import DialogBox from "./DialogBox";
 import { useNavigate } from "react-router-dom";
 
+const incrementType = [
+  "Percentage",
+  "Value"
+]
+
 
 // form initial state
 
@@ -255,9 +260,9 @@ const handleSubmit = (e)=>{
                 onChange={e=>handleChange(e)}
                 />
                 <SelectComponent
-                  label="Yearly Increment"
-                  placeHolder="Select Increment Type"
+                  label={'Yearly Increment'}
                   name='yearlyIncrement'
+                  options={incrementType}
                   value={Value.yearlyIncrement}
                 onChange={e=>handleChange(e)}
                 />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import DataTable from "./DataTable";
 
@@ -6,14 +6,17 @@ import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
 import { Stack } from "@mui/material";
 
-const options = ["New Agreement","Monthaly Payment","Rental"]
+const options = ["New Agreement","Monthly Payment","Rental"]
 
 function Listing() {
   const [Select, setSelect] = useState("New Agreement");
 
   const handleChange = (e) => {
-    // setSelect(e.target.value);
+    setSelect(e.target.value);
   };
+
+
+
 
   return (
     <>
@@ -21,7 +24,7 @@ function Listing() {
         <HamburgerMenu navigateTo={'listing'}/>
 
         <ListingComponent
-          title="Rental Agreement"
+          title={'Rental Agreement'}
           buttonText="Upload"
           buttonText1="Add Agreement"
           addbtn={true}

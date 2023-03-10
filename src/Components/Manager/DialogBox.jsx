@@ -6,17 +6,10 @@ import {
   TextField,
   Button,
   Typography,
+  Box,
 } from "@mui/material";
 import React, { useState } from "react";
-import { CustomTextField } from "../StyledComponent";
 
-const labelStyle = {
-  fontSize: "15px",
-  lineHeight:"30px",
-  color: "#03C1F3",
-  fontWeight: "600",
-  "@media(max-width:900px)": { fontSize: "10px" },
-};
 
 const TextFieldWrapper = ({
   label,
@@ -38,19 +31,14 @@ const TextFieldWrapper = ({
   };
 
   return (
-    <Grid item md={10} xs={grid}>
-      {/* <MyTextfield /> */}
+      
+        <Box sx={{width:'100%'}} className="textFieldWrapper">
       <FormControl fullWidth>
-        {/* <FormLabel>
-          <Typography variant="body1" sx={labelStyle}>
-            {label}
-          </Typography>
-        </FormLabel> */}
         <TextField
           variant="outlined"
           label={label}
           name={name}
-          type={'number'}
+          type={'text'}
           onChange={(e) => onChange(e)}
           fullWidth
           InputProps={{
@@ -64,15 +52,16 @@ const TextFieldWrapper = ({
           value={value}
           sx={fieldStyle}
         />
-      </FormControl>
-    </Grid>
+       </FormControl>
+       </Box>
   );
 };
 
 const Landblord = () => {
   return (
     <>
-      <Grid item md={10} xs={11.5} container sx={{ justifyContent: "center" }} spacing={0}>
+      <Grid container sx={{ justifyContent: "space-evenly",mb:2 }} spacing={2}>
+
         <Grid item xs={6}>
           <TextFieldWrapper
             label={"Name of Landlord"}
@@ -115,7 +104,7 @@ function DialogBox({value, setValue}) {
           container
           sx={{
             // height: "345px",
-            width: "500px",
+            width: "600px",
             borderRadious: "30px ",
             backgroundColor: "#FFFFFF",
             justifyContent: "center",
@@ -125,6 +114,7 @@ function DialogBox({value, setValue}) {
           }}
           spacing={4}
         >
+          <Grid item md={10}>
           <TextFieldWrapper
             label="Enter No of Landlord"
             placeHolder="Enter No of Landlord"
@@ -133,7 +123,8 @@ function DialogBox({value, setValue}) {
             name={"landblord"}
             onChange={handleChange}
           />
-
+          </Grid>
+          <Grid item md={10}>
           {value > 0 ? (
             <>
               {Array.from({ length: value }, (_, i) => (
@@ -143,8 +134,10 @@ function DialogBox({value, setValue}) {
           ) : (
             ""
           )}
+          </Grid>
+
+          <Grid item md={3}>
           {value > 0 ? (
-            <Grid item md={4} xs={6}>
               <Button
                 variant="contained"
                 onClick={handleClose}
@@ -161,10 +154,10 @@ function DialogBox({value, setValue}) {
               >
                 Submit
               </Button>
-            </Grid>
           ) : (
             ""
           )}
+          </Grid>
         </Grid>
       </Dialog>
     </>

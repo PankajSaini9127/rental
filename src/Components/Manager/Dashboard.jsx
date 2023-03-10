@@ -33,7 +33,7 @@ function Dashboard() {
       <MyHeader>Dashboard</MyHeader>
 
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-        <HamburgerMenu  navigateTo={'listing'}/>
+        <HamburgerMenu  navigateTo={'listing'} />
 
         {/* dashboard content */}
         <Grid container sx={{ justifyContent: "center" }}>

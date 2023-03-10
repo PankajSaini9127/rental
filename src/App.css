@@ -149,18 +149,28 @@ background: rgba(0, 140, 194, 0.78);
   
 .logout1{
     position: absolute;
-     top:7px; 
+     top:20px;
+     left:10px; 
    
 }  
 
 .logout2{
     position: absolute;
-    
-    left:11px;  
+    left:21px;  
 }
 .textFieldWrapper *{
-  border-color: #00008b !important;
+  border-color: #C8C8C8 !important;
+  color: black;
 }
 .textFieldWrapper label{
-  color : #00008b !important;
+  color : #C8C8C8 !important;
+}
+
+.LoginInput * {
+  border-color: #C8C8C8 !important;
+  color:black !important;
+}
+
+.LoginInput label{
+  /* color:#C8C8C8 !important; */
 }

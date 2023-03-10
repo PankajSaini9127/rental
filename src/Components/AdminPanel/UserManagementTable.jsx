@@ -1,7 +1,16 @@
-import { Box } from '@mui/material';
+import { Box, Switch } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React from 'react'
 
+const activeBtn =()=>{
+  return (
+    <Switch
+    onClick={(e) => {
+      e.stopPropagation(); // don't select this row after clicking
+    }}
+    />
+  )
+}
 
 const columns = [
    
@@ -16,44 +25,52 @@ const columns = [
     {
       field: "name",
       headerName: "Name",
-      width: 190,
+      width: 170,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "role",
       headerName: "Role",
-      width: 190,
+      width: 150,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "password",
       headerName: "Password",
-      width: 170,
+      width: 150,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "email",
       headerName: "Email",
-      width: 190,
+      width: 170,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "contactno",
       headerName: "Contact No.",
-      width: 170,
+      width: 150,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
         field: "status",
         headerName: "Status",
+        width: 110,
+        headerClassName: "dataGridHeader",
+        headerAlign: "center",
+      },
+    {
+        field: "active",
+        headerName: "Active/Inactive",
         width: 130,
         headerClassName: "dataGridHeader",
         headerAlign: "center",
+        renderCell: activeBtn
       },
   ];
   

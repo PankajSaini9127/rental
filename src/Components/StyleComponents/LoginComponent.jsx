@@ -13,8 +13,7 @@ import {
 
 import Img from "../../assest/pic/login-form.png";
 import logo from "../../assest/pic/logo1 1.png";
-import { useNavigate } from "react-router-dom";
-import { CustomTextField } from "../StyledComponent";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function LoginComponent({
   title,
@@ -28,6 +27,10 @@ function LoginComponent({
   const { password, username } = formValue;
 
   const naviagte = useNavigate();
+
+  const resetPassword = ()=>{
+    naviagte('/resetPassword')
+  }
 
   return (
     <Grid container sx={{ height: "100vh" }}>
@@ -133,7 +136,7 @@ function LoginComponent({
 
             <Grid container sx={{ justifyContent: "center" }} spacing={1}>
               <Grid item xs={12}>
-                <FormControl sx={{ my: 1 }} fullWidth className="textFieldWrapper">
+                <FormControl sx={{ my: 1 }} fullWidth className="LoginInput">
                   {/* <FormLabel>
                     <Typography variant="body1">Username/Email</Typography>
                   </FormLabel> */}
@@ -149,7 +152,7 @@ function LoginComponent({
               </Grid>
 
               <Grid item xs={12}>
-                <FormControl fullWidth className="textFieldWrapper">
+                <FormControl fullWidth className="LoginInput">
                   {/* <FormLabel>
                     <Typography variant="body1">Password</Typography>
                   </FormLabel> */}
@@ -164,6 +167,11 @@ function LoginComponent({
                   />
                 </FormControl>
               </Grid>
+ 
+ <Grid item xs={12}>
+ <Typography variant="body">Forgot Password ? <Button variant="text" sx={{textTransform:"capitalize"}} onClick={resetPassword}>Reset Now</Button></Typography>
+ </Grid>
+            
 
               <Grid item sx={{ mt: 2 }}>
                 <Button

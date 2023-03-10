@@ -1,15 +1,54 @@
-import { Box } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
+//icons
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+const renderDetailsButton = () => {
+  return (
+      <Grid container>
+        <Grid item md={6}>
+        <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              style={{ backgroundColor:"#C5C05B",fontSize:"12px",textTransform:"capitalize" }}
+              startIcon={<EditIcon />}
+              onClick={(e) => {
+                e.stopPropagation(); // don't select this row after clicking
+              }}
+          >
+              Edit
+          </Button>          
+        </Grid>
+        <Grid item md={6}>
+          <Button
+           variant="contained"
+           size="small"
+           startIcon={<DeleteIcon />}
+           onClick={(e) => {
+            e.stopPropagation(); // don't select this row after clicking
+          }}
+            sx={{fontSize:"12px",backgroundColor:"#CF482A",textTransform:"capitalize"}}
+          >
+            Delete
+          </Button>
+        </Grid>
+      </Grid>
+         
+      
+  )
+}
 
 const columns = [
    
     {
       field: "code",
       headerName: "Code",
-      width: 150,
+      width: 130,
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -17,33 +56,42 @@ const columns = [
     {
       field: "name",
       headerName: "Name",
-      width: 250,
+      width: 230,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "location",
       headerName: "Location",
-      width: 250,
+      width: 230,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "rentalAmount",
       headerName: "Rental Amount",
-      width: 220,
+      width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
         field: "status",
         headerName: "Status",
-        width: 180,
+        width: 160,
         headerClassName: "dataGridHeader",
         headerAlign: "center",
       },
+    {
+        field: "action",
+        headerName: "Action",
+        width: 200,
+        headerClassName: "dataGridHeader",
+        headerAlign: "center",
+        renderCell: renderDetailsButton
+      },
   ];
   
+ 
 
   const row = [
     {
@@ -53,6 +101,7 @@ const columns = [
       name: "John Doe",
       location:"Rajsthan",
       rentalAmount:10000,
+    
     },
     {
       id: 2,

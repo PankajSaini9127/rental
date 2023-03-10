@@ -1,9 +1,9 @@
 
-import { Box, Button, Grid,  Stack } from "@mui/material";
+import { Box, Button, Grid,  Select,  Stack } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
-import { MyHeader, SelectNative, TextFieldWrapper } from "../StyledComponent";
+import { MyHeader, SelectComponent, TextFieldWrapper } from "../StyledComponent";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
 const initialState ={
@@ -14,18 +14,32 @@ const initialState ={
     mobile:""
 }
 
+const Role = [
+  "Manager",
+  "Senior Manager",
+  "BHU",
+  "Operations",
+  "Finance"
+]
+
+
+
 function NewUser() {
 
   const navigate =useNavigate()
 
     const [formVal, setFormVal]= useState(initialState)
+    const [SelectRole, setSelectRole]= useState("")
 
     const {name,email,password,role,mobile} = formVal;
 
-    const names =[ "Sr. Manager", 'Manager', 'Operations']
 
     const handleAddUser =()=>{
       navigate('/userManagement')
+    }
+
+    const handleSelect =(e)=>{
+      setSelectRole(e.target.value)
     }
 
   return (
@@ -80,13 +94,8 @@ function NewUser() {
               placeHolder="Password"
               value={password}
             />
-            {/* <TextFieldWrapper
-              label="Role"
-              placeHolder=""
-              value={role}
-            /> */}
 
-   <SelectNative value={role} names={names} label={'Role'}/>
+   <SelectComponent value={SelectRole} label={'Role'} options={Role} onChange={handleSelect}/>
 
 
           <Grid item sm={3.0}>
