@@ -93,7 +93,9 @@ function UserManagementTable({rows}) {
           textAlign:"center !important",
           borderRadius:"10px !important"
         },
-
+        "& .allCell":{
+          justifyContent:"center !important"          
+        }
       }}
     >
       <DataGrid
@@ -104,21 +106,25 @@ function UserManagementTable({rows}) {
         checkboxSelection
         sx={{ color: "black !important",  minWidth:"50px" }}
         getCellClassName={(parms) => {
+          let cellClass = []
+         if (parms.field === "status" && parms.row.status === "Active") {
+           cellClass.push("green statusCell") ;
+         } else if (
+           parms.field === "status" &&
+           parms.row.status === "Pending"
+         ) {
+           cellClass.push( "yellow statusCell") ;
+         } else if (
+           parms.field === "status" &&
+           parms.row.status === "Inactive"
+         ) {
+           cellClass.push("red statusCell")  ;
+         }
+         cellClass.push('allCell')
          
-          if (parms.field === "status" && parms.row.status === "Active") {
-            return "green statusCell";
-          } else if (
-            parms.field === "status" &&
-            parms.row.status === "Pending"
-          ) {
-            return "yellow statusCell";
-          } else if (
-            parms.field === "status" &&
-            parms.row.status === "Inactive"
-          ) {
-            return "red statusCell";
-          }
-        }}
+         return(cellClass)
+
+       }}
 
       >
 

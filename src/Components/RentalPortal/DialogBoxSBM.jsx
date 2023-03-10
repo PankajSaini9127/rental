@@ -10,6 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
+import { CustomTextField } from "../StyledComponent";
 
 const labelStyle = {
   fontSize: "20px",
@@ -41,7 +42,7 @@ const TextFieldWrapper = ({ placeHolder, value, name, onChange, grid }) => {
             Remark
           </Typography>
         </FormLabel>
-        <TextField
+        <CustomTextField
           variant="standard"
           multiline
           rows={7}

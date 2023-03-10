@@ -18,7 +18,7 @@ function Listing() {
   return (
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-        <HamburgerMenu />
+        <HamburgerMenu navigateTo={'listing'}/>
 
         <ListingComponent
           title="Rental Agreement"
