@@ -7,56 +7,12 @@ import Logo from "../assest/pic/Dashboard/logo1 2.png";
 import "../assest/CSS/hamburgerMenu.css";
 import { useNavigate } from "react-router-dom";
 import { Vector1, Vector2, Vector3 } from "./Vector";
+import { NavExpand, NavItem } from "./StyleComponents/HamburgerStyled";
 
 function HamburgerMenu({navigateTo}) {
   const [expand, setExpand] = useState(false);
 
-  const navigate = useNavigate();
-
-  const NavExpand = ({ msg, navigateTO, Vector }) => {
-    return (
-      <Grid
-        item
-        container
-        className="ActiveMenu"
-        sx={{
-          height: "50px",
-          width: "250px",
-          position: "relative",
-          flexDirection: "row",
-          alignItems: "center",
-          "@media(max-width:900px)": { width: "180px" },
-        }}
-        onClick={() => {
-          navigate(`/${navigateTO}`);
-        }}
-      >
-        <Box sx={{ width: "50px" }}>
-          <Vector />
-        </Box>
-
-        <Typography
-          variant="body1"
-          component={"span"}
-          color="#03C1F3"
-          className="menuItem"
-          sx={{
-            textAlign: "center",
-            fontWeight: "500",
-            lineHeight: "24px",
-            fontSize: "18px",
-            "@media(max-width:900px)": { fontSize: "12px", lineHeight: "15px" },
-          }}
-        >
-          {msg}
-        </Typography>
-      </Grid>
-    );
-  };
-
-  const NavItem = ({ Vector }) => {
-    return <Vector />;
-  };
+   const navigate = useNavigate()
 
   return (
     <>
@@ -94,7 +50,6 @@ function HamburgerMenu({navigateTo}) {
                 msg="New Agreement"
                 navigateTO={navigateTo}
                 Vector={Vector1}
-                NavItem={NavItem}
               />
               <NavExpand
                 msg="Monthly Payments"

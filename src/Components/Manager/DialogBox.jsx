@@ -72,14 +72,14 @@ const TextFieldWrapper = ({
 const Landblord = () => {
   return (
     <>
-      <Grid item md={10} xs={11.5} container sx={{ justifyContent: "space-evenly" }} spacing={1}>
-        <Grid item xs={5.5}>
+      <Grid item md={10} xs={11.5} container sx={{ justifyContent: "center" }} spacing={0}>
+        <Grid item xs={6}>
           <TextFieldWrapper
             label={"Name of Landlord"}
             placeHolder={"Name of Landlord"}
           />
         </Grid>
-        <Grid item xs={5.5}>
+        <Grid item xs={6}>
           <TextFieldWrapper
             label={"Percentage Share%"}
             placeHolder={"Percentage Share%"}
