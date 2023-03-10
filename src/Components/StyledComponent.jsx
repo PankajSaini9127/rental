@@ -74,7 +74,7 @@ const fieldStyle = {
 const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
   return (
     <Grid item md={4} xs={6}>
-      <FormControl fullWidth>
+      <FormControl fullWidth className="textFieldWrapper">
         {/* <FormLabel>
           <Typography variant="body1" sx={labelStyle}>
             {label}
@@ -83,6 +83,7 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
         <TextField
           variant="outlined"
           name={name}
+          // color='secodary'
           onChange={(e) => onChange(e)}
           label={label}
           InputProps={{
@@ -90,6 +91,7 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
               color: "rgba(16, 99, 173, 0.47) !important/",
               '@media(max-width:900px)':{fontSize:'10px !important'}
             },
+           
           }}
           placeholder={placeHolder}
           value={value}
