@@ -102,6 +102,9 @@ function OperationsTable({rows}) {
           textAlign:"center !important",
           borderRadius:"10px !important"
         },
+        "& .allCell":{
+          justifyContent:"center !important"          
+        }
 
       }}
     >
@@ -112,22 +115,27 @@ function OperationsTable({rows}) {
         rowsPerPageOptions={[6]}
         checkboxSelection
         sx={{ color: "black !important",  minWidth:"50px" }}
-        getCellClassName={(parms) => {
+       getCellClassName={(parms) => {
+          let cellClass = []
+         if (parms.field === "status" && parms.row.status === "Approved") {
+           cellClass.push("green statusCell") ;
+         } else if (
+           parms.field === "status" &&
+           parms.row.status === "Pending"
+         ) {
+           cellClass.push( "yellow statusCell") ;
+         } else if (
+           parms.field === "status" &&
+           parms.row.status === "Rejected"
+         ) {
+           cellClass.push("red statusCell")  ;
+         }
+         cellClass.push('allCell')
          
-          if (parms.field === "status" && parms.row.status === "Approved") {
-            return "green statusCell";
-          } else if (
-            parms.field === "status" &&
-            parms.row.status === "Pending"
-          ) {
-            return "yellow statusCell";
-          } else if (
-            parms.field === "status" &&
-            parms.row.status === "Rejected"
-          ) {
-            return "red statusCell";
-          }
-        }}
+         return(cellClass)
+
+       }}
+
         onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
       >
 

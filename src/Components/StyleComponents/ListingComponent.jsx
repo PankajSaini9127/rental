@@ -98,8 +98,9 @@ function ListingComponent({
           p: 4,
           "@media(max-width:600px)": { p: 2 },
         }}
+        spacing={2}
       >
-        <Grid item sx={{flexGrow:1}}>
+        <Grid item md={8} xs={7} sx={{flexGrow:1}}>
           <TextField
             placeholder="Search By Field Name..."
             InputProps={{
@@ -114,20 +115,27 @@ function ListingComponent({
         </Grid>
 
 {
-  addbtn? <Button
+  addbtn? 
+  <Grid item md={4} xs={5} sx={{display:'flex',justifyContent:'flex-end'}}>
+  <Button
   variant="contained"
   sx={{
     borderRadius: "15px",
     color: "white",
     backgroundColor: "#03C1F3",
     textTransform: "capitalize",
-    mr:3
+    // mr:3
+    '@media(maxwidth:900px)':{
+      fontSize:'12px',
+      lineHeight:'12px'
+    }
   }}
   startIcon={<AddCircleOutlineIcon />}
   onClick={()=>navigate('/newAgreement')}
 >
   {buttonText1}
 </Button>
+</Grid>
 :''
 }
        

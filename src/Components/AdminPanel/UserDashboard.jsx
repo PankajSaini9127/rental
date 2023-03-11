@@ -14,7 +14,7 @@ function UserDashboard() {
 
 <Grid container sx={{justifyContent:"center"}}>
   <Grid item md={10}>
-        <Grid container spacing={3} sx={{justifyContent:"space-evenly" }} >
+        <Grid container spacing={3}>
             <DashboardItem service="Total Sr Manager" value="5" />
             <DashboardItem service="Total Manager" value="5" />
             <DashboardItem service="Total Operation" value="5" />

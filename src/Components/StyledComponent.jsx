@@ -51,13 +51,9 @@ const fieldStyle = {
 // Text Field Style
 const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
   return (
-    <Grid item md={4} xs={6}>
-      <FormControl fullWidth className="textFieldWrapper">
-        {/* <FormLabel>
-          <Typography variant="body1" sx={labelStyle}>
-            {label}
-          </Typography>
-        </FormLabel> */}
+    <Grid item md={4} xs={6} sx={{'@media(max-width:900px)':{my:1}}}>
+      <FormControl fullWidth className="textFieldWrapper" sx={{p:'0px !important'}}>
+       
         <TextField
           variant="outlined"
           name={name}
@@ -123,8 +119,8 @@ const DocumentUpload = ({ label, placeHolder,handleChange }) => {
 
 const SelectComponent = ({ label, value, name, onChange ,options}) => {
   return (
-    <Grid item md={4} xs={6}>
-      <FormControl fullWidth className="textFieldWrapper">
+    <Grid item md={4} xs={6} sx={{mb:'0px !important','@media(max-width:900px)':{my:1}}}>
+      <FormControl fullWidth className="textFieldWrapper" >
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
           name={name}
@@ -147,18 +143,11 @@ const SelectComponent = ({ label, value, name, onChange ,options}) => {
             '.MuiSvgIcon-root ': {
               fill: "#C8C8C8 !important",
             },
-            // border: "1px solid #03C1F3",
-            // borderRadius: "20px",
-            // height: "50px",
             mt: "0px !important",
             color: "rgba(16, 99, 173, 0.47)",
-            // p: "8px",
             width: "100%",
-            // px: "13px",
+            height:'50px',
             boxShadow: "none",
-            // input: { '&::placeholder':{color:"rgba(16, 99, 173, 0.47)"} },
-            // ".MuiOutlinedInput-notchedOutline": { border: 0 },
-            "@media(max-width:900px)": { height: "35px", width: "35vw" },
             
           }}
         >

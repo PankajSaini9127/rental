@@ -18,7 +18,7 @@ function Listing() {
 
 
 
-  return (
+ return (
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
         <HamburgerMenu navigateTo={'listing'}/>

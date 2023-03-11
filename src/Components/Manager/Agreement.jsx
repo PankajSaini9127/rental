@@ -145,7 +145,7 @@ const handleSubmit = (e)=>{
 
 {/* Basic details start here */}
 
-              <Grid container sx={{px:3, justifyContent:"space-evenly" }} spacing={isSmall? 1 :4}>
+              <Grid container sx={{px:3 }} spacing={isSmall? 2 :4}>
                 <TextFieldWrapper
                   label="Code"
                   placeHolder=""
@@ -292,7 +292,7 @@ const handleSubmit = (e)=>{
                   Array.from({length:arrlenght},(_,i)=>{
                     return(<>
                     {arrlenght > 1?<Typography>Landlord Name</Typography>:''}
-                    <Grid container sx={{px:3}} spacing={isSmall?1:4}>
+                    <Grid container sx={{px:3}} spacing={isSmall?2:4}>
                     <TextFieldWrapper
                   label="Bank Name"
                   placeHolder="Enter Bank Name"
@@ -350,7 +350,7 @@ const handleSubmit = (e)=>{
     {arrlenght > 1?<Typography>Landlord Name</Typography>:''}
       <Grid
       container
-      spacing={4}
+      spacing={isSmall?2:4}
       sx={{ px:1, justifyContent:"space-evenly"}}
     >
 

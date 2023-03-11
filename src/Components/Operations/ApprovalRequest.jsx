@@ -167,7 +167,7 @@ function ApprovalRequest() {
             {/* Bank Details Ends here */}
 
             {/* Document Section start here */}
-            <Heading heading={"Document Download"} />
+            {/* <Heading heading={"Document Download"} />
 
             <Grid item md={8}>
               <Grid container spacing={2}>
@@ -178,7 +178,7 @@ function ApprovalRequest() {
                   }
                   
               </Grid>
-            </Grid>
+            </Grid> */}
 
             {/* document section ends here */}
 

@@ -74,27 +74,40 @@ function LoginComponent({
         sm={6}
         sx={{ justifyContent: "center", alignItems: "center" }}
       >
-        <Button
+        
+        <Grid item md={8} xs={11} container spacing={2} sx={{mt:1}}>
+          
+          <Grid item md={4} xs={6}>
+          <Button
           variant="contained"
-          sx={{ color: "#FFFFFF", textTransform: "capitalize" }}
-          onClick={() => naviagte("/srManagerLogin")}
-        >
-          Sr Manager Login
-        </Button>
-        <Button
-          variant="contained"
-          sx={{ color: "#FFFFFF", textTransform: "capitalize", mx: 2 }}
+          sx={{ color: "#FFFFFF", textTransform: "capitalize"}}
           onClick={() => naviagte("/operationsLogin")}
         >
           Opertions Login
         </Button>
-        <Button
+          </Grid>
+          <Grid item md={4} xs={6}>
+            <Button
           variant="contained"
           sx={{ color: "#FFFFFF", textTransform: "capitalize" }}
           onClick={() => naviagte("/adminLogin")}
         >
           Admin Login
         </Button>
+        </Grid>
+        <Grid item md={4} xs={6}>
+          <Button
+          variant="contained"
+          sx={{ color: "#FFFFFF", textTransform: "capitalize" }}
+          onClick={() => naviagte("/srManagerLogin")}
+        >
+          Sr Manager Login
+        </Button>
+          </Grid>
+        
+        
+        
+        </Grid>
 
         <Grid item md={7} xs={11} sx={{ "@media(max-width:900px)": { mb: 2 } }}>
           <Typography

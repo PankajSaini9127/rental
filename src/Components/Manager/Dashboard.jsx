@@ -40,7 +40,7 @@ function Dashboard() {
           <Grid item xs={10}>
             <Grid
               container
-              spacing={4}
+              spacing={3}
             >
             {
               data.map((item,index)=>{
