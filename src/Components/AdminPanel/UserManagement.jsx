@@ -3,11 +3,13 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 
+import axios from 'axios'
+
 import ListingComponent from "../StyleComponents/ListingComponent";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import UserManagementTable from "./UserManagementTable";
 
-const options = ["Sr Manager", "Manager", "Operations"];
+const options = ["Senior Manager", "Manager", "Operations","BHU","Finance"];
 
 
 
@@ -22,6 +24,7 @@ const managerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 2,
@@ -32,6 +35,7 @@ const managerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Yashwant'
   },
   {
     id: 3,
@@ -42,6 +46,7 @@ const managerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Pankaj'
   },
   {
     id: 4,
@@ -52,6 +57,7 @@ const managerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 5,
@@ -62,6 +68,7 @@ const managerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 6,
@@ -72,6 +79,7 @@ const managerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 7,
@@ -82,6 +90,7 @@ const managerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 8,
@@ -92,6 +101,7 @@ const managerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 9,
@@ -102,6 +112,7 @@ const managerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   
 ];
@@ -111,11 +122,12 @@ const srManagerRows = [
     id: 1,
     status: "Pending",
     code: 123,
-    name: "Pankaj",
+    name: "John",
     role: "Sr Manager",
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 2,
@@ -126,6 +138,7 @@ const srManagerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Yashwant'
   },
   {
     id: 3,
@@ -136,6 +149,7 @@ const srManagerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Pankaj'
   },
   {
     id: 4,
@@ -146,6 +160,7 @@ const srManagerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 5,
@@ -156,6 +171,7 @@ const srManagerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 6,
@@ -166,6 +182,7 @@ const srManagerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Pankaj'
   },
   {
     id: 7,
@@ -176,6 +193,7 @@ const srManagerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Yashwant'
   },
   {
     id: 8,
@@ -186,6 +204,7 @@ const srManagerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Yashwant'
   },
   {
     id: 9,
@@ -196,6 +215,7 @@ const srManagerRows = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   
 ];
@@ -210,6 +230,7 @@ const operationRow = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Pankaj'
   },
   {
     id: 2,
@@ -220,6 +241,7 @@ const operationRow = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 3,
@@ -230,6 +252,7 @@ const operationRow = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 4,
@@ -240,6 +263,7 @@ const operationRow = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 5,
@@ -250,6 +274,7 @@ const operationRow = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 6,
@@ -260,6 +285,7 @@ const operationRow = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 7,
@@ -270,6 +296,7 @@ const operationRow = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 8,
@@ -280,6 +307,7 @@ const operationRow = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   {
     id: 9,
@@ -290,6 +318,7 @@ const operationRow = [
     password: "Password",
     email: "john@test.com",
     contactno: 1234567890,
+    supervisor:'Nilesh'
   },
   
 ];
@@ -299,10 +328,48 @@ const operationRow = [
 
 function UserManagement() {
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    const [SelectValue, setSelectValue] = useState('Sr Manager')
-    const [rows, setRows] = useState(srManagerRows)
+  const [data, setData] = useState([])
+  const [SelectValue, setSelectValue] = useState('Senior Manager')
+  const [rows, setRows] = useState(srManagerRows)
+
+
+  //api Call
+  const getUsers = async(SelectValue)=>{
+      try {
+        setData([])
+    const users = await axios.post('http://localhost:8080/api/admin/user',{role:SelectValue})
+    if(users.data.length > 0) {
+        const reverse = users.data.reverse()
+      setData(reverse)
+    }
+  } catch (error) {
+    console.log(error) 
+  }
+    
+  }
+
+  // useEffect(()=>{
+  //  getUsers(SelectValue)
+  // },[SelectValue])
+
+  const row = data.map((item,i)=>{
+    return(
+      {
+        id: item.id,
+        status: "Active",
+        code: item.code,
+        name: item.fullName,
+        role: item.role,
+        password: item.password,
+        email: item.email,
+        contactno: item.mobileNo,
+      }
+    )
+  })
+
+    
 
      const handleChange = (e)=>{
         setSelectValue(e.target.value)

@@ -23,7 +23,7 @@ const data =[
   {field:'lock in year(if applicable)',value:'no'},
   {field:'notice period in month',value:'2'},
   {field:'deposite amount',value:'11000'},
-  {field:'monthaly rental',value:'1500'},
+  {field:'monthly rental',value:'1500'},
 ]
 
 const year = [

@@ -18,16 +18,6 @@ function Dashboard() {
     {service:"Renewal Agreements", value:4}
   ]
 
-  // backEnd
-//   const [data, setData] = useState([]);
-//   const getData = async()=>{
-//     const response = await axios.get('http://localhost:8080/dashboard')
-//     setData(response.data)
-//   }
-// useEffect(()=>{
-//    getData()
-// },[])
-
   return (
     <>
       <MyHeader>Dashboard</MyHeader>

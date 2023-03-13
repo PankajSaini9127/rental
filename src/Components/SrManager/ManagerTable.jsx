@@ -61,7 +61,7 @@ function ManagerTable({rows}) {
   const onRowsSelectionHandler = (ids) => {
     const selectRow = ids.map((id) => rows.find((row) => row.id === id));
     // console.log(selectRow)
-      navigate('/ceoApproval')
+      navigate('/srManagerApproval')
   };
   return (
     <>

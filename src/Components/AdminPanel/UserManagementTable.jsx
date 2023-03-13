@@ -1,6 +1,9 @@
-import { Box, Switch } from '@mui/material';
+import { Box, Button, Grid, Switch } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React from 'react'
+
+//icons
+import EditIcon from '@mui/icons-material/Edit';
 
 const activeBtn =()=>{
   return (
@@ -12,12 +15,35 @@ const activeBtn =()=>{
   )
 }
 
+const renderDetailsButton = () => {
+  return (
+      <Grid container>
+        <Grid item md={6}>
+        <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              style={{ backgroundColor:"#C5C05B",fontSize:"12px",textTransform:"capitalize" }}
+              startIcon={<EditIcon />}
+              onClick={(e) => {
+                e.stopPropagation(); // don't select this row after clicking
+              }}
+          >
+              Edit
+          </Button>          
+        </Grid>
+      </Grid>
+         
+      
+  )
+}
+
 const columns = [
    
     {
       field: "code",
       headerName: "Code",
-      width: 110,
+      width: 80,
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -25,52 +51,67 @@ const columns = [
     {
       field: "name",
       headerName: "Name",
-      width: 170,
+      width: 140,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "role",
       headerName: "Role",
-      width: 150,
+      width: 110,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
+      field: "supervisor",
+      headerName: "Supervisor",
+      width: 110,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "password",
       headerName: "Password",
-      width: 150,
+      width: 110,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "email",
       headerName: "Email",
-      width: 170,
+      width: 160,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "contactno",
       headerName: "Contact No.",
-      width: 150,
+      width: 100,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
         field: "status",
         headerName: "Status",
-        width: 110,
+        width: 120,
         headerClassName: "dataGridHeader",
         headerAlign: "center",
       },
     {
         field: "active",
         headerName: "Active/Inactive",
-        width: 130,
+        width: 120,
         headerClassName: "dataGridHeader",
         headerAlign: "center",
         renderCell: activeBtn
+      },
+    {
+        field: "actions",
+        headerName: "Actions",
+        width: 100,
+        headerClassName: "dataGridHeader",
+        headerAlign: "center",
+        renderCell: renderDetailsButton
       },
   ];
   

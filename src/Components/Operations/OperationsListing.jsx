@@ -5,7 +5,7 @@ import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
 import OperationsTable from "./OperationsTable";
 
-const options = ["New Agreement","Monthaly Payment","Rental"];
+const options = ["New Agreement","Monthly Payment","Rental"];
 
 
 
@@ -100,8 +100,8 @@ function OperationsListing() {
       if(selectVal === "New Agreement"){
         setTitle("New Agreement")
       }
-      if(selectVal === "Monthaly Payment"){
-        setTitle("Monthaly Payment")
+      if(selectVal === "Monthly Payment"){
+        setTitle("Monthly Payment")
       }
       if(selectVal === "Rental"){
         setTitle("Rental")

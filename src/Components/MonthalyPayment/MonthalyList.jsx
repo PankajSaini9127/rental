@@ -24,7 +24,7 @@ export default function MonthalyList() {
 
       <ListingComponent
         title1={'Rental Agreement'}
-        title={'Monthaly Payment'}
+        title={'Monthly Payment'}
         buttonText="Upload"
         buttonText1="Add Agreement"
         addbtn={true}

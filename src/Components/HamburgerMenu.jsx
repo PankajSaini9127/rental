@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid, IconButton, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 
 //icons hero section
@@ -8,6 +8,8 @@ import "../assest/CSS/hamburgerMenu.css";
 import { useNavigate } from "react-router-dom";
 import { Vector1, Vector2, Vector3 } from "./Vector";
 import { NavExpand, NavItem } from "./StyleComponents/HamburgerStyled";
+
+import MenuIcon from '@mui/icons-material/Menu';
 
 function HamburgerMenu({navigateTo,navigate2}) {
   const [expand, setExpand] = useState(false);
@@ -20,10 +22,10 @@ function HamburgerMenu({navigateTo,navigate2}) {
       <Grid
         sx={{ ml: "10px" }}
         className={expand ? "HeroSectionMenu" : ""}
-        onMouseEnter={() => setExpand(true)}
-        onMouseLeave={() => {
-          setExpand(false);
-        }}
+        // onMouseEnter={() => setExpand(true)}
+        // onMouseLeave={() => {
+        //   setExpand(false);
+        // }}
       >
         <Stack sx={{ flexDirection: "column" }} spacing={2}>
           <Box
@@ -35,6 +37,17 @@ function HamburgerMenu({navigateTo,navigate2}) {
             }}
             onClick={() => navigate("/dashboard")}
           />
+          <Box
+            sx={{
+              height: "50px",
+              width: "50px",
+              display:'grid',
+              placeItems:'center'
+            }} 
+          
+          >
+            <IconButton color="primary" onClick={() => setExpand(!expand)} ><MenuIcon/></IconButton>
+          </Box>
 
           {!expand ? (
             <>
@@ -53,7 +66,7 @@ function HamburgerMenu({navigateTo,navigate2}) {
               />
               <NavExpand
                 msg="Monthly Payments"
-                navigateTO={'monthaly-payment'}
+                navigateTO={'monthly-payment'}
                 Vector={Vector2}
               />
               <NavExpand msg="Renewal" Vector={Vector3} navigateTO={'renewal'}/>

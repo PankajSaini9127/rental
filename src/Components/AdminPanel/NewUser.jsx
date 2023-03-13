@@ -1,17 +1,21 @@
 
-import { Box, Button, Grid,  Select,  Stack } from "@mui/material";
+import { Alert, Box, Button, Grid,  Select,  Snackbar,  Stack } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 import { MyHeader, SelectComponent, TextFieldWrapper } from "../StyledComponent";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
+import axios, {Axios} from 'axios'
+
 const initialState ={
-    name:"",
+  code:"123456",
+    fullName:"",
     email:"",
     password:"",
     role:"",
-    mobile:""
+    mobileNo:"",
+    supervisor:""
 }
 
 const Role = [
@@ -22,6 +26,12 @@ const Role = [
   "Finance"
 ]
 
+const Supervisor = [
+  "Nilesh",
+  "Yashwant",
+  "Pankaj"
+]
+
 
 
 function NewUser() {
@@ -29,18 +39,63 @@ function NewUser() {
   const navigate =useNavigate()
 
     const [formVal, setFormVal]= useState(initialState)
-    const [SelectRole, setSelectRole]= useState("")
+    const [msg, setMsg]= useState({
+      open:false,
+      type:"",
+      message:""
+    })
 
-    const {name,email,password,role,mobile} = formVal;
+    const {open,type,message} = msg;
+
+    const {fullName,email,password,role,mobileNo,code,supervisor} = formVal;
 
 
-    const handleAddUser =()=>{
-      navigate('/userManagement')
+    const apiCall = async()=>{
+      const result = await axios.post('http://localhost:8080/api/admin/userRegistration',formVal)
+      console.warn(result)
+      if(result.status === 201){
+        setMsg({
+          open:true,
+          type:'success',
+          message:result.data.message
+        })
+      }
+      if(result.status === 208){
+        setMsg({
+          open:true,
+          type:"error",
+          message:result.data.message
+        })
+      }
+
     }
 
-    const handleSelect =(e)=>{
-      setSelectRole(e.target.value)
+
+    const handleClose = ()=>{
+      if(msg.type === "success"){
+        setFormVal(initialState)
+      }
+       setMsg({
+        open:false,
+        type:"",
+        message:""
+       })
     }
+
+    const handleSubmit =(e)=>{
+      e.preventDefault()
+      // apiCall()
+      // console.log(formVal)
+    }
+
+    
+
+const handleChange = (e)=>{
+     setFormVal({
+      ...formVal,
+      [e.target.name] : e.target.value
+     })
+}
 
   return (
     <>
@@ -54,6 +109,18 @@ function NewUser() {
         <Grid container sx={{ justifyContent: "center" }}>
           <Grid item >
 
+          {
+            open? 
+            <Snackbar open={open} anchorOrigin={{ vertical:"top", horizontal:'center' }} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity={type} sx={{ width: '100%' }}>
+              {message}
+            </Alert>
+                    </Snackbar>
+                    :
+                    ''
+          }
+         
+
         <Box
           component="form"
           sx={{
@@ -63,41 +130,57 @@ function NewUser() {
             borderRadius: "15px",
             maxWidth: "1050px",
           }}
+          onSubmit={handleSubmit}
         >
           <Grid
             container
-            sx={{ px: 3, justifyContent: "space-evenly" }}
+            sx={{ px: 3}}
             spacing={4}
           >
             <TextFieldWrapper
               label="Code"
               placeHolder=""
-              value="NA000001"
+              value={code}
+              onChange={handleChange}
             />
             <TextFieldWrapper
               label="Full Name"
               placeHolder="Full Name"
-              value={name}
+              value={fullName}
+              name='fullName'
+              onChange={handleChange}
             />
             <TextFieldWrapper
               label="Email"
               placeHolder="Email"
               value={email}
+              name='email'
+              onChange={handleChange}
             />
             <TextFieldWrapper
               label="Mobile Number"
               placeHolder="Mobile Number"
-              value={mobile}
+              value={mobileNo}
+              name='mobileNo'
+              onChange={handleChange}
             />
             <TextFieldWrapper
               label="Password"
+              name='password'
               placeHolder="Password"
               value={password}
+              onChange={handleChange}
             />
 
-   <SelectComponent value={SelectRole} label={'Role'} options={Role} onChange={handleSelect}/>
+   <SelectComponent value={role} name='role' label={'Role'} options={Role} onChange={handleChange}/>
+   <SelectComponent value={supervisor} name='supervisor' label={'Supervisor'} options={Supervisor} onChange={handleChange}/>
 
 
+          
+
+
+          </Grid>
+          <Grid container sx={{justifyContent:"space-evenly",mt:3}}>
           <Grid item sm={3.0}>
             <Button variant="contained" color='primary' sx={{
                height: "40px",
@@ -108,11 +191,9 @@ function NewUser() {
                lineHeight: "32px",
                textTransform: "capitalize",
             }}
-            onClick={handleAddUser}
+             type={'submit'}
             >Submit</Button>
           </Grid>
-
-
           </Grid>
         </Box>
         

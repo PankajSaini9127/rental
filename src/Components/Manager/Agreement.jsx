@@ -254,7 +254,7 @@ const handleSubmit = (e)=>{
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
-                  label="Monthaly Rental"
+                  label="Monthly Rental"
                   placeHolder="Enter Rental"
                   name='monthalyRent'
                 onChange={e=>handleChange(e)}

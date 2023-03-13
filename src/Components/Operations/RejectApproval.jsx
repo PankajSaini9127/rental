@@ -68,7 +68,7 @@ const handleApproval =()=>{
                 />
                 <DataFieldStyle field={"notice period in month"} value={"2"} />
                 <DataFieldStyle field={"deposite amount"} value={"10000"} />
-                <DataFieldStyle field={"monthaly rental"} value={"3000"} />
+                <DataFieldStyle field={"monthly rental"} value={"3000"} />
 
                 <Grid container spacing={1} sx={{ mt: 2 }}>
                   <YearField year={"Year 1"} amount={"3000"} />

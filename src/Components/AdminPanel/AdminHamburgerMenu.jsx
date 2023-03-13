@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid, IconButton, Stack, Typography } from "@mui/material";
 import React, { useState } from "react";
 
 //icons hero section
@@ -8,6 +8,8 @@ import "../../assest/CSS/hamburgerMenu.css";
 import { useNavigate } from "react-router-dom";
 import { VectorLogout, VectorUser } from "../Vector";
 import { NavExpand, NavItem } from "../StyleComponents/HamburgerStyled";
+
+import MenuIcon from '@mui/icons-material/Menu';
 
 function AdminHamburgerMenu() {
   const [expand, setExpand] = useState(false);
@@ -20,10 +22,8 @@ function AdminHamburgerMenu() {
       <Grid
         sx={{ ml: "10px"}}
         className={expand ? "HeroSectionMenu" : ""}
-        onMouseEnter={() => setExpand(true)}
-        onMouseLeave={() => {
-          setExpand(false);
-        }}
+        // onMou
+        
       >
         <Stack sx={{ flexDirection: "column" }} spacing={2}>
           <Box
@@ -35,6 +35,17 @@ function AdminHamburgerMenu() {
             }} 
             onClick={()=>navigate('/userDashboard')}
           />
+          <Box
+            sx={{
+              height: "50px",
+              width: "50px",
+              display:'grid',
+              placeItems:'center'
+            }} 
+          
+          >
+            <IconButton color="primary" onClick={() => setExpand(!expand)} ><MenuIcon/></IconButton>
+          </Box>
 
           {!expand ? (
             <>
