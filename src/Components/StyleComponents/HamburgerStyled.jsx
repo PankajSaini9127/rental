@@ -26,7 +26,7 @@ const NavExpand = ({msg, navigateTO,Vector})=>{
   
        <Box sx={{width:"50px"}}><Vector/></Box>
   
-        <Typography variant="body1" component={'span'} color="#03C1F3" className="menuItem"
+        <Typography variant="body1" component={'span'} color="var(--main-color)" className="menuItem"
         sx={{
           textAlign: "center",
       fontWeight: "500",

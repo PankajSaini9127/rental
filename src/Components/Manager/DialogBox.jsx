@@ -142,7 +142,6 @@ function DialogBox({value, setValue}) {
                 variant="contained"
                 onClick={handleClose}
                 sx={{
-                  backgroundColor: "#03C1F3",
                   height: "40px",
                   width: "100%",
                   borderRadius: "20px",

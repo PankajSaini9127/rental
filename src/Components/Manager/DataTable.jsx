@@ -10,12 +10,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const renderDetailsButton = () => {
   return (
       <Grid container>
-        <Grid item md={6}>
+        <Grid item md={6} sx={{color:"white !important"}}>
         <Button
               variant="contained"
               color="primary"
               size="small"
-              style={{ backgroundColor:"#C5C05B",fontSize:"12px",textTransform:"capitalize" }}
+              style={{ backgroundColor:"#e3c739",color:"white",fontSize:"12px",textTransform:"capitalize" }}
               startIcon={<EditIcon />}
               onClick={(e) => {
                 e.stopPropagation(); // don't select this row after clicking
@@ -32,7 +32,7 @@ const renderDetailsButton = () => {
            onClick={(e) => {
             e.stopPropagation(); // don't select this row after clicking
           }}
-            sx={{fontSize:"12px",backgroundColor:"#CF482A",textTransform:"capitalize"}}
+            sx={{fontSize:"12px",color:"white",backgroundColor:"red",textTransform:"capitalize"}}
           >
             Delete
           </Button>

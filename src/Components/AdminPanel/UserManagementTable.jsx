@@ -4,6 +4,7 @@ import React from 'react'
 
 //icons
 import EditIcon from '@mui/icons-material/Edit';
+import { useNavigate } from 'react-router-dom';
 
 const activeBtn =()=>{
   return (
@@ -15,30 +16,45 @@ const activeBtn =()=>{
   )
 }
 
-const renderDetailsButton = () => {
-  return (
-      <Grid container>
-        <Grid item md={6}>
-        <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              style={{ backgroundColor:"#C5C05B",fontSize:"12px",textTransform:"capitalize" }}
-              startIcon={<EditIcon />}
-              onClick={(e) => {
-                e.stopPropagation(); // don't select this row after clicking
-              }}
-          >
-              Edit
-          </Button>          
-        </Grid>
-      </Grid>
-         
-      
-  )
-}
 
-const columns = [
+
+
+  
+ 
+
+
+function UserManagementTable({rows}) {
+  
+  const navigate = useNavigate();
+
+  const renderDetailsButton = (e) => {
+  
+    const id = e.id;
+
+    return (
+        <Grid container>
+          <Grid item md={6}>
+          <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{ backgroundColor:"#e3c739",color:"white",fontSize:"12px",textTransform:"capitalize" }}
+                startIcon={<EditIcon />}
+                onClick={(e) => {
+                  // e.stopPropagation(); // don't select this row after clicking
+                 id && navigate(`/editUser/${id}`, {id})
+                }}
+            >
+                Edit
+            </Button>          
+          </Grid>
+        </Grid>
+           
+        
+    )
+  }
+
+  const columns = [
    
     {
       field: "code",
@@ -114,11 +130,7 @@ const columns = [
         renderCell: renderDetailsButton
       },
   ];
-  
- 
 
-
-function UserManagementTable({rows}) {
   return (
     <>
       <Box

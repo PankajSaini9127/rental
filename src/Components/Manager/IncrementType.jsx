@@ -27,7 +27,7 @@ const ValueWrapper = ({ label, value }) => {
               variant="body1"
               fontWeight="600"
               fontSize="20px"
-              color="#03C1F3"
+              color="var(--main-color)"
               minHeight="30px"
               sx={{
                 "@media(max-width:900px)": {
@@ -44,7 +44,7 @@ const ValueWrapper = ({ label, value }) => {
             container
             sx={{
               // border: "1px solid #03C1F3",
-              backgroundColor: "#03C1F3",
+              backgroundColor: "var(--main-color)",
               borderRadius: "20px",
               height: "66px",
               // width: "280px",
@@ -86,7 +86,7 @@ function IncrementType({ Year, Percentage, Amount, label }) {
 }
 
 const YearlyIncrement = ({ value }) => {
-  if (value === "percentage") {
+  if (value === "Percentage") {
     return (
       <Grid
         container
@@ -127,7 +127,7 @@ const YearlyIncrement = ({ value }) => {
     );
   }
 
-  if (value === "value") {
+  if (value === "Value") {
     return (
       <Grid
         container

@@ -10,19 +10,18 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { CustomTextField } from "../StyledComponent";
 
 const labelStyle = {
   fontSize: "20px",
   lineHeight: "30px",
-  color: "#03C1F3",
+  color: 'var(--main-color)',
   fontWeight: "600",
   "@media(max-width:900px)": { fontSize: "10px" },
 };
 
 const TextFieldWrapper = ({ placeHolder, value, name, onChange, grid }) => {
   const fieldStyle = {
-    border: "1px solid #03C1F3",
+    border: "1px solid var(--main-color)",
     borderRadius: "20px",
     //   height: "50px",
     p: 1,

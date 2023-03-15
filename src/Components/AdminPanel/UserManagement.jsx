@@ -339,7 +339,7 @@ function UserManagement() {
   const getUsers = async(SelectValue)=>{
       try {
         setData([])
-    const users = await axios.post('http://localhost:8080/api/admin/user',{role:SelectValue})
+    const users = await axios.post(`http://localhost:8080/api/admin/user`,{role:SelectValue})
     if(users.data.length > 0) {
         const reverse = users.data.reverse()
       setData(reverse)
@@ -350,9 +350,9 @@ function UserManagement() {
     
   }
 
-  // useEffect(()=>{
-  //  getUsers(SelectValue)
-  // },[SelectValue])
+  useEffect(()=>{
+   getUsers(SelectValue)
+  },[SelectValue])
 
   const row = data.map((item,i)=>{
     return(
@@ -360,11 +360,12 @@ function UserManagement() {
         id: item.id,
         status: "Active",
         code: item.code,
-        name: item.fullName,
+        name: item.name,
         role: item.role,
         password: item.password,
         email: item.email,
-        contactno: item.mobileNo,
+        contactno: item.mobile,
+        supervisor:item.supervisor
       }
     )
   })

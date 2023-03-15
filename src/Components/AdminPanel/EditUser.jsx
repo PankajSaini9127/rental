@@ -1,8 +1,7 @@
 
 import { Alert, Box, Button, Grid,  Select,  Snackbar,  Stack } from "@mui/material";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import HamburgerMenu from "../HamburgerMenu";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { MyHeader, SelectComponent, TextFieldWrapper } from "../StyledComponent";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
@@ -34,10 +33,9 @@ const Supervisor = [
 
 
 
-function NewUser() {
-
+function EditUser() {
   const navigate =useNavigate()
-
+  const { id } = useParams();
     const [formVal, setFormVal]= useState(initialState)
     const [msg, setMsg]= useState({
       open:false,
@@ -48,33 +46,34 @@ function NewUser() {
     const {open,type,message} = msg;
 
     const {name,email,password,role,mobile,code,supervisor} = formVal;
-    console.log(process.env.API_HOST_NAME)
 
+const getData = async()=>{
+     const data = await axios.post(`http://localhost:8080/api/admin/user`
+     ,{id})
 
-    const apiCall = async()=>{
-      const result = await axios.post(`http://localhost:8080/api/admin/userRegistration`,formVal)
-      console.warn(result)
-      if(result.status === 201){
-        setMsg({
-          open:true,
-          type:'success',
-          message:result.data.message
-        })
-      }
-      if(result.status === 208){
-        setMsg({
-          open:true,
-          type:"error",
-          message:result.data.message
-        })
-      }
+     const {name,code,password,email,role,supervisor,mobile} = data.data[0];
 
-    }
+     setFormVal({
+      ...formVal,
+      name,code,password,email,role,supervisor,mobile
 
+     })
+}
+
+const updateData = async()=>{
+  const data = await axios.put(`http://localhost:8080/api/admin/edit/${id}`,formVal)
+  if(data.data.success){
+    setMsg({
+      open:"true",
+      type:"success",
+      message:data.data.message
+    })
+  }
+}
 
     const handleClose = ()=>{
       if(msg.type === "success"){
-        setFormVal(initialState)
+       navigate(-1)
       }
        setMsg({
         open:false,
@@ -83,9 +82,10 @@ function NewUser() {
        })
     }
 
+
     const handleSubmit =(e)=>{
       e.preventDefault()
-      apiCall()
+      updateData()
       // console.log(formVal)
     }
 
@@ -98,6 +98,10 @@ const handleChange = (e)=>{
      })
 }
 
+useEffect(()=>{
+  getData()
+},[])
+
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
@@ -105,7 +109,7 @@ const handleChange = (e)=>{
 
         <Box sx={{flexGrow:1}}>
 
-        <MyHeader>New User</MyHeader>
+        <MyHeader>Update User</MyHeader>
 
         <Grid container sx={{ justifyContent: "center" }}>
           <Grid item >
@@ -193,7 +197,7 @@ const handleChange = (e)=>{
                textTransform: "capitalize",
             }}
              type={'submit'}
-            >Submit</Button>
+            >Update</Button>
           </Grid>
           </Grid>
         </Box>
@@ -208,4 +212,4 @@ const handleChange = (e)=>{
   );
 }
 
-export default NewUser;
+export default EditUser;

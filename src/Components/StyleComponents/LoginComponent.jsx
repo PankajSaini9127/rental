@@ -13,7 +13,7 @@ import {
 
 import Img from "../../assest/pic/login-form.png";
 import logo from "../../assest/pic/logo1 1.png";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function LoginComponent({
   title,
@@ -114,7 +114,7 @@ function LoginComponent({
             variant="body1"
             fontSize="55px"
             lineHeight="80px"
-            color="#03C1F3"
+            color="var(--main-color)"
             textAlign={"center"}
             sx={{ "@media(max-width:900px)": { textAlign: "center" } }}
           >
@@ -124,7 +124,7 @@ function LoginComponent({
             variant="body1"
             fontSize="25px"
             lineHeight="30px"
-            color="#03C1F3"
+            color="var(--main-color)"
             textAlign={"center"}
             sx={{ "@media(max-width:900px)": { textAlign: "center" } }}
           >

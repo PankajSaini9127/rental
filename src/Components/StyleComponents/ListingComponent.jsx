@@ -119,10 +119,10 @@ function ListingComponent({
   <Grid item md={4} xs={5} sx={{display:'flex',justifyContent:'flex-end'}}>
   <Button
   variant="contained"
+  color="primary"
   sx={{
     borderRadius: "15px",
     color: "white",
-    backgroundColor: "#03C1F3",
     textTransform: "capitalize",
     // mr:3
     '@media(maxwidth:900px)':{
@@ -146,10 +146,10 @@ function ListingComponent({
     sx={{
       borderRadius: "15px",
       color: "white",
-      backgroundColor: "#03C1F3",
+      backgroundColor: "var(--main-color)",
       textTransform: "capitalize",
     }}
-    startIcon={<UploadFileIcon />}
+    startIcon={<AddCircleOutlineIcon />}
     onClick={onButtonClick}
   >
     {buttonText}

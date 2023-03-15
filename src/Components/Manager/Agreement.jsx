@@ -38,6 +38,7 @@ const incrementType = [
 // form initial state
 
 const initialState={
+  code:"NA000001",
   leeseName:"",
   state:"",
   city:"",
@@ -53,17 +54,17 @@ const initialState={
   lockInYear:"",
   noticePeriod:"",
   deposite:"",
-  monthalyRent:"",
-  yearlyIncrement:"1",
+  monthlyRent:"",
+  yearlyIncrement:"",
   bankName:"",
   benificiaryName:"",
   accountNo:"",
   ifscCode:""
-
 }
 
 
 function Agreement() {
+
   const navigate = useNavigate()
 
   const [landblord, setLandblord] = useState('');
@@ -84,7 +85,29 @@ function Agreement() {
 
 const [Value, setValue] = useState(initialState)
 
-
+const { code,
+leeseName,
+state,
+city,
+location,
+pincode,
+address,
+aadharNo,
+panNo,
+gstNo,
+mobileNo,
+alternateMobile,
+email,
+lockInYear,
+noticePeriod,
+deposite,
+monthlyRent,
+yearlyIncrement,
+bankName,
+benificiaryName,
+accountNo,
+ifscCode
+} = Value;
 
 // on field state change
  const handleChange = (e)=>{
@@ -150,7 +173,8 @@ const handleSubmit = (e)=>{
                   label="Code"
                   placeHolder=""
                   backgroundColor="rgba(3, 193, 243, 0.2);"
-                  value="NA000001"
+                  value={code}
+                  onChange={e=>handleChange(e)}
                 />
 
 {
@@ -161,12 +185,14 @@ const handleSubmit = (e)=>{
                   placeHolder="Enter Name Of Lesse"
                   name='leeseName'
                   onChange={e=>handleChange(e)}
+                  value={leeseName}
                 />
                 <TextFieldWrapper 
                 label="State"
                 placeHolder="Enter State"
                 name='state'
                 onChange={e=>handleChange(e)}
+                value={state}
                  />
 
                 <TextFieldWrapper 
@@ -174,35 +200,41 @@ const handleSubmit = (e)=>{
                 placeHolder="Enter City"
                 name='city'
                 onChange={e=>handleChange(e)}
+                value={city}
                 />
                 <TextFieldWrapper
                   label="Location"
                   placeHolder="Enter Location"
                   name='location'
+                  value={location}
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper 
                 label="Pincode" 
                 placeHolder="Enter Pincode" 
                 name='pincode'
+                value={pincode}
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper 
                 label="Address" 
                 placeHolder="Enter Address"
                 name='address'
+                value={address}
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Aadhar Number"
                   placeHolder="Enter Aadhar No."
                   name='aadharNo'
+                  value={aadharNo}
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Pan Number"
                   placeHolder="Enter Pan No."
                   name='panNo'
+                  value={panNo}
                 onChange={e=>handleChange(e)}
                 />
 
@@ -210,18 +242,21 @@ const handleSubmit = (e)=>{
                   label="GST Number"
                   placeHolder="Enter GST No."
                   name='gstNo'
+                  value={gstNo}
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Mobile Number"
                   placeHolder="Enter Mobile No."
                   name='mobileNo'
+                  value={mobileNo}
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Alternate Number"
                   placeHolder="Enter Alternate No."
                   name='alternateMobile'
+                  value={alternateMobile}
                 onChange={e=>handleChange(e)}
                 />
 
@@ -229,6 +264,7 @@ const handleSubmit = (e)=>{
                 label="Email" 
                 placeHolder="Enter Email" 
                 name='email'
+                value={email}
                 onChange={e=>handleChange(e)}
                 />
     </>)
@@ -239,31 +275,35 @@ const handleSubmit = (e)=>{
                   label='Lock In Year(If Applicable)'
                   placeHolder="Enter Lock in Year"
                   name='lockInYear'
+                  value={lockInYear}
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Notice Period In Month"
                   placeHolder="Enter Notice Period"
                   name='noticePeriod'
+                  value={noticePeriod}
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Deposite Amount"
                   placeHolder="Enter Deposite Amount"
                   name='deposite'
+                  value={deposite}
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Monthly Rental"
                   placeHolder="Enter Rental"
-                  name='monthalyRent'
+                  name='monthlyRent'
+                  value={monthlyRent}
                 onChange={e=>handleChange(e)}
                 />
                 <SelectComponent
                   label={'Yearly Increment'}
                   name='yearlyIncrement'
                   options={incrementType}
-                  value={Value.yearlyIncrement}
+                  value={yearlyIncrement}
                 onChange={e=>handleChange(e)}
                 />
               </Grid>
@@ -271,14 +311,14 @@ const handleSubmit = (e)=>{
               {/* basic details end here */}
    
            {/* Increment Yearly */}
-          <YearlyIncrement value={Value.yearlyIncrement}/>
+          <YearlyIncrement value={yearlyIncrement}/>
 
 
 
           {/* Bank Details start here*/}
             <Typography
               variant="body1"
-              color="#03C1F3"
+              color="var(--main-color)"
               fontSize="25px"
               lineHeight="28px"
               fontWeight="600"
@@ -297,24 +337,28 @@ const handleSubmit = (e)=>{
                   label="Bank Name"
                   placeHolder="Enter Bank Name"
                   name='bankName'
+                  value={bankName}
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Benificiary Name"
                   placeHolder="Enter Benificiary Name"
                   name='benificiaryName'
+                  value={benificiaryName}
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Bank A/C Number "
                   placeHolder="Enter Account No."
                   name='accountNo'
+                  value={accountNo}
                 onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Bank IFSC Code"
                   placeHolder="Enter IFSC Code"
                   name='ifscCode'
+                  value={ifscCode}
                 onChange={e=>handleChange(e)}
                 />
                 
@@ -334,7 +378,7 @@ const handleSubmit = (e)=>{
  {/* Document */}
  <Typography
               variant="body1"
-              color="#03C1F3"
+              color="var(--main-color)"
               fontSize="25px"
               lineHeight="28px"
               fontWeight="600"

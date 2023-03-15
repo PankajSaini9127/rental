@@ -3,7 +3,7 @@ import { Grid, Typography } from "@mui/material";
 const DataFieldStyle = ({ field, value }) => {
     const typographyStyle = {
       textTransform: "capitalize",
-      color: "#03C1F3",
+      color:"var(--main-color)",
       fontSize: "20px",
       "@media(max-width:900px)": { fontSize: "18px" },
     };
@@ -23,7 +23,7 @@ const DataFieldStyle = ({ field, value }) => {
   
   const YearField = ({ year, amount }) => {
   
-    const fieldStyle ={fontSize:'20px',color:'#03C1F3','@media(max-width:900px)':{fontSize:'18px'}}
+    const fieldStyle ={fontSize:'20px',color:"var(--main-color)",'@media(max-width:900px)':{fontSize:'18px'}}
     return (
       <Grid item md={1} xs={4}>
         <Typography variant="body1" 

@@ -34,6 +34,7 @@ import UserManagement from './Components/AdminPanel/UserManagement'
 import ForgotPassword from './Components/ResetPassword/ForgotPassword'
 import EmailVerify from './Components/ResetPassword/EmailVerify'
 import ResetPassword from './Components/ResetPassword/ResetPassword'
+import EditUser from './Components/AdminPanel/EditUser';
 
 function Router() {
   return (
@@ -71,6 +72,7 @@ function Router() {
         <Route exact path='/userDashboard' element={<UserDashboard/>}/>
         <Route exact path='/userManagement' element={<UserManagement/>}/>
         <Route exact path='/newUser' element={<NewUser/>}/>
+        <Route exact path='/editUser/:id' element={<EditUser/>}/>
 
 
 

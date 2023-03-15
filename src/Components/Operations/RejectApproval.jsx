@@ -110,7 +110,7 @@ const handleApproval =()=>{
                       height: "65px",
                       borderRadius: "12px",
                       width: "100%",
-                      color: "#03C1F3",
+                      color: 'var(--main-color)',
                       textTransform: "capitalize",
                       fontSize: "20px",
                     }}

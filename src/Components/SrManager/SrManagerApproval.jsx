@@ -73,7 +73,7 @@ const DocumentView = ({ title }) => {
       <Box
         sx={{
           height: "150px",
-          border: "1px solid #03C1F3",
+          border: "1px solid var(--main-color)",
           borderRadius: "20px",
           display: "flex",
           justifyContent: "center",
@@ -210,7 +210,7 @@ function SrManagerApproval() {
                       height: "65px",
                       borderRadius: "12px",
                       width: "100%",
-                      color: "#03C1F3",
+                      color: "var(--main-color)",
                       textTransform: "capitalize",
                       fontSize: "18px",
                     }}

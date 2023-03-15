@@ -22,15 +22,15 @@ const MyHeader = styled("h5")({
   fontSize: "31px",
   fontWeight: "700",
   lineHeight: "48px",
-  color: "#03C1F3",
   marginLeft: "55px",
+  color:'var(--main-color)',
   "@media(max-width:600px)": { fontSize: "20px", ml: "20px" },
 });
 
 // CSS Style for Label for Text field etc.
 const labelStyle = {
   fontSize: "20px",
-  color: "#03C1F3",
+  color: "var(--main-color)",
   fontWeight: "600",
   "@media(max-width:900px)": { fontSize: "10px" },
 };
@@ -165,69 +165,6 @@ const SelectComponent = ({ label, value, name, onChange ,options}) => {
 };
 
 
-
-// native select in user dashboard
-const SelectNative = ({value,names,label})=>{
-  return(
-    <Grid item md={4} xs={6}>
-    <FormControl fullWidth>
-      {/* <FormLabel>
-        <Typography variant="body1" sx={labelStyle}>
-          {label}
-        </Typography>
-      </FormLabel> */}
-      <InputLabel id="nativeSelectLabel">Role</InputLabel>
-
-      <Select
-      variant="outlined"
-      label="Role"
-      multiple
-      autoFocus
-       native
-      //  label={'hihihi'}
-      sx={{
-        // border: "1px solid #03C1F3",
-        // borderRadius: "20px",
-        // height: "50px",
-        '.MuiOutlinedInput-notchedOutline': {
-          borderColor: '#00008b',
-        },
-        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-          borderColor: '#00008b',
-        },
-        '&:hover .MuiOutlinedInput-notchedOutline': {
-          borderColor: '#00008b',
-        },
-        mt: "0px !important",
-        color: "rgba(16, 99, 173, 0.47)",
-        p: 1,
-        width: "100%",
-        px: 2,
-        boxShadow: "none",
-        input: { fontSize:"23px",'&::placeholder':{color:"rgba(16, 99, 173, 0.47)"} },
-        // ".MuiOutlinedInput-notchedOutline": { border: 0 },
-        
-      }}
-
-value={value}
-// @ts-ignore Typings are not considering `native`
-// onChange={handleChangeMultiple}
-
->
-{names.map((name) => (
-  <option key={name} value={name}>
-    {name}
-  </option>
-))}
-</Select>
-
-    </FormControl>
-  </Grid>
-  )
-}
-
-
-
 //dashboard 
 
 const DashboardItem = ({ service, value }) => {
@@ -238,7 +175,7 @@ const DashboardItem = ({ service, value }) => {
         sx={{
           height: "181px",
           // maxWidth:"356px",
-          backgroundColor: "#03C1F3",
+          backgroundColor: "var(--main-color)",
           borderRadius: "20px",
           justifyContent: "center",
           alignItems: "center",
@@ -277,4 +214,4 @@ const DashboardItem = ({ service, value }) => {
 
 
 
-export { MyHeader, TextFieldWrapper, DocumentUpload, SelectComponent,SelectNative,DashboardItem };
+export { MyHeader, TextFieldWrapper, DocumentUpload, SelectComponent,DashboardItem };

@@ -1,5 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400&display=swap');
 
+
+ :root{
+    
+   --main-color: #0164AE;
+   /* --main-color:"red" */
+
+ }
+
 *{
     padding: 0;
     margin: 0;
@@ -8,10 +16,6 @@
     font-family: 'Poppins', sans-serif !important;
 }
 
-/* body{
-    background-color: #F5F5F5;
-} */
-
 .loginOverlay{
     position: absolute;
 width: 100%;
@@ -19,7 +23,7 @@ height: 100%;
 left: 0px;
 top: 0px;
 
-background: rgba(0, 140, 194, 0.78);
+background: rgba(1, 100, 174, 0.78);
 }
 
 
