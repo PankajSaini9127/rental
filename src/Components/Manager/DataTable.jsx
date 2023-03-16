@@ -1,99 +1,27 @@
-import { Box, Button, Grid } from '@mui/material';
+import { Alert, AlertTitle, Box, Button, Grid, Snackbar } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import React from 'react'
+import React, { lazy, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
+
+import axios from 'axios'
 
 //icons
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useEffect } from 'react';
+import DeleteAlert from './DeleteAlert';
 
-const renderDetailsButton = () => {
-  return (
-      <Grid container>
-        <Grid item md={6} sx={{color:"white !important"}}>
-        <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              style={{ backgroundColor:"#e3c739",color:"white",fontSize:"12px",textTransform:"capitalize" }}
-              startIcon={<EditIcon />}
-              onClick={(e) => {
-                e.stopPropagation(); // don't select this row after clicking
-              }}
-          >
-              Edit
-          </Button>          
-        </Grid>
-        <Grid item md={6}>
-          <Button
-           variant="contained"
-           size="small"
-           startIcon={<DeleteIcon />}
-           onClick={(e) => {
-            e.stopPropagation(); // don't select this row after clicking
-          }}
-            sx={{fontSize:"12px",color:"white",backgroundColor:"red",textTransform:"capitalize"}}
-          >
-            Delete
-          </Button>
-        </Grid>
-      </Grid>
-         
-      
-  )
-}
 
-const columns = [
-   
-    {
-      field: "code",
-      headerName: "Code",
-      width: 130,
-      type: "number",
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-    },
-    {
-      field: "name",
-      headerName: "Name",
-      width: 230,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-    },
-    {
-      field: "location",
-      headerName: "Location",
-      width: 230,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-    },
-    {
-      field: "rentalAmount",
-      headerName: "Rental Amount",
-      width: 200,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-    },
-    {
-        field: "status",
-        headerName: "Status",
-        width: 160,
-        headerClassName: "dataGridHeader",
-        headerAlign: "center",
-      },
-    {
-        field: "action",
-        headerName: "Action",
-        width: 200,
-        headerClassName: "dataGridHeader",
-        headerAlign: "center",
-        renderCell: renderDetailsButton
-      },
-  ];
+
+
+
+
+
+
   
  
 
-  const row = [
+  const rows = [
     {
       id: 1,
       status: "Pending",
@@ -155,18 +83,196 @@ const columns = [
   ];
  
 
+  
+
 
 function DataTable() {
 
+  const [data,setData] = useState([])
+
+  const [loading, setLoading] = useState(false)
+
+  const [err,setErr] = useState({
+    open:false,
+    type:"",
+    message:''
+  })
+
+  //altet close 
+  const handleClose = ()=>{
+      setErr(
+        {
+          open:false,
+          type:"",
+          message:''
+        }
+      )
+  }
+
+  // api call for get data
+
+  const APICALL = async()=>{
+    setLoading(true)
+    setData([])
+    const result = await axios.get("http://localhost:8080/api/agreements")
+
+    if(result.data.success){
+      const data = result.data.agreements.reverse();
+   setData(data)
+      setLoading(false)
+    }
+  }
+
+  // api for delete record
+  const deleteAPI = async(id)=>{
+    const deleteItem = await axios.delete(`http://localhost:8080/api/delAgreement/${id}`)
+    if(deleteItem.data.success){
+      setErr({
+        open:true,
+        type:"warning",
+        message:deleteItem.data.message
+      })
+    }else{
+      setErr({
+        open:true,
+        type:"error",
+        message:deleteItem.data.message
+      })
+    }
+  }
+
+
+  useEffect(()=>{
+    APICALL()
+  },[])
+
+ const row = data.map((item)=>{
+  return  {
+    id: item.id,
+    status: "Pending",
+    code: item.code,
+    name: item.leeseName,
+    location:item.location,
+    rentalAmount:item.monthlyRent,
+  
+  }
+ })
+
+
   const navigate = useNavigate()
 
-  // const onRowsSelectionHandler = (ids) => {
-  //   const selectRow = ids.map((id) => rows.find((row) => row.id === id));
-  //   // console.log(selectRow)
-  //     navigate('/ceoApproval')
-  // };
+  const renderDetailsButton = (e) => {
+      const id = e.id;
+  
+    return (
+        <Grid container>
+          <Grid item md={6} sx={{color:"white !important"}}>
+          <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{ backgroundColor:"#e3c739",color:"white",fontSize:"12px",textTransform:"capitalize" }}
+                startIcon={<EditIcon />}
+                onClick={(e) => {
+                  e.stopPropagation(); // don't select this row after clicking
+                  id && navigate(`/editAgreement/${id}`, {id})
+                }}
+            >
+                Edit
+            </Button>          
+          </Grid>
+          <Grid item md={6}>
+            <Button
+             variant="contained"
+             size="small"
+             startIcon={<DeleteIcon />}
+             onClick={(e) => {
+              e.stopPropagation(); // don't select this row after clicking
+              // deleteAPI(id)
+              setDeleteAlert({open:true,id:id})
+            }}
+              sx={{fontSize:"12px",color:"white",backgroundColor:"red",textTransform:"capitalize"}}
+            >
+              Delete
+            </Button>
+          </Grid>
+        </Grid>
+           
+        
+    )
+  }
+
+  const columns = [
+   
+    {
+      field: "code",
+      headerName: "Code",
+      width: 130,
+      type: "number",
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
+      field: "name",
+      headerName: "Name",
+      width: 230,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
+      field: "location",
+      headerName: "Location",
+      width: 230,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
+      field: "rentalAmount",
+      headerName: "Rental Amount",
+      width: 200,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
+        field: "status",
+        headerName: "Status",
+        width: 160,
+        headerClassName: "dataGridHeader",
+        headerAlign: "center",
+      },
+    {
+        field: "action",
+        headerName: "Action",
+        width: 200,
+        headerClassName: "dataGridHeader",
+        headerAlign: "center",
+        renderCell: renderDetailsButton
+      },
+  ];
+  
+
+  //form delete alert
+
+const [deleteAlert, setDeleteAlert] = useState({open:false,id:''})
+
+  const handleConfirm = ()=>{
+    deleteAPI(deleteAlert.id)
+    setDeleteAlert({open:false,id:''})
+  }
+ 
+  const handleCancel = ()=>{
+      setDeleteAlert({open:false,id:''})
+  }
   return (
     <>
+<Snackbar open={err.open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:"top", horizontal:"center" }}>
+  <Alert onClose={handleClose} severity={err.type} sx={{ width: '100%' }}>
+    {err.message}
+  </Alert>
+</Snackbar>
+
+<DeleteAlert handleClose={handleCancel} handleConfirm={handleConfirm} open={ deleteAlert.open}/>
+
       <Box
       sx={{
         height: "430px",
@@ -207,6 +313,7 @@ function DataTable() {
         columns={columns}
         pageSize={6}
         rowsPerPageOptions={[6]}
+        loading={loading}
         checkboxSelection
         sx={{ color: "black !important",  minWidth:"50px" }}
         getCellClassName={(parms) => {

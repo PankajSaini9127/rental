@@ -8,6 +8,7 @@ import Login from './Components/Manager/Login'
 import Dashboard from './Components/Manager/Dashboard'
 import Listing from './Components/Manager/Listing';
 import Agreement from './Components/Manager/Agreement';
+import EditAgreement from './Components/Manager/EditAgreement';
 import MonthalyList from './Components/MonthalyPayment/MonthalyList'
 import RenewalList from './Components/Renewal/RenewalList'
 
@@ -44,6 +45,7 @@ function Router() {
         <Route exact path='/' element={<Login/>}/>
         <Route exact path='/dashboard' element={<Dashboard/>}/>
         <Route exact path='/newAgreement' element={<Agreement/>}/>
+        <Route exact path='/editAgreement/:id' element={<EditAgreement/>}/>
         <Route exact path='/listing' element={<Listing/>}/>
         <Route exact path='/monthly-payment' element={<MonthalyList/>}/>
         <Route exact path='/renewal' element={<RenewalList/>}/>

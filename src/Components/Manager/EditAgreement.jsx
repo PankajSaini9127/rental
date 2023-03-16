@@ -1,181 +1,156 @@
-import React,{ useEffect, useState } from "react";
-
-// MUI Components
-import {
-  Box,
-  Button,
-  Grid,
-  Typography,
-  Stack,
-  useTheme,
-  useMediaQuery
-} from "@mui/material";
-
-
-// Custom Style Component
-
-import { 
-  DocumentUpload, 
-  MyHeader, 
-  SelectComponent,
-  TextFieldWrapper 
-} from "../StyledComponent";
+import { useTheme } from '@emotion/react';
+import { Alert, Box, Button, Grid, Snackbar, Stack, Typography, useMediaQuery } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom';
+import HamburgerMenu from '../HamburgerMenu';
+import { DocumentUpload, MyHeader, SelectComponent, TextFieldWrapper } from '../StyledComponent';
+import YearlyIncrement from './IncrementType';
 
 import axios from 'axios'
 
-// Components
-
-import HamburgerMenu from "../HamburgerMenu";
-import YearlyIncrement from "./IncrementType";
-import DialogBox from "./DialogBox";
-import { useNavigate } from "react-router-dom";
-
-import {useFormik} from 'formik'
-import { agreementSchema } from "../ValidationSchema/Manager";
-
-const incrementType = [
-  "Percentage",
-  "Value"
-]
-
-
-// form initial state
-
 const initialState={
-  code:"NA000001",
-  leeseName:"",
-  state:"",
-  city:"",
-  location:"",
-  pincode:"",
-  address:"",
-  aadharNo:"",
-  panNo:"",
-  gstNo:"",
-  mobileNo:"",
-  alternateMobile:"",
-  email:"",
-  lockInYear:"",
-  noticePeriod:"",
-  deposite:"",
-  monthlyRent:"",
-  yearlyIncrement:"",
-  bankName:"",
-  benificiaryName:"",
-  accountNo:"",
-  ifscCode:""
+    code:"NA000001",
+    leeseName:"",
+    state:"",
+    city:"",
+    location:"",
+    pincode:"",
+    address:"",
+    aadharNo:"",
+    panNo:"",
+    gstNo:"",
+    mobileNo:"",
+    alternateMobile:"",
+    email:"",
+    lockInYear:"",
+    noticePeriod:"",
+    deposite:"",
+    monthlyRent:"",
+    yearlyIncrement:"",
+    bankName:"",
+    benificiaryName:"",
+    accountNo:"",
+    ifscCode:""
+  }
+
+  const incrementType = [
+    "Percentage",
+    "Value"
+  ]
+
+
+
+
+function EditAgreement() {
+      const navigate = useNavigate();
+    const { id } = useParams();
+
+    // get data by id
+const getData = async()=>{
+    const agreement = await axios.post(`http://localhost:8080/api/agreement/${id}`)
+    setValue(agreement.data[0])
 }
 
+useEffect(()=>{
+    getData()
+},[])
 
-function Agreement() {
+    const [Value, setValue] = useState(initialState);
 
-  const navigate = useNavigate()
+    const [err,setErr] = useState({
+        open:false,
+        type:"",
+        message:''
+      })
+    
+      //altet close 
+      const handleClose = ()=>{
+        navigate(-1)
+          setErr(
+            {
+              open:false,
+              type:"",
+              message:''
+            }
+          )
+          
+      }
+
+    const { code,
+        leeseName,
+        state,
+        city,
+        location,
+        pincode,
+        address,
+        aadharNo,
+        panNo,
+        gstNo,
+        mobileNo,
+        alternateMobile,
+        email,
+        lockInYear,
+        noticePeriod,
+        deposite,
+        monthlyRent,
+        yearlyIncrement,
+        bankName,
+        benificiaryName,
+        accountNo,
+        ifscCode
+        } = Value;
 
 
-  // form handling using formik
-
-  const {values, handleChange, handleSubmit, handleBlur, errors, touched } = useFormik({
-        initialValues:initialState,
-        validationSchema:agreementSchema,
-        onSubmit:(values,action)=>{
-          APICall(values)
-        }
-  })
-
-// console.log("Agreement Component")
-
-  const [landblord, setLandblord] = useState('');
-
-  const [arrlenght,setArrLength] = useState(1)
-
-  useEffect(() => {
-    if(landblord !== ''){
-      setArrLength(landblord)
+ //Update API
+ const updateAPI = async()=>{
+    const updateAPI = await axios.put(`http://localhost:8080/api/updateAgreement/${id}`,Value)
+      
+    if(updateAPI.data.success){
+        setErr({
+            open:true,
+            type:'success',
+            message:updateAPI.data.message
+        })
     }
-  }, [landblord])
-  
+ }
+ 
+ 
+        // on field state change
+ const handleChange = (e)=>{
+    setValue({
+      ...Value,
+      [e.target.name]:e.target.value
+    })
+  }
 
-  const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
+  const handleSubmit = (e)=>{
+    e.preventDefault()
+    updateAPI()
+    // navigate('/srManagerLogin')
+    
+  }
 
-  // state management form
-
-// const [Value, setValue] = useState(initialState)
-
-const { code,
-leeseName,
-state,
-city,
-location,
-pincode,
-address,
-aadharNo,
-panNo,
-gstNo,
-mobileNo,
-alternateMobile,
-email,
-lockInYear,
-noticePeriod,
-deposite,
-monthlyRent,
-yearlyIncrement,
-bankName,
-benificiaryName,
-accountNo,
-ifscCode
-} = values;
-
-// on field state change
-//  const handleChange = (e)=>{
-//   setValue({
-//     ...Value,
-//     [e.target.name]:e.target.value
-//   })
-// }
-
-
-// upload document
-const handleChangeFile = (e)=>{
-console.log(e.target.files)
-
-}
-
-
-// on form submit
-
-// const handleSubmit = (e)=>{
-//   e.preventDefault()
-//   // navigate('/srManagerLogin')
-  
-//   APICall()
-// }
-
-
-const APICall = async(values)=>{
-  const agreement = await axios.post('http://localhost:8080/api/newAgreement',values);
-
-  console.log(agreement)
-}
-
+    const theme = useTheme();
+    const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
   return (
     <>
-
-    {/* dialog box ( popup box ) */}
-    <DialogBox value={landblord} setValue={setLandblord}/>
-
-
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
 
     {/* side nav     */}
         <HamburgerMenu />
 
         <Box sx={{flexGrow:1}}>
-          <MyHeader>New Agreement</MyHeader>
+          <MyHeader>Edit Agreement</MyHeader>
 
 
           <Grid container sx={{ justifyContent: "center" }}>
           <Grid item xs={12} md={10}>
+
+          <Snackbar open={err.open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:"top", horizontal:"center" }}>
+  <Alert onClose={handleClose} severity={err.type} sx={{ width: '100%' }}>
+    {err.message}
+  </Alert>
+</Snackbar>
 
      {/* agreement form start here */}
           <Box
@@ -202,89 +177,63 @@ const APICall = async(values)=>{
                   onChange={e=>handleChange(e)}
                 />
 
-{
-  Array.from({length:arrlenght},(_,i)=>{
-    return (<>
+
        <TextFieldWrapper
                   label="Name Of Lesse"
                   placeHolder="Enter Name Of Lesse"
                   name='leeseName'
+                  onChange={e=>handleChange(e)}
                   value={leeseName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.leeseName}
-                  touched={touched.leeseName}
                 />
                 <TextFieldWrapper 
                 label="State"
                 placeHolder="Enter State"
                 name='state'
+                onChange={e=>handleChange(e)}
                 value={state}
-                onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.state}
-                  touched={touched.state}
                  />
 
                 <TextFieldWrapper 
                 label="City" 
                 placeHolder="Enter City"
                 name='city'
+                onChange={e=>handleChange(e)}
                 value={city}
-                onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.city}
-                  touched={touched.city}
                 />
                 <TextFieldWrapper
                   label="Location"
                   placeHolder="Enter Location"
                   name='location'
                   value={location}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.location}
-                  touched={touched.location}
+                onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper 
                 label="Pincode" 
                 placeHolder="Enter Pincode" 
                 name='pincode'
                 value={pincode}
-                onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.pincode}
-                  touched={touched.pincode}
+                onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper 
                 label="Address" 
                 placeHolder="Enter Address"
                 name='address'
                 value={address}
-                onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.address}
-                  touched={touched.address}
+                onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Aadhar Number"
                   placeHolder="Enter Aadhar No."
                   name='aadharNo'
                   value={aadharNo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.aadharNo}
-                  touched={touched.aadharNo}
+                onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Pan Number"
                   placeHolder="Enter Pan No."
                   name='panNo'
                   value={panNo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.panNo}
-                  touched={touched.panNo}
+                onChange={e=>handleChange(e)}
                 />
 
                 <TextFieldWrapper
@@ -292,30 +241,21 @@ const APICall = async(values)=>{
                   placeHolder="Enter GST No."
                   name='gstNo'
                   value={gstNo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.gstNo}
-                  touched={touched.gstNo}
+                onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Mobile Number"
                   placeHolder="Enter Mobile No."
                   name='mobileNo'
                   value={mobileNo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.mobileNo}
-                  touched={touched.mobileNo}
+                onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Alternate Number"
                   placeHolder="Enter Alternate No."
                   name='alternateMobile'
                   value={alternateMobile}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.alternateMobile}
-                  touched={touched.alternateMobile}
+                onChange={e=>handleChange(e)}
                 />
 
                 <TextFieldWrapper 
@@ -323,64 +263,44 @@ const APICall = async(values)=>{
                 placeHolder="Enter Email" 
                 name='email'
                 value={email}
-                onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.email}
-                  touched={touched.email}
+                onChange={e=>handleChange(e)}
                 />
-    </>)
-  })
-}
+  
         
                 <TextFieldWrapper
                   label='Lock In Year(If Applicable)'
                   placeHolder="Enter Lock in Year"
                   name='lockInYear'
                   value={lockInYear}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.lockInYear}
-                  touched={touched.lockInYear}
+                onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Notice Period In Month"
                   placeHolder="Enter Notice Period"
                   name='noticePeriod'
                   value={noticePeriod}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.noticePeriod}
-                  touched={touched.noticePeriod}
+                onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Deposite Amount"
                   placeHolder="Enter Deposite Amount"
                   name='deposite'
                   value={deposite}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.deposite}
-                  touched={touched.deposite}
+                onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Monthly Rental"
                   placeHolder="Enter Rental"
                   name='monthlyRent'
                   value={monthlyRent}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.monthlyRent}
-                  touched={touched.monthlyRent}
+                onChange={e=>handleChange(e)}
                 />
                 <SelectComponent
                   label={'Yearly Increment'}
                   name='yearlyIncrement'
                   options={incrementType}
                   value={yearlyIncrement}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.yearlyIncrement}
-                  touched={touched.yearlyIncrement}
+                onChange={e=>handleChange(e)}
                 />
               </Grid>
 
@@ -404,56 +324,37 @@ const APICall = async(values)=>{
             </Typography>
               
 
-                {
-                  Array.from({length:arrlenght},(_,i)=>{
-                    return(<>
-                    {arrlenght > 1?<Typography>Landlord Name</Typography>:''}
                     <Grid container sx={{px:3}} spacing={isSmall?2:4}>
                     <TextFieldWrapper
                   label="Bank Name"
                   placeHolder="Enter Bank Name"
                   name='bankName'
                   value={bankName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.bankName}
-                  touched={touched.bankName}
+                onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Benificiary Name"
                   placeHolder="Enter Benificiary Name"
                   name='benificiaryName'
                   value={benificiaryName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.benificiaryName}
-                  touched={touched.benificiaryName}
+                onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Bank A/C Number "
                   placeHolder="Enter Account No."
                   name='accountNo'
                   value={accountNo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.accountNo}
-                  touched={touched.accountNo}
+                onChange={e=>handleChange(e)}
                 />
                 <TextFieldWrapper
                   label="Bank IFSC Code"
                   placeHolder="Enter IFSC Code"
                   name='ifscCode'
                   value={ifscCode}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.ifscCode}
-                  touched={touched.ifscCode}
+                onChange={e=>handleChange(e)}
                 />
                 
-              </Grid>      
-                                          </>)
-                  })
-                }
+              </Grid>
                 
 
               {/* Bank Details ends here*/}
@@ -464,7 +365,7 @@ const APICall = async(values)=>{
           {/* Document upload section start here */}
 
  {/* Document */}
- <Typography
+ {/* <Typography
               variant="body1"
               color="var(--main-color)"
               fontSize="25px"
@@ -473,10 +374,10 @@ const APICall = async(values)=>{
               my="20px"
             >
               Upload Document
-            </Typography>
+            </Typography> */}
 
 
-{
+{/* {
   Array.from({length:arrlenght},(_,i)=>{
     return(<>
     {arrlenght > 1?<Typography>Landlord Name</Typography>:''}
@@ -536,7 +437,7 @@ const APICall = async(values)=>{
     </>
     )
   })
-}
+} */}
               
 
               {/* Document upload section end here */}
@@ -564,7 +465,7 @@ const APICall = async(values)=>{
                     '@media(max-width:900px)':{fontSize:"11px",lineHeight:"12px",height:"40px"}
                   }}
                 >
-                  Submit To Sr Manager
+                  Update
                 </Button>
                 </Grid>
 
@@ -581,8 +482,9 @@ const APICall = async(values)=>{
                     textTransform: "capitalize",
                     '@media(max-width:900px)':{fontSize:"10px",lineHeight:"20px",height:"40px"}
                   }}
+                  onClick={()=>navigate(-1)}
                 >
-                  Hold
+                  Cancel
                 </Button>
                 </Grid>
             </Grid>
@@ -599,7 +501,7 @@ const APICall = async(values)=>{
         </Box>
       </Stack>
     </>
-  );
+  )
 }
 
-export default Agreement;
+export default EditAgreement

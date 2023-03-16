@@ -49,17 +49,19 @@ const fieldStyle = {
 
 
 // Text Field Style
-const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
+const TextFieldWrapper = ({ label, placeHolder, value, name, onChange,errMsg,onBlur, touched}) => {
   return (
     <Grid item md={4} xs={6} sx={{'@media(max-width:900px)':{my:1}}}>
-      <FormControl fullWidth className="textFieldWrapper" sx={{p:'0px !important'}}>
+      <FormControl fullWidth sx={{p:'0px !important'}}>
        
         <TextField
           variant="outlined"
           name={name}
           // color='secodary'
           onChange={(e) => onChange(e)}
+          error={errMsg && touched ? true : false}
           label={label}
+          onBlur={onBlur}
           InputProps={{
             style: {
               color: "rgba(16, 99, 173, 0.47) !important/",
@@ -72,6 +74,7 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
           fullWidth
           sx={fieldStyle}
         />
+        { errMsg && touched? <Typography variant="body1" color="red" mt={1}>{errMsg}</Typography>:null}
       </FormControl>
     </Grid>
   );
@@ -117,10 +120,10 @@ const DocumentUpload = ({ label, placeHolder,handleChange }) => {
 // Select Field
 
 
-const SelectComponent = ({ label, value, name, onChange ,options}) => {
+const SelectComponent = ({ label, value, name, onChange ,options,errMsg,onBlur,touched}) => {
   return (
     <Grid item md={4} xs={6} sx={{mb:'0px !important','@media(max-width:900px)':{my:1}}}>
-      <FormControl fullWidth className="textFieldWrapper" >
+      <FormControl fullWidth >
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
           name={name}
@@ -129,6 +132,8 @@ const SelectComponent = ({ label, value, name, onChange ,options}) => {
           labelId="demo-simple-select-label"
           value={value}
           label={label}
+          onBlur={onBlur}
+          error={errMsg && touched ? true : false}
           // labelId="demo-simple-select-helper-label"
           sx={{
             '.MuiOutlinedInput-notchedOutline': {
@@ -157,6 +162,7 @@ const SelectComponent = ({ label, value, name, onChange ,options}) => {
             })
           }
         </Select>
+        { errMsg && touched? <Typography variant="body1" color="red" mt={1}>{errMsg}</Typography>:null}
       </FormControl>
     </Grid>
 

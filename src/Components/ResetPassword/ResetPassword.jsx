@@ -67,10 +67,11 @@ function ResetPassword() {
           <Box component={'form'} sx={{mt:2}}>
               <Grid container spacing={3} sx={{justifyContent:"space-evenly"}} >
                   <Grid item md={12}>
-                      <FormControl fullWidth className="textFieldWrapper">
+                      <FormControl fullWidth>
                          <TextField
                           variant="outlined"
                           label={'New password'}
+                          name={'password'}
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end" onClick={passwordToggle}>
@@ -82,8 +83,10 @@ function ResetPassword() {
                       </FormControl>
                   </Grid>
                   <Grid item md={12}>
-                      <FormControl fullWidth className="textFieldWrapper">
+                      <FormControl fullWidth >
                          <TextField
+                         error
+                         helperText={'requierd'}
                           variant="outlined"
                           label={'Confirm New password'}
                           InputProps={{
@@ -101,7 +104,6 @@ function ResetPassword() {
                       <Button variant="contained" fullWidth sx={{textTransform:"capitalize",color:"white",fontSize:"16px"}}>Reset</Button>
                   </Grid>
               </Grid>
-              
           </Box>
         </Grid>
       </Grid>
