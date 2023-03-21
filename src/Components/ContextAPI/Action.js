@@ -4,6 +4,12 @@ const ADD_AUTH = (data)=>{
         payload:data
     }
 }
+const setAlert = (data)=>{
+    return {
+        type:"ALERT",
+        payload:data
+    }
+}
 
 
-export {ADD_AUTH}
+export {ADD_AUTH,setAlert}

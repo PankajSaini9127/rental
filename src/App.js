@@ -1,9 +1,13 @@
 
 import './App.css';
 
+import { BrowserRouter} from 'react-router-dom'
 
 // Component
-import Router from './Router';
+import MyRouter from './Router';
+
+// untility 
+import Snackbar from './Components/utility/Snackbar'
 
 import {ThemeProvider} from '@mui/material'
 import {Theam} from './Components/Theam';
@@ -14,7 +18,12 @@ const AuthContext = createContext()
 
 const initialState ={
   login:{},
-  adminReCall:false
+  adminReCall:false,
+  alert : {
+    open : false,
+    variant : null,
+    message : null
+  }
 }
 
 
@@ -26,7 +35,10 @@ const [state, dispatch] = useReducer(reducer, initialState)
   return (
     <AuthContext.Provider value={{state,dispatch}}>
    <ThemeProvider theme={Theam}>
-   <Router/>
+   <BrowserRouter>
+    <Snackbar/>
+   <MyRouter/>
+   </BrowserRouter>
    </ThemeProvider>
    </AuthContext.Provider>
   );

@@ -8,6 +8,10 @@ const reducer =(state,action)=>{
             ...state,
             adminReCall: !state.adminReCall
         }
+        case "ALERT" : return {
+            ...state,
+            alert : action.payload
+        } 
         default: return state
             break;
     }

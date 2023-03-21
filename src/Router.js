@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 
 //components
 
@@ -38,9 +38,10 @@ import ResetPassword from './Components/ResetPassword/ResetPassword'
 import EditUser from './Components/AdminPanel/EditUser';
 import ManagerApproval from './Components/Manager/ManagerApproval';
 
-function Router() {
+function MyRouter() {
+  const history = useNavigate();
   return (
-    <BrowserRouter>
+
     <Routes>
 
 
@@ -83,14 +84,13 @@ function Router() {
 
         {/* passowrd section Reset */}
 
-        <Route path={'/resetPassword'} element={<ForgotPassword/>} />
+        <Route path={'/resetPassword'} element={<ForgotPassword history = {history}/>} />
         <Route path={'/emailVerify'} element={<EmailVerify/>} />
-        <Route path={'/newPassword/:id'} element={<ResetPassword/>} />
+        <Route path={'/newPassword/:email'} element={<ResetPassword history = {history}/>} />
         
 
     </Routes>
-    </BrowserRouter>
   )
 }
 
-export default Router
+export default MyRouter

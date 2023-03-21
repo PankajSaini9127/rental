@@ -1,40 +1,66 @@
+
 import { Button, FormControl, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Img from "../../assest/pic/login-form.png";
 import logo from "../../assest/pic/logo1 1.png";
 
+import {useDispatch} from 'react-redux'; 
+import {setAlert} from '../../store/action/action'
+
+function ForgotPassword({history}) {
 
 
-function ForgotPassword() {
+  const dispatch = useDispatch() 
 
-  const navigate = useNavigate()
-
-  const [value,setValue] = useState('')
+  const [value,setValue] = useState({email : undefined})
 
 const handleChange = (e)=>{
-   setValue(e.target.value)
+   setValue({[e.target.name] : e.target.value})
 }
 
+// add by Yashwant 
+async function handleSubmit(){
+  try {
+    const user = await axios.get(`http://localhost:8080/api/resetPassword?email=${value.email}`);
 
-const getUser = async(email)=>{
-     const user = await axios.post('http://localhost:8080/api/admin/forgotPassword',{email:email})
-     console.log(user.data[0])
-     navigate(`/newPassword/${user.data[0].id}`)
-}
+    if(user.status === 200)
+    {
 
-  const handleSubmit =()=>{
-    getUser(value)
+      history('/')
 
-   
-      //  navigate('/emailVerify')
+      dispatch(setAlert({
+        open : true,
+        variant : 'success',
+        message : user.data.message || 'Email Sent'
+      }))
+    }
+    else {
+      dispatch(setAlert({
+        open : true,
+        variant : 'warning',
+        message : user.data.message || 'Email Sent'
+      }))
+
+    }
+    
+  } catch (error) {
+    console.log(error)
+    dispatch(setAlert(
+      {
+        open : true,
+        variant : 'error',
+        message : 'Something Went Wrong !!!'
+      }
+    ))
+  }
   }
 
   const handleBack = ()=>{
-      navigate(-1)
+      history(-1)
   }
   
   return (
@@ -96,6 +122,8 @@ const getUser = async(email)=>{
                             variant="outlined"
                             label={'Email Address'}
                             onChange={handleChange}
+                            name = 'email'
+                            type = 'email'
                            />
                         </FormControl>
                     </Grid>

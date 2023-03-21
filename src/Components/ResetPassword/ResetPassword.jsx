@@ -8,12 +8,16 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
+import {useDispatch} from 'react-redux';
+import {setAlert} from '../../store/action/action';
+
 
 
 function ResetPassword() {
 
-  const {id} = useParams()
-  console.log(id)
+  const {email} = useParams()
+const dispatch = useDispatch()
+
   const [showPassword, setShowPassword] = useState(false);
 
   const [value, setValue] = useState({password:"",cPassword:""}) 
@@ -27,15 +31,27 @@ function ResetPassword() {
     })
   }
 
-  const UpdatePassword = async(id,password)=>{
-    const resetPassword = await axios.put(`http://localhost:8080/api/admin/edit/${id}`,{password})
-    console.log(resetPassword)
-  }
 
-  const handleSubmit =(e)=>{
+  const handleSubmit = async (e)=>{
     e.preventDefault()
-    if(value.password === value.cPassword){
-      UpdatePassword(id,value.password)
+    if(value.password !== value.cPassword){
+      dispatch(setAlert({
+        open : true,
+        message : "Password doesn't match.",
+        variant : 'warning'
+      }))
+    }
+    else {
+      const resetPassword = await axios.patch(`http://localhost:8080/api/reset`,{email,password : value.password})
+
+      if(resetPassword.status === 200)
+      {
+        dispatch(setAlert({
+          open : true,
+          message : "Password reset successfully.",
+          variant : 'warning'
+        }))
+      }
     }
   }
 

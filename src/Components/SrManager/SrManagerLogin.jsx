@@ -44,7 +44,10 @@ function SrManagerLogin() {
     const data = user.data;
 
     if(data.success){
-      if(data.result[0].role === "Senior Manager"){
+      data.result[0].role = JSON.parse(data.result[0].role)
+
+      console.log(data.result[0].role[0])
+      if(data.result[0].role[0] === "Senior Manager"){
         if(data.result[0].password === formValue.password){
           setErr({open:false})
 
