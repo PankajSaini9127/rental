@@ -51,7 +51,7 @@ function HamburgerMenu({navigateTo,navigate2}) {
 
           {!expand ? (
             <>
-              <NavItem Vector={Vector1} />
+              <NavItem Vector={Vector1} navigateTO={navigateTo}/>
               <NavItem Vector={Vector2} />
               <NavItem Vector={Vector3} />
             </>

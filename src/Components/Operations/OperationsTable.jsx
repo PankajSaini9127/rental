@@ -66,9 +66,8 @@ function OperationsTable({rows}) {
   const navigate = useNavigate()
 
   const onRowsSelectionHandler = (ids) => {
-    const selectRow = ids.map((id) => rows.find((row) => row.id === id));
-    console.log(selectRow)
-      navigate('/operationsApproval')
+    const id = ids[0]
+      navigate(`/operationsApproval/${id}`)
   };
   return (
     <>

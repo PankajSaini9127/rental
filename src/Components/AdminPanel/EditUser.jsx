@@ -12,7 +12,7 @@ const initialState ={
     name:"",
     email:"",
     password:"",
-    role:"",
+    role:[],
     mobile:"",
     supervisor:""
 }
@@ -37,6 +37,7 @@ function EditUser() {
   const navigate =useNavigate()
   const { id } = useParams();
     const [formVal, setFormVal]= useState(initialState)
+
     const [msg, setMsg]= useState({
       open:false,
       type:"",
@@ -47,6 +48,7 @@ function EditUser() {
 
     const {name,email,password,role,mobile,code,supervisor} = formVal;
 
+
 const getData = async()=>{
      const data = await axios.post(`http://localhost:8080/api/admin/user`
      ,{id})
@@ -55,7 +57,9 @@ const getData = async()=>{
 
      setFormVal({
       ...formVal,
-      name,code,password,email,role,supervisor,mobile
+      name,code,password,email,
+      role:JSON.parse(role)
+      ,supervisor,mobile
 
      })
 }
@@ -86,7 +90,6 @@ const updateData = async()=>{
     const handleSubmit =(e)=>{
       e.preventDefault()
       updateData()
-      // console.log(formVal)
     }
 
     
@@ -137,17 +140,25 @@ useEffect(()=>{
           }}
           onSubmit={handleSubmit}
         >
+
+<Grid
+            container
+            sx={{ p: 3}}
+            spacing={4}
+          >
+            <TextFieldWrapper
+              label="Emp.Code"
+              placeHolder=""
+              value={code}
+              onChange={handleChange}
+            />
+          </Grid>
           <Grid
             container
             sx={{ px: 3}}
             spacing={4}
           >
-            <TextFieldWrapper
-              label="Code"
-              placeHolder=""
-              value={code}
-              onChange={handleChange}
-            />
+            
             <TextFieldWrapper
               label="Full Name"
               placeHolder="Full Name"
@@ -169,18 +180,32 @@ useEffect(()=>{
               name='mobile'
               onChange={handleChange}
             />
-            <TextFieldWrapper
+           
+
+   <SelectComponent 
+   multiple={true}
+   value={role} 
+   name='role' 
+   label={'Role'} 
+   options={Role} 
+   onChange={handleChange}
+   />
+
+   <SelectComponent 
+   value={supervisor} 
+   name='supervisor' 
+   label={'Supervisor'} 
+   options={Supervisor} 
+   onChange={handleChange}
+   />
+
+   <TextFieldWrapper
               label="Password"
               name='password'
               placeHolder="Password"
               value={password}
               onChange={handleChange}
             />
-
-   <SelectComponent value={role} name='role' label={'Role'} options={Role} onChange={handleChange}/>
-   <SelectComponent value={supervisor} name='supervisor' label={'Supervisor'} options={Supervisor} onChange={handleChange}/>
-
-
           
 
 
@@ -197,7 +222,9 @@ useEffect(()=>{
                textTransform: "capitalize",
             }}
              type={'submit'}
-            >Update</Button>
+            >
+              Update
+              </Button>
           </Grid>
           </Grid>
         </Box>

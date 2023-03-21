@@ -11,14 +11,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect } from 'react';
 import DeleteAlert from './DeleteAlert';
 
-
-
-
-
-
-
-
-  
  
 
   const rows = [
@@ -83,6 +75,7 @@ import DeleteAlert from './DeleteAlert';
   ];
  
 
+  
   
 
 
@@ -149,7 +142,7 @@ function DataTable() {
  const row = data.map((item)=>{
   return  {
     id: item.id,
-    status: "Pending",
+    status: item.status,
     code: item.code,
     name: item.leeseName,
     location:item.location,
@@ -160,6 +153,11 @@ function DataTable() {
 
 
   const navigate = useNavigate()
+
+  const onRowsSelectionHandler = (ids) => {
+    const id = ids[0]
+      navigate(`/managerApproval/${id}`)
+  };
 
   const renderDetailsButton = (e) => {
       const id = e.id;
@@ -336,7 +334,7 @@ const [deleteAlert, setDeleteAlert] = useState({open:false,id:''})
           return(cellClass)
 
         }}
-        // onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+        onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
       >
 
       </DataGrid>

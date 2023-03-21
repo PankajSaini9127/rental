@@ -2,41 +2,45 @@ import {
   Alert,
   Box,
   Button,
+  Checkbox,
   Grid,
   Select,
   Snackbar,
   Stack,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import HamburgerMenu from "../HamburgerMenu";
 import {
   MyHeader,
   SelectComponent,
   TextFieldWrapper,
 } from "../StyledComponent";
+
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
-import axios, { Axios } from "axios";
+import axios from "axios";
 import { useFormik } from "formik";
 import { AddUserSchema } from "../ValidationSchema/Admin";
+import { AdminSelect } from "../StyleComponents/AdminSelect";
 
 const initialState = {
   code: "123456",
   name: "",
   email: "",
   password: "",
-  role: "",
+  role: [],
   mobile: "",
   supervisor: "",
 };
 
-const Role = ["Manager", "Senior Manager", "BHU", "Operations", "Finance"];
+const Role = ["Admin", "Operations","Senior Manager", "BHU","Finance", "Manager"];
 
-const Supervisor = ["Nilesh", "Yashwant", "Pankaj"];
+// const Supervisor = ["Nilesh", "Yashwant", "Pankaj"];
 
 function NewUser() {
   const navigate = useNavigate();
+
+  
 
   // form handling and validate
   const { values, handleChange, handleSubmit, handleBlur, errors, touched } =
@@ -50,6 +54,23 @@ function NewUser() {
 
   //distructring elements from values
   const { name, email, password, role, mobile, code, supervisor } = values;
+  
+  // const getData = async(role)=>{
+  //   const user = await axios.post('http://localhost:8080/api/admin/selectRole',role)
+  //   console.log(user)
+  // }
+
+const [supervisorArray, setsupervisorArray] = useState([])
+
+
+async function getSupervisor (role){
+  const supervisor = await axios.post('http://localhost:8080/api/admin/selectRole',role)
+  setsupervisorArray(supervisor.data.map((item)=>item.name))
+}
+
+  useEffect(()=>{
+    getSupervisor(role)
+  },[role])
 
   const [msg, setMsg] = useState({
     open: false,
@@ -91,18 +112,6 @@ function NewUser() {
     });
   };
 
-  // const handleSubmit =(e)=>{
-  //   e.preventDefault()
-  //   apiCall()
-  //   // console.log(formVal)
-  // }
-
-  // const handleChange = (e)=>{
-  //      setFormVal({
-  //       ...formVal,
-  //       [e.target.name] : e.target.value
-  //      })
-  // }
 
   return (
     <>
@@ -144,8 +153,12 @@ function NewUser() {
                 }}
                 onSubmit={handleSubmit}
               >
+                 
+                <Grid container sx={{ p: 3 }} spacing={4}>
+                <TextFieldWrapper label="Emp.Code" placeHolder="" value={code} />
+                </Grid>
+
                 <Grid container sx={{ px: 3 }} spacing={4}>
-                  <TextFieldWrapper label="Code" placeHolder="" value={code} />
                   <TextFieldWrapper
                     label="Full Name"
                     placeHolder="Full Name"
@@ -176,18 +189,10 @@ function NewUser() {
                     errMsg={errors.mobile}
                     touched={touched.mobile}
                   />
-                  <TextFieldWrapper
-                    label="Password"
-                    name="password"
-                    placeHolder="Password"
-                    value={password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    errMsg={errors.password}
-                    touched={touched.password}
-                  />
+                 
 
-                  <SelectComponent
+                  <AdminSelect
+                    multiple={true}
                     value={role}
                     name="role"
                     label={"Role"}
@@ -197,15 +202,31 @@ function NewUser() {
                     errMsg={errors.role}
                     touched={touched.role}
                   />
+
+                   {/* <Checkbox
+      checked={true}
+      onChange={handleChange}
+      inputProps={{ 'aria-label': 'controlled' }}
+    /> */}
                   <SelectComponent
                     value={supervisor}
                     name="supervisor"
                     label={"Supervisor"}
-                    options={Supervisor}
+                    options={supervisorArray}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     errMsg={errors.supervisor}
                     touched={touched.supervisor}
+                  />
+                   <TextFieldWrapper
+                    label="Password"
+                    name="password"
+                    placeHolder="Password"
+                    value={password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    errMsg={errors.password}
+                    touched={touched.password}
                   />
                 </Grid>
                 <Grid container sx={{ justifyContent: "space-evenly", mt: 3 }}>

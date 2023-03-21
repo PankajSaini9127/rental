@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material'
 import { Stack } from '@mui/system'
 import React from 'react'
+import { AuthContext } from '../../App'
 import HamburgerMenu from '../HamburgerMenu'
 import { DashboardItem, MyHeader } from '../StyledComponent'
 
@@ -15,6 +16,9 @@ const data = [
   ]
 
 function SrManagerDashboard() {
+
+  
+
   return (
     <>
     <MyHeader>Dashboard</MyHeader>

@@ -91,20 +91,40 @@ const initialState = {
   bankName: "",
   benificiaryName: "",
   accountNo: "",
-  ifscCode: "",
+  ifscCode: ""
 };
 
-function SrManagerApproval() {
-  const { id } = useParams();
+function ManagerApproval() {
 
   const value = useContext(AuthContext)
-  // console.log(value.state.login.name)
+  console.log(value.state.login.name)
+
+  const { id } = useParams();
 
   const [msg, setMsg] = useState({
     open: false,
     type: "",
     message: "",
   });
+
+  const handleClose = ()=>{
+    if(msg.type === 'success'){
+       navigate('/listing')
+       setMsg({
+        open: false,
+        type: "",
+        message: "",
+      })
+    }else{
+      setMsg({
+        open: false,
+        type: "",
+        message: "",
+      })
+    }
+       
+  }
+
 
   const [agreement, setAgreement] = useState(initialState);
   const {
@@ -132,19 +152,21 @@ function SrManagerApproval() {
     manager
   } = agreement;
 
-console.log(agreement)
-
   const getData = async () => {
-    console.log(id)
-    const agreement = await axios.get(
-      `http://localhost:8080/api/srmanager/agreement/${id}`
+    const agreement = await axios.post(
+      `http://localhost:8080/api/agreement/${id}`
     );
-  
-    setAgreement(agreement.data.agreements[0]);
+    console.log(agreement)
+    setAgreement(agreement.data[0]);
   };
 
-  const data = {
-    leeseName,
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const navigate = useNavigate();
+
+  const data ={ leeseName,
     code,
     state,
     city,
@@ -165,64 +187,35 @@ console.log(agreement)
     benificiaryName,
     accountNo,
     ifscCode,
-    manager,
-    srmanager:value.state.login.name
-  }
-  
-
-  useEffect(() => {
-    getData();
-  }, []);
-
-  const navigate = useNavigate();
-
-  const handleApprove = () => {
-        PostData(data)
-  };
-
-  const PostData = async()=>{
-     const agreement = await axios.post(`http://localhost:8080/api/operations/agreement/${id}`,data)
-     SetAlert(agreement)
+    manager: value.state.login.name
   }
 
-const SetAlert = (response)=>{
-    if(response.data.success){
-      setMsg({
-        open:true,
-        type:"success",
-        message:response.data.message
-      })
-    }else{
-      setMsg({
-        open:true,
-        type:"error",
-        message:response.data.message
-      })
-    }
-}
+  const setData = async()=>{
+    const result = await axios.post(`http://localhost:8080/api/srmanger/agreement/${id}`,data)
+    console.log(result)
+   }
 
-const handleClose = ()=>{
-  if(msg.type === 'success'){
-    navigate("/srManagerListing")
-    setMsg({
-      open:false,
-      type:"",
-      message:""
-    })
-  }else{
-    setMsg({
-      open:false,
-      type:"",
-      message:""
-    })
+  const setAlert= (data)=>{
+    // console.log(data)
+     if(data.success){
+        setMsg({
+            open:true,
+            message:data.message,
+            type:"success"
+        })
+     }else{
+        setMsg({
+            open:true,
+            message:data.message,
+            type:"error"
+        })
+     }
   }
-  
-}
+  const handleSubmit = (e)=>{
+    // e.preventDefault()
+    setData()
 
-  const handleSendManager = () => {
-
-  };
-
+  }
 
   return (
     <>
@@ -233,8 +226,7 @@ const handleClose = ()=>{
           <MyHeader>New Agreement Approval</MyHeader>
 
           <Grid container sx={{ justifyContent: "center" }}>
-
-          {
+           {
             msg.open? <Snackbar
             open={msg.open}
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
@@ -327,9 +319,9 @@ const handleClose = ()=>{
                       textTransform: "capitalize",
                       fontSize: "18px",
                     }}
-                    onClick={handleApprove}
+                    onClick={handleSubmit}
                   >
-                    Approved And Send to Operations
+                    Approved And Send to Sr Manager
                   </Button>
                 </Grid>
                 <Grid item md={6} xs={11}>
@@ -343,9 +335,8 @@ const handleClose = ()=>{
                       textTransform: "capitalize",
                       fontSize: "18px",
                     }}
-                    onClick={handleSendManager}
                   >
-                    Send Back To Manager
+                    Reject
                   </Button>
                 </Grid>
               </Grid>
@@ -358,4 +349,4 @@ const handleClose = ()=>{
   );
 }
 
-export default SrManagerApproval;
+export default ManagerApproval;

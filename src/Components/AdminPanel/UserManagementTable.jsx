@@ -1,31 +1,66 @@
 import { Box, Button, Grid, Switch } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 //icons
 import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { AuthContext } from '../../App';
 
-const activeBtn =()=>{
-  return (
-    <Switch
-    onClick={(e) => {
-      e.stopPropagation(); // don't select this row after clicking
-    }}
-    />
-  )
+
+const updateStatus = async(id)=>{
+  const update = axios.put(`http://localhost:8080/api/admin/updateStatus/${id}`)
 }
-
-
-
-
-  
  
 
 
 function UserManagementTable({rows}) {
+
+
+  const {dispatch} = useContext(AuthContext)
+  
+ 
   
   const navigate = useNavigate();
+
+  const ActiveBtn =(e)=>{
+    
+    const checkActive = ()=>{
+      if(e.row.status === "Active"){
+        return true
+      }else{
+        return false
+      }
+    }
+
+    const UpdateStatus = async(id)=>{
+
+      const data = !checked?"Active":"Inactive"
+         const update = await axios.put(`http://localhost:8080/api/admin/updateStatus/${id}`,{"status":data})
+         dispatch({type:"ADMIN_RECALL"})
+    }
+
+    const [checked, setChecked] = useState(checkActive())
+    
+    const handleSwitch = (e)=>{
+      setChecked(e.target.checked)
+    }
+
+
+    const id = e.id;
+    return (
+      <Switch
+      key={id}
+      checked={checked}
+      onChange={handleSwitch}
+      onClick={(e) => {
+        e.stopPropagation(); 
+        UpdateStatus(id)
+      }}
+      />
+    )
+  }
 
   const renderDetailsButton = (e) => {
   
@@ -54,7 +89,7 @@ function UserManagementTable({rows}) {
     )
   }
 
-  const columns = [
+const columns = [
    
     {
       field: "code",
@@ -119,7 +154,7 @@ function UserManagementTable({rows}) {
         width: 120,
         headerClassName: "dataGridHeader",
         headerAlign: "center",
-        renderCell: activeBtn
+        renderCell: ActiveBtn
       },
     {
         field: "actions",

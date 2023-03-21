@@ -5,14 +5,39 @@ import Img from "../../assest/pic/login-form.png";
 import logo from "../../assest/pic/logo1 1.png";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 
 
 function ResetPassword() {
 
+  const {id} = useParams()
+  console.log(id)
   const [showPassword, setShowPassword] = useState(false);
 
+  const [value, setValue] = useState({password:"",cPassword:""}) 
+
   const passwordToggle = () => setShowPassword((show) => !show);
+
+  const handleChange = (e)=>{
+    setValue({
+     ...value,
+     [e.target.name]:e.target.value
+    })
+  }
+
+  const UpdatePassword = async(id,password)=>{
+    const resetPassword = await axios.put(`http://localhost:8080/api/admin/edit/${id}`,{password})
+    console.log(resetPassword)
+  }
+
+  const handleSubmit =(e)=>{
+    e.preventDefault()
+    if(value.password === value.cPassword){
+      UpdatePassword(id,value.password)
+    }
+  }
 
   return (
     <>
@@ -64,13 +89,15 @@ function ResetPassword() {
           <Typography variant="body1" color={"#C8C8C8"} fontSize={"20px"}>
             Set a new password
           </Typography>
-          <Box component={'form'} sx={{mt:2}}>
+          <Box component={'form'} sx={{mt:2}} onSubmit={handleSubmit}>
               <Grid container spacing={3} sx={{justifyContent:"space-evenly"}} >
                   <Grid item md={12}>
                       <FormControl fullWidth>
                          <TextField
                           variant="outlined"
                           label={'New password'}
+                          onChange={handleChange}
+                          value={value.password}
                           name={'password'}
                           InputProps={{
                             endAdornment: (
@@ -85,10 +112,11 @@ function ResetPassword() {
                   <Grid item md={12}>
                       <FormControl fullWidth >
                          <TextField
-                         error
-                         helperText={'requierd'}
                           variant="outlined"
                           label={'Confirm New password'}
+                          onChange={handleChange}
+                          value={value.cPassword}
+                          name="cPassword"
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
@@ -101,7 +129,7 @@ function ResetPassword() {
                       </FormControl>
                   </Grid>
                   <Grid item md={12}>
-                      <Button variant="contained" fullWidth sx={{textTransform:"capitalize",color:"white",fontSize:"16px"}}>Reset</Button>
+                      <Button variant="contained" type='submit' fullWidth sx={{textTransform:"capitalize",color:"white",fontSize:"16px"}}>Reset Password</Button>
                   </Grid>
               </Grid>
           </Box>

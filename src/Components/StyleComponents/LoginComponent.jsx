@@ -145,7 +145,7 @@ function LoginComponent({
           </Typography>
 
           <Box component="form" sx={{ mt: 2 }} onSubmit={handleSubmit}>
-            {err ? <Alert severity="error">Invalid Username/Email & Password !</Alert> : ""}
+            {err.open ? <Alert severity={err.type}>{err.msg}</Alert> : ""}
 
             <Grid container sx={{ justifyContent: "center" }} spacing={1}>
               <Grid item xs={12}>

@@ -78,7 +78,7 @@ function Agreement() {
         initialValues:initialState,
         validationSchema:agreementSchema,
         onSubmit:(values,action)=>{
-          APICall(values)
+          // APICall(values)
         }
   })
 
@@ -98,9 +98,6 @@ function Agreement() {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
 
-  // state management form
-
-// const [Value, setValue] = useState(initialState)
 
 const { code,
 leeseName,
@@ -126,13 +123,6 @@ accountNo,
 ifscCode
 } = values;
 
-// on field state change
-//  const handleChange = (e)=>{
-//   setValue({
-//     ...Value,
-//     [e.target.name]:e.target.value
-//   })
-// }
 
 
 // upload document
@@ -152,11 +142,10 @@ console.log(e.target.files)
 // }
 
 
-const APICall = async(values)=>{
-  const agreement = await axios.post('http://localhost:8080/api/newAgreement',values);
-
-  console.log(agreement)
-}
+// const APICall = async(values)=>{
+//   const agreement = await axios.post('http://localhost:8080/api/newAgreement',values);
+//    navigate('/listing')
+// }
 
   return (
     <>
@@ -475,15 +464,14 @@ const APICall = async(values)=>{
               Upload Document
             </Typography>
 
-
-{
+            {
   Array.from({length:arrlenght},(_,i)=>{
     return(<>
     {arrlenght > 1?<Typography>Landlord Name</Typography>:''}
       <Grid
       container
       spacing={isSmall?2:4}
-      sx={{ px:1, justifyContent:"space-evenly"}}
+      sx={{ px:1, justifyContent:"space-evenly",mb:3}}
     >
 
       <DocumentUpload 
@@ -492,14 +480,41 @@ const APICall = async(values)=>{
       handleChange={handleChangeFile}
       />
 
-      <DocumentUpload
-        label="Upload GST Certificate"
-        placeHolder="Upload GST Certificate"
-      />
-
       <DocumentUpload 
       label="Upload Pan Card" 
       placeHolder={'Upload Pan Card'}
+      />
+
+
+    </Grid>
+    </>
+    )
+  })
+}
+
+{arrlenght > 1?
+<Typography
+              variant="body1"
+              color="var(--main-color)"
+              fontSize="25px"
+              lineHeight="28px"
+              fontWeight="600"
+              my="20px"
+            >
+              Upload Document
+            </Typography>
+            :""}
+
+            
+            <Grid
+      container
+      spacing={isSmall?2:4}
+      sx={{ px:1, justifyContent:"space-evenly"}}
+    >
+
+            <DocumentUpload
+        label="Upload GST Certificate"
+        placeHolder="Upload GST Certificate"
       />
       <DocumentUpload
         label="Upload Draft Agreement"
@@ -532,11 +547,9 @@ const APICall = async(values)=>{
         label="Upload Noc(If Mutiple Oweners)"
         placeHolder="Upload GST Certificate"
       />
-    </Grid>
-    </>
-    )
-  })
-}
+      </Grid>
+
+
               
 
               {/* Document upload section end here */}
@@ -564,7 +577,7 @@ const APICall = async(values)=>{
                     '@media(max-width:900px)':{fontSize:"11px",lineHeight:"12px",height:"40px"}
                   }}
                 >
-                  Submit To Sr Manager
+                 Add Agreement
                 </Button>
                 </Grid>
 

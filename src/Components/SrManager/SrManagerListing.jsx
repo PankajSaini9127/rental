@@ -1,5 +1,7 @@
 import { Stack } from "@mui/material";
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
@@ -82,6 +84,30 @@ const row = [
 function SrManagerListing() {
 
 
+const [data, setData] =useState([])
+
+ const getData = async()=>{
+  const response = await axios.get('http://localhost:8080/api/srmanager/agreement')
+  setData(response.data.agreements.reverse())
+ } 
+
+ const rows = data.map((item)=>{
+  return {
+    id: item.id,
+    status: item.status,
+    code: item.code,
+    name: item.leeseName,
+    location:item.location,
+    manager:item.manager,
+    rentalAmount:item.monthlyRent
+  }
+ })
+
+ useEffect(()=>{
+  getData()
+ },[])
+
+
   return (
     <>
 
@@ -92,10 +118,9 @@ function SrManagerListing() {
         title="Rental Agreement"
         buttonText="Upload"
         options={options}
-        // onChange={handleChange}
         value={'New Agreement'}
         Table={ManagerTable}
-        rows={row}
+        rows={rows}
       />
 
 </Stack>

@@ -17,6 +17,7 @@ const NavExpand = ({msg, navigateTO,Vector})=>{
           position: "relative",
           flexDirection:"row",
           alignItems:"center",
+          cursor:'pointer',
           '@media(max-width:900px)':{width:'180px'}
         }}
         onClick={() => {
@@ -42,10 +43,12 @@ const NavExpand = ({msg, navigateTO,Vector})=>{
     )
   }
   
-  const NavItem = ({Vector})=>{
+  const NavItem = ({Vector,navigateTO})=>{
+    const navigate = useNavigate()
     return(
-     
+              <Box sx={{cursor:'pointer'}} onClick={()=>navigate(`/${navigateTO}`)}>
                   <Vector/>
+                  </Box>
     )
   }
 

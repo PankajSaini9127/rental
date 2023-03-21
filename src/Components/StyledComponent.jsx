@@ -10,8 +10,7 @@ import {
   Typography,
   styled,
   Button,
-  InputLabel,
-  NativeSelect, 
+  InputLabel
 } from "@mui/material";
 
 
@@ -120,13 +119,14 @@ const DocumentUpload = ({ label, placeHolder,handleChange }) => {
 // Select Field
 
 
-const SelectComponent = ({ label, value, name, onChange ,options,errMsg,onBlur,touched}) => {
+const SelectComponent = ({ label, value, name, onChange ,options,errMsg,onBlur,touched ,multiple}) => {
   return (
     <Grid item md={4} xs={6} sx={{mb:'0px !important','@media(max-width:900px)':{my:1}}}>
       <FormControl fullWidth >
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
           name={name}
+          multiple={multiple}
           onChange={(e) => onChange(e)}
           variant="outlined"
           labelId="demo-simple-select-label"
@@ -134,24 +134,11 @@ const SelectComponent = ({ label, value, name, onChange ,options,errMsg,onBlur,t
           label={label}
           onBlur={onBlur}
           error={errMsg && touched ? true : false}
-          // labelId="demo-simple-select-helper-label"
           sx={{
-            '.MuiOutlinedInput-notchedOutline': {
-              borderColor: '#C8C8C8',
-            },
-            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#C8C8C8',
-            },
-            '&:hover .MuiOutlinedInput-notchedOutline': {
-              borderColor: '#C8C8C8',
-            },
-            '.MuiSvgIcon-root ': {
-              fill: "#C8C8C8 !important",
-            },
             mt: "0px !important",
             color: "rgba(16, 99, 173, 0.47)",
             width: "100%",
-            height:'50px',
+            height:'50px !important',
             boxShadow: "none",
             
           }}

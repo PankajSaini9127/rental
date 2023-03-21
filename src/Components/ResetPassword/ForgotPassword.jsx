@@ -1,6 +1,7 @@
 import { Button, FormControl, Grid, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Img from "../../assest/pic/login-form.png";
@@ -12,8 +13,24 @@ function ForgotPassword() {
 
   const navigate = useNavigate()
 
-  const handleSubmit =(e)=>{
-       navigate('/emailVerify')
+  const [value,setValue] = useState('')
+
+const handleChange = (e)=>{
+   setValue(e.target.value)
+}
+
+
+const getUser = async(email)=>{
+     const user = await axios.post('http://localhost:8080/api/admin/forgotPassword',{email:email})
+     console.log(user.data[0])
+     navigate(`/newPassword/${user.data[0].id}`)
+}
+
+  const handleSubmit =()=>{
+    getUser(value)
+
+   
+      //  navigate('/emailVerify')
   }
 
   const handleBack = ()=>{
@@ -78,6 +95,7 @@ function ForgotPassword() {
                            <TextField
                             variant="outlined"
                             label={'Email Address'}
+                            onChange={handleChange}
                            />
                         </FormControl>
                     </Grid>

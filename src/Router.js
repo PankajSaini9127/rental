@@ -36,11 +36,13 @@ import ForgotPassword from './Components/ResetPassword/ForgotPassword'
 import EmailVerify from './Components/ResetPassword/EmailVerify'
 import ResetPassword from './Components/ResetPassword/ResetPassword'
 import EditUser from './Components/AdminPanel/EditUser';
+import ManagerApproval from './Components/Manager/ManagerApproval';
 
 function Router() {
   return (
     <BrowserRouter>
     <Routes>
+
 
         <Route exact path='/' element={<Login/>}/>
         <Route exact path='/dashboard' element={<Dashboard/>}/>
@@ -49,6 +51,7 @@ function Router() {
         <Route exact path='/listing' element={<Listing/>}/>
         <Route exact path='/monthly-payment' element={<MonthalyList/>}/>
         <Route exact path='/renewal' element={<RenewalList/>}/>
+        <Route exact path='/managerApproval/:id' element={<ManagerApproval/>}/>
 
 
          {/* Sr Manager */}
@@ -56,7 +59,7 @@ function Router() {
         <Route exact path='/srManagerLogin' element={<ManagerLogin/>}/>
         <Route exact path='/srManagerDashboard' element={<SrManagerDashboard/>}/>
         <Route exact path='/srManagerListing' element={<SrManagerListing/>}/>
-        <Route exact path='/srManagerApproval' element={<SrManagerApproval/>}/>
+        <Route exact path='/srManagerApproval/:id' element={<SrManagerApproval/>}/>
         <Route exact path='/backToManager' element={<SendBack/>}/>
 
 
@@ -64,7 +67,7 @@ function Router() {
 
         <Route exact path='/operationsLogin' element={<OperationsLogin/>}/>
         <Route exact path='/operationsListing' element={<OperationsListing/>}/>
-        <Route exact path='/operationsApproval' element={<ApprovalRequest/>}/>
+        <Route exact path='/operationsApproval/:id' element={<ApprovalRequest/>}/>
         <Route exact path='/operationsReject' element={<RejectApproval/>}/>
 
 
@@ -82,7 +85,7 @@ function Router() {
 
         <Route path={'/resetPassword'} element={<ForgotPassword/>} />
         <Route path={'/emailVerify'} element={<EmailVerify/>} />
-        <Route path={'/newPassword'} element={<ResetPassword/>} />
+        <Route path={'/newPassword/:id'} element={<ResetPassword/>} />
         
 
     </Routes>

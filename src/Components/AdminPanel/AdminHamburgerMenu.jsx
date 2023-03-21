@@ -49,14 +49,14 @@ function AdminHamburgerMenu() {
 
           {!expand ? (
             <>
-              <NavItem Vector={VectorUser}/>
+              <NavItem Vector={VectorUser} navigateTO="userManagement"/>
               <NavItem Vector={VectorLogout}/>
               </>
           ) : (
             <Stack container  spacing={2} >
               {/* onclick */}
              
-             <NavExpand msg="User" navigateTO="userManagement" Vector={VectorUser} NavItem={NavItem}/>
+             <NavExpand msg="User"  Vector={VectorUser} NavItem={NavItem}/>
              <NavExpand msg="LogOut" navigateTO="" Vector={VectorLogout} NavItem={NavItem}/>
 
             </Stack>
