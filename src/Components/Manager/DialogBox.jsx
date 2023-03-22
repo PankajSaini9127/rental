@@ -44,23 +44,6 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
   );
 };
 
-<<<<<<< HEAD
-const Landblord = ({value,setValue,index}) => {
-
-
-  function handleChange (e){
-    if(value[index]){
-      setValue(old=>(
-        old.map((row,i)=>{
-if(index === i){
- return {
-  ...row,
-  [e.target.name]:e.target.value
- }
-
-}
-return row
-=======
 const Landblord = ({ value, setValue, index }) => {
   function handleChange(e) {
     if (value[index]) {
@@ -73,7 +56,6 @@ const Landblord = ({ value, setValue, index }) => {
             };
           }
           return row;
->>>>>>> a998acda7a818ef6ac3e696505c34d782d7ce1f8
         })
       );
     } else {

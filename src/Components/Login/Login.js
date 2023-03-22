@@ -37,13 +37,23 @@ const handleChange = (e) => {
       const Get_DATA = async()=>{
         const user = await LoginAPI({email:formValue.username})
         const data = user.data;
+       
         
         if(data.success){
           if(data.result[0].password === formValue.password){
             data.result[0].role = JSON.parse(data.result[0].role)
             let userRole = data.result[0].role
 
-            if(userRole.includes(role)){
+            if(userRole.includes(role))
+            {
+              //navigate to reset password 
+              console.log("first")
+              navigate(`/newPassword/${data.result[0].email}`)
+           }else
+            {
+
+              if(data.result[0].password_flag ===  0){
+            
 
             if(role === "Manager")
             {
@@ -69,9 +79,11 @@ const handleChange = (e) => {
               navigate(`/operationsListing`)
              }
 
-            }else{
+            else{
               setErr({open:true,type:'error', msg:"Role Not Valid !"});
             }
+          }
+          }
 
           }else{
             setErr({open:true,type:'error', msg:"Invalid Password !"});

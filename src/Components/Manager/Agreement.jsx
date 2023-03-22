@@ -29,18 +29,12 @@ import YearlyIncrement from "./IncrementType";
 import DialogBox from "./DialogBox";
 import { useNavigate } from "react-router-dom";
 
-<<<<<<< HEAD
-const incrementType = [
-  "Percentage",
-  "Value"
-]
-
-=======
 import { useFormik } from "formik";
 import { agreementSchema } from "../ValidationSchema/Manager";
+import { add_agreement, add_landlord } from "../../Services/Services";
+import { useSelector } from "react-redux";
 
 const incrementType = ["Percentage", "Value"];
->>>>>>> a998acda7a818ef6ac3e696505c34d782d7ce1f8
 
 // form initial state
 
@@ -71,6 +65,7 @@ const incrementType = ["Percentage", "Value"];
 
 function Agreement() {
 
+  const {landloard} = useSelector(state=>state)
 
   const [data, setData] = useState({
     landlord: [],
@@ -82,7 +77,7 @@ function Agreement() {
     yearlyIncrement: "",
   });
 
-  const [landblord, setLandblord] = useState([]);
+  const [landblord, setLandblord] = useState([1]);
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -122,22 +117,31 @@ function Agreement() {
 
   // handle Change for common feilds
   function handleCommonChange(e, i) {
-    setData((old) => ({...old,[e.target.name]: e.target.value}));
+    setData(old=>({...old,[e.target.name]: e.target.value}))
   }
 
   // on form submit
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(data);
+    const {code,lockInYear,monthlyRent,noticePeriod,yearlyIncrement,deposite} =data;
+    const {landlord} = data;
+
+    APICall({code,lockInYear,monthlyRent,noticePeriod,yearlyIncrement,deposite},landlord)
+
   };
 
-  const APICall = async (values) => {
-    const agreement = await axios.post(
-      "http://localhost:8080/api/newAgreement",
-      values
-    );
-    console.log(agreement);
+  const APICall = async (values,landlordData) => {
+    const agreement = await add_agreement(values)
+
+    if(agreement.data.success){
+      const agreement_id = agreement.data.agreement[0];
+
+      landlordData = landlordData.map((row,index)=>{
+        return {...row,percentageShare:landloard[index].percentage,name:landloard[index].name,agreement_id}
+      })
+      const result = await add_landlord(landlordData)
+    }
   };
 
   return (
@@ -180,6 +184,7 @@ function Agreement() {
                   />
 
                   {landblord.map((row,i)=><>
+                  {console.log(landblord)}
                         <TextFieldWrapper
                           label="Name Of Lesse"
                           placeHolder="Enter Name Of Lesse"

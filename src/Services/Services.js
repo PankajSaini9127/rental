@@ -30,3 +30,11 @@ export async function UpdateStatusAPI (id,data){
 
 //Admin Section Ends Here
 
+//manager sEction start here
+export async function add_agreement (data){
+    return  axios.post("http://localhost:8080/api/newAgreement",data);
+}
+
+export async function add_landlord (data){
+    return axios.post('http://localhost:8080/api/add_landlord',data)
+}
