@@ -8,17 +8,10 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { addLandLoard } from "../../store/action/action";
 
-
-const TextFieldWrapper = ({
-  label,
-  placeHolder,
-  value,
-  name,
-  onChange
-}) => {
+const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
   const fieldStyle = {
     height: "50px",
     color: "rgba(16, 99, 173, 0.47)",
@@ -26,32 +19,32 @@ const TextFieldWrapper = ({
   };
 
   return (
-      
-        <Box sx={{width:'100%'}} className="textFieldWrapper">
+    <Box sx={{ width: "100%" }} className="textFieldWrapper">
       <FormControl fullWidth>
         <TextField
           variant="outlined"
           label={label}
           name={name}
-          type={'text'}
+          type={"text"}
           onChange={(e) => onChange(e)}
           fullWidth
           InputProps={{
             disableUnderline: true,
             style: {
               color: "rgba(16, 99, 173, 0.47)",
-              fontSize:"15px",
+              fontSize: "15px",
             },
           }}
           placeholder={placeHolder}
           value={value}
           sx={fieldStyle}
         />
-       </FormControl>
-       </Box>
+      </FormControl>
+    </Box>
   );
 };
 
+<<<<<<< HEAD
 const Landblord = ({value,setValue,index}) => {
 
 
@@ -67,30 +60,45 @@ if(index === i){
 
 }
 return row
+=======
+const Landblord = ({ value, setValue, index }) => {
+  function handleChange(e) {
+    if (value[index]) {
+      setValue((old) =>
+        old.map((row, i) => {
+          if (index === i) {
+            return {
+              ...row,
+              [e.target.name]: e.target.value,
+            };
+          }
+          return row;
+>>>>>>> a998acda7a818ef6ac3e696505c34d782d7ce1f8
         })
-      ))
-    }else{
-      setValue(old=>([
+      );
+    } else {
+      setValue((old) => [
         ...old,
         {
-          [e.target.name]:e.target.value
-        }
-      ]))
+          [e.target.name]: e.target.value,
+        },
+      ]);
     }
-      
   }
-  
 
   return (
     <>
-      <Grid container sx={{ justifyContent: "space-evenly",mb:2 }} spacing={2}>
-
+      <Grid
+        container
+        sx={{ justifyContent: "space-evenly", mb: 2 }}
+        spacing={2}
+      >
         <Grid item xs={6}>
           <TextFieldWrapper
             label={"Name of Landlord"}
             placeHolder={"Name of Landlord"}
-            name={'name'}
-            value={value[index]&&value[index].name?value[index].name:""}
+            name={"name"}
+            value={value[index] && value[index].name ? value[index].name : ""}
             onChange={handleChange}
           />
         </Grid>
@@ -98,8 +106,12 @@ return row
           <TextFieldWrapper
             label={"Percentage Share%"}
             placeHolder={"Percentage Share%"}
-            name={'percentage'}
-            value={value[index] && value[index].percentage ? value[index].percentage:""}
+            name={"percentage"}
+            value={
+              value[index] && value[index].percentage
+                ? value[index].percentage
+                : ""
+            }
             onChange={handleChange}
           />
         </Grid>
@@ -108,27 +120,24 @@ return row
   );
 };
 
-
-
-function DialogBox({value, setValue}) {
+function DialogBox({ value, setValue }) {
   const [open, setOpen] = useState(true);
 
-  const [data, setData] = useState([])
+  const [data, setData] = useState([]);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const handleSubmit = ()=>{
-    dispatch(addLandLoard(data))
-    handleClose()
-  }
-  
+  const handleSubmit = () => {
+    dispatch(addLandLoard(data));
+    handleClose();
+  };
 
   const handleClose = () => {
     setOpen(false);
   };
 
   const handleChange = (e) => {
-    setValue(e.target.value);
+    setValue(Array.from({length : e.target.value},i=>i));
   };
 
   return (
@@ -150,34 +159,39 @@ function DialogBox({value, setValue}) {
             justifyContent: "center",
             alignItems: "center",
             py: 10,
-            '@media(max-width:900px)':{width:'300px',py:6}
+            "@media(max-width:900px)": { width: "300px", py: 6 },
           }}
           spacing={4}
         >
           <Grid item md={10}>
-          <TextFieldWrapper
-            label="Enter No of Landlord"
-            placeHolder="Enter No of Landlord"
-            // width="230px"
-            grid='10'
-            name={"landblord"}
-            onChange={handleChange}
-          />
+            <TextFieldWrapper
+              label="Enter No of Landlord"
+              placeHolder="Enter No of Landlord"
+              // width="230px"
+              grid="10"
+              name={"landblord"}
+              onChange={handleChange}
+            />
           </Grid>
           <Grid item md={10}>
-          {value > 0 ? (
-            <>
-              {Array.from({ length: value }, (_, i) => (
-                <Landblord key={i} index={i} value={data} setValue={setData} />
-              ))}
-            </>
-          ) : (
-            ""
-          )}
+            {value.length > 0 ? (
+              <>
+                {value.map((_, i) => (
+                  <Landblord
+                    key={i}
+                    index={i}
+                    value={data}
+                    setValue={setData}
+                  />
+                ))}
+              </>
+            ) : (
+              ""
+            )}
           </Grid>
 
           <Grid item md={3}>
-          {value > 0 ? (
+            {value.length > 0 ? (
               <Button
                 variant="contained"
                 onClick={handleSubmit}
@@ -185,17 +199,17 @@ function DialogBox({value, setValue}) {
                   height: "40px",
                   width: "100%",
                   borderRadius: "20px",
-                  fontSize:"16px",
-                  color:"#FFFFFF",
-                  lineHeight:"32px",
-                  textTransform:"capitalize"
+                  fontSize: "16px",
+                  color: "#FFFFFF",
+                  lineHeight: "32px",
+                  textTransform: "capitalize",
                 }}
               >
                 Submit
               </Button>
-          ) : (
-            ""
-          )}
+            ) : (
+              ""
+            )}
           </Grid>
         </Grid>
       </Dialog>
