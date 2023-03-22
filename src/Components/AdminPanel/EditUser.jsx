@@ -2,10 +2,11 @@
 import { Alert, Box, Button, Grid,  Select,  Snackbar,  Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { MyHeader, SelectComponent, TextFieldWrapper } from "../StyledComponent";
+import { MyHeader, PasswordField, SelectComponent, TextFieldWrapper } from "../StyledComponent";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
 import axios, {Axios} from 'axios'
+import AdminCheckBox from "../StyleComponents/AdminCheckBox";
 
 const initialState ={
   code:"123456",
@@ -16,14 +17,6 @@ const initialState ={
     mobile:"",
     supervisor:""
 }
-
-const Role = [
-  "Manager",
-  "Senior Manager",
-  "BHU",
-  "Operations",
-  "Finance"
-]
 
 const Supervisor = [
   "Nilesh",
@@ -38,15 +31,47 @@ function EditUser() {
   const { id } = useParams();
     const [formVal, setFormVal]= useState(initialState)
 
+
+    const [disable, setDisable] = useState({manager:false,srManager:false})
+    
+const [supervisorArray, setsupervisorArray] = useState([])
+
     const [msg, setMsg]= useState({
       open:false,
       type:"",
       message:""
     })
 
-    const {open,type,message} = msg;
 
+    async function getSupervisor (role){
+      const supervisor = await axios.post('http://localhost:8080/api/admin/selectRole',role)
+      setsupervisorArray(supervisor.data.map((item)=>item.name))
+    }
+
+    function manageRole (role){
+      if(role[0] === "Manager"){
+        setDisable({
+          ...disable,
+          manager:true
+        })
+      }else{
+        setDisable({
+          manager:false,
+          srManager:false
+        })
+      }
+    }
+
+    
     const {name,email,password,role,mobile,code,supervisor} = formVal;
+
+
+    useEffect(()=>{
+      manageRole(role)
+      getSupervisor(role)
+    },[role])
+
+    const {open,type,message} = msg;
 
 
 const getData = async()=>{
@@ -182,24 +207,26 @@ useEffect(()=>{
             />
            
 
-   <SelectComponent 
+   {/* <SelectComponent 
    multiple={true}
    value={role} 
    name='role' 
    label={'Role'} 
    options={Role} 
    onChange={handleChange}
-   />
+   /> */}
+
+<AdminCheckBox handleChange={handleChange} disable={disable}/>
 
    <SelectComponent 
    value={supervisor} 
    name='supervisor' 
    label={'Supervisor'} 
-   options={Supervisor} 
+   options={supervisorArray} 
    onChange={handleChange}
    />
 
-   <TextFieldWrapper
+   <PasswordField
               label="Password"
               name='password'
               placeHolder="Password"

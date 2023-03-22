@@ -2,9 +2,7 @@ import {
   Alert,
   Box,
   Button,
-  Checkbox,
   Grid,
-  Select,
   Snackbar,
   Stack,
 } from "@mui/material";
@@ -12,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   MyHeader,
+  PasswordField,
   SelectComponent,
   TextFieldWrapper,
 } from "../StyledComponent";
@@ -21,7 +20,7 @@ import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import axios from "axios";
 import { useFormik } from "formik";
 import { AddUserSchema } from "../ValidationSchema/Admin";
-import { AdminSelect } from "../StyleComponents/AdminSelect";
+import AdminCheckBox from "../StyleComponents/AdminCheckBox";
 
 const initialState = {
   code: "123456",
@@ -33,16 +32,15 @@ const initialState = {
   supervisor: "",
 };
 
-const Role = ["Admin", "Operations","Senior Manager", "BHU","Finance", "Manager"];
 
-// const Supervisor = ["Nilesh", "Yashwant", "Pankaj"];
 
 function NewUser() {
   const navigate = useNavigate();
 
-  
+// Disable Role CheckBox Base On Condition
+  const [disable, setDisable] = useState({ manager: false, srManager: false });
 
-  // form handling and validate
+ // form handling and validate
   const { values, handleChange, handleSubmit, handleBlur, errors, touched } =
     useFormik({
       initialValues: initialState,
@@ -54,25 +52,37 @@ function NewUser() {
 
   //distructring elements from values
   const { name, email, password, role, mobile, code, supervisor } = values;
-  
-  // const getData = async(role)=>{
-  //   const user = await axios.post('http://localhost:8080/api/admin/selectRole',role)
-  //   console.log(user)
-  // }
 
-const [supervisorArray, setsupervisorArray] = useState([])
+// state for set supervisor value  
+  const [supervisorArray, setsupervisorArray] = useState([]);
+
+// Supervisor value  
+  async function getSupervisor(role) {
+    const supervisor = await axios.post(
+      "http://localhost:8080/api/admin/selectRole",
+      role
+    );
+    setsupervisorArray(supervisor.data.map((item) => item.name));
+  }
+
+// Role Check Box Disable Manage  
+  function manageRole(role) {
+    if (role[0] === "Manager") {
+      setDisable({
+        ...disable,
+        manager: true,
+      });
+    }
+  }
 
 
-async function getSupervisor (role){
-  const supervisor = await axios.post('http://localhost:8080/api/admin/selectRole',role)
-  setsupervisorArray(supervisor.data.map((item)=>item.name))
-}
+  useEffect(() => {
+    manageRole(role);
+    getSupervisor(role);
+  }, [role]);
 
-  useEffect(()=>{
-    getSupervisor(role)
-  },[role])
 
-  const [msg, setMsg] = useState({
+ const [msg, setMsg] = useState({
     open: false,
     type: "",
     message: "",
@@ -80,8 +90,8 @@ async function getSupervisor (role){
 
   const { open, type, message } = msg;
 
-
-  const apiCall = async (values) => {
+// For save data in DB   
+ const apiCall = async (values) => {
     const result = await axios.post(
       `http://localhost:8080/api/admin/userRegistration`,
       values
@@ -102,6 +112,7 @@ async function getSupervisor (role){
     }
   };
 
+// on Alert close
   const handleClose = () => {
     if (msg.type === "success") {
     }
@@ -111,7 +122,6 @@ async function getSupervisor (role){
       message: "",
     });
   };
-
 
   return (
     <>
@@ -153,9 +163,12 @@ async function getSupervisor (role){
                 }}
                 onSubmit={handleSubmit}
               >
-                 
                 <Grid container sx={{ p: 3 }} spacing={4}>
-                <TextFieldWrapper label="Emp.Code" placeHolder="" value={code} />
+                  <TextFieldWrapper
+                    label="Emp.Code"
+                    placeHolder=""
+                    value={code}
+                  />
                 </Grid>
 
                 <Grid container sx={{ px: 3 }} spacing={4}>
@@ -189,25 +202,11 @@ async function getSupervisor (role){
                     errMsg={errors.mobile}
                     touched={touched.mobile}
                   />
-                 
-
-                  <AdminSelect
-                    multiple={true}
-                    value={role}
-                    name="role"
-                    label={"Role"}
-                    options={Role}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    errMsg={errors.role}
-                    touched={touched.role}
+                  <AdminCheckBox
+                    handleChange={handleChange}
+                    disable={disable}
                   />
 
-                   {/* <Checkbox
-      checked={true}
-      onChange={handleChange}
-      inputProps={{ 'aria-label': 'controlled' }}
-    /> */}
                   <SelectComponent
                     value={supervisor}
                     name="supervisor"
@@ -218,9 +217,11 @@ async function getSupervisor (role){
                     errMsg={errors.supervisor}
                     touched={touched.supervisor}
                   />
-                   <TextFieldWrapper
+
+                  <PasswordField
                     label="Password"
                     name="password"
+                    type={"password"}
                     placeHolder="Password"
                     value={password}
                     onChange={handleChange}
@@ -228,6 +229,7 @@ async function getSupervisor (role){
                     errMsg={errors.password}
                     touched={touched.password}
                   />
+                  
                 </Grid>
                 <Grid container sx={{ justifyContent: "space-evenly", mt: 3 }}>
                   <Grid item sm={3.0}>

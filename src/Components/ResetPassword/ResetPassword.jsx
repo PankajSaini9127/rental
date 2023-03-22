@@ -118,7 +118,7 @@ const dispatch = useDispatch()
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end" onClick={passwordToggle}>
-                               {showPassword? <Visibility />:<VisibilityOff/>} 
+                               {!showPassword? <Visibility />:<VisibilityOff/>} 
                               </InputAdornment>
                             ),
                           }}

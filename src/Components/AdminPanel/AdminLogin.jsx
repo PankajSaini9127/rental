@@ -22,14 +22,13 @@ function AdminLogin() {
       });
     };
 
-    const Get_DATA = async()=>{
-      const user = await axios.post('http://localhost:8080/api/auth/login',{email:formValue.username})
-      const data = user.data;
-      data.result[0].role = JSON.parse(data.result[0].role)
-      console.log(data.result[0].status)
+
+    // validate
+    function validate (data){
       if(data.success){
-        if(data.result[0].status === "Active"){
+        data.result[0].role = JSON.parse(data.result[0].role)
         if(data.result[0].role === "Admin" && data.result[0].password === formValue.password){
+        
           setErr({open:false});
           navigate(`/userDashboard`)
           
@@ -37,12 +36,19 @@ function AdminLogin() {
          }else{
           setErr({open:true,type:'error', msg:"Invalid Password !"});
          }
-        }else{
-          setErr({open:true,type:'error', msg:"User Inactive !"})
-        }
-      }else{
+      }
+      if(!data.success){
+        console.log("first")
         setErr({open:true,type:'error', msg:data.message});
       }
+    }
+
+ //get Data   
+    const Get_DATA = async()=>{
+      const user = await axios.post('http://localhost:8080/api/auth/login',{email:formValue.username})
+      const data = user.data;
+      
+      validate(data)
        
     }
  
@@ -51,15 +57,12 @@ function AdminLogin() {
     const handleSubmit = async (e) => {
           
       e.preventDefault();
-
       Get_DATA()
-      
-      
-  
-  
     };
+
   return (
     <>
+
       <LoginComponent
         title="Login"
         subTitle={"Admin Portal"}
@@ -69,6 +72,7 @@ function AdminLogin() {
         formValue={formValue}
         handleChange={handleChange}
       />
+    
     </>
   );
 }

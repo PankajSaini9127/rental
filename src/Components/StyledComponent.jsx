@@ -10,11 +10,15 @@ import {
   Typography,
   styled,
   Button,
-  InputLabel
+  InputLabel,
+  InputAdornment
 } from "@mui/material";
 
+//icons
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useState } from "react";
 
-// import {withStyles} from "@mui/styles";
 
 // header
 const MyHeader = styled("h5")({
@@ -66,7 +70,7 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange,errMsg,onB
               color: "rgba(16, 99, 173, 0.47) !important/",
               '@media(max-width:900px)':{fontSize:'10px !important'}
             },
-           
+            
           }}
           placeholder={placeHolder}
           value={value}
@@ -78,6 +82,48 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange,errMsg,onB
     </Grid>
   );
 };
+
+
+
+const PasswordField = ({label, placeHolder, value, name, onChange,errMsg,onBlur, touched})=>{
+  
+  const [showPassword, setShowPassword] = useState(false);
+
+  const passwordToggle = () => setShowPassword((show) => !show);
+  return(
+    <Grid item md={4} xs={6} sx={{'@media(max-width:900px)':{my:1}}}>
+    <FormControl fullWidth sx={{p:'0px !important'}}>
+     
+      <TextField
+        variant="outlined"
+        name={name}
+        // color='secodary'
+        type={showPassword?'text':'password'}
+        onChange={(e) => onChange(e)}
+        error={errMsg && touched ? true : false}
+        label={label}
+        onBlur={onBlur}
+        InputProps={{
+          style: {
+            color: "rgba(16, 99, 173, 0.47) !important/",
+            '@media(max-width:900px)':{fontSize:'10px !important'}
+          },
+          endAdornment: (
+            <InputAdornment position="end" onClick={passwordToggle}>
+             {showPassword? <VisibilityOff/>:<Visibility />} 
+            </InputAdornment>
+          ),
+        }}
+        placeholder={placeHolder}
+        value={value}
+        fullWidth
+        sx={fieldStyle}
+      />
+      { errMsg && touched? <Typography variant="body1" color="red" mt={1}>{errMsg}</Typography>:null}
+    </FormControl>
+  </Grid>
+  )
+}
 
 // Document Upload
 const DocumentUpload = ({ label, placeHolder,handleChange }) => {
@@ -207,4 +253,4 @@ const DashboardItem = ({ service, value }) => {
 
 
 
-export { MyHeader, TextFieldWrapper, DocumentUpload, SelectComponent,DashboardItem };
+export { MyHeader, TextFieldWrapper, DocumentUpload, SelectComponent,DashboardItem,PasswordField };

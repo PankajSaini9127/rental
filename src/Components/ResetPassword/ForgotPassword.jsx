@@ -1,68 +1,71 @@
-
-import { Button, FormControl, Grid, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
-import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState} from "react";
 
 import Img from "../../assest/pic/login-form.png";
 import logo from "../../assest/pic/logo1 1.png";
 
-import {useDispatch} from 'react-redux'; 
-import {setAlert} from '../../store/action/action'
+import { useDispatch } from "react-redux";
+import { setAlert } from "../../store/action/action";
 
-function ForgotPassword({history}) {
+function ForgotPassword({ history }) {
+  const dispatch = useDispatch();
 
+  const [value, setValue] = useState({ email: undefined });
 
-  const dispatch = useDispatch() 
+  const handleChange = (e) => {
+    setValue({ [e.target.name]: e.target.value });
+  };
 
-  const [value,setValue] = useState({email : undefined})
+  // add by Yashwant
+  async function handleSubmit() {
+    try {
+      const user = await axios.get(
+        `http://localhost:8080/api/resetPassword?email=${value.email}`
+      );
 
-const handleChange = (e)=>{
-   setValue({[e.target.name] : e.target.value})
-}
+      if (user.status === 200) {
+        history("/");
 
-// add by Yashwant 
-async function handleSubmit(){
-  try {
-    const user = await axios.get(`http://localhost:8080/api/resetPassword?email=${value.email}`);
-
-    if(user.status === 200)
-    {
-
-      history('/')
-
-      dispatch(setAlert({
-        open : true,
-        variant : 'success',
-        message : user.data.message || 'Email Sent'
-      }))
-    }
-    else {
-      dispatch(setAlert({
-        open : true,
-        variant : 'warning',
-        message : user.data.message || 'Email Sent'
-      }))
-
-    }
-    
-  } catch (error) {
-    console.log(error)
-    dispatch(setAlert(
-      {
-        open : true,
-        variant : 'error',
-        message : 'Something Went Wrong !!!'
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "success",
+            message: user.data.message || "Email Sent",
+          })
+        );
+      } else {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "warning",
+            message: user.data.message || "Email Sent",
+          })
+        );
       }
-    ))
-  }
+    } catch (error) {
+      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong !!!",
+        })
+      );
+    }
   }
 
-  const handleBack = ()=>{
-      history(-1)
-  }
-  
+  const handleBack = () => {
+    history(-1);
+  };
+
   return (
     <>
       <Grid container sx={{ height: "100vh" }}>
@@ -85,18 +88,18 @@ async function handleSubmit(){
             sx={{ alignItems: "center", justifyContent: "space-evenly" }}
             className="loginOverlay"
           >
-           <Grid item sx={{ justifyContent: "center" }}>
-            <Box component="img" src={logo} height="250px" />
-            <Typography
-              variant="body1"
-              color="white"
-              textAlign="center"
-              mt="-25px"
-              sx={{}}
-            >
-             Rental Portal
-            </Typography>
-          </Grid>
+            <Grid item sx={{ justifyContent: "center" }}>
+              <Box component="img" src={logo} height="250px" />
+              <Typography
+                variant="body1"
+                color="white"
+                textAlign="center"
+                mt="-25px"
+                sx={{}}
+              >
+                Rental Portal
+              </Typography>
+            </Grid>
           </Grid>
         </Grid>
 
@@ -114,27 +117,48 @@ async function handleSubmit(){
               Your email associate with account and we'll send you a link to
               reset your password.
             </Typography>
-            <Box component={'form'} sx={{mt:2}}>
-                <Grid container spacing={3} sx={{justifyContent:"space-evenly"}} >
-                    <Grid item md={10}>
-                        <FormControl fullWidth className="textFieldWrapper">
-                           <TextField
-                            variant="outlined"
-                            label={'Email Address'}
-                            onChange={handleChange}
-                            name = 'email'
-                            type = 'email'
-                           />
-                        </FormControl>
-                    </Grid>
-                    <Grid item md={10}>
-                        <Button variant="contained" fullWidth sx={{textTransform:"capitalize",color:"white",fontSize:"16px"}} onClick={handleSubmit}>Send Email</Button>
-                    </Grid>
-                    <Grid item md={10}>
-                        <Button variant="text" fullWidth sx={{textTransform:"capitalize",fontSize:"16px"}} onClick={handleBack}>Back To Login</Button>
-                    </Grid>
+            <Box component={"form"} sx={{ mt: 2 }}>
+              <Grid
+                container
+                spacing={3}
+                sx={{ justifyContent: "space-evenly" }}
+              >
+                <Grid item md={10}>
+                  <FormControl fullWidth className="textFieldWrapper">
+                    <TextField
+                      variant="outlined"
+                      label={"Email Address"}
+                      onChange={handleChange}
+                      name="email"
+                      type="email"
+                    />
+                  </FormControl>
                 </Grid>
-                
+                <Grid item md={10}>
+                  <Button
+                    variant="contained"
+                    fullWidth
+                    sx={{
+                      textTransform: "capitalize",
+                      color: "white",
+                      fontSize: "16px",
+                    }}
+                    onClick={handleSubmit}
+                  >
+                    Send Email
+                  </Button>
+                </Grid>
+                <Grid item md={10}>
+                  <Button
+                    variant="text"
+                    fullWidth
+                    sx={{ textTransform: "capitalize", fontSize: "16px" }}
+                    onClick={handleBack}
+                  >
+                    Back To Login
+                  </Button>
+                </Grid>
+              </Grid>
             </Box>
           </Grid>
         </Grid>

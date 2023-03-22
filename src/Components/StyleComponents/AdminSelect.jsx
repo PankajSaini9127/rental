@@ -26,7 +26,7 @@ const AdminSelect = ({name,multiple,value,label,onBlur,errMsg,touched,options,on
           >
             {
               options.map((item,i)=>{
-                return <MenuItem disabled={options.indexOf(value) > i ? false : true } value={item}>{item}</MenuItem>
+                return <MenuItem  value={item}>{item}</MenuItem>
               })
             }
           </Select>

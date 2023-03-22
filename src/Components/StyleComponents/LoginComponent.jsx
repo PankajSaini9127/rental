@@ -1,19 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 
 import {
   Alert,
   Button,
   FormControl,
-  FormLabel,
   Grid,
   TextField,
   Typography,
   Box,
+  InputAdornment,
 } from "@mui/material";
 
 import Img from "../../assest/pic/login-form.png";
 import logo from "../../assest/pic/logo1 1.png";
 import { useNavigate } from "react-router-dom";
+
+
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 function LoginComponent({
   title,
@@ -25,6 +29,11 @@ function LoginComponent({
   handleChange,
 }) {
   const { password, username } = formValue;
+
+  const [showPassword, setShowPassword] = useState(false);
+  
+  const passwordToggle = () => setShowPassword((show) => !show);
+
 
   const naviagte = useNavigate();
 
@@ -75,8 +84,8 @@ function LoginComponent({
         sx={{ justifyContent: "center", alignItems: "center" }}
       >
         
-        <Grid item md={8} xs={11} container spacing={2} sx={{mt:1}}>
-          
+        {/* <Grid item md={8} xs={11} container spacing={2} sx={{mt:1}}>
+          <.....Buttons .....>
           <Grid item md={4} xs={6}>
           <Button
           variant="contained"
@@ -103,11 +112,8 @@ function LoginComponent({
         >
           Sr Manager Login
         </Button>
-          </Grid>
-        
-        
-        
-        </Grid>
+          </Grid>       
+        </Grid> */}
 
         <Grid item md={7} xs={11} sx={{ "@media(max-width:900px)": { mb: 2 } }}>
           <Typography
@@ -150,9 +156,6 @@ function LoginComponent({
             <Grid container sx={{ justifyContent: "center" }} spacing={1}>
               <Grid item xs={12}>
                 <FormControl sx={{ my: 1 }} fullWidth className="LoginInput">
-                  {/* <FormLabel>
-                    <Typography variant="body1">Username/Email</Typography>
-                  </FormLabel> */}
                   <TextField
                     variant="outlined"
                     placeholder="Enter Username/Email"
@@ -166,17 +169,21 @@ function LoginComponent({
 
               <Grid item xs={12}>
                 <FormControl fullWidth className="LoginInput">
-                  {/* <FormLabel>
-                    <Typography variant="body1">Password</Typography>
-                  </FormLabel> */}
                   <TextField
-                    type="password"
+                    type={showPassword?'text':'password'}
                     variant="outlined"
                     placeholder="********"
                     label={"Password"}
                     value={password}
                     name="password"
                     onChange={handleChange}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end" onClick={passwordToggle}>
+                         {!showPassword? <Visibility />:<VisibilityOff/>} 
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </FormControl>
               </Grid>

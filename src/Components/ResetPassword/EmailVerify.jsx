@@ -79,16 +79,7 @@ function EmailVerify() {
             </Grid>
             <Grid item md={10} sx={{justifyContent:"center",display:'flex'}}>
             <Button variant="text" onClick={handleBack}>Back to login</Button>
-            </Grid>
-            <Grid item md={10} sx={{justifyContent:"center",display:'flex'}}>
-            <Button variant="text" onClick={handleReset}>Reset Password</Button>
-            </Grid>
-
-            
-           
-           
-            
-           
+            </Grid>          
           </Grid>
         </Grid>
 

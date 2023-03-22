@@ -50,14 +50,14 @@ function AdminHamburgerMenu() {
           {!expand ? (
             <>
               <NavItem Vector={VectorUser} navigateTO="userManagement"/>
-              <NavItem Vector={VectorLogout}/>
+              <NavItem Vector={VectorLogout}  navigateTO="adminLogin"/>
               </>
           ) : (
             <Stack container  spacing={2} >
               {/* onclick */}
              
-             <NavExpand msg="User"  Vector={VectorUser} NavItem={NavItem}/>
-             <NavExpand msg="LogOut" navigateTO="" Vector={VectorLogout} NavItem={NavItem}/>
+             <NavExpand msg="User" navigateTO={'userManagement'} Vector={VectorUser} NavItem={NavItem}/>
+             <NavExpand msg="LogOut" navigateTO="adminLogin" Vector={VectorLogout} NavItem={NavItem}/>
 
             </Stack>
           )}
