@@ -30,9 +30,6 @@ import YearlyIncrement from "./IncrementType";
 import DialogBox from "./DialogBox";
 import { useNavigate } from "react-router-dom";
 
-import {useFormik} from 'formik'
-import { agreementSchema } from "../ValidationSchema/Manager";
-
 const incrementType = [
   "Percentage",
   "Value"

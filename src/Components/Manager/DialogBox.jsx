@@ -55,8 +55,6 @@ const TextFieldWrapper = ({
 const Landblord = ({value,setValue,index}) => {
 
 
-  
-
   function handleChange (e){
     if(value[index]){
       setValue(old=>(
