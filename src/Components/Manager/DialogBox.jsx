@@ -1,14 +1,15 @@
 import {
   Dialog,
   FormControl,
-  FormLabel,
   Grid,
   TextField,
   Button,
-  Typography,
   Box,
 } from "@mui/material";
 import React, { useState } from "react";
+
+import { useDispatch } from 'react-redux';
+import { addLandLoard } from "../../store/action/action";
 
 
 const TextFieldWrapper = ({
@@ -16,16 +17,10 @@ const TextFieldWrapper = ({
   placeHolder,
   value,
   name,
-  onChange,
-  grid
+  onChange
 }) => {
   const fieldStyle = {
-    // border: "1px solid #03C1F3",
-    // borderRadius: "20px",
     height: "50px",
-    // p: 1,
-    // px:2,
-    
     color: "rgba(16, 99, 173, 0.47)",
     "@media(max-width:900px)": { height: "46px", p: 1 },
   };
@@ -57,7 +52,37 @@ const TextFieldWrapper = ({
   );
 };
 
-const Landblord = () => {
+const Landblord = ({value,setValue,index}) => {
+
+
+  
+
+  function handleChange (e){
+    if(value[index]){
+      setValue(old=>(
+        old.map((row,i)=>{
+if(index === i){
+ return {
+  ...row,
+  [e.target.name]:e.target.value
+ }
+
+}
+return row
+        })
+      ))
+    }else{
+      setValue(old=>([
+        ...old,
+        {
+          [e.target.name]:e.target.value
+        }
+      ]))
+    }
+      
+  }
+  
+
   return (
     <>
       <Grid container sx={{ justifyContent: "space-evenly",mb:2 }} spacing={2}>
@@ -66,12 +91,18 @@ const Landblord = () => {
           <TextFieldWrapper
             label={"Name of Landlord"}
             placeHolder={"Name of Landlord"}
+            name={'name'}
+            value={value[index]&&value[index].name?value[index].name:""}
+            onChange={handleChange}
           />
         </Grid>
         <Grid item xs={6}>
           <TextFieldWrapper
             label={"Percentage Share%"}
             placeHolder={"Percentage Share%"}
+            name={'percentage'}
+            value={value[index] && value[index].percentage ? value[index].percentage:""}
+            onChange={handleChange}
           />
         </Grid>
       </Grid>
@@ -79,8 +110,19 @@ const Landblord = () => {
   );
 };
 
+
+
 function DialogBox({value, setValue}) {
   const [open, setOpen] = useState(true);
+
+  const [data, setData] = useState([])
+
+  const dispatch = useDispatch()
+
+  const handleSubmit = ()=>{
+    dispatch(addLandLoard(data))
+    handleClose()
+  }
   
 
   const handleClose = () => {
@@ -128,7 +170,7 @@ function DialogBox({value, setValue}) {
           {value > 0 ? (
             <>
               {Array.from({ length: value }, (_, i) => (
-                <Landblord key={i} />
+                <Landblord key={i} index={i} value={data} setValue={setData} />
               ))}
             </>
           ) : (
@@ -140,7 +182,7 @@ function DialogBox({value, setValue}) {
           {value > 0 ? (
               <Button
                 variant="contained"
-                onClick={handleClose}
+                onClick={handleSubmit}
                 sx={{
                   height: "40px",
                   width: "100%",

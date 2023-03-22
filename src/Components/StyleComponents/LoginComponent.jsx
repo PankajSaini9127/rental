@@ -9,15 +9,17 @@ import {
   Typography,
   Box,
   InputAdornment,
+  Select,
+  MenuItem,
+  InputLabel,
 } from "@mui/material";
 
 import Img from "../../assest/pic/login-form.png";
 import logo from "../../assest/pic/logo1 1.png";
 import { useNavigate } from "react-router-dom";
 
-
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
 function LoginComponent({
   title,
@@ -28,18 +30,19 @@ function LoginComponent({
   formValue,
   handleChange,
 }) {
-  const { password, username } = formValue;
+  const { password, username, role } = formValue;
+
+  const options = ["Admin", "Senior Manager", "Manager", "Operations"];
 
   const [showPassword, setShowPassword] = useState(false);
-  
-  const passwordToggle = () => setShowPassword((show) => !show);
 
+  const passwordToggle = () => setShowPassword((show) => !show);
 
   const naviagte = useNavigate();
 
-  const resetPassword = ()=>{
-    naviagte('/resetPassword')
-  }
+  const resetPassword = () => {
+    naviagte("/resetPassword");
+  };
 
   return (
     <Grid container sx={{ height: "100vh" }}>
@@ -80,41 +83,10 @@ function LoginComponent({
       <Grid
         item
         container
-        sm={6}
+        md={6}
+       xs={12}
         sx={{ justifyContent: "center", alignItems: "center" }}
       >
-        
-        {/* <Grid item md={8} xs={11} container spacing={2} sx={{mt:1}}>
-          <.....Buttons .....>
-          <Grid item md={4} xs={6}>
-          <Button
-          variant="contained"
-          sx={{ color: "#FFFFFF", textTransform: "capitalize"}}
-          onClick={() => naviagte("/operationsLogin")}
-        >
-          Opertions Login
-        </Button>
-          </Grid>
-          <Grid item md={4} xs={6}>
-            <Button
-          variant="contained"
-          sx={{ color: "#FFFFFF", textTransform: "capitalize" }}
-          onClick={() => naviagte("/adminLogin")}
-        >
-          Admin Login
-        </Button>
-        </Grid>
-        <Grid item md={4} xs={6}>
-          <Button
-          variant="contained"
-          sx={{ color: "#FFFFFF", textTransform: "capitalize" }}
-          onClick={() => naviagte("/srManagerLogin")}
-        >
-          Sr Manager Login
-        </Button>
-          </Grid>       
-        </Grid> */}
-
         <Grid item md={7} xs={11} sx={{ "@media(max-width:900px)": { mb: 2 } }}>
           <Typography
             variant="body1"
@@ -153,7 +125,7 @@ function LoginComponent({
           <Box component="form" sx={{ mt: 2 }} onSubmit={handleSubmit}>
             {err.open ? <Alert severity={err.type}>{err.msg}</Alert> : ""}
 
-            <Grid container sx={{ justifyContent: "center" }} spacing={1}>
+            <Grid container sx={{ justifyContent: "center" }} spacing={2}>
               <Grid item xs={12}>
                 <FormControl sx={{ my: 1 }} fullWidth className="LoginInput">
                   <TextField
@@ -170,7 +142,7 @@ function LoginComponent({
               <Grid item xs={12}>
                 <FormControl fullWidth className="LoginInput">
                   <TextField
-                    type={showPassword?'text':'password'}
+                    type={showPassword ? "text" : "password"}
                     variant="outlined"
                     placeholder="********"
                     label={"Password"}
@@ -180,18 +152,50 @@ function LoginComponent({
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end" onClick={passwordToggle}>
-                         {!showPassword? <Visibility />:<VisibilityOff/>} 
+                          {!showPassword ? <Visibility /> : <VisibilityOff />}
                         </InputAdornment>
                       ),
                     }}
                   />
                 </FormControl>
               </Grid>
- 
- <Grid item xs={12}>
- <Typography variant="body">Forgot Password ? <Button variant="text" sx={{textTransform:"capitalize"}} onClick={resetPassword}>Reset Now</Button></Typography>
- </Grid>
-            
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-label">Role</InputLabel>
+                  <Select
+                    name={"role"}
+                    onChange={handleChange}
+                    variant="outlined"
+                    labelId="demo-simple-select-label"
+                    value={role}
+                    label={"Role"}
+                    sx={{
+                      mt: "0px !important",
+                      color: "rgba(16, 99, 173, 0.47)",
+                      width: "100%",
+                      height: "50px !important",
+                      boxShadow: "none",
+                    }}
+                  >
+                    {options.map((item, i) => {
+                      return <MenuItem value={item}>{item}</MenuItem>;
+                    })}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <Typography variant="body">
+                  Forgot Password ?{" "}
+                  <Button
+                    variant="text"
+                    sx={{ textTransform: "capitalize" }}
+                    onClick={resetPassword}
+                  >
+                    Reset Now
+                  </Button>
+                </Typography>
+              </Grid>
 
               <Grid item sx={{ mt: 2 }}>
                 <Button

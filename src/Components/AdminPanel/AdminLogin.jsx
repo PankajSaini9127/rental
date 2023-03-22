@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginComponent from "../StyleComponents/LoginComponent";
-import axios, {Axios} from 'axios'
+import { LoginAPI } from "../../Services/Services";
 
 const data = { username: "admin", password: "Admin" };
 
@@ -27,7 +27,7 @@ function AdminLogin() {
     function validate (data){
       if(data.success){
         data.result[0].role = JSON.parse(data.result[0].role)
-        if(data.result[0].role === "Admin" && data.result[0].password === formValue.password){
+        if(data.result[0].role.includes("Admin") && data.result[0].password === formValue.password){
         
           setErr({open:false});
           navigate(`/userDashboard`)
@@ -38,14 +38,13 @@ function AdminLogin() {
          }
       }
       if(!data.success){
-        console.log("first")
         setErr({open:true,type:'error', msg:data.message});
       }
     }
 
  //get Data   
     const Get_DATA = async()=>{
-      const user = await axios.post('http://localhost:8080/api/auth/login',{email:formValue.username})
+      const user = await LoginAPI({email:formValue.username})
       const data = user.data;
       
       validate(data)

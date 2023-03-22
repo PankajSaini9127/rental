@@ -42,3 +42,11 @@ export const setRefreshBox = (parameters) => {
         payload: parameters
     }
 }
+
+export const addLandLoard = (data)=>{
+    console.log(data)
+    return{
+        type: "ADD_LANDLOARD",
+        payload : data
+    }
+}

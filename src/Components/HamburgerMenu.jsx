@@ -28,16 +28,8 @@ function HamburgerMenu({navigateTo,navigate2}) {
         // }}
       >
         <Stack sx={{ flexDirection: "column" }} spacing={2}>
-          <Box
-            sx={{
-              background: `url(${Logo})`,
-              height: "50px",
-              width: "50px",
-              backgroundSize: "cover",
-            }}
-            onClick={() => navigate("/dashboard")}
-          />
-          <Box
+
+        <Box
             sx={{
               height: "50px",
               width: "50px",
@@ -48,6 +40,17 @@ function HamburgerMenu({navigateTo,navigate2}) {
           >
             <IconButton color="primary" onClick={() => setExpand(!expand)} ><MenuIcon/></IconButton>
           </Box>
+
+          <Box
+            sx={{
+              background: `url(${Logo})`,
+              height: "50px",
+              width: "50px",
+              backgroundSize: "cover",
+            }}
+            onClick={() => navigate("/dashboard")}
+          />
+          
 
           {!expand ? (
             <>

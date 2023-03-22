@@ -8,7 +8,7 @@ import {
 import React, { useState } from "react";
 
 function AdminCheckBox({ handleChange,disable }) {
-    const {manager,srManager} = disable
+    const {manager,srManager,admin,operations,finance,bhu} = disable
   return (
     <>
       <Grid
@@ -24,8 +24,8 @@ function AdminCheckBox({ handleChange,disable }) {
             name={"role"}
               control={<Checkbox name={"role"} />}
               onChange={handleChange}
-              disabled={manager?true:false}
               value={'Admin'}
+              disabled={admin?true:false}
               label="Admin"
               labelPlacement="end"
             />
@@ -35,6 +35,7 @@ function AdminCheckBox({ handleChange,disable }) {
               control={<Checkbox  />}
               onChange={handleChange}
               name={"role"}
+              disabled={manager?true:false}
               label="Manager"
               labelPlacement="end"
               value={'Manager'}
@@ -45,7 +46,7 @@ function AdminCheckBox({ handleChange,disable }) {
               control={<Checkbox  />}
               onChange={handleChange}
               name={"role"}
-              disabled={manager?true:false}
+              disabled={srManager?true:false}
               label="Senior Manager"
               value={'Senior Manager'}
               labelPlacement="end"
@@ -57,8 +58,8 @@ function AdminCheckBox({ handleChange,disable }) {
               control={<Checkbox name={"role"} />}
               onChange={handleChange}
               name={"role"}
-              disabled={manager?true:false}
               label="Operations"
+              disabled={operations?true:false}
               value="Operations"
               labelPlacement="end"
             />
@@ -68,7 +69,7 @@ function AdminCheckBox({ handleChange,disable }) {
               control={<Checkbox name={"role"} />}
               name={"role"}
               onChange={handleChange}
-              disabled={manager?true:false}
+              disabled={finance?true:false}
               label="Finance"
               value="Finance"
               labelPlacement="end"
@@ -79,7 +80,7 @@ function AdminCheckBox({ handleChange,disable }) {
               control={<Checkbox name={"role"} />}
               name={"role"}
               onChange={handleChange}
-              disabled={manager?true:false}
+              disabled={bhu?true:false}
               label="BHU"
               value={'BHU'}
               labelPlacement="end"

@@ -17,10 +17,10 @@ import {
 
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
-import axios from "axios";
 import { useFormik } from "formik";
 import { AddUserSchema } from "../ValidationSchema/Admin";
 import AdminCheckBox from "../StyleComponents/AdminCheckBox";
+import { AddUser, GetSupervisor } from "../../Services/Services";
 
 const initialState = {
   code: "123456",
@@ -38,7 +38,7 @@ function NewUser() {
   const navigate = useNavigate();
 
 // Disable Role CheckBox Base On Condition
-  const [disable, setDisable] = useState({ manager: false, srManager: false });
+  const [disable, setDisable] = useState({ manager: false, srManager: false,admin:false,finance:false,bhu:false,operations:false });
 
  // form handling and validate
   const { values, handleChange, handleSubmit, handleBlur, errors, touched } =
@@ -58,20 +58,61 @@ function NewUser() {
 
 // Supervisor value  
   async function getSupervisor(role) {
-    const supervisor = await axios.post(
-      "http://localhost:8080/api/admin/selectRole",
-      role
-    );
+    const supervisor = await GetSupervisor(role);
     setsupervisorArray(supervisor.data.map((item) => item.name));
   }
 
 // Role Check Box Disable Manage  
   function manageRole(role) {
-    if (role[0] === "Manager") {
+    if (role.includes("Admin")) {
       setDisable({
-        ...disable,
-        manager: true,
+        srManager:false,
+        manager:false,
+        bhu:false,
+        operations:false,
+        finance:false
       });
+    }else 
+    if(role.includes("Senior Manager")){
+      setDisable({
+        admin:false,
+        bhu:true,
+        manager:true,
+        operations:true,
+        finance:true
+      })
+    }else if(role.includes('Manager')){
+      setDisable({
+        admin:false,
+        bhu:true,
+        srManager:true,
+        operations:true,
+        finance:true
+      })
+    }else if(role.includes("Operations")){
+      setDisable({
+        admin:false,
+        bhu:true,
+        srManager:true,
+        manager:true,
+        finance:true
+      })
+    }else if(role.includes("Finance")){
+      setDisable({
+        admin:false,
+        bhu:true,
+        srManager:true,
+        manager:true,
+        operations:true
+      })
+    }else if(role.includes("BHU")){
+      setDisable({
+        admin:false,
+        operations:true,
+        srManager:true,
+        manager:true,
+        finance:true
+      })
     }
   }
 
@@ -92,10 +133,7 @@ function NewUser() {
 
 // For save data in DB   
  const apiCall = async (values) => {
-    const result = await axios.post(
-      `http://localhost:8080/api/admin/userRegistration`,
-      values
-    );
+    const result = await AddUser(values)
     if (result.status === 201) {
       setMsg({
         open: true,

@@ -7,6 +7,7 @@ import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
 import axios, {Axios} from 'axios'
 import AdminCheckBox from "../StyleComponents/AdminCheckBox";
+import { EditUserInfo } from "../../Services/Services";
 
 const initialState ={
   code:"123456",
@@ -89,8 +90,8 @@ const getData = async()=>{
      })
 }
 
-const updateData = async()=>{
-  const data = await axios.put(`http://localhost:8080/api/admin/edit/${id}`,formVal)
+const updateData = async(id,formVal)=>{
+  const data = await EditUserInfo(id,formVal)
   if(data.data.success){
     setMsg({
       open:"true",

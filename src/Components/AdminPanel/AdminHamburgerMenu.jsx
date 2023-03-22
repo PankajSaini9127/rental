@@ -26,16 +26,7 @@ function AdminHamburgerMenu() {
         
       >
         <Stack sx={{ flexDirection: "column" }} spacing={2}>
-          <Box
-            sx={{
-              background: `url(${Logo})`,
-              height: "50px",
-              width: "50px",
-              backgroundSize: "cover",
-            }} 
-            onClick={()=>navigate('/userDashboard')}
-          />
-          <Box
+        <Box
             sx={{
               height: "50px",
               width: "50px",
@@ -46,18 +37,29 @@ function AdminHamburgerMenu() {
           >
             <IconButton color="primary" onClick={() => setExpand(!expand)} ><MenuIcon/></IconButton>
           </Box>
+          
+          <Box
+            sx={{
+              background: `url(${Logo})`,
+              height: "50px",
+              width: "50px",
+              backgroundSize: "cover",
+            }} 
+            onClick={()=>navigate('/userDashboard')}
+          />
+         
 
           {!expand ? (
             <>
               <NavItem Vector={VectorUser} navigateTO="userManagement"/>
-              <NavItem Vector={VectorLogout}  navigateTO="adminLogin"/>
+              <NavItem Vector={VectorLogout}  navigateTO=""/>
               </>
           ) : (
             <Stack container  spacing={2} >
               {/* onclick */}
              
              <NavExpand msg="User" navigateTO={'userManagement'} Vector={VectorUser} NavItem={NavItem}/>
-             <NavExpand msg="LogOut" navigateTO="adminLogin" Vector={VectorLogout} NavItem={NavItem}/>
+             <NavExpand msg="LogOut" navigateTO="" Vector={VectorLogout} NavItem={NavItem}/>
 
             </Stack>
           )}

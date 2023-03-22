@@ -84,3 +84,14 @@ export const refresh = (state = initialRefresh, action) => {
             return state;
     }
 }
+
+const initialLandloard={
+    landloard:[]
+}
+export const landloard = (state= initialLandloard,action) =>{
+    switch(action.type){
+        case "ADD_LANDLOARD":
+            return state.landloard = action.payload;
+            default:return state
+    }
+}

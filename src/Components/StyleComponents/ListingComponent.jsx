@@ -15,7 +15,6 @@ import {
 import { MyHeader } from "../StyledComponent";
 
 import SearchIcon from "@mui/icons-material/Search";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useNavigate } from "react-router-dom";
 
@@ -31,7 +30,8 @@ function ListingComponent({
   onChange,
   rows,
   onButtonClick,
-  addUserBtn
+  addUserBtn,
+  dropDown
 }) {
 
   const navigate = useNavigate()
@@ -67,27 +67,30 @@ function ListingComponent({
           </Typography>
         </Grid>
 
-        <Grid xs={6} md={2}>
-          <FormControl fullWidth>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              label="Age"
-              value={value}
-              size="small"
-              onChange={onChange}
-              sx={{ border: "1px solid #CACACA" }}
-            >
-              {options.map((elem, i) => {
-                return (
-                  <MenuItem value={elem} key={i}>
-                    {elem}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </FormControl>
-        </Grid>
+{
+  dropDown === false ?"":<Grid xs={6} md={2}>
+  <FormControl fullWidth>
+    <Select
+      labelId="demo-simple-select-label"
+      id="demo-simple-select"
+      label="Age"
+      value={value}
+      size="small"
+      onChange={onChange}
+      sx={{ border: "1px solid #CACACA" }}
+    >
+      {options.map((elem, i) => {
+        return (
+          <MenuItem value={elem} key={i}>
+            {elem}
+          </MenuItem>
+        );
+      })}
+    </Select>
+  </FormControl>
+</Grid>
+}
+      
       </Grid>
       <Divider />
 

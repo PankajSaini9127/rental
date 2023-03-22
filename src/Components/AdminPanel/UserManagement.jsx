@@ -2,14 +2,13 @@ import { Stack } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import axios from 'axios'
 
 import ListingComponent from "../StyleComponents/ListingComponent";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import UserManagementTable from "./UserManagementTable";
 import { AuthContext } from "../../App";
+import { GetUser } from "../../Services/Services";
 
-const options = ["Senior Manager", "Manager", "Operations","BHU","Finance"];
 
 
 function UserManagement() {
@@ -22,10 +21,10 @@ function UserManagement() {
   const [SelectValue, setSelectValue] = useState('Senior Manager');
 
   //api Call
-  const getUsers = async(SelectValue)=>{
+  const getUsers = async()=>{
       try {
         setData([])
-    const users = await axios.post(`http://localhost:8080/api/admin/user`)
+    const users = await GetUser()
     if(users.data.length > 0) {
         const reverse = users.data.reverse()
       setData(reverse)
@@ -37,8 +36,8 @@ function UserManagement() {
   }
 
   useEffect(()=>{
-   getUsers(SelectValue)
-  },[SelectValue, adminReCall])
+   getUsers()
+  },[ adminReCall])
 
   const row = data.map((item,i)=>{
     return(
@@ -77,12 +76,12 @@ const handleAddUser =()=>{
         title="User Management"
         buttonText="Add User"
         addUserBtn={true}
-        options={options}
         onChange={handleChange}
         value={SelectValue}
         Table={UserManagementTable}
         rows={row}
         onButtonClick={handleAddUser}
+        dropDown={false}
       />
 
 </Stack>

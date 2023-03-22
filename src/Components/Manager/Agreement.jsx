@@ -71,18 +71,8 @@ function Agreement() {
 
   const navigate = useNavigate()
 
+const [formData, setFormData] = useState([])
 
-  // form handling using formik
-
-  const {values, handleChange, handleSubmit, handleBlur, errors, touched } = useFormik({
-        initialValues:initialState,
-        validationSchema:agreementSchema,
-        onSubmit:(values,action)=>{
-          // APICall(values)
-        }
-  })
-
-// console.log("Agreement Component")
 
   const [landblord, setLandblord] = useState('');
 
@@ -121,7 +111,7 @@ bankName,
 benificiaryName,
 accountNo,
 ifscCode
-} = values;
+} = formData;
 
 
 
@@ -132,20 +122,43 @@ console.log(e.target.files)
 }
 
 
+//handle Change
+function handleChange(e,i){
+  if(formData[i]){
+    setFormData(old=>(
+      old.map((row,id)=>{
+        if(i===id){
+          return{
+            ...row,
+            [e.target.name]:e.target.value
+          }
+        }
+        return row
+      })
+    ))
+  }else{
+    setFormData(old=>([
+      ...old,
+      {
+        [e.target.name]:e.target.value
+      }
+    ]))
+  }
+}
+
 // on form submit
 
-// const handleSubmit = (e)=>{
-//   e.preventDefault()
-//   // navigate('/srManagerLogin')
+const handleSubmit = (e)=>{
+  e.preventDefault()
+  console.log(formData)
   
-//   APICall()
-// }
+}
 
 
-// const APICall = async(values)=>{
-//   const agreement = await axios.post('http://localhost:8080/api/newAgreement',values);
-//    navigate('/listing')
-// }
+const APICall = async(values)=>{
+  const agreement = await axios.post('http://localhost:8080/api/newAgreement',values);
+  console.log(agreement)
+}
 
   return (
     <>
@@ -188,7 +201,7 @@ console.log(e.target.files)
                   placeHolder=""
                   backgroundColor="rgba(3, 193, 243, 0.2);"
                   value={code}
-                  onChange={e=>handleChange(e)}
+                  onChange={e=>(e)=>handleChange(e)}
                 />
 
 {
@@ -199,20 +212,15 @@ console.log(e.target.files)
                   placeHolder="Enter Name Of Lesse"
                   name='leeseName'
                   value={leeseName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.leeseName}
-                  touched={touched.leeseName}
+                  onChange={(e)=>handleChange(e,i)}
                 />
                 <TextFieldWrapper 
                 label="State"
                 placeHolder="Enter State"
                 name='state'
                 value={state}
-                onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.state}
-                  touched={touched.state}
+                onChange={(e)=>handleChange(e,i)}
+                index={i}
                  />
 
                 <TextFieldWrapper 
@@ -220,60 +228,48 @@ console.log(e.target.files)
                 placeHolder="Enter City"
                 name='city'
                 value={city}
-                onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.city}
-                  touched={touched.city}
+                onChange={(e)=>handleChange(e,i)}
+                index={i}
                 />
                 <TextFieldWrapper
                   label="Location"
                   placeHolder="Enter Location"
                   name='location'
                   value={location}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.location}
-                  touched={touched.location}
+                  onChange={(e)=>handleChange(e,i)}
+                  index={i}
                 />
                 <TextFieldWrapper 
                 label="Pincode" 
                 placeHolder="Enter Pincode" 
                 name='pincode'
                 value={pincode}
-                onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.pincode}
-                  touched={touched.pincode}
+                onChange={(e)=>handleChange(e,i)}
+                index={i}
                 />
                 <TextFieldWrapper 
                 label="Address" 
                 placeHolder="Enter Address"
                 name='address'
                 value={address}
-                onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.address}
-                  touched={touched.address}
+                onChange={(e)=>handleChange(e,i)}
+                index={i}
                 />
                 <TextFieldWrapper
                   label="Aadhar Number"
                   placeHolder="Enter Aadhar No."
                   name='aadharNo'
                   value={aadharNo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.aadharNo}
-                  touched={touched.aadharNo}
+                  onChange={(e)=>handleChange(e,i)}
+                  index={i}
                 />
                 <TextFieldWrapper
                   label="Pan Number"
                   placeHolder="Enter Pan No."
                   name='panNo'
                   value={panNo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.panNo}
-                  touched={touched.panNo}
+                  onChange={(e)=>handleChange(e,i)}
+                  index={i}
                 />
 
                 <TextFieldWrapper
@@ -281,30 +277,24 @@ console.log(e.target.files)
                   placeHolder="Enter GST No."
                   name='gstNo'
                   value={gstNo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.gstNo}
-                  touched={touched.gstNo}
+                  onChange={(e)=>handleChange(e,i)}
+                  index={i}
                 />
                 <TextFieldWrapper
                   label="Mobile Number"
                   placeHolder="Enter Mobile No."
                   name='mobileNo'
                   value={mobileNo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.mobileNo}
-                  touched={touched.mobileNo}
+                  onChange={(e)=>handleChange(e,i)}
+                  index={i}
                 />
                 <TextFieldWrapper
                   label="Alternate Number"
                   placeHolder="Enter Alternate No."
                   name='alternateMobile'
                   value={alternateMobile}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.alternateMobile}
-                  touched={touched.alternateMobile}
+                  onChange={(e)=>handleChange(e,i)}
+                  index={i}
                 />
 
                 <TextFieldWrapper 
@@ -312,11 +302,9 @@ console.log(e.target.files)
                 placeHolder="Enter Email" 
                 name='email'
                 value={email}
-                onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.email}
-                  touched={touched.email}
-                />
+                onChange={(e)=>handleChange(e,i)}
+                index={i}
+                  />
     </>)
   })
 }
@@ -326,50 +314,35 @@ console.log(e.target.files)
                   placeHolder="Enter Lock in Year"
                   name='lockInYear'
                   value={lockInYear}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.lockInYear}
-                  touched={touched.lockInYear}
-                />
+                  onChange={(e)=>handleChange(e)}
+                            />
                 <TextFieldWrapper
                   label="Notice Period In Month"
                   placeHolder="Enter Notice Period"
                   name='noticePeriod'
                   value={noticePeriod}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.noticePeriod}
-                  touched={touched.noticePeriod}
-                />
+                  onChange={(e)=>handleChange(e)}
+                                />
                 <TextFieldWrapper
                   label="Deposite Amount"
                   placeHolder="Enter Deposite Amount"
                   name='deposite'
                   value={deposite}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.deposite}
-                  touched={touched.deposite}
-                />
+                  onChange={(e)=>handleChange(e)}
+                        />
                 <TextFieldWrapper
                   label="Monthly Rental"
                   placeHolder="Enter Rental"
                   name='monthlyRent'
                   value={monthlyRent}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.monthlyRent}
-                  touched={touched.monthlyRent}
-                />
+                  onChange={(e)=>handleChange(e)}
+                              />
                 <SelectComponent
                   label={'Yearly Increment'}
                   name='yearlyIncrement'
                   options={incrementType}
                   value={yearlyIncrement}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.yearlyIncrement}
-                  touched={touched.yearlyIncrement}
+                  onChange={(e)=>handleChange(e)}
                 />
               </Grid>
 
@@ -403,41 +376,29 @@ console.log(e.target.files)
                   placeHolder="Enter Bank Name"
                   name='bankName'
                   value={bankName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.bankName}
-                  touched={touched.bankName}
-                />
+                  onChange={(e)=>handleChange(e,i)}
+                        />
                 <TextFieldWrapper
                   label="Benificiary Name"
                   placeHolder="Enter Benificiary Name"
                   name='benificiaryName'
                   value={benificiaryName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.benificiaryName}
-                  touched={touched.benificiaryName}
+                  onChange={(e)=>handleChange(e,i)}
                 />
                 <TextFieldWrapper
                   label="Bank A/C Number "
                   placeHolder="Enter Account No."
                   name='accountNo'
                   value={accountNo}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.accountNo}
-                  touched={touched.accountNo}
-                />
+                  onChange={(e)=>handleChange(e,i)}
+                          />
                 <TextFieldWrapper
                   label="Bank IFSC Code"
                   placeHolder="Enter IFSC Code"
                   name='ifscCode'
                   value={ifscCode}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  errMsg={errors.ifscCode}
-                  touched={touched.ifscCode}
-                />
+                  onChange={(e)=>handleChange(e,i)}
+                        />
                 
               </Grid>      
                                           </>)
@@ -477,7 +438,7 @@ console.log(e.target.files)
       <DocumentUpload 
       label="Upload Aadhar Card" 
       placeHolder="Upload Aadhar Card" 
-      handleChange={handleChangeFile}
+      
       />
 
       <DocumentUpload 

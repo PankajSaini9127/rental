@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 //components
 
 //manager Section
-import Login from './Components/Manager/Login'
+import Login from './Components/Login/Login'
 import Dashboard from './Components/Manager/Dashboard'
 import Listing from './Components/Manager/Listing';
 import Agreement from './Components/Manager/Agreement';
