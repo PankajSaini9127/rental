@@ -38,13 +38,11 @@ export default function Login() {
     const user = await LoginAPI({ email: formValue.username })
     const data = user.data;
 
-console.log(data)
     if (data.success) {
       if (data.result[0].password === formValue.password) {
         data.result[0].role = JSON.parse(data.result[0].role)
         let userRole = data.result[0].role
 
-        console.log(typeof(data.result[0].password_flag))
 
         if (userRole.includes(role) && data.result[0].password_flag === "1") {
           

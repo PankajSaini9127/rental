@@ -13,7 +13,7 @@ function AdminCheckBox({ handleChange,disable }) {
     <>
       <Grid
         item
-        md={4}
+        md={8}
         xs={6}
         sx={{ mb: "0px !important", "@media(max-width:900px)": { my: 1 } }}
       >

@@ -1,30 +1,24 @@
 
-import { Alert, Box, Button, Grid,  Select,  Snackbar,  Stack } from "@mui/material";
+import { Alert, Box, Button, Grid,  Snackbar,  Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MyHeader, PasswordField, SelectComponent, TextFieldWrapper } from "../StyledComponent";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import config from '../../config.json'
 
-import axios, {Axios} from 'axios'
+import axios from 'axios'
 import AdminCheckBox from "../StyleComponents/AdminCheckBox";
-import { EditUserInfo } from "../../Services/Services";
+import { EditUserInfo, GetSupervisor, get_user } from "../../Services/Services";
 
 const initialState ={
   code:"123456",
     name:"",
     email:"",
-    password:"",
     role:[],
     mobile:"",
     supervisor:""
 }
 
-const Supervisor = [
-  "Nilesh",
-  "Yashwant",
-  "Pankaj"
-]
 
 
 
@@ -46,26 +40,66 @@ const [supervisorArray, setsupervisorArray] = useState([])
 
 
     async function getSupervisor (role){
-      const supervisor = await axios.post(`${config.API_LIVE}/api/admin/selectRole`,role)
+      const supervisor = await GetSupervisor(role)
       setsupervisorArray(supervisor.data.map((item)=>item.name))
     }
 
-    function manageRole (role){
-      if(role[0] === "Manager"){
-        setDisable({
-          ...disable,
-          manager:true
-        })
-      }else{
-        setDisable({
-          manager:false,
-          srManager:false
-        })
-      }
-    }
+// Role Check Box Disable Manage  
+function manageRole(role) {
+  if (role.includes("Admin")) {
+    setDisable({
+      srManager:false,
+      manager:false,
+      bhu:false,
+      operations:false,
+      finance:false
+    });
+  }else 
+  if(role.includes("Senior Manager")){
+    setDisable({
+      admin:false,
+      bhu:true,
+      manager:true,
+      operations:true,
+      finance:true
+    })
+  }else if(role.includes('Manager')){
+    setDisable({
+      admin:false,
+      bhu:true,
+      srManager:true,
+      operations:true,
+      finance:true
+    })
+  }else if(role.includes("Operations")){
+    setDisable({
+      admin:false,
+      bhu:true,
+      srManager:true,
+      manager:true,
+      finance:true
+    })
+  }else if(role.includes("Finance")){
+    setDisable({
+      admin:false,
+      bhu:true,
+      srManager:true,
+      manager:true,
+      operations:true
+    })
+  }else if(role.includes("BHU")){
+    setDisable({
+      admin:false,
+      operations:true,
+      srManager:true,
+      manager:true,
+      finance:true
+    })
+  }
+}
 
     
-    const {name,email,password,role,mobile,code,supervisor} = formVal;
+    const {name,email,role,mobile,code,supervisor} = formVal;
 
 
     useEffect(()=>{
@@ -76,8 +110,8 @@ const [supervisorArray, setsupervisorArray] = useState([])
     const {open,type,message} = msg;
 
 
-const getData = async()=>{
-     const data = await axios.post(`${config.API_LIVE}/api/admin/user${id}`)
+const getData = async(id)=>{
+     const data = await get_user(id);
 
      const {name,code,password,email,role,supervisor,mobile} = data.data[0];
 
@@ -115,7 +149,7 @@ const updateData = async(id,formVal)=>{
 
     const handleSubmit =(e)=>{
       e.preventDefault()
-      updateData()
+      updateData(id,formVal)
     }
 
     
@@ -128,7 +162,7 @@ const handleChange = (e)=>{
 }
 
 useEffect(()=>{
-  getData()
+  getData(id)
 },[])
 
   return (
@@ -206,16 +240,6 @@ useEffect(()=>{
               name='mobile'
               onChange={handleChange}
             />
-           
-
-   {/* <SelectComponent 
-   multiple={true}
-   value={role} 
-   name='role' 
-   label={'Role'} 
-   options={Role} 
-   onChange={handleChange}
-   /> */}
 
 <AdminCheckBox handleChange={handleChange} disable={disable}/>
 
@@ -226,14 +250,6 @@ useEffect(()=>{
    options={supervisorArray} 
    onChange={handleChange}
    />
-
-   <PasswordField
-              label="Password"
-              name='password'
-              placeHolder="Password"
-              value={password}
-              onChange={handleChange}
-            />
           
 
 

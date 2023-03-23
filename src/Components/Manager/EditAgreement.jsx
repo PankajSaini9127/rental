@@ -3,14 +3,15 @@ import { Alert, Box, Button, Grid, Snackbar, Stack, Typography, useMediaQuery } 
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import HamburgerMenu from '../HamburgerMenu';
-import { DocumentUpload, MyHeader, SelectComponent, TextFieldWrapper } from '../StyledComponent';
+import { MyHeader, SelectComponent, TextFieldWrapper } from '../StyledComponent';
 import YearlyIncrement from './IncrementType';
 import config from '../../config.json'
 
 import axios from 'axios'
+import { get_agreement_id } from '../../Services/Services';
 
 const initialState={
-    code:"NA000001",
+    code:"",
     leeseName:"",
     state:"",
     city:"",
@@ -47,9 +48,10 @@ function EditAgreement() {
     const { id } = useParams();
 
     // get data by id
-const getData = async()=>{
-    const agreement = await axios.post(`${config.API_LIVE}/api/agreement/${id}`)
-    setValue(agreement.data[0])
+const getData = async(id)=>{
+    const agreement = await get_agreement_id(id)
+    // setValue(agreement.data[0])
+    console.log(agreement)
 }
 
 useEffect(()=>{

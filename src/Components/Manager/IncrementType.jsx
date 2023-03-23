@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // import { TextFieldWrapper } from "./StyledComponent";
 import {
   Grid,
@@ -16,9 +16,7 @@ const ValueWrapper = ({ label, value }) => {
         md={4}
         xs={4}
         sx={{
-          height: "66px",
-          //  width: "280px",
-          //  '@media(max-width:900px)':{height:"46px"}
+          height: "66px"
         }}
       >
         <FormControl fullWidth>
@@ -43,11 +41,9 @@ const ValueWrapper = ({ label, value }) => {
           <Grid
             container
             sx={{
-              // border: "1px solid #03C1F3",
               backgroundColor: "var(--main-color)",
               borderRadius: "20px",
               height: "66px",
-              // width: "280px",
               justifyContent: "center",
               alignItems: "center",
               "@media(max-width:900px)": { height: "46px" },
@@ -85,9 +81,44 @@ function IncrementType({ Year, Percentage, Amount, label }) {
   );
 }
 
-const YearlyIncrement = ({ value }) => {
-  if (value === "Percentage") {
+
+
+const YearlyIncrement = ({ value,rent,increment,setIncrement }) => {
+
+  rent = Number(rent)
+  let year2;
+  let year3;
+  let year4;
+  let year5;
+  if(value === "Percentage"){
+     year2 = rent/100*10 + rent;
+     year3 = year2/100*12 + rent;
+     year4 = year3/100*12 + rent;
+     year5 = year4/100*15 +rent;
+  }else
+   if(value === "Value"){
+     year2 = rent + 1000;
+     year3 = year2 + 1000;
+     year4 = year3 + 1500;
+     year5 = year4 + 1500;
+  }
+
+useEffect(()=>{
+  setIncrement({
+    year1:rent,
+    year2,
+    year3,
+    year4,
+    year5
+  })
+},[value])
+
+
+   
     return (
+      <>
+      {
+        value === "Percentage"&&
       <Grid
         container
         sx={{ justifyContent: "space-evenly", minHeight: "200px", py: 3 }}
@@ -96,39 +127,37 @@ const YearlyIncrement = ({ value }) => {
         <IncrementType
           Year="Year 1"
           Percentage="0%"
-          Amount="10000"
+          Amount={increment.year1}
           label="Percentage"
+
         />
         <IncrementType
           Year="Year 2"
           Percentage="10%"
-          Amount="11000"
+          Amount={increment.year2}
           label="Percentage"
         />
         <IncrementType
           Year="Year 3"
           Percentage="12%"
-          Amount="12320"
+          Amount={increment.year3}
           label="Percentage"
         />
         <IncrementType
           Year="Year 4"
           Percentage="12%"
-          Amount="13798"
+          Amount={increment.year4}
           label="Percentage"
         />
         <IncrementType
           Year="Year 5"
           Percentage="15%"
-          Amount="15868"
+          Amount={increment.year5}
           label="Percentage"
         />
       </Grid>
-    );
-  }
-
-  if (value === "Value") {
-    return (
+}
+   { value === "Value"&&
       <Grid
         container
         sx={{ justifyContent: "space-evenly", minHeight: "200px", py: 3 }}
@@ -137,47 +166,42 @@ const YearlyIncrement = ({ value }) => {
         <IncrementType
           Year="Year 1"
           Percentage="0"
-          Amount="10000"
+          Amount={increment.year1}
           label="Value"
         />
         <IncrementType
           Year="Year 2"
           Percentage="1000"
-          Amount="11000"
+          Amount={increment.year2}
           label="Value"
         />
         <IncrementType
           Year="Year 3"
           Percentage="1000"
-          Amount="12000"
+          Amount={increment.year3}
           label="Value"
         />
         <IncrementType
           Year="Year 4"
           Percentage="1500"
-          Amount="13600"
+          Amount={increment.year4}
           label="Value"
         />
         <IncrementType
           Year="Year 5"
           Percentage="1500"
-          Amount="15000"
+          Amount={increment.year5}
           label="Value"
         />
       </Grid>
-    );
-  }
-};
+    }
+    </>
+    )
+    }
+
 
 export default YearlyIncrement;
 
-const labelStyle = {
-  fontSize: "20px",
-  color: "#03C1F3",
-  fontWeight: "600",
-  minheight:"30px",
-  "@media(max-width:900px)": { fontSize: "10px" },
-};
 
 const fieldStyle = {
   // border: "1px solid #03C1F3",
@@ -192,21 +216,11 @@ const fieldStyle = {
 const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
   return (
     <Grid item md={4} xs={4}>
-      {/* <MyTextfield /> */}
       <FormControl fullWidth>
-        {/* <FormLabel>
-          <Typography variant="body1" sx={labelStyle}>
-            
-          </Typography>
-        </FormLabel> */}
         <TextField
           variant="outlined"
           name={name}
           label={label}
-          onChange={(e) => onChange(e)}
-          // InputProps={{
-          //   disableUnderline: true,
-          // }}
           placeholder={placeHolder}
           value={value}
           fullWidth

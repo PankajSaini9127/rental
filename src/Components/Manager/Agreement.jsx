@@ -20,17 +20,12 @@ import {
   TextFieldWrapper,
 } from "../StyledComponent";
 
-import axios from "axios";
 
 // Components
 
 import HamburgerMenu from "../HamburgerMenu";
 import YearlyIncrement from "./IncrementType";
 import DialogBox from "./DialogBox";
-import { useNavigate } from "react-router-dom";
-
-import { useFormik } from "formik";
-import { agreementSchema } from "../ValidationSchema/Manager";
 import {
   add_agreement,
   add_landlord,
@@ -38,39 +33,29 @@ import {
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
+import PermissionAlert from "./Alert";
 
 const incrementType = ["Percentage", "Value"];
 
-// form initial state
 
-// const initialState={
-//   code:"NA000001",
-//   leeseName:"",
-//   state:"",
-//   city:"",
-//   location:"",
-//   pincode:"",
-//   address:"",
-//   aadharNo:"",
-//   panNo:"",
-//   gstNo:"",
-//   mobileNo:"",
-//   alternateMobile:"",
-//   email:"",
-//   lockInYear:"",
-//   noticePeriod:"",
-//   deposite:"",
-//   monthlyRent:"",
-//   yearlyIncrement:"",
-//   bankName:"",
-//   benificiaryName:"",
-//   accountNo:"",
-//   ifscCode:""
-// }
 
 function Agreement() {
   const { landloard } = useSelector((state) => state);
   const dispatch = useDispatch();
+
+  const codeGenerater = ()=>{
+    var length = 6,
+    charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+    random = "";
+for (var i = 0, n = charset.length; i < length; ++i) {
+    random += charset.charAt(Math.floor(Math.random() * n));
+    setData({...data,code:random})
+}
+  }
+
+  useEffect(()=>{
+    codeGenerater()
+  },[])
 
   const [document, setDocuments] = useState({});
   const [data, setData] = useState({
@@ -79,7 +64,7 @@ function Agreement() {
     lockInYear: "",
     noticePeriod: "",
     deposite: "",
-    monthlyRent: "",
+    monthlyRent: '',
     yearlyIncrement: "",
   });
 
@@ -88,9 +73,16 @@ function Agreement() {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const [increment, setIncrement] = useState({year1:"",year2:"",year3:"",year4:"",year5:""})
+
+
+
   // upload document
   async function handleChangeFile(e) {
-    console.log(data);
+
+  
+
+
     const FD = new FormData();
     FD.append("photo", e.target.files[0]);
     let response = await uploadDoc(FD);
@@ -151,8 +143,9 @@ function Agreement() {
 
   // on form submit
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleConfirm = () => {
+    setOpen(false)
+    console.log(data)
     const {
       code,
       lockInYear,
@@ -192,7 +185,13 @@ function Agreement() {
     );
   };
 
+
+  
+
+
+
   const APICall = async (values, landlordData) => {
+    
     const agreement = await add_agreement(values);
 
     if (agreement.data.success) {
@@ -229,14 +228,30 @@ function Agreement() {
     }
   };
 
+  //confirmation alert
+  const [open,setOpen]= useState(false)
+
+  const handleSubmit = (e)=>{
+    e.preventDefault();
+    setOpen(true)
+  }
+
+  const handleCancel = ()=>{
+    setOpen(false)
+  }
+
   return (
     <>
+
+     {/* alert for submit form */}
+     <PermissionAlert handleClose={handleCancel} handleConfirm={handleConfirm} open={open} message={"Before Final Submission Please Check Carefully ."}/>
+
       {/* dialog box ( popup box ) */}
       <DialogBox value={landblord} setValue={setLandblord} />
       {/* {console.log(landblord)} */}
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
         {/* side nav     */}
-        <HamburgerMenu />
+        <HamburgerMenu  navigateTo={'listing'} />
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>New Agreement</MyHeader>
@@ -265,7 +280,7 @@ function Agreement() {
                     backgroundColor="rgba(3, 193, 243, 0.2);"
                     value={data.code}
                     name="code"
-                    onChange={handleCommonChange}
+                  
                   />
 
                   {landblord.map((row, i) => (
@@ -460,7 +475,7 @@ function Agreement() {
                 {/* basic details end here */}
 
                 {/* Increment Yearly */}
-                <YearlyIncrement value={data.yearlyIncrement} />
+                <YearlyIncrement value={data.yearlyIncrement} rent={data.monthlyRent} increment={increment} setIncrement={setIncrement} />
 
                 {/* Bank Details start here*/}
                 <Typography
@@ -477,7 +492,7 @@ function Agreement() {
                 {landblord.map((_, i) => (
                   <>
                     {landblord.length > 0 ? (
-                      <Typography>Landlord Name</Typography>
+                      <Typography mx={2}>Landlord Name  {landloard.length > 0 ? landloard[i].name : ""}</Typography>
                     ) : (
                       ""
                     )}
@@ -531,8 +546,8 @@ function Agreement() {
                 </Typography>
                 {landblord.map((_, i) => (
                   <>
-                    <Typography>
-                      Landlord Name{" "}
+                    <Typography mx={2}>
+                      Landloard Name 
                       {landloard.length > 0 ? landloard[i].name : ""}
                     </Typography>
                     <Grid
@@ -672,7 +687,7 @@ function Agreement() {
                         },
                       }}
                     >
-                      Add Agreement
+                      Submit To Sr Manager
                     </Button>
                   </Grid>
 

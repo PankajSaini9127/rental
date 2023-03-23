@@ -10,7 +10,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   MyHeader,
-  PasswordField,
   SelectComponent,
   TextFieldWrapper,
 } from "../StyledComponent";
@@ -26,7 +25,6 @@ const initialState = {
   code: "123456",
   name: "",
   email: "",
-  password: "",
   role: [],
   mobile: "",
   supervisor: "",
@@ -36,22 +34,27 @@ const initialState = {
 
 function NewUser() {
   const navigate = useNavigate();
+  const [randomPassword, setRandomPassword] = useState("");
+
+  const [loading,setLoading] =useState(false)
 
 // Disable Role CheckBox Base On Condition
   const [disable, setDisable] = useState({ manager: false, srManager: false,admin:false,finance:false,bhu:false,operations:false });
 
  // form handling and validate
-  const { values, handleChange, handleSubmit, handleBlur, errors, touched } =
+  const { values, handleChange, handleBlur, errors, touched } =
     useFormik({
       initialValues: initialState,
-      validationSchema: AddUserSchema,
-      onSubmit: (values) => {
-        apiCall(values);
-      },
+      validationSchema: AddUserSchema
     });
 
+    const handleSubmit = (e)=>{
+      e.preventDefault()
+      apiCall(values,randomPassword)
+    }
+
   //distructring elements from values
-  const { name, email, password, role, mobile, code, supervisor } = values;
+  const { name, email,  role, mobile, code, supervisor } = values;
 
 // state for set supervisor value  
   const [supervisorArray, setsupervisorArray] = useState([]);
@@ -63,7 +66,7 @@ function NewUser() {
   }
 
 // Role Check Box Disable Manage  
-  function manageRole(role) {
+ function manageRole(role) {
     if (role.includes("Admin")) {
       setDisable({
         srManager:false,
@@ -114,8 +117,33 @@ function NewUser() {
         finance:true
       })
     }
+    else{
+      setDisable({
+        admin:false,
+        operations:false,
+        srManager:false,
+        manager:false,
+        finance:false
+      })
+    }
   }
 
+
+  const passwordGenerate = ()=>{
+    var length = 6,
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+        random = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+        random += charset.charAt(Math.floor(Math.random() * n));
+        setRandomPassword(random)
+    }
+    
+  }
+
+
+useEffect(()=>{
+  passwordGenerate()
+},[])
 
   useEffect(() => {
     manageRole(role);
@@ -132,7 +160,9 @@ function NewUser() {
   const { open, type, message } = msg;
 
 // For save data in DB   
- const apiCall = async (values) => {
+ const apiCall = async (values,randomPassword) => {
+  values = {...values, password:randomPassword}
+  setLoading(true)
     const result = await AddUser(values)
     if (result.status === 201) {
       setMsg({
@@ -148,11 +178,13 @@ function NewUser() {
         message: result.data.message,
       });
     }
+    setLoading(false)
   };
 
 // on Alert close
   const handleClose = () => {
     if (msg.type === "success") {
+       navigate('/userManagement')
     }
     setMsg({
       open: false,
@@ -251,23 +283,7 @@ function NewUser() {
                     label={"Supervisor"}
                     options={supervisorArray}
                     onChange={handleChange}
-                    onBlur={handleBlur}
-                    errMsg={errors.supervisor}
-                    touched={touched.supervisor}
                   />
-
-                  <PasswordField
-                    label="Password"
-                    name="password"
-                    type={"password"}
-                    placeHolder="Password"
-                    value={password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    errMsg={errors.password}
-                    touched={touched.password}
-                  />
-                  
                 </Grid>
                 <Grid container sx={{ justifyContent: "space-evenly", mt: 3 }}>
                   <Grid item sm={3.0}>
@@ -283,7 +299,8 @@ function NewUser() {
                         lineHeight: "32px",
                         textTransform: "capitalize",
                       }}
-                      type={"submit"}
+                      type='submit'
+                      disabled={loading?true:false}
                     >
                       Submit
                     </Button>

@@ -1,6 +1,6 @@
-import { Alert, AlertTitle, Box, Button, Grid, Snackbar } from '@mui/material';
+import { Alert, Box, Button, Grid, Snackbar } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import React, { lazy, useState} from 'react'
+import React, { useState,useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 import config from '../../config.json'
 
@@ -10,75 +10,8 @@ import axios from 'axios'
 //icons
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useEffect } from 'react';
-import DeleteAlert from './DeleteAlert';
-
+import PermissionAlert from './Alert';
  
-
-  const rows = [
-    {
-      id: 1,
-      status: "Pending",
-      code: 123,
-      name: "John Doe",
-      location:"Rajsthan",
-      rentalAmount:10000,
-    
-    },
-    {
-      id: 2,
-      status: "Approved",
-      code: 123,
-      name: "John Doe",
-      location:"Rajsthan",
-      rentalAmount:10000,
-    },
-    {
-      id: 3,
-      status: "Rejected",
-      code: 123,
-      name: "John Doe",
-      location:"Rajsthan",
-      rentalAmount:10000,
-    },
-    {
-      id: 4,
-      status: "Approved",
-      code: 123,
-      name: "John Doe",
-      location:"Rajsthan",
-      rentalAmount:10000,
-    },
-    {
-      id: 5,
-      status: "Approved",
-      code: 123,
-      name: "John Doe",
-      location:"Rajsthan",
-      rentalAmount:10000,
-    },
-    {
-      id: 6,
-      status: "Pending",
-      code: 123,
-      name: "John Doe",
-      location:"Rajsthan",
-      rentalAmount:10000,
-    },
-    {
-      id: 7,
-      status: "Rejected",
-      code: 123,
-      name: "John Doe",
-      location:"Rajsthan",
-      rentalAmount:10000,
-    }
-    
-  ];
- 
-
-  
-  
 
 
 function DataTable() {
@@ -159,7 +92,7 @@ function DataTable() {
 
   const onRowsSelectionHandler = (ids) => {
     const id = ids[0]
-      navigate(`/managerApproval/${id}`)
+      // navigate(`/managerApproval/${id}`)
   };
 
   const renderDetailsButton = (e) => {
@@ -272,7 +205,7 @@ const [deleteAlert, setDeleteAlert] = useState({open:false,id:''})
   </Alert>
 </Snackbar>
 
-<DeleteAlert handleClose={handleCancel} handleConfirm={handleConfirm} open={ deleteAlert.open}/>
+<PermissionAlert handleClose={handleCancel} handleConfirm={handleConfirm} open={ deleteAlert.open} message={"Are you sure you want to delete this item?"}/>
 
       <Box
       sx={{

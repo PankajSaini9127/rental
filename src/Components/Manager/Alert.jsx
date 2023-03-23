@@ -1,7 +1,7 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
-import React, { useState } from 'react'
+import React from 'react'
 
-export default function DeleteAlert({open,handleClose,handleConfirm}) {
+export default function PermissionAlert({open,handleClose,handleConfirm,message}) {
 
     
 
@@ -14,7 +14,7 @@ export default function DeleteAlert({open,handleClose,handleConfirm}) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Are you sure you want to delete this item?"}
+         {message}
         </DialogTitle>
        <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>

@@ -9,6 +9,11 @@ export async function LoginAPI(data){
    return user ;
 }
 
+export async function get_user(id){
+    console.log(id)
+    return await axios.post(`${API_LIVE}/api/admin/user/${id}`)
+}
+
 export async function GetUser (){
     return await axios.get(`${API_LIVE}/api/admin/user`)
 }
@@ -33,6 +38,8 @@ export async function UpdateStatusAPI (id,data){
 //Admin Section Ends Here
 
 //manager sEction start here
+
+
 export async function add_agreement (data){
     return  axios.post(`${API_LIVE}/api/newAgreement`,data);
 }
@@ -43,4 +50,8 @@ export async function add_landlord (data){
 
 export async function uploadDoc (data){
     return axios.post(`${API_LIVE}/api/uploadDoc`,data)
+}
+
+export async function get_agreement_id (id) {
+    return axios.post(`${API_LIVE}/api/agreement/${id}`)
 }

@@ -6,7 +6,6 @@ import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
 import { Stack } from "@mui/material";
 
-const options = ["New Agreement","Monthly Payment","Rental"]
 
 function Listing() {
   const [Select, setSelect] = useState("New Agreement");
@@ -28,10 +27,10 @@ function Listing() {
           buttonText="Upload"
           buttonText1="Add Agreement"
           addbtn={true}
-          options={options}
           value={Select}
           Table={DataTable}
           onChange={handleChange}
+          dropDown={false}
         />
       </Stack>
     </>

@@ -5,6 +5,8 @@ import {
   TextField,
   Button,
   Box,
+  ListItem,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 
@@ -28,6 +30,7 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
           type={"text"}
           onChange={(e) => onChange(e)}
           fullWidth
+          required
           InputProps={{
             disableUnderline: true,
             style: {
@@ -46,6 +49,7 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
 
 const Landblord = ({ value, setValue, index }) => {
   function handleChange(e) {
+    
     if (value[index]) {
       setValue((old) =>
         old.map((row, i) => {
@@ -70,6 +74,7 @@ const Landblord = ({ value, setValue, index }) => {
 
   return (
     <>
+    
       <Grid
         container
         sx={{ justifyContent: "space-evenly", mb: 2 }}
@@ -107,11 +112,23 @@ function DialogBox({ value, setValue }) {
 
   const [data, setData] = useState([]);
 
+  const [alert,setAlert] = useState(false)
+
   const dispatch = useDispatch();
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    let percentage=0;
+    data.map((item)=> 
+    percentage += Number(item.percentage)
+    )
+   if(percentage > 100){
+    setAlert(true)
+   }else{
+    setAlert(false)
     dispatch(addLandLoard(data));
-    handleClose();
+    handleClose()
+   }
   };
 
   const handleClose = () => {
@@ -134,16 +151,14 @@ function DialogBox({ value, setValue }) {
         <Grid
           container
           sx={{
-            // height: "345px",
-            width: "600px",
             borderRadious: "30px ",
             backgroundColor: "#FFFFFF",
             justifyContent: "center",
             alignItems: "center",
-            py: 10,
+            py: 5,
             "@media(max-width:900px)": { width: "300px", py: 6 },
           }}
-          spacing={4}
+          spacing={2}
         >
           <Grid item md={10}>
             <TextFieldWrapper
@@ -155,6 +170,21 @@ function DialogBox({ value, setValue }) {
               onChange={handleChange}
             />
           </Grid>
+          <Box component={'form'} onSubmit={handleSubmit}>
+          <Grid
+          container
+          sx={{
+            // height: "345px",
+            width: "600px",
+            borderRadious: "30px ",
+            backgroundColor: "#FFFFFF",
+            justifyContent: "center",
+            alignItems: "center",
+            py: 10,
+            "@media(max-width:900px)": { width: "300px", py: 6 },
+          }}
+          spacing={4}
+        >
           <Grid item md={10}>
             {value.length > 0 ? (
               <>
@@ -170,13 +200,17 @@ function DialogBox({ value, setValue }) {
             ) : (
               ""
             )}
+            {
+              alert?<Typography textAlign={'center'} variant={'body1'} color="red" mx={2}>Percentage Share Not Be Bigger Then 100 %</Typography>:""
+            }
+            
           </Grid>
 
           <Grid item md={3}>
             {value.length > 0 ? (
               <Button
                 variant="contained"
-                onClick={handleSubmit}
+                type='submit'
                 sx={{
                   height: "40px",
                   width: "100%",
@@ -193,6 +227,8 @@ function DialogBox({ value, setValue }) {
               ""
             )}
           </Grid>
+          </Grid>
+            </Box>
         </Grid>
       </Dialog>
     </>
