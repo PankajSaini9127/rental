@@ -1,5 +1,5 @@
 
 {
-    "API_LIVE" : "http://64.227.133.102",
-    "API_LOCAL" : "http://localhost:8080"
+    "API_LOCAL" : "http://64.227.133.102",
+    "API_LIVE" : "http://localhost:8080"
 }

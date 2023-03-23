@@ -158,6 +158,7 @@ function DataTable() {
   const navigate = useNavigate()
 
   const onRowsSelectionHandler = (ids) => {
+    
     const id = ids[0]
       navigate(`/managerApproval/${id}`)
   };
@@ -337,7 +338,7 @@ const [deleteAlert, setDeleteAlert] = useState({open:false,id:''})
           return(cellClass)
 
         }}
-        onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+        // onSelectionModelChange={(ids) => {console.log(ids)}}
       >
 
       </DataGrid>

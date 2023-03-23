@@ -51,7 +51,7 @@ function NewUser() {
     });
 
   //distructring elements from values
-  const { name, email, password, role, mobile, code, supervisor } = values;
+  const { name, email, role, mobile, code, supervisor } = values;
 
 // state for set supervisor value  
   const [supervisorArray, setsupervisorArray] = useState([]);
@@ -256,7 +256,7 @@ function NewUser() {
                     touched={touched.supervisor}
                   />
 
-                  <PasswordField
+                  {/* <PasswordField
                     label="Password"
                     name="password"
                     type={"password"}
@@ -267,7 +267,7 @@ function NewUser() {
                     errMsg={errors.password}
                     touched={touched.password}
                   />
-                  
+                   */}
                 </Grid>
                 <Grid container sx={{ justifyContent: "space-evenly", mt: 3 }}>
                   <Grid item sm={3.0}>
