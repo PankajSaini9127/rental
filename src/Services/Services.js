@@ -38,3 +38,7 @@ export async function add_agreement (data){
 export async function add_landlord (data){
     return axios.post('http://localhost:8080/api/add_landlord',data)
 }
+
+export async function uploadDoc (data){
+    return axios.post('http://localhost:8080/api/uploadDoc',data)
+}

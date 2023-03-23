@@ -126,7 +126,7 @@ function DialogBox({ value, setValue }) {
     <>
       <Dialog
         open={open}
-        onClose={handleClose}
+        // onClose={handleClose}
         PaperProps={{
           style: { borderRadius: 18 },
         }}

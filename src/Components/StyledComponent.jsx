@@ -126,7 +126,7 @@ const PasswordField = ({label, placeHolder, value, name, onChange,errMsg,onBlur,
 }
 
 // Document Upload
-const DocumentUpload = ({ label, placeHolder,handleChange }) => {
+const DocumentUpload = ({ label, placeHolder,handleChange, name }) => {
   return (
     <Grid item md={4.1} xs={6}>
       {/* <MyTextfield /> */}
@@ -153,7 +153,7 @@ const DocumentUpload = ({ label, placeHolder,handleChange }) => {
         >
           <Typography sx={{fontSize:"16px", textAlign:"left",width:"100%",'@media(max-width:900px)':{fontSize:'10px'}}}> {placeHolder}</Typography>
          
-          <input hidden accept="image/*" multiple type="file" onChange={handleChange}/>
+          <input hidden accept="image/*" name = {name} multiple type="file" onChange={handleChange}/>
         </Button>
 
         

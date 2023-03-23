@@ -31,8 +31,13 @@ import { useNavigate } from "react-router-dom";
 
 import { useFormik } from "formik";
 import { agreementSchema } from "../ValidationSchema/Manager";
-import { add_agreement, add_landlord } from "../../Services/Services";
-import { useSelector } from "react-redux";
+import {
+  add_agreement,
+  add_landlord,
+  uploadDoc,
+} from "../../Services/Services";
+import { useDispatch, useSelector } from "react-redux";
+import { setAlert } from "../../store/action/action";
 
 const incrementType = ["Percentage", "Value"];
 
@@ -64,9 +69,10 @@ const incrementType = ["Percentage", "Value"];
 // }
 
 function Agreement() {
+  const { landloard } = useSelector((state) => state);
+  const dispatch = useDispatch();
 
-  const {landloard} = useSelector(state=>state)
-
+  const [document, setDocuments] = useState({});
   const [data, setData] = useState({
     landlord: [],
     code: "",
@@ -83,13 +89,35 @@ function Agreement() {
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
   // upload document
-  const handleChangeFile = (e) => {
-    console.log(e.target.files);
-  };
+  async function handleChangeFile(e) {
+    console.log(data);
+    const FD = new FormData();
+    FD.append("photo", e.target.files[0]);
+    let response = await uploadDoc(FD);
+
+    if (response.status === 200) {
+      setData((old) => ({ ...old, [e.target.name]: response.data.link }));
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "success",
+          message: response.data.message,
+        })
+      );
+    } else {
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: response.data.message || "Something went wrong !!!",
+        })
+      );
+    }
+  }
 
   //handle Change for uncommon feilds
   function handleChange(e, i) {
-    console.log(data)
+    // console.log(data)
     if (data.landlord[i]) {
       setData((old) => ({
         ...old,
@@ -106,10 +134,11 @@ function Agreement() {
     } else {
       setData((old) => ({
         ...old,
-        landlord: [ ...old.landlord,
+        landlord: [
+          ...old.landlord,
           {
             [e.target.name]: e.target.value,
-          }
+          },
         ],
       }));
     }
@@ -117,30 +146,86 @@ function Agreement() {
 
   // handle Change for common feilds
   function handleCommonChange(e, i) {
-    setData(old=>({...old,[e.target.name]: e.target.value}))
+    setData((old) => ({ ...old, [e.target.name]: e.target.value }));
   }
 
   // on form submit
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const {code,lockInYear,monthlyRent,noticePeriod,yearlyIncrement,deposite} =data;
-    const {landlord} = data;
+    const {
+      code,
+      lockInYear,
+      monthlyRent,
+      noticePeriod,
+      yearlyIncrement,
+      deposite,
+      gst_certificate,
+      draft_agreement,
+      electricity_bill,
+      poa,
+      maintaince_bill,
+      cheque,
+      tax_receipt,
+      noc,
+    } = data;
+    const { landlord } = data;
 
-    APICall({code,lockInYear,monthlyRent,noticePeriod,yearlyIncrement,deposite},landlord)
-
+    APICall(
+      {
+        code,
+        lockInYear,
+        monthlyRent,
+        noticePeriod,
+        yearlyIncrement,
+        deposite,
+        gst_certificate,
+        draft_agreement,
+        electricity_bill,
+        poa,
+        maintaince_bill,
+        cheque,
+        tax_receipt,
+        noc,
+      },
+      landlord
+    );
   };
 
-  const APICall = async (values,landlordData) => {
-    const agreement = await add_agreement(values)
+  const APICall = async (values, landlordData) => {
+    const agreement = await add_agreement(values);
 
-    if(agreement.data.success){
+    if (agreement.data.success) {
       const agreement_id = agreement.data.agreement[0];
 
-      landlordData = landlordData.map((row,index)=>{
-        return {...row,percentageShare:landloard[index].percentage,name:landloard[index].name,agreement_id}
-      })
-      const result = await add_landlord(landlordData)
+      landlordData = landlordData.map((row, index) => {
+        let aadhar_card = `${(landloard[index].name + "@aadhar_card").replace(
+          " ",
+          ""
+        )}`;
+        let pan_card = `${(landloard[index].name + "@pan_card").replace(
+          " ",
+          ""
+        )}`;
+        return {
+          ...row,
+          percentageShare: landloard[index].percentage,
+          name: landloard[index].name,
+          agreement_id,
+          aadhar_card: data[aadhar_card],
+          pan_card: data[pan_card],
+        };
+      });
+      const result = await add_landlord(landlordData);
+
+      if(result)
+      {
+        dispatch(setAlert({
+          open : true,
+          variant : 'success',
+          message : 'Agrement submited.'
+        }))
+      }
     }
   };
 
@@ -179,161 +264,161 @@ function Agreement() {
                     placeHolder=""
                     backgroundColor="rgba(3, 193, 243, 0.2);"
                     value={data.code}
-                    name = 'code'
+                    name="code"
                     onChange={handleCommonChange}
                   />
 
-                  {landblord.map((row,i)=><>
-                  {console.log(landblord)}
-                        <TextFieldWrapper
-                          label="Name Of Lesse"
-                          placeHolder="Enter Name Of Lesse"
-                          name="leeseName"
-                          value={
-                            data.landlord[i] && data.landlord[i].leeseName
-                              ? data.landlord[i].leeseName
-                              : ""
-                          }
-                          onChange={(e) => handleChange(e, i)}
-                        />
-                        <TextFieldWrapper
-                          label="State"
-                          placeHolder="Enter State"
-                          name="state"
-                          value={
-                            data.landlord[i] && data.landlord[i].state
-                              ? data.landlord[i].state
-                              : ""
-                          }
-                          onChange={(e) => handleChange(e, i)}
-                          index={i}
-                        />
+                  {landblord.map((row, i) => (
+                    <>
+                      {/* {console.log(landblord)} */}
+                      <TextFieldWrapper
+                        label="Name Of Lesse"
+                        placeHolder="Enter Name Of Lesse"
+                        name="leeseName"
+                        value={
+                          data.landlord[i] && data.landlord[i].leeseName
+                            ? data.landlord[i].leeseName
+                            : ""
+                        }
+                        onChange={(e) => handleChange(e, i)}
+                      />
+                      <TextFieldWrapper
+                        label="State"
+                        placeHolder="Enter State"
+                        name="state"
+                        value={
+                          data.landlord[i] && data.landlord[i].state
+                            ? data.landlord[i].state
+                            : ""
+                        }
+                        onChange={(e) => handleChange(e, i)}
+                        index={i}
+                      />
 
-                        <TextFieldWrapper
-                          label="City"
-                          placeHolder="Enter City"
-                          name="city"
-                          value={
-                            data.landlord[i] && data.landlord[i].city
-                              ? data.landlord[i].city
-                              : ""
-                          }
-                          onChange={(e) => handleChange(e, i)}
-                          index={i}
-                        />
-                        <TextFieldWrapper
-                          label="Location"
-                          placeHolder="Enter Location"
-                          name="location"
-                          value={
-                            data.landlord[i] && data.landlord[i].location
-                              ? data.landlord[i].location
-                              : ""
-                          }
-                          onChange={(e) => handleChange(e, i)}
-                          index={i}
-                        />
-                        <TextFieldWrapper
-                          label="Pincode"
-                          placeHolder="Enter Pincode"
-                          name="pincode"
-                          value={
-                            data.landlord[i] && data.landlord[i].pincode
-                              ? data.landlord[i].pincode
-                              : ""
-                          }
-                          onChange={(e) => handleChange(e, i)}
-                          index={i}
-                        />
-                        <TextFieldWrapper
-                          label="Address"
-                          placeHolder="Enter Address"
-                          name="address"
-                          value={
-                            data.landlord[i] && data.landlord[i].address
-                              ? data.landlord[i].address
-                              : ""
-                          }
-                          onChange={(e) => handleChange(e, i)}
-                          index={i}
-                        />
-                        <TextFieldWrapper
-                          label="Aadhar Number"
-                          placeHolder="Enter Aadhar No."
-                          name="aadharNo"
-                          value={
-                            data.landlord[i] && data.landlord[i].aadharNo
-                              ? data.landlord[i].aadharNo
-                              : ""
-                          }
-                          onChange={(e) => handleChange(e, i)}
-                          index={i}
-                        />
-                        <TextFieldWrapper
-                          label="Pan Number"
-                          placeHolder="Enter Pan No."
-                          name="panNo"
-                          value={
-                            data.landlord[i] && data.landlord[i].panNo
-                              ? data.landlord[i].panNo
-                              : ""
-                          }
-                          onChange={(e) => handleChange(e, i)}
-                          index={i}
-                        />
+                      <TextFieldWrapper
+                        label="City"
+                        placeHolder="Enter City"
+                        name="city"
+                        value={
+                          data.landlord[i] && data.landlord[i].city
+                            ? data.landlord[i].city
+                            : ""
+                        }
+                        onChange={(e) => handleChange(e, i)}
+                        index={i}
+                      />
+                      <TextFieldWrapper
+                        label="Location"
+                        placeHolder="Enter Location"
+                        name="location"
+                        value={
+                          data.landlord[i] && data.landlord[i].location
+                            ? data.landlord[i].location
+                            : ""
+                        }
+                        onChange={(e) => handleChange(e, i)}
+                        index={i}
+                      />
+                      <TextFieldWrapper
+                        label="Pincode"
+                        placeHolder="Enter Pincode"
+                        name="pincode"
+                        value={
+                          data.landlord[i] && data.landlord[i].pincode
+                            ? data.landlord[i].pincode
+                            : ""
+                        }
+                        onChange={(e) => handleChange(e, i)}
+                        index={i}
+                      />
+                      <TextFieldWrapper
+                        label="Address"
+                        placeHolder="Enter Address"
+                        name="address"
+                        value={
+                          data.landlord[i] && data.landlord[i].address
+                            ? data.landlord[i].address
+                            : ""
+                        }
+                        onChange={(e) => handleChange(e, i)}
+                        index={i}
+                      />
+                      <TextFieldWrapper
+                        label="Aadhar Number"
+                        placeHolder="Enter Aadhar No."
+                        name="aadharNo"
+                        value={
+                          data.landlord[i] && data.landlord[i].aadharNo
+                            ? data.landlord[i].aadharNo
+                            : ""
+                        }
+                        onChange={(e) => handleChange(e, i)}
+                        index={i}
+                      />
+                      <TextFieldWrapper
+                        label="Pan Number"
+                        placeHolder="Enter Pan No."
+                        name="panNo"
+                        value={
+                          data.landlord[i] && data.landlord[i].panNo
+                            ? data.landlord[i].panNo
+                            : ""
+                        }
+                        onChange={(e) => handleChange(e, i)}
+                        index={i}
+                      />
 
-                        <TextFieldWrapper
-                          label="GST Number"
-                          placeHolder="Enter GST No."
-                          name="gstNo"
-                          value={
-                            data.landlord[i] && data.landlord[i].gstNo
-                              ? data.landlord[i].gstNo
-                              : ""
-                          }
-                          onChange={(e) => handleChange(e, i)}
-                          index={i}
-                        />
-                        <TextFieldWrapper
-                          label="Mobile Number"
-                          placeHolder="Enter Mobile No."
-                          name="mobileNo"
-                          value={
-                            data.landlord[i] && data.landlord[i].mobileNo
-                              ? data.landlord[i].mobileNo
-                              : ""
-                          }
-                          onChange={(e) => handleChange(e, i)}
-                          index={i}
-                        />
-                        <TextFieldWrapper
-                          label="Alternate Number"
-                          placeHolder="Enter Alternate No."
-                          name="alternateMobile"
-                          value={
-                            data.landlord[i] && data.landlord[i].alternateMobile
-                              ? data.landlord[i].alternateMobile
-                              : ""
-                          }
-                          onChange={(e) => handleChange(e, i)}
-                          index={i}
-                        />
+                      <TextFieldWrapper
+                        label="GST Number"
+                        placeHolder="Enter GST No."
+                        name="gstNo"
+                        value={
+                          data.landlord[i] && data.landlord[i].gstNo
+                            ? data.landlord[i].gstNo
+                            : ""
+                        }
+                        onChange={(e) => handleChange(e, i)}
+                        index={i}
+                      />
+                      <TextFieldWrapper
+                        label="Mobile Number"
+                        placeHolder="Enter Mobile No."
+                        name="mobileNo"
+                        value={
+                          data.landlord[i] && data.landlord[i].mobileNo
+                            ? data.landlord[i].mobileNo
+                            : ""
+                        }
+                        onChange={(e) => handleChange(e, i)}
+                        index={i}
+                      />
+                      <TextFieldWrapper
+                        label="Alternate Number"
+                        placeHolder="Enter Alternate No."
+                        name="alternateMobile"
+                        value={
+                          data.landlord[i] && data.landlord[i].alternateMobile
+                            ? data.landlord[i].alternateMobile
+                            : ""
+                        }
+                        onChange={(e) => handleChange(e, i)}
+                        index={i}
+                      />
 
-                        <TextFieldWrapper
-                          label="Email"
-                          placeHolder="Enter Email"
-                          name="email"
-                          value={
-                            data.landlord[i] && data.landlord[i].email
-                              ? data.landlord[i].email
-                              : ""
-                          }
-                          onChange={(e) => handleChange(e, i)}
-                          index={i}
-                        />
-                      </>
-                    )
-                  }
+                      <TextFieldWrapper
+                        label="Email"
+                        placeHolder="Enter Email"
+                        name="email"
+                        value={
+                          data.landlord[i] && data.landlord[i].email
+                            ? data.landlord[i].email
+                            : ""
+                        }
+                        onChange={(e) => handleChange(e, i)}
+                        index={i}
+                      />
+                    </>
+                  ))}
 
                   <TextFieldWrapper
                     label="Lock In Year(If Applicable)"
@@ -389,46 +474,45 @@ function Agreement() {
                   Bank Detail
                 </Typography>
 
-                {landblord.map((_, i) =>
-                    <>
-                      {landblord.length > 0 ? (
-                        <Typography>Landlord Name</Typography>
-                      ) : (
-                        ""
-                      )}
-                      <Grid container sx={{ px: 3 }} spacing={isSmall ? 2 : 4}>
-                        <TextFieldWrapper
-                          label="Bank Name"
-                          placeHolder="Enter Bank Name"
-                          name="bankName"
-                          value={data.bankName}
-                          onChange={(e) => handleChange(e, i)}
-                        />
-                        <TextFieldWrapper
-                          label="Benificiary Name"
-                          placeHolder="Enter Benificiary Name"
-                          name="benificiaryName"
-                          value={data.benificiaryName}
-                          onChange={(e) => handleChange(e, i)}
-                        />
-                        <TextFieldWrapper
-                          label="Bank A/C Number "
-                          placeHolder="Enter Account No."
-                          name="accountNo"
-                          value={data.accountNo}
-                          onChange={(e) => handleChange(e, i)}
-                        />
-                        <TextFieldWrapper
-                          label="Bank IFSC Code"
-                          placeHolder="Enter IFSC Code"
-                          name="ifscCode"
-                          value={data.ifscCode}
-                          onChange={(e) => handleChange(e, i)}
-                        />
-                      </Grid>
-                    </>
-                  )
-                }
+                {landblord.map((_, i) => (
+                  <>
+                    {landblord.length > 0 ? (
+                      <Typography>Landlord Name</Typography>
+                    ) : (
+                      ""
+                    )}
+                    <Grid container sx={{ px: 3 }} spacing={isSmall ? 2 : 4}>
+                      <TextFieldWrapper
+                        label="Bank Name"
+                        placeHolder="Enter Bank Name"
+                        name="bankName"
+                        value={data.bankName}
+                        onChange={(e) => handleChange(e, i)}
+                      />
+                      <TextFieldWrapper
+                        label="Benificiary Name"
+                        placeHolder="Enter Benificiary Name"
+                        name="benificiaryName"
+                        value={data.benificiaryName}
+                        onChange={(e) => handleChange(e, i)}
+                      />
+                      <TextFieldWrapper
+                        label="Bank A/C Number "
+                        placeHolder="Enter Account No."
+                        name="accountNo"
+                        value={data.accountNo}
+                        onChange={(e) => handleChange(e, i)}
+                      />
+                      <TextFieldWrapper
+                        label="Bank IFSC Code"
+                        placeHolder="Enter IFSC Code"
+                        name="ifscCode"
+                        value={data.ifscCode}
+                        onChange={(e) => handleChange(e, i)}
+                      />
+                    </Grid>
+                  </>
+                ))}
 
                 {/* Bank Details ends here*/}
 
@@ -445,31 +529,47 @@ function Agreement() {
                 >
                   Upload Document
                 </Typography>
+                {landblord.map((_, i) => (
+                  <>
+                    <Typography>
+                      Landlord Name{" "}
+                      {landloard.length > 0 ? landloard[i].name : ""}
+                    </Typography>
+                    <Grid
+                      container
+                      spacing={isSmall ? 2 : 4}
+                      sx={{ px: 1, justifyContent: "space-evenly", mb: 3 }}
+                    >
+                      <DocumentUpload
+                        label="Upload Aadhar Card"
+                        placeHolder="Upload Aadhar Card"
+                        handleChange={handleChangeFile}
+                        name={
+                          landloard[i]
+                            ? `${(landloard[i].name + "@aadhar_card").replace(
+                                " ",
+                                ""
+                              )}`
+                            : "adhar"
+                        }
+                      />
 
-                {landblord.map((_, i) => <>
-                      {landblord.length > 1 ? (
-                        <Typography>Landlord Name</Typography>
-                      ) : (
-                        ""
-                      )}
-                      <Grid
-                        container
-                        spacing={isSmall ? 2 : 4}
-                        sx={{ px: 1, justifyContent: "space-evenly", mb: 3 }}
-                      >
-                        <DocumentUpload
-                          label="Upload Aadhar Card"
-                          placeHolder="Upload Aadhar Card"
-                        />
-
-                        <DocumentUpload
-                          label="Upload Pan Card"
-                          placeHolder={"Upload Pan Card"}
-                        />
-                      </Grid>
-                    </>
-                  )
-                }
+                      <DocumentUpload
+                        label="Upload Pan Card"
+                        placeHolder={"Upload Pan Card"}
+                        handleChange={handleChangeFile}
+                        name={
+                          landloard[i]
+                            ? `${(landloard[i].name + "@pan_card").replace(
+                                " ",
+                                ""
+                              )}`
+                            : "pan"
+                        }
+                      />
+                    </Grid>
+                  </>
+                ))}
 
                 {landblord.length > 0 ? (
                   <Typography
@@ -494,37 +594,53 @@ function Agreement() {
                   <DocumentUpload
                     label="Upload GST Certificate"
                     placeHolder="Upload GST Certificate"
+                    handleChange={handleChangeFile}
+                    name={"gst_certificate"}
                   />
                   <DocumentUpload
                     label="Upload Draft Agreement"
                     placeHolder="Upload Draft Agreement"
+                    handleChange={handleChangeFile}
+                    name={"draft_agreement"}
                   />
                   <DocumentUpload
                     label="Upload Electricity Bill"
                     placeHolder={"Upload Electricity Bill"}
+                    handleChange={handleChangeFile}
+                    name={"electricity_bill"}
                   />
 
                   <DocumentUpload
                     label="Upload POA(If Applicable)"
                     placeHolder="Upload POA"
+                    handleChange={handleChangeFile}
+                    name={"poa"}
                   />
 
                   <DocumentUpload
                     label="Upload Maintaince Bill"
                     placeHolder={"Upload Maintaince Bill"}
+                    handleChange={handleChangeFile}
+                    name={"maintaince_bill"}
                   />
 
                   <DocumentUpload
                     label="Upload Cencel Bank Cheque"
                     placeHolder="Upload Cencel Bank Cheque"
+                    handleChange={handleChangeFile}
+                    name={"cheque"}
                   />
                   <DocumentUpload
                     label="Upload Property Tax Receipt"
                     placeHolder={"Upload Property Tax Receipt"}
+                    handleChange={handleChangeFile}
+                    name={"tax_receipt"}
                   />
                   <DocumentUpload
                     label="Upload Noc(If Mutiple Oweners)"
-                    placeHolder="Upload GST Certificate"
+                    placeHolder="NOC"
+                    handleChange={handleChangeFile}
+                    name={"noc"}
                   />
                 </Grid>
 

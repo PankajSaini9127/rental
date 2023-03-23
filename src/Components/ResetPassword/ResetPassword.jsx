@@ -13,7 +13,7 @@ import {setAlert} from '../../store/action/action';
 
 
 
-function ResetPassword() {
+function ResetPassword({history}) {
 
   const {email} = useParams()
 const dispatch = useDispatch()
@@ -46,10 +46,11 @@ const dispatch = useDispatch()
 
       if(resetPassword.status === 200)
       {
+        history('/')
         dispatch(setAlert({
           open : true,
+          variant : 'success',
           message : "Password reset successfully.",
-          variant : 'warning'
         }))
       }
     }
