@@ -6,6 +6,7 @@ import HamburgerMenu from "../HamburgerMenu";
 import { DataFieldStyle, YearField } from "../StyleComponents/Rental";
 import { MyHeader } from "../StyledComponent";
 
+import config from '../../config.json'
 
 // const data =[
 //   {field:'code',value:'123456'},
@@ -138,7 +139,7 @@ function ApprovalRequest() {
   } = agreement;
 
   const getData = async()=>{
-    const data = await axios.get(`http://localhost:8080/api/operations/getagreement/${id}`)
+    const data = await axios.get(`${config.API_LIVE}/api/operations/getagreement/${id}`)
     if(data.data.success){
       setAgreement(data.data.agreements[0])
     }

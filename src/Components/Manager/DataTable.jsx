@@ -2,6 +2,8 @@ import { Alert, AlertTitle, Box, Button, Grid, Snackbar } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { lazy, useState} from 'react'
 import { useNavigate } from 'react-router-dom';
+import config from '../../config.json'
+
 
 import axios from 'axios'
 
@@ -107,10 +109,10 @@ function DataTable() {
   const APICALL = async()=>{
     setLoading(true)
     setData([])
-    const result = await axios.get("http://localhost:8080/api/agreements")
+    const result = await axios.get(`${config.API_LIVE}/api/agreements`)
 
-    if(result.data.success){
-      const data = result.data.agreements.reverse();
+    if(result.status === 200){
+      const data = result.data.data.reverse();
    setData(data)
       setLoading(false)
     }
@@ -118,7 +120,7 @@ function DataTable() {
 
   // api for delete record
   const deleteAPI = async(id)=>{
-    const deleteItem = await axios.delete(`http://localhost:8080/api/delAgreement/${id}`)
+    const deleteItem = await axios.delete(`${config.API_LIVE}/api/delAgreement/${id}`)
     if(deleteItem.data.success){
       setErr({
         open:true,
@@ -140,6 +142,7 @@ function DataTable() {
   },[])
 
  const row = data.map((item)=>{
+  console.log(item)
   return  {
     id: item.id,
     status: item.status,

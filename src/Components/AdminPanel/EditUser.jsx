@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { MyHeader, PasswordField, SelectComponent, TextFieldWrapper } from "../StyledComponent";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
+import config from '../../config.json'
 
 import axios, {Axios} from 'axios'
 import AdminCheckBox from "../StyleComponents/AdminCheckBox";
@@ -45,7 +46,7 @@ const [supervisorArray, setsupervisorArray] = useState([])
 
 
     async function getSupervisor (role){
-      const supervisor = await axios.post('http://localhost:8080/api/admin/selectRole',role)
+      const supervisor = await axios.post(`${config.API_LIVE}/api/admin/selectRole`,role)
       setsupervisorArray(supervisor.data.map((item)=>item.name))
     }
 
@@ -76,8 +77,7 @@ const [supervisorArray, setsupervisorArray] = useState([])
 
 
 const getData = async()=>{
-     const data = await axios.post(`http://localhost:8080/api/admin/user`
-     ,{id})
+     const data = await axios.post(`${config.API_LIVE}/api/admin/user${id}`)
 
      const {name,code,password,email,role,supervisor,mobile} = data.data[0];
 

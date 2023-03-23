@@ -6,6 +6,9 @@ import HamburgerMenu from "../HamburgerMenu";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
 import ManagerTable from "./ManagerTable";
+import config from '../../config.json'
+
+
 
 const options = ["New Agreement","Monthly Payment","Rental"]
 
@@ -81,13 +84,13 @@ const row = [
 
 
 
-function SrManagerListing() {
+function SrManagerListing() { 
 
 
 const [data, setData] =useState([])
 
  const getData = async()=>{
-  const response = await axios.get('http://localhost:8080/api/srmanager/agreement')
+  const response = await axios.get(`${config.API_LIVE}/api/srmanager/agreement`)
   setData(response.data.agreements.reverse())
  } 
 

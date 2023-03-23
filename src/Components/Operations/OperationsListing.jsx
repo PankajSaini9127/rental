@@ -1,3 +1,4 @@
+import config from '../../config.json'
 import { Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import HamburgerMenu from "../HamburgerMenu";
@@ -113,7 +114,7 @@ function OperationsListing() {
   const [data, setData] =useState([])
 
  const getData = async()=>{
-  const response = await axios.get('http://localhost:8080/api/operations/get-agreements')
+  const response = await axios.get(`${config.API_LIVE}/api/operations/get-agreements`)
   setData(response.data.agreements.reverse())
  } 
 

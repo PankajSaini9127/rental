@@ -11,6 +11,7 @@ import React, { useState} from "react";
 
 import Img from "../../assest/pic/login-form.png";
 import logo from "../../assest/pic/logo1 1.png";
+import config from '../../config.json'
 
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/action/action";
@@ -28,7 +29,7 @@ function ForgotPassword({ history }) {
   async function handleSubmit() {
     try {
       const user = await axios.get(
-        `http://localhost:8080/api/resetPassword?email=${value.email}`
+        `${config.API_LIVE}/api/resetPassword?email=${value.email}`
       );
 
       if (user.status === 200) {

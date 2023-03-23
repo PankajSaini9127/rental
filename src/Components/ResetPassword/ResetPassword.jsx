@@ -12,6 +12,7 @@ import {useDispatch} from 'react-redux';
 import {setAlert} from '../../store/action/action';
 
 
+import config from '../../config.json'
 
 function ResetPassword({history}) {
 
@@ -42,7 +43,7 @@ const dispatch = useDispatch()
       }))
     }
     else {
-      const resetPassword = await axios.patch(`http://localhost:8080/api/reset`,{email,password : value.password})
+      const resetPassword = await axios.patch(`${config.API_LIVE}/api/reset`,{email,password : value.password})
 
       if(resetPassword.status === 200)
       {

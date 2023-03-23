@@ -5,6 +5,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import HamburgerMenu from '../HamburgerMenu';
 import { DocumentUpload, MyHeader, SelectComponent, TextFieldWrapper } from '../StyledComponent';
 import YearlyIncrement from './IncrementType';
+import config from '../../config.json'
 
 import axios from 'axios'
 
@@ -47,7 +48,7 @@ function EditAgreement() {
 
     // get data by id
 const getData = async()=>{
-    const agreement = await axios.post(`http://localhost:8080/api/agreement/${id}`)
+    const agreement = await axios.post(`${config.API_LIVE}/api/agreement/${id}`)
     setValue(agreement.data[0])
 }
 
@@ -103,7 +104,7 @@ useEffect(()=>{
 
  //Update API
  const updateAPI = async()=>{
-    const updateAPI = await axios.put(`http://localhost:8080/api/updateAgreement/${id}`,Value)
+    const updateAPI = await axios.put(`${config.API_LIVE}/api/updateAgreement/${id}`,Value)
       
     if(updateAPI.data.success){
         setErr({

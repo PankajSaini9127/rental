@@ -5,6 +5,7 @@ import LoginComponent from "../StyleComponents/LoginComponent";
 import axios from 'axios'
 import { AuthContext } from "../../App";
 import { ADD_AUTH } from "../ContextAPI/Action";
+import config from '../../config.json'
 
 function SrManagerLogin() {
   const navigate = useNavigate();
@@ -40,7 +41,7 @@ function SrManagerLogin() {
   };
 
   const getData = async()=>{
-    const user = await axios.post('http://localhost:8080/api/auth/login',{email:formValue.username})
+    const user = await axios.post(`${config.API_LIVE}/api/auth/login`,{email:formValue.username})
     const data = user.data;
 
     if(data.success){

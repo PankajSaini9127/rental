@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginComponent from "../StyleComponents/LoginComponent";
+import config from '../../config.json'
 
 function OperationsLogin() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ function OperationsLogin() {
   };
 
   const getData = async()=>{
-    const user = await axios.post('http://localhost:8080/api/auth/login',{email:formValue.username})
+    const user = await axios.post(`${config.API_LIVE}/api/auth/login`,{email:formValue.username})
     const data = user.data;
 
     if(data.success){

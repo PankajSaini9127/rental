@@ -6,6 +6,7 @@ import { AuthContext } from "../../App";
 import HamburgerMenu from "../HamburgerMenu";
 import { DataFieldStyle, YearField } from "../StyleComponents/Rental";
 import { MyHeader } from "../StyledComponent";
+import config from '../../config.json'
 
 const documentView = [
   "aadhar card",
@@ -137,7 +138,7 @@ console.log(agreement)
   const getData = async () => {
     console.log(id)
     const agreement = await axios.get(
-      `http://localhost:8080/api/srmanager/agreement/${id}`
+      `${config.API_LIVE}/api/srmanager/agreement/${id}`
     );
   
     setAgreement(agreement.data.agreements[0]);
@@ -181,7 +182,7 @@ console.log(agreement)
   };
 
   const PostData = async()=>{
-     const agreement = await axios.post(`http://localhost:8080/api/operations/agreement/${id}`,data)
+     const agreement = await axios.post(`${config.API_LIVE}/api/operations/agreement/${id}`,data)
      SetAlert(agreement)
   }
 

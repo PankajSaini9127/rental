@@ -6,6 +6,7 @@ import { AuthContext } from "../../App";
 import HamburgerMenu from "../HamburgerMenu";
 import { DataFieldStyle, YearField } from "../StyleComponents/Rental";
 import { MyHeader } from "../StyledComponent";
+import config from '../../config.json'
 
 const documentView = [
   "aadhar card",
@@ -154,7 +155,7 @@ function ManagerApproval() {
 
   const getData = async () => {
     const agreement = await axios.post(
-      `http://localhost:8080/api/agreement/${id}`
+      `${config.API_LIVE}/api/agreement/${id}`
     );
     console.log(agreement)
     setAgreement(agreement.data[0]);
@@ -191,7 +192,7 @@ function ManagerApproval() {
   }
 
   const setData = async()=>{
-    const result = await axios.post(`http://localhost:8080/api/srmanger/agreement/${id}`,data)
+    const result = await axios.post(`${config.API_LIVE}/api/srmanger/agreement/${id}`,data)
     console.log(result)
    }
 
