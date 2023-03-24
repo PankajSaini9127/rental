@@ -52,7 +52,7 @@ const fieldStyle = {
 
 
 // Text Field Style
-const TextFieldWrapper = ({ label, placeHolder, value, name, onChange,errMsg,onBlur, touched}) => {
+const TextFieldWrapper = ({ label, placeHolder, value, name, onChange,error,required}) => {
   return (
     <Grid item md={4} xs={6} sx={{'@media(max-width:900px)':{my:1}}}>
       <FormControl fullWidth sx={{p:'0px !important'}}>
@@ -62,9 +62,9 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange,errMsg,onB
           name={name}
           // color='secodary'
           onChange={(e) => onChange(e)}
-          error={errMsg && touched ? true : false}
+          error={error?true:false}
           label={label}
-          onBlur={onBlur}
+          required={required?true:false}
           InputProps={{
             style: {
               color: "rgba(16, 99, 173, 0.47) !important/",
@@ -77,7 +77,7 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange,errMsg,onB
           fullWidth
           sx={fieldStyle}
         />
-        { errMsg && touched? <Typography variant="body1" color="red" mt={1}>{errMsg}</Typography>:null}
+        { error? <Typography variant="body1" color="red" ml={1} mt={3}>{error}</Typography>:null}
       </FormControl>
     </Grid>
   );

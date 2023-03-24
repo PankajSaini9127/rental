@@ -125,7 +125,7 @@ function DialogBox({ value, setValue }) {
    if(percentage > 100){
     setAlert(true)
    }else{
-    setAlert(false)
+    // setAlert(false)
     dispatch(addLandLoard(data));
     handleClose()
    }

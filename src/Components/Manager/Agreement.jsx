@@ -72,6 +72,8 @@ for (var i = 0, n = charset.length; i < length; ++i) {
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
+  const [formError, setFormError] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const [increment, setIncrement] = useState({year1:"",year2:"",year3:"",year4:"",year5:""})
 
@@ -228,12 +230,56 @@ for (var i = 0, n = charset.length; i < length; ++i) {
     }
   };
 
+useEffect(()=>{
+  console.log(formError)
+   if(Object.keys(formError).length === 0 && isSubmit){
+    console.log("No error")
+   }
+},[formError])
+
+  // form validation
+  function validate(data){
+    const regexEmail = "^[a-zA-Z0-9]+@[a-zA-Z0-9.-]+$";
+    const error = {};
+    if(!data.landlord[0].pincode){
+      error.pincode = "Please Enter Pincode"
+    }else 
+    if(data.landlord[0].pincode.length < 6 || data.landlord[0].pincode.length > 6){
+      error.pincode = "Please Enter Valid Pincode"
+    }
+    if(!data.landlord[0].aadharNo){
+       error.aadharNo = "Please Enter Aadhar Number !"
+    }else
+    if(data.landlord[0].aadharNo.length < 12 || data.landlord[0].aadharNo.length > 12){
+       error.aadharNo = "Aadhar Number Must be 12 Digit"
+    }
+    if(!data.landlord[0].mobileNo.length){
+      error.mobileNo = "Please Enter Mobile Number !"
+    }else 
+    if(data.landlord[0].mobileNo.length < 10 || data.landlord[0].mobileNo.length > 12){
+      error.mobileNo = "Please Enter Valid Mobile Number !"
+    } 
+    if(data.landlord[0].alternateMobile.length < 10 || data.landlord[0].alternateMobile.length > 12){
+      error.alternateMobile = "Please Enter Valid Mobile Number !"
+    }
+    
+    if(!data.landlord[0].email){
+      error.email = "Please Enter Email Address !"
+    } 
+    
+    setFormError(error)
+
+
+  } 
+
   //confirmation alert
   const [open,setOpen]= useState(false)
 
   const handleSubmit = (e)=>{
     e.preventDefault();
-    setOpen(true)
+    validate(data)
+    setIsSubmit(true)
+    // setOpen(true)
   }
 
   const handleCancel = ()=>{
@@ -290,6 +336,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                         label="Name Of Lesse"
                         placeHolder="Enter Name Of Lesse"
                         name="leeseName"
+                        required={true}
                         value={
                           data.landlord[i] && data.landlord[i].leeseName
                             ? data.landlord[i].leeseName
@@ -301,6 +348,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                         label="State"
                         placeHolder="Enter State"
                         name="state"
+                        required={true}
                         value={
                           data.landlord[i] && data.landlord[i].state
                             ? data.landlord[i].state
@@ -314,6 +362,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                         label="City"
                         placeHolder="Enter City"
                         name="city"
+                        required={true}
                         value={
                           data.landlord[i] && data.landlord[i].city
                             ? data.landlord[i].city
@@ -338,6 +387,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                         label="Pincode"
                         placeHolder="Enter Pincode"
                         name="pincode"
+                        required={true}
                         value={
                           data.landlord[i] && data.landlord[i].pincode
                             ? data.landlord[i].pincode
@@ -345,10 +395,12 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                         }
                         onChange={(e) => handleChange(e, i)}
                         index={i}
+                        error={formError.pincode}
                       />
                       <TextFieldWrapper
                         label="Address"
                         placeHolder="Enter Address"
+                        required={true}
                         name="address"
                         value={
                           data.landlord[i] && data.landlord[i].address
@@ -361,6 +413,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                       <TextFieldWrapper
                         label="Aadhar Number"
                         placeHolder="Enter Aadhar No."
+                        required={true}
                         name="aadharNo"
                         value={
                           data.landlord[i] && data.landlord[i].aadharNo
@@ -369,6 +422,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                         }
                         onChange={(e) => handleChange(e, i)}
                         index={i}
+                        error={formError.aadharNo}
                       />
                       <TextFieldWrapper
                         label="Pan Number"
@@ -386,6 +440,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                       <TextFieldWrapper
                         label="GST Number"
                         placeHolder="Enter GST No."
+                        required={true}
                         name="gstNo"
                         value={
                           data.landlord[i] && data.landlord[i].gstNo
@@ -398,7 +453,9 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                       <TextFieldWrapper
                         label="Mobile Number"
                         placeHolder="Enter Mobile No."
+                        required={true}
                         name="mobileNo"
+                        error={formError.mobileNo}
                         value={
                           data.landlord[i] && data.landlord[i].mobileNo
                             ? data.landlord[i].mobileNo
@@ -416,6 +473,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                             ? data.landlord[i].alternateMobile
                             : ""
                         }
+                        error={formError.alternateMobile}
                         onChange={(e) => handleChange(e, i)}
                         index={i}
                       />
@@ -423,6 +481,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                       <TextFieldWrapper
                         label="Email"
                         placeHolder="Enter Email"
+                        required={true}
                         name="email"
                         value={
                           data.landlord[i] && data.landlord[i].email
@@ -431,6 +490,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                         }
                         onChange={(e) => handleChange(e, i)}
                         index={i}
+                        error={formError.email}
                       />
                     </>
                   ))}
@@ -459,12 +519,14 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                   <TextFieldWrapper
                     label="Monthly Rental"
                     placeHolder="Enter Rental"
+                    required={true}
                     name="monthlyRent"
                     value={data.monthlyRent}
                     onChange={handleCommonChange}
                   />
                   <SelectComponent
                     label={"Yearly Increment"}
+                    required={true}
                     name="yearlyIncrement"
                     options={incrementType}
                     value={data.yearlyIncrement}
@@ -501,6 +563,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                         label="Bank Name"
                         placeHolder="Enter Bank Name"
                         name="bankName"
+                        required={true}
                         value={data.bankName}
                         onChange={(e) => handleChange(e, i)}
                       />
@@ -509,12 +572,14 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                         placeHolder="Enter Benificiary Name"
                         name="benificiaryName"
                         value={data.benificiaryName}
+                        required={true}
                         onChange={(e) => handleChange(e, i)}
                       />
                       <TextFieldWrapper
                         label="Bank A/C Number "
                         placeHolder="Enter Account No."
                         name="accountNo"
+                        required={true}
                         value={data.accountNo}
                         onChange={(e) => handleChange(e, i)}
                       />
@@ -522,6 +587,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
                         label="Bank IFSC Code"
                         placeHolder="Enter IFSC Code"
                         name="ifscCode"
+                        required={true}
                         value={data.ifscCode}
                         onChange={(e) => handleChange(e, i)}
                       />
