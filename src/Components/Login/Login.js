@@ -42,9 +42,9 @@ export default function Login() {
       if (data.result[0].password === formValue.password) {
         data.result[0].role = JSON.parse(data.result[0].role)
         let userRole = data.result[0].role
-
-
-        if (userRole.includes(role) && data.result[0].password_flag === "1") {
+        console.log(userRole)
+       if(userRole.includes(role)){
+        if (data.result[0].is_auth == 1 || role === "Admin") {
           
 
           if (role === "Manager") {
@@ -68,15 +68,17 @@ export default function Login() {
                 dispatch(ADD_AUTH(data.result[0]))
                 navigate(`/operationsListing`)
               }
-
-              else {
+               else {
                 setErr({ open: true, type: 'error', msg: "Role Not Valid !" });
               }
         } else {
             navigate(`/newPassword/${data.result[0].email}`)
         }
 
-      } else {
+        }else{
+          setErr({ open: true, type: 'error', msg: "Role Not Valid !" });
+        }
+       } else {
         setErr({ open: true, type: 'error', msg: "Invalid Password !" });
       }
 

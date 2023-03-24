@@ -35,7 +35,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 import PermissionAlert from "./Alert";
 
-const incrementType = ["Percentage", "Value"];
 
 
 
@@ -66,6 +65,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
     deposite: "",
     monthlyRent: '',
     yearlyIncrement: "",
+    tenure:""
   });
 
   const [landblord, setLandblord] = useState([1]);
@@ -76,7 +76,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
   const [isSubmit, setIsSubmit] = useState(false);
 
   const [increment, setIncrement] = useState({year1:"",year2:"",year3:"",year4:"",year5:""})
-
+  const [yearValue, setYearValue] = useState({year1:1,year2:10,year3:12,year4:12,year5:15})
 
 
   // upload document
@@ -147,7 +147,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
 
   const handleConfirm = () => {
     setOpen(false)
-    console.log(data)
+    // console.log(data)
     const {
       code,
       lockInYear,
@@ -231,9 +231,9 @@ for (var i = 0, n = charset.length; i < length; ++i) {
   };
 
 useEffect(()=>{
-  console.log(formError)
+  // console.log(formError)
    if(Object.keys(formError).length === 0 && isSubmit){
-    console.log("No error")
+    setOpen(true)
    }
 },[formError])
 
@@ -388,6 +388,7 @@ useEffect(()=>{
                         placeHolder="Enter Pincode"
                         name="pincode"
                         required={true}
+                        maxLength={6}
                         value={
                           data.landlord[i] && data.landlord[i].pincode
                             ? data.landlord[i].pincode
@@ -415,6 +416,7 @@ useEffect(()=>{
                         placeHolder="Enter Aadhar No."
                         required={true}
                         name="aadharNo"
+                        maxLength={12}
                         value={
                           data.landlord[i] && data.landlord[i].aadharNo
                             ? data.landlord[i].aadharNo
@@ -428,6 +430,7 @@ useEffect(()=>{
                         label="Pan Number"
                         placeHolder="Enter Pan No."
                         name="panNo"
+                        maxLength={10}
                         value={
                           data.landlord[i] && data.landlord[i].panNo
                             ? data.landlord[i].panNo
@@ -442,6 +445,7 @@ useEffect(()=>{
                         placeHolder="Enter GST No."
                         required={true}
                         name="gstNo"
+                        maxLength={15}
                         value={
                           data.landlord[i] && data.landlord[i].gstNo
                             ? data.landlord[i].gstNo
@@ -455,6 +459,7 @@ useEffect(()=>{
                         placeHolder="Enter Mobile No."
                         required={true}
                         name="mobileNo"
+                        maxLength={10}
                         error={formError.mobileNo}
                         value={
                           data.landlord[i] && data.landlord[i].mobileNo
@@ -468,6 +473,7 @@ useEffect(()=>{
                         label="Alternate Number"
                         placeHolder="Enter Alternate No."
                         name="alternateMobile"
+                        maxLength={10}
                         value={
                           data.landlord[i] && data.landlord[i].alternateMobile
                             ? data.landlord[i].alternateMobile
@@ -524,20 +530,34 @@ useEffect(()=>{
                     value={data.monthlyRent}
                     onChange={handleCommonChange}
                   />
+
+                   <SelectComponent
+                    label={"Agreement Tenure"}
+                    required={true}
+                    name="tenure"
+                    options={["11 Month","3 Year", "5 Year"]}
+                    value={data.tenure}
+                    onChange={handleCommonChange}
+                   />
+                   {
+                    data.tenure === ""?null
+                    :
+                    data.tenure === "11 Month"?null:
                   <SelectComponent
                     label={"Yearly Increment"}
                     required={true}
                     name="yearlyIncrement"
-                    options={incrementType}
+                    options={["Percentage","Value"]}
                     value={data.yearlyIncrement}
                     onChange={handleCommonChange}
                   />
+                   }
                 </Grid>
 
                 {/* basic details end here */}
 
                 {/* Increment Yearly */}
-                <YearlyIncrement value={data.yearlyIncrement} rent={data.monthlyRent} increment={increment} setIncrement={setIncrement} />
+                <YearlyIncrement yearValue={yearValue} setYearValue={setYearValue} tenure={data.tenure} value={data.yearlyIncrement} rent={data.monthlyRent} increment={increment} setIncrement={setIncrement} />
 
                 {/* Bank Details start here*/}
                 <Typography
@@ -553,12 +573,15 @@ useEffect(()=>{
 
                 {landblord.map((_, i) => (
                   <>
-                    {landblord.length > 0 ? (
-                      <Typography mx={2}>Landlord Name  {landloard.length > 0 ? landloard[i].name : ""}</Typography>
+                    
+                    <Grid container sx={{ px: 3,mb:"25px" }} spacing={isSmall ? 2 : 4}>
+                      <Grid item xs={12}>
+                      {landblord.length > 0 ? (
+                      <Typography color={'var( --main-color)'}>  {landloard.length > 0 ? landloard[i].name : ""}</Typography>
                     ) : (
                       ""
                     )}
-                    <Grid container sx={{ px: 3 }} spacing={isSmall ? 2 : 4}>
+                      </Grid>
                       <TextFieldWrapper
                         label="Bank Name"
                         placeHolder="Enter Bank Name"
@@ -612,15 +635,17 @@ useEffect(()=>{
                 </Typography>
                 {landblord.map((_, i) => (
                   <>
-                    <Typography mx={2}>
-                      Landloard Name 
-                      {landloard.length > 0 ? landloard[i].name : ""}
-                    </Typography>
+                    
                     <Grid
                       container
                       spacing={isSmall ? 2 : 4}
                       sx={{ px: 1, justifyContent: "space-evenly", mb: 3 }}
                     >
+                      <Grid item xs={12}>
+                      <Typography  color={'var( --main-color)'}>
+                      {landloard.length > 0 ? landloard[i].name : ""}
+                    </Typography>
+                      </Grid>
                       <DocumentUpload
                         label="Upload Aadhar Card"
                         placeHolder="Upload Aadhar Card"

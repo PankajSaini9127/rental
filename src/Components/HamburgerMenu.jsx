@@ -6,7 +6,7 @@ import Logo from "../assest/pic/Dashboard/logo1 2.png";
 
 import "../assest/CSS/hamburgerMenu.css";
 import { useNavigate } from "react-router-dom";
-import { Vector1, Vector2, Vector3 } from "./Vector";
+import { Vector1, Vector2, Vector3, VectorLogout } from "./Vector";
 import { NavExpand, NavItem } from "./StyleComponents/HamburgerStyled";
 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -55,8 +55,9 @@ function HamburgerMenu({navigateTo,navigate2}) {
           {!expand ? (
             <>
               <NavItem Vector={Vector1} navigateTO={navigateTo}/>
-              <NavItem Vector={Vector2} />
-              <NavItem Vector={Vector3} />
+              <NavItem Vector={Vector2} navigateTO={"monthly-payment"}/>
+              <NavItem Vector={Vector3} navigateTO={"renewal"}/>
+              <NavItem Vector={VectorLogout} navigateTO={''} />
             </>
           ) : (
             <Stack container spacing={2}>
@@ -73,6 +74,7 @@ function HamburgerMenu({navigateTo,navigate2}) {
                 Vector={Vector2}
               />
               <NavExpand msg="Renewal" Vector={Vector3} navigateTO={'renewal'}/>
+              <NavExpand msg="Log-out" Vector={VectorLogout} navigateTO={''}/>
             </Stack>
           )}
         </Stack>

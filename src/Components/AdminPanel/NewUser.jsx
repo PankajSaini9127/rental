@@ -18,8 +18,9 @@ import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
 import { useFormik } from "formik";
 import { AddUserSchema } from "../ValidationSchema/Admin";
-import AdminCheckBox from "../StyleComponents/AdminCheckBox";
 import { AddUser, GetSupervisor } from "../../Services/Services";
+import AddUserCheckBox from "../StyleComponents/AddUserCheckBox";
+import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 
 const initialState = {
   code: "123456",
@@ -27,7 +28,7 @@ const initialState = {
   email: "",
   role: [],
   mobile: "",
-  supervisor: "",
+  supervisor: ""
 };
 
 
@@ -36,31 +37,56 @@ function NewUser() {
   const navigate = useNavigate();
   const [randomPassword, setRandomPassword] = useState("");
 
+  // const [is_auth, setIs_auth] = useState(false);
+
   const [loading,setLoading] =useState(false)
 
 // Disable Role CheckBox Base On Condition
   const [disable, setDisable] = useState({ manager: false, srManager: false,admin:false,finance:false,bhu:false,operations:false });
 
  // form handling and validate
-  const { values, handleChange, handleBlur, errors, touched } =
-    useFormik({
-      initialValues: initialState,
-      validationSchema: AddUserSchema
-    });
+  // const { values, handleChange, handleBlur, errors, touched } =
+  //   useFormik({
+  //     initialValues: initialState,
+  //     validationSchema: AddUserSchema
+  //   });
+
+
+  const [formData, setFormData] = useState(initialState)
+
+  function handleChange (e){
+    setFormData({
+      ...formData,
+      [e.target.name]:e.target.value
+    })
+  }
+
+ async function emp_code_generator (){
+    //  const code = await
+  }
 
     const handleSubmit = (e)=>{
       e.preventDefault()
-      apiCall(values,randomPassword)
+      apiCall(formData,randomPassword)
     }
 
   //distructring elements from values
-  const { name, email, role, mobile, code, supervisor } = values;
+  const { name, email, role, mobile, code, supervisor } = formData;
 
 // state for set supervisor value  
   const [supervisorArray, setsupervisorArray] = useState([]);
 
 // Supervisor value  
   async function getSupervisor(role) {
+    console.log(role)
+    // let super1 = [
+    //   'Admin',
+    //   'Finance',
+    //   'BHU','Operations','Senior Manager','Manager'];
+
+  
+    //   role.map(row=>super1.slice(super1.indexOf(row),super1.length -1))
+
     const supervisor = await GetSupervisor(role);
     setsupervisorArray(supervisor.data.map((item) => item.name));
   }
@@ -141,6 +167,7 @@ function NewUser() {
   }
 
 
+
 useEffect(()=>{
   passwordGenerate()
 },[])
@@ -148,6 +175,7 @@ useEffect(()=>{
   useEffect(() => {
     manageRole(role);
     getSupervisor(role);
+    // auth_flag(role)
   }, [role]);
 
 
@@ -164,6 +192,7 @@ useEffect(()=>{
   values = {...values, password:randomPassword}
   setLoading(true)
     const result = await AddUser(values)
+    console.log(result)
     if (result.status === 201) {
       setMsg({
         open: true,
@@ -248,9 +277,7 @@ useEffect(()=>{
                     value={name}
                     name="name"
                     onChange={handleChange}
-                    onBlur={handleBlur}
-                    errMsg={errors.name}
-                    touched={touched.name}
+                    required={true}
                   />
                   <TextFieldWrapper
                     label="Email"
@@ -258,9 +285,7 @@ useEffect(()=>{
                     value={email}
                     name="email"
                     onChange={handleChange}
-                    onBlur={handleBlur}
-                    errMsg={errors.email}
-                    touched={touched.email}
+                    required={true}
                   />
                   <TextFieldWrapper
                     label="Mobile Number"
@@ -268,13 +293,12 @@ useEffect(()=>{
                     value={mobile}
                     name="mobile"
                     onChange={handleChange}
-                    onBlur={handleBlur}
-                    errMsg={errors.mobile}
-                    touched={touched.mobile}
+                    required={true}
                   />
-                  <AdminCheckBox
+                  <AddUserCheckBox
                     handleChange={handleChange}
                     disable={disable}
+                    required={true}
                   />
 
                   <SelectComponent

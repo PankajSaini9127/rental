@@ -112,7 +112,7 @@ function DialogBox({ value, setValue }) {
 
   const [data, setData] = useState([]);
 
-  const [alert,setAlert] = useState(false)
+  const [alert,setAlert] = useState({open:false,message:""})
 
   const dispatch = useDispatch();
 
@@ -123,9 +123,13 @@ function DialogBox({ value, setValue }) {
     percentage += Number(item.percentage)
     )
    if(percentage > 100){
-    setAlert(true)
-   }else{
-    // setAlert(false)
+    setAlert({open:true,message:"Percentage Share Not Be Bigger Then 100 %"})
+   }else
+   if(percentage < 100){
+    setAlert({open:true,message:"Percentage Share Should Be 100 %"})
+   }
+   else{
+    setAlert({open:false,message:""})
     dispatch(addLandLoard(data));
     handleClose()
    }
@@ -201,7 +205,7 @@ function DialogBox({ value, setValue }) {
               ""
             )}
             {
-              alert?<Typography textAlign={'center'} variant={'body1'} color="red" mx={2}>Percentage Share Not Be Bigger Then 100 %</Typography>:""
+              alert.open?<Typography textAlign={'center'} variant={'body1'} color="red" mx={2}>{alert.message}</Typography>:""
             }
             
           </Grid>

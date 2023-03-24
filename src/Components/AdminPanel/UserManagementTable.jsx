@@ -196,7 +196,7 @@ function UserManagementTable({ rows }) {
           columns={columns}
           pageSize={6}
           rowsPerPageOptions={[6]}
-          checkboxSelection
+  disableMultipleSelection
           sx={{ color: "black !important", minWidth: "50px" }}
           getCellClassName={(parms) => {
             let cellClass = [];

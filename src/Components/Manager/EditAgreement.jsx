@@ -49,9 +49,9 @@ function EditAgreement() {
 
     // get data by id
 const getData = async(id)=>{
-    const agreement = await get_agreement_id(id)
+    // const agreement = await get_agreement_id(id)
     // setValue(agreement.data[0])
-    console.log(agreement)
+    // console.log(agreement)
 }
 
 useEffect(()=>{
@@ -129,7 +129,6 @@ useEffect(()=>{
   const handleSubmit = (e)=>{
     e.preventDefault()
     updateAPI()
-    // navigate('/srManagerLogin')
     
   }
 
@@ -140,7 +139,7 @@ useEffect(()=>{
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
 
     {/* side nav     */}
-        <HamburgerMenu />
+    <HamburgerMenu  navigateTo={'listing'} />
 
         <Box sx={{flexGrow:1}}>
           <MyHeader>Edit Agreement</MyHeader>

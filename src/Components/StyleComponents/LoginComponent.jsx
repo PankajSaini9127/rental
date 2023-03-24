@@ -135,6 +135,7 @@ function LoginComponent({
                     value={username}
                     name="username"
                     onChange={handleChange}
+                    required
                   />
                 </FormControl>
               </Grid>
@@ -147,6 +148,7 @@ function LoginComponent({
                     placeholder="********"
                     label={"Password"}
                     value={password}
+                    required
                     name="password"
                     onChange={handleChange}
                     InputProps={{
@@ -168,6 +170,7 @@ function LoginComponent({
                     variant="outlined"
                     labelId="demo-simple-select-label"
                     value={role}
+                    required
                     label={"Role"}
                     sx={{
                       mt: "0px !important",

@@ -10,7 +10,6 @@ export async function LoginAPI(data){
 }
 
 export async function get_user(id){
-    console.log(id)
     return await axios.post(`${API_LIVE}/api/admin/user/${id}`)
 }
 

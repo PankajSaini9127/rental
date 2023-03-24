@@ -69,12 +69,12 @@ const ValueWrapper = ({ label, value }) => {
   );
 };
 
-function IncrementType({ Year, Percentage, Amount, label }) {
+function IncrementType({ Year, Percentage, Amount, label,increment ,onChange,name}) {
   return (
     <>
       <Grid item container spacing={2}>
         <ValueWrapper value={Year} />
-        <ValueWrapper label={label} value={Percentage} />
+        <TextFieldWrapper value={increment} label={label} onChange={onChange} name={name} />
         <TextFieldWrapper value={Amount} label="Rental Amount" />
       </Grid>
     </>
@@ -83,42 +83,51 @@ function IncrementType({ Year, Percentage, Amount, label }) {
 
 
 
-const YearlyIncrement = ({ value,rent,increment,setIncrement }) => {
+const YearlyIncrement = ({ value,rent,increment,setIncrement,tenure,yearValue,setYearValue }) => {
 
-  rent = Number(rent)
-  let year2;
-  let year3;
-  let year4;
-  let year5;
-  if(value === "Percentage"){
-     year2 = rent/100*10 + rent;
-     year3 = year2/100*12 + rent;
-     year4 = year3/100*12 + rent;
-     year5 = year4/100*15 +rent;
-  }else
-   if(value === "Value"){
-     year2 = rent + 1000;
-     year3 = year2 + 1000;
-     year4 = year3 + 1500;
-     year5 = year4 + 1500;
-  }
 
+
+
+rent = Number(rent)
+let total1;
+let total2;
+let total3;
+let total4;
+let total5;
+if(value === "Percentage"){
+  total1 = rent/100*yearValue.year1 + rent;
+   total2 = total1/100*yearValue.year2 + rent;
+   total3 = total2/100*yearValue.year3 + rent;
+   total4 = total3/100*yearValue.year4 + rent;
+   total5 = total4/100*yearValue.year5 +rent;
+}else
+ if(value === "Value"){
+   total1 = rent + yearValue.year1;
+   total2 = total1 + yearValue.year2;
+   total3 = total2 + yearValue.year3;
+   total4 = total3 + yearValue.year4;
+   total5 = total4 + yearValue.year5;
+}
 useEffect(()=>{
   setIncrement({
-    year1:rent,
-    year2,
-    year3,
-    year4,
-    year5
+    year1:total1,
+    year2:total2,
+    year3:total3,
+    year4:total4,
+    year5:total5
   })
-},[value])
+},[yearValue])
 
-
-   
+function handleChange (e){
+    setYearValue({
+      ...yearValue,
+      [e.target.name]:Number(e.target.value)
+    })
+}
     return (
       <>
-      {
-        value === "Percentage"&&
+      {tenure === "11 Month"? null:
+        value === "Percentage"?
       <Grid
         container
         sx={{ justifyContent: "space-evenly", minHeight: "200px", py: 3 }}
@@ -129,35 +138,55 @@ useEffect(()=>{
           Percentage="0%"
           Amount={increment.year1}
           label="Percentage"
-
+          name="year1"
+          increment={yearValue.year1}
+          onChange={handleChange}
         />
         <IncrementType
           Year="Year 2"
           Percentage="10%"
           Amount={increment.year2}
           label="Percentage"
+          name="year2"
+          increment={yearValue.year2}
+          onChange={handleChange}
+
         />
         <IncrementType
           Year="Year 3"
           Percentage="12%"
           Amount={increment.year3}
           label="Percentage"
+          increment={yearValue.year3}
+          onChange={handleChange}
+          name="year3"
         />
+        {
+          tenure === "5 Year"?
+          <>
         <IncrementType
           Year="Year 4"
           Percentage="12%"
           Amount={increment.year4}
           label="Percentage"
+          value= {yearValue.year4}
+          onChange={handleChange}
+          name="year4"
         />
         <IncrementType
           Year="Year 5"
           Percentage="15%"
           Amount={increment.year5}
           label="Percentage"
+          value={yearValue.year5}
+          onChange={handleChange}
+          name="year5"
         />
+        </>
+        :null
+        }
       </Grid>
-}
-   { value === "Value"&&
+: value === "Value"?
       <Grid
         container
         sx={{ justifyContent: "space-evenly", minHeight: "200px", py: 3 }}
@@ -168,33 +197,54 @@ useEffect(()=>{
           Percentage="0"
           Amount={increment.year1}
           label="Value"
+          increment={yearValue.year1}
+          onChange={handleChange}
+          name="year1"
         />
         <IncrementType
           Year="Year 2"
           Percentage="1000"
           Amount={increment.year2}
           label="Value"
+          increment={yearValue.year2}
+          onChange={handleChange}
+          name="year2"
         />
         <IncrementType
           Year="Year 3"
           Percentage="1000"
           Amount={increment.year3}
           label="Value"
+          increment={yearValue.year3}
+          onChange={handleChange}
+          name="year3"
         />
+         {
+          tenure === "5 Year"?
+          <>
         <IncrementType
           Year="Year 4"
           Percentage="1500"
           Amount={increment.year4}
           label="Value"
+          increment={yearValue.year4}
+          onChange={handleChange}
+          name="year4"
         />
         <IncrementType
           Year="Year 5"
           Percentage="1500"
           Amount={increment.year5}
           label="Value"
+          increment={yearValue.year5}
+          onChange={handleChange}
+          name="year5"
         />
+        </> : null}
       </Grid>
-    }
+     : ""}
+  
+    
     </>
     )
     }
@@ -225,6 +275,7 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
           value={value}
           fullWidth
           sx={fieldStyle}
+          onChange={onChange}
         />
       </FormControl>
     </Grid>

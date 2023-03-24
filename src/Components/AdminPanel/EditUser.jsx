@@ -2,11 +2,8 @@
 import { Alert, Box, Button, Grid,  Snackbar,  Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { MyHeader, PasswordField, SelectComponent, TextFieldWrapper } from "../StyledComponent";
+import { MyHeader, SelectComponent, TextFieldWrapper } from "../StyledComponent";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
-import config from '../../config.json'
-
-import axios from 'axios'
 import AdminCheckBox from "../StyleComponents/AdminCheckBox";
 import { EditUserInfo, GetSupervisor, get_user } from "../../Services/Services";
 
@@ -26,7 +23,7 @@ function EditUser() {
   const navigate =useNavigate()
   const { id } = useParams();
     const [formVal, setFormVal]= useState(initialState)
-
+    
 
     const [disable, setDisable] = useState({manager:false,srManager:false})
     
@@ -115,6 +112,7 @@ const getData = async(id)=>{
 
      const {name,code,password,email,role,supervisor,mobile} = data.data[0];
 
+
      setFormVal({
       ...formVal,
       name,code,password,email,
@@ -155,10 +153,28 @@ const updateData = async(id,formVal)=>{
     
 
 const handleChange = (e)=>{
-     setFormVal({
+  if(e.target.type === 'checkbox'){
+    const { value,checked} = e.target;
+
+    if(checked){
+      setFormVal({
+        ...formVal,
+       role: [...role,value]
+      })
+    }else{
+      setFormVal({
+        ...formVal,
+        role:role.filter((e)=>e !== value)
+      })
+    }
+    
+  }else{
+    setFormVal({
       ...formVal,
       [e.target.name] : e.target.value
      })
+  }
+     
 }
 
 useEffect(()=>{
@@ -241,7 +257,7 @@ useEffect(()=>{
               onChange={handleChange}
             />
 
-<AdminCheckBox handleChange={handleChange} disable={disable}/>
+<AdminCheckBox handleChange={handleChange} disable={disable} value={role}/>
 
    <SelectComponent 
    value={supervisor} 

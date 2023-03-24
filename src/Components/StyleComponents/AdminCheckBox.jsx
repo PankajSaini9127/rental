@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 
-function AdminCheckBox({ handleChange,disable }) {
+function AdminCheckBox({ handleChange,disable, value }) {
     const {manager,srManager,admin,operations,finance,bhu} = disable
   return (
     <>
@@ -28,6 +28,7 @@ function AdminCheckBox({ handleChange,disable }) {
               disabled={admin?true:false}
               label="Admin"
               labelPlacement="end"
+              checked={ value?value.includes('Admin')?true:false: null}
             />
           </FormGroup>
           <FormGroup>
@@ -39,6 +40,7 @@ function AdminCheckBox({ handleChange,disable }) {
               label="Manager"
               labelPlacement="end"
               value={'Manager'}
+              checked={ value? value.includes('Manager')?true:false :null }
             />
           </FormGroup>
           <FormGroup>
@@ -50,6 +52,7 @@ function AdminCheckBox({ handleChange,disable }) {
               label="Senior Manager"
               value={'Senior Manager'}
               labelPlacement="end"
+              checked={value? value.includes('Senior Manager')?true:false:null}
             />
           </FormGroup>
 
@@ -62,6 +65,7 @@ function AdminCheckBox({ handleChange,disable }) {
               disabled={operations?true:false}
               value="Operations"
               labelPlacement="end"
+              checked={ value? value.includes('Operations')?true:false: null}
             />
           </FormGroup>
           <FormGroup>
@@ -73,7 +77,9 @@ function AdminCheckBox({ handleChange,disable }) {
               label="Finance"
               value="Finance"
               labelPlacement="end"
+              checked={value? value.includes('Finance')?true:false:null}
             />
+
           </FormGroup>
           <FormGroup>
             <FormControlLabel
@@ -84,6 +90,7 @@ function AdminCheckBox({ handleChange,disable }) {
               label="BHU"
               value={'BHU'}
               labelPlacement="end"
+              checked={ value? value.includes('BHU')?true:false:null}
             />
           </FormGroup>
 

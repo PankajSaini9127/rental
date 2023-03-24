@@ -52,7 +52,7 @@ const fieldStyle = {
 
 
 // Text Field Style
-const TextFieldWrapper = ({ label, placeHolder, value, name, onChange,error,required}) => {
+const TextFieldWrapper = ({ label, placeHolder, value, name, onChange,error,required,maxLength}) => {
   return (
     <Grid item md={4} xs={6} sx={{'@media(max-width:900px)':{my:1}}}>
       <FormControl fullWidth sx={{p:'0px !important'}}>
@@ -64,6 +64,7 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange,error,requ
           onChange={(e) => onChange(e)}
           error={error?true:false}
           label={label}
+         
           required={required?true:false}
           InputProps={{
             style: {
@@ -71,6 +72,9 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange,error,requ
               '@media(max-width:900px)':{fontSize:'10px !important'}
             },
             
+          }}
+          inputProps = {{
+            maxLength:maxLength
           }}
           placeholder={placeHolder}
           value={value}
