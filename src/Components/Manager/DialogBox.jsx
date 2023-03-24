@@ -95,9 +95,9 @@ const Landblord = ({ value, setValue, index }) => {
             placeHolder={"Percentage Share%"}
             name={"percentage"}
             value={
-              value[index] && value[index].percentage
+              (value[index] && value[index].percentage && value[index].percentage <= 100)
                 ? value[index].percentage
-                : ""
+                : ''
             }
             onChange={handleChange}
           />

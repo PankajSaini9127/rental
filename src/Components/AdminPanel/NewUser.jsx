@@ -54,7 +54,7 @@ function NewUser() {
     }
 
   //distructring elements from values
-  const { name, email,  role, mobile, code, supervisor } = values;
+  const { name, email, role, mobile, code, supervisor } = values;
 
 // state for set supervisor value  
   const [supervisorArray, setsupervisorArray] = useState([]);
