@@ -49,6 +49,7 @@ function MyRouter() {
         <Route exact path='/dashboard' element={<Dashboard/>}/>
         <Route exact path='/newAgreement' element={<Agreement/>}/>
         <Route exact path='/editAgreement/:id' element={<EditAgreement/>}/>
+        <Route exact path='/editAgreement' element={<EditAgreement/>}/>
         <Route exact path='/listing' element={<Listing/>}/>
         <Route exact path='/monthly-payment' element={<MonthalyList/>}/>
         <Route exact path='/renewal' element={<RenewalList/>}/>

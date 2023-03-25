@@ -109,13 +109,6 @@ function UserManagementTable({ rows }) {
       headerAlign: "center",
     },
     {
-      field: "password",
-      headerName: "Password",
-      width: 110,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-    },
-    {
       field: "email",
       headerName: "Email",
       width: 160,

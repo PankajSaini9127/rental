@@ -7,7 +7,7 @@ import ListingComponent from "../StyleComponents/ListingComponent";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import UserManagementTable from "./UserManagementTable";
 import { AuthContext } from "../../App";
-import { GetUser } from "../../Services/Services";
+import { GetUser, get_search } from "../../Services/Services";
 
 
 
@@ -19,6 +19,20 @@ function UserManagement() {
 
   const [data, setData] = useState([])
   const [SelectValue, setSelectValue] = useState('Senior Manager');
+
+  const [searchValue,setsearchValue] =useState('');
+
+  
+async function SearchAPi(searchValue){
+  const search = await get_search(searchValue)
+  setData(search.data)
+}
+
+useEffect(()=>{
+  if(searchValue.length >= 3){
+    SearchAPi(searchValue)
+  }
+},[searchValue])
 
   //api Call
   const getUsers = async()=>{
@@ -47,7 +61,6 @@ function UserManagement() {
         code: item.code,
         name: item.name,
         role: JSON.parse(item.role),
-        password: item.password,
         email: item.email,
         contactno: item.mobile,
         supervisor:item.supervisor
@@ -82,6 +95,8 @@ const handleAddUser =()=>{
         rows={row}
         onButtonClick={handleAddUser}
         dropDown={false}
+        searchValue={searchValue}
+        setsearchValue={setsearchValue}
       />
 
 </Stack>

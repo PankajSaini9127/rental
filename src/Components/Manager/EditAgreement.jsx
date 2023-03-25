@@ -46,16 +46,18 @@ const initialState={
 function EditAgreement() {
       const navigate = useNavigate();
     const { id } = useParams();
+    console.log(id)
 
     // get data by id
 const getData = async(id)=>{
-    // const agreement = await get_agreement_id(id)
-    // setValue(agreement.data[0])
-    // console.log(agreement)
+  console.log(id)
+    const agreement = await get_agreement_id(id)
+    setValue(agreement.data[0])
+    console.log(agreement)
 }
 
 useEffect(()=>{
-    getData()
+    getData(id)
 },[])
 
     const [Value, setValue] = useState(initialState);
@@ -105,17 +107,17 @@ useEffect(()=>{
 
 
  //Update API
- const updateAPI = async()=>{
-    const updateAPI = await axios.put(`${config.API_LIVE}/api/updateAgreement/${id}`,Value)
+//  const updateAPI = async()=>{
+//     const updateAPI = await axios.put(`${config.API_LIVE}/api/updateAgreement/${id}`,Value)
       
-    if(updateAPI.data.success){
-        setErr({
-            open:true,
-            type:'success',
-            message:updateAPI.data.message
-        })
-    }
- }
+//     if(updateAPI.data.success){
+//         setErr({
+//             open:true,
+//             type:'success',
+//             message:updateAPI.data.message
+//         })
+//     }
+//  }
  
  
         // on field state change
@@ -128,12 +130,12 @@ useEffect(()=>{
 
   const handleSubmit = (e)=>{
     e.preventDefault()
-    updateAPI()
+    // updateAPI()
     
   }
 
     const theme = useTheme();
-    const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
+    // const isSmall = useMediaQuery(theme.breakpoints.down('sm'))
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
@@ -170,7 +172,7 @@ useEffect(()=>{
 
 {/* Basic details start here */}
 
-              <Grid container sx={{px:3 }} spacing={isSmall? 2 :4}>
+              <Grid container sx={{px:3 }} spacing={4}>
                 <TextFieldWrapper
                   label="Code"
                   placeHolder=""
@@ -309,7 +311,7 @@ useEffect(()=>{
               {/* basic details end here */}
    
            {/* Increment Yearly */}
-          <YearlyIncrement value={yearlyIncrement}/>
+          {/* <YearlyIncrement value={yearlyIncrement}/> */}
 
 
 
@@ -326,7 +328,7 @@ useEffect(()=>{
             </Typography>
               
 
-                    <Grid container sx={{px:3}} spacing={isSmall?2:4}>
+                    <Grid container sx={{px:3}} spacing={2}>
                     <TextFieldWrapper
                   label="Bank Name"
                   placeHolder="Enter Bank Name"

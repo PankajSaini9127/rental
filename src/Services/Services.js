@@ -34,10 +34,22 @@ export async function UpdateStatusAPI (id,data){
   
 }
 
+export async function get_emp_code (){
+    return await axios.get(`${API_LIVE}/api/admin/get_emp.code`)
+}
+
+
+export async function get_search (name){
+     return await axios.post(`${API_LIVE}/api/admin/user_search/`,{name})
+}
+
 //Admin Section Ends Here
 
 //manager sEction start here
 
+export async function get_agreements (){
+    return axios.get(`${API_LIVE}/api/agreements`)
+}
 
 export async function add_agreement (data){
     return  axios.post(`${API_LIVE}/api/newAgreement`,data);
@@ -53,4 +65,18 @@ export async function uploadDoc (data){
 
 export async function get_agreement_id (id) {
     return axios.post(`${API_LIVE}/api/agreement/${id}`)
+}
+
+export async function delete_agreement (id){
+    return axios.delete(`${API_LIVE}/api/delAgreement/${id}`)
+}
+
+
+
+export async function get_monthaly_rent(){
+    return await axios.get(`${API_LIVE}/api/list_monthly`)
+}
+
+export async function get_renewal(){
+    return await axios.get(`${API_LIVE}/api/list_teure`)
 }

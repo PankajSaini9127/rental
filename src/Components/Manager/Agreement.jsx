@@ -163,6 +163,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
       cheque,
       tax_receipt,
       noc,
+      tenure
     } = data;
     const { landlord } = data;
 
@@ -182,6 +183,7 @@ for (var i = 0, n = charset.length; i < length; ++i) {
         cheque,
         tax_receipt,
         noc,
+        tenure
       },
       landlord
     );

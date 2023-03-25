@@ -15,15 +15,11 @@ import {
 } from "../StyledComponent";
 
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
-
-import { useFormik } from "formik";
-import { AddUserSchema } from "../ValidationSchema/Admin";
-import { AddUser, GetSupervisor } from "../../Services/Services";
+import { AddUser, GetSupervisor, get_emp_code } from "../../Services/Services";
 import AddUserCheckBox from "../StyleComponents/AddUserCheckBox";
-import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 
 const initialState = {
-  code: "123456",
+  code: "0",
   name: "",
   email: "",
   role: [],
@@ -37,7 +33,6 @@ function NewUser() {
   const navigate = useNavigate();
   const [randomPassword, setRandomPassword] = useState("");
 
-  // const [is_auth, setIs_auth] = useState(false);
 
   const [loading,setLoading] =useState(false)
 
@@ -53,21 +48,75 @@ function NewUser() {
 
 
   const [formData, setFormData] = useState(initialState)
+  // console.log(formData.role)
+
+  const [formError,setformError] = useState({})
+  // console.log(formError)
+
+
+  const [isSubmit, setIsSubmit] = useState(false)
+
+ 
+
+
+function validate (e){
+   const error = {};
+   if(!name){
+    error.name= "Required ! Please Enter User's Name."
+   }else if(name.length < 4){
+    error.name = "Name Atleast 4 Character."
+   }
+   if(!mobile){
+    error.mobile = "Required ! Please Enter User's Mobile Number."
+   } else if(mobile.length < 10){
+    error.mobile = "Mobile Number Not Valid."
+   }
+   if(!email){
+    error.email = "Required ! Please Enter User's Email Address."
+   }
+
+   setformError(error)
+}  
 
   function handleChange (e){
-    setFormData({
-      ...formData,
-      [e.target.name]:e.target.value
-    })
+    if(e.target.name === "role"){
+      setFormData(old=>(
+        {
+          ...old,
+          [e.target.name]: old.role.includes(e.target.value)? old.role.filter(row=>(row !== e.target.value)):[...old.role,e.target.value]
+        }
+      ))
+    }else{
+      setFormData({
+        ...formData,
+        [e.target.name]:e.target.value
+      })
+    }
+    
   }
 
  async function emp_code_generator (){
-    //  const code = await
+  // console.log('function')
+     let code = await get_emp_code()
+     setFormData({
+      ...formData,
+      code:code.data.code
+     })
   }
+
+
+  useEffect(()=>{
+     emp_code_generator()
+  },[])
 
     const handleSubmit = (e)=>{
       e.preventDefault()
-      apiCall(formData,randomPassword)
+        if(Object.keys(formError).length < 1){
+          setIsSubmit(true)
+        }
+      if(isSubmit){
+        apiCall(formData,randomPassword)
+      }
     }
 
   //distructring elements from values
@@ -78,18 +127,16 @@ function NewUser() {
 
 // Supervisor value  
   async function getSupervisor(role) {
-    console.log(role)
-    // let super1 = [
-    //   'Admin',
-    //   'Finance',
-    //   'BHU','Operations','Senior Manager','Manager'];
 
-  
-    //   role.map(row=>super1.slice(super1.indexOf(row),super1.length -1))
+    let superVisor1 = ['Admin','Finance','BHU','Operatins','Senior Manager','Manager'];
 
-    const supervisor = await GetSupervisor(role);
+    superVisor1 = superVisor1.filter(row=>!role.includes(row))
+
+    const supervisor = await GetSupervisor(superVisor1);
     setsupervisorArray(supervisor.data.map((item) => item.name));
   }
+
+
 
 // Role Check Box Disable Manage  
  function manageRole(role) {
@@ -192,7 +239,7 @@ useEffect(()=>{
   values = {...values, password:randomPassword}
   setLoading(true)
     const result = await AddUser(values)
-    console.log(result)
+    // console.log(result)
     if (result.status === 201) {
       setMsg({
         open: true,
@@ -278,6 +325,8 @@ useEffect(()=>{
                     name="name"
                     onChange={handleChange}
                     required={true}
+                    error={formError.name}
+                    onBlur={validate}
                   />
                   <TextFieldWrapper
                     label="Email"
@@ -286,6 +335,8 @@ useEffect(()=>{
                     name="email"
                     onChange={handleChange}
                     required={true}
+                    onBlur={validate}
+                    error={formError.email}
                   />
                   <TextFieldWrapper
                     label="Mobile Number"
@@ -294,11 +345,16 @@ useEffect(()=>{
                     name="mobile"
                     onChange={handleChange}
                     required={true}
+                    onBlur={validate}
+                    error={formError.mobile}
+                    maxLength={10}
                   />
                   <AddUserCheckBox
                     handleChange={handleChange}
                     disable={disable}
                     required={true}
+                    error={formError.name}
+                    onBlur={validate}
                   />
 
                   <SelectComponent

@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
 import { Stack } from "@mui/material";
-import DataTable from "../Manager/DataTable";
+import DataTable from "./DataTable";
 
 const options = ["New Agreement","Monthly Payment","Rental"]
 
@@ -32,6 +32,7 @@ export default function RenewalList() {
         value={Select}
         Table={DataTable}
         onChange={handleChange}
+        dropDown={false}
       />
     </Stack>
   </>

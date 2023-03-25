@@ -4,10 +4,11 @@ import {
   FormControlLabel,
   FormGroup,
   Grid,
+  Typography,
 } from "@mui/material";
 import React, { useState } from "react";
 
-function AdminCheckBox({ handleChange,disable, value }) {
+function AdminCheckBox({ handleChange,disable, value,error }) {
     const {manager,srManager,admin,operations,finance,bhu} = disable
   return (
     <>
@@ -94,6 +95,7 @@ function AdminCheckBox({ handleChange,disable, value }) {
             />
           </FormGroup>
 
+          { error? <Typography variant="body1" color="red" ml={1} mt={3}>{error}</Typography>:null}
           
         </Box>
       </Grid>

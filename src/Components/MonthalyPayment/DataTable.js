@@ -7,11 +7,9 @@ import config from '../../config.json'
 
 import axios from 'axios'
 
-//icons
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import PermissionAlert from './Alert';
-import { delete_agreement, get_agreements } from '../../Services/Services';
+//
+import PermissionAlert from '../Manager/Alert';
+import { get_monthaly_rent, get_monthly_rent } from '../../Services/Services';
  
 
 
@@ -43,32 +41,16 @@ function DataTable() {
   const APICALL = async()=>{
     setLoading(true)
     setData([])
-    const result = await get_agreements()
-
+    const result = await get_monthaly_rent()
+   console.log(result)
     if(result.status === 200){
-      const data = result.data.data.reverse();
-   setData(data)
+    //   const data = result.data.data.reverse();
+   setData(result.data.monthly_rent)
       setLoading(false)
     }
   }
 
-  // api for delete record
-  const deleteAPI = async(id)=>{
-    const deleteItem = await delete_agreement(id)
-    if(deleteItem.data.success){
-      setErr({
-        open:true,
-        type:"warning",
-        message:deleteItem.data.message
-      })
-    }else{
-      setErr({
-        open:true,
-        type:"error",
-        message:deleteItem.data.message
-      })
-    }
-  }
+
 
 
   useEffect(()=>{
@@ -78,12 +60,13 @@ function DataTable() {
  const row = data.map((item)=>{
   // console.log(item)
   return  {
-    id: item.agreement_id,
+    id: item.id,
     status: item.status,
     code: item.code,
     name: item.leeseName,
     location:item.location,
     rentalAmount:item.monthlyRent,
+  
   }
  })
 
@@ -96,46 +79,7 @@ function DataTable() {
       // navigate(`/managerApproval/${id}`)
   };
 
-  const renderDetailsButton = (e) => {
-      const id = e.id;
-  
-    return (
-        <Grid container>
-          <Grid item md={6} sx={{color:"white !important"}}>
-          <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                style={{ backgroundColor:"#e3c739",color:"white",fontSize:"12px",textTransform:"capitalize" }}
-                startIcon={<EditIcon />}
-                onClick={(e) => {
-                  e.stopPropagation(); // don't select this row after clicking
-                  id && navigate(`/editAgreement/${id}`, {id})
-                }}
-            >
-                Edit
-            </Button>          
-          </Grid>
-          <Grid item md={6}>
-            <Button
-             variant="contained"
-             size="small"
-             startIcon={<DeleteIcon />}
-             onClick={(e) => {
-              e.stopPropagation(); // don't select this row after clicking
-              // deleteAPI(id)
-              setDeleteAlert({open:true,id:id})
-            }}
-              sx={{fontSize:"12px",color:"white",backgroundColor:"red",textTransform:"capitalize"}}
-            >
-              Delete
-            </Button>
-          </Grid>
-        </Grid>
-           
-        
-    )
-  }
+
 
   const columns = [
    
@@ -168,21 +112,13 @@ function DataTable() {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
-    {
-        field: "status",
-        headerName: "Status",
-        width: 160,
-        headerClassName: "dataGridHeader",
-        headerAlign: "center",
-      },
-    {
-        field: "action",
-        headerName: "Action",
-        width: 200,
-        headerClassName: "dataGridHeader",
-        headerAlign: "center",
-        renderCell: renderDetailsButton
-      },
+    // {
+    //     field: "status",
+    //     headerName: "Status",
+    //     width: 160,
+    //     headerClassName: "dataGridHeader",
+    //     headerAlign: "center",
+    //   }
   ];
   
 
@@ -191,7 +127,6 @@ function DataTable() {
 const [deleteAlert, setDeleteAlert] = useState({open:false,id:''})
 
   const handleConfirm = ()=>{
-    deleteAPI(deleteAlert.id)
     setDeleteAlert({open:false,id:''})
   }
  
