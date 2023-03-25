@@ -25,9 +25,6 @@ export default function RenewalList() {
       <ListingComponent
         title1={'Rental Agreement'}
         title={'Renewal'}
-        buttonText="Upload"
-        buttonText1="Add Agreement"
-        addbtn={true}
         options={options}
         value={Select}
         Table={DataTable}

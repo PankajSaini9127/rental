@@ -25,7 +25,7 @@ function EditUser() {
     const [formVal, setFormVal]= useState(initialState)
     
 
-    const [disable, setDisable] = useState({manager:false,srManager:false})
+    const [disable, setDisable] = useState({manager:false,srManager:false,admin:false,bhu:false,finance:false})
     
 const [supervisorArray, setsupervisorArray] = useState([])
 
@@ -43,56 +43,127 @@ const [supervisorArray, setsupervisorArray] = useState([])
 
 // Role Check Box Disable Manage  
 function manageRole(role) {
-  if (role.includes("Admin")) {
+  console.log(role)
+  if(role.includes("Admin") && role.length == 1){
     setDisable({
       srManager:false,
-      manager:false,
-      bhu:false,
-      operations:false,
-      finance:false
-    });
-  }else 
-  if(role.includes("Senior Manager")){
-    setDisable({
-      admin:false,
-      bhu:true,
-      manager:true,
-      operations:true,
-      finance:true
-    })
-  }else if(role.includes('Manager')){
-    setDisable({
-      admin:false,
-      bhu:true,
-      srManager:true,
-      operations:true,
-      finance:true
-    })
-  }else if(role.includes("Operations")){
-    setDisable({
-      admin:false,
-      bhu:true,
-      srManager:true,
-      manager:true,
-      finance:true
-    })
-  }else if(role.includes("Finance")){
-    setDisable({
-      admin:false,
-      bhu:true,
-      srManager:true,
-      manager:true,
-      operations:true
-    })
-  }else if(role.includes("BHU")){
-    setDisable({
-      admin:false,
-      operations:true,
-      srManager:true,
-      manager:true,
-      finance:true
+        manager:false,
+        bhu:false,
+        operations:false,
+        finance:false,
+        admin:false
     })
   }
+  if(role.includes("Admin") && role.includes("Senior Manager") && role.length == 2){
+    setDisable({
+      srManager:false,
+        manager:true,
+        bhu:true,
+        operations:true,
+        finance:true,
+        admin:false
+    })
+  }
+  if(role.includes("Admin") && role.includes("Manager") && role.length == 2){
+    setDisable({
+      srManager:true,
+        manager:false,
+        bhu:true,
+        operations:true,
+        finance:true,
+        admin:false
+    })
+  }  
+  if(role.includes("Admin") && role.includes("Operations") && role.length == 2){
+    setDisable({
+      srManager:true,
+        manager:true,
+        bhu:true,
+        operations:false,
+        finance:true,
+        admin:false
+    })
+  } 
+  if(role.includes("Admin") && role.includes("Finance") && role.length == 2){
+    setDisable({
+      srManager:true,
+        manager:true,
+        bhu:true,
+        operations:true,
+        finance:false,
+        admin:false
+    })
+  }
+  if(role.includes("Admin") && role.includes("BHU") && role.length == 2){
+    setDisable({
+      srManager:true,
+        manager:true,
+        bhu:false,
+        operations:true,
+        finance:true,
+        admin:false
+    })
+  }
+  if(role.includes("Senior Manager") && role.length == 1){
+    setDisable({
+      srManager:false,
+        manager:true,
+        bhu:true,
+        operations:true,
+        finance:true,
+        admin:false
+    })
+  }
+  if(role.includes("Manager") && role.length == 1){
+    setDisable({
+      srManager:true,
+        manager:false,
+        bhu:true,
+        operations:true,
+        finance:true,
+        admin:false
+    })
+  }
+  if(role.includes("Operations") && role.length == 1){
+    setDisable({
+      srManager:true,
+        manager:true,
+        bhu:true,
+        operations:false,
+        finance:true,
+        admin:false
+    })
+  }
+  if(role.includes("BHU") && role.length == 1){
+    setDisable({
+      srManager:true,
+        manager:true,
+        bhu:false,
+        operations:true,
+        finance:true,
+        admin:false
+    })
+  }
+  if(role.includes("Finance") && role.length == 1){
+    setDisable({
+      srManager:true,
+        manager:true,
+        bhu:true,
+        operations:true,
+        finance:false,
+        admin:false
+    })
+  }
+  if(role.length == 0){
+    setDisable({
+      srManager:false,
+        manager:false,
+        bhu:false,
+        operations:false,
+        finance:false,
+        admin:false
+    })
+  } 
 }
 
     

@@ -6,7 +6,7 @@ import {
   Snackbar,
   Stack,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   MyHeader,
@@ -19,7 +19,7 @@ import { AddUser, GetSupervisor, get_emp_code } from "../../Services/Services";
 import AddUserCheckBox from "../StyleComponents/AddUserCheckBox";
 
 const initialState = {
-  code: "0",
+  code: "",
   name: "",
   email: "",
   role: [],
@@ -34,32 +34,18 @@ function NewUser() {
   const [randomPassword, setRandomPassword] = useState("");
 
 
-  const [loading,setLoading] =useState(false)
-
+const [loading,setLoading] =useState(false)
 // Disable Role CheckBox Base On Condition
-  const [disable, setDisable] = useState({ manager: false, srManager: false,admin:false,finance:false,bhu:false,operations:false });
-
- // form handling and validate
-  // const { values, handleChange, handleBlur, errors, touched } =
-  //   useFormik({
-  //     initialValues: initialState,
-  //     validationSchema: AddUserSchema
-  //   });
+const [disable, setDisable] = useState({})
+const [formData, setFormData] = useState(initialState);
+const [formError,setformError] = useState({});
 
 
-  const [formData, setFormData] = useState(initialState)
-  // console.log(formData.role)
-
-  const [formError,setformError] = useState({})
-  // console.log(formError)
-
-
-  const [isSubmit, setIsSubmit] = useState(false)
 
  
 
 
-function validate (e){
+function validate (e,role){
    const error = {};
    if(!name){
     error.name= "Required ! Please Enter User's Name."
@@ -75,15 +61,18 @@ function validate (e){
     error.email = "Required ! Please Enter User's Email Address."
    }
 
+
    setformError(error)
 }  
 
   function handleChange (e){
+   
     if(e.target.name === "role"){
+    
       setFormData(old=>(
         {
           ...old,
-          [e.target.name]: old.role.includes(e.target.value)? old.role.filter(row=>(row !== e.target.value)):[...old.role,e.target.value]
+          role : old.role.includes(e.target.value)? old.role.filter(row=>(row !== e.target.value)):[...old.role,e.target.value]
         }
       ))
     }else{
@@ -95,28 +84,23 @@ function validate (e){
     
   }
 
- async function emp_code_generator (){
-  // console.log('function')
-     let code = await get_emp_code()
-     setFormData({
-      ...formData,
-      code:code.data.code
-     })
-  }
-
-
-  useEffect(()=>{
-     emp_code_generator()
-  },[])
+  console.log(role)
 
     const handleSubmit = (e)=>{
       e.preventDefault()
         if(Object.keys(formError).length < 1){
-          setIsSubmit(true)
-        }
-      if(isSubmit){
-        apiCall(formData,randomPassword)
+        
+      if(role.length == 0){
+        setMsg({
+          open:true,
+          type:'error',
+          message:"Please Select Role"
+        })
+      }else{
+          apiCall(formData,randomPassword)
+        
       }
+    }
     }
 
   //distructring elements from values
@@ -128,7 +112,17 @@ function validate (e){
 // Supervisor value  
   async function getSupervisor(role) {
 
-    let superVisor1 = ['Admin','Finance','BHU','Operatins','Senior Manager','Manager'];
+    let superVisor1 = ['Finance','BHU','Operations','Senior Manager','Manager'];
+    if(role == "Senior Manager"){
+   role.push("Manager")
+    }
+    if(role == 'BHU'){
+      role.push("Manager",'Senior Manager')
+    }
+    if(role == 'Operations'){
+      role.push("Manager",'Senior Manager','BHU')
+    }
+    
 
     superVisor1 = superVisor1.filter(row=>!role.includes(row))
 
@@ -139,67 +133,130 @@ function validate (e){
 
 
 // Role Check Box Disable Manage  
- function manageRole(role) {
-    if (role.includes("Admin")) {
-      setDisable({
-        srManager:false,
-        manager:false,
-        bhu:false,
-        operations:false,
-        finance:false
-      });
-    }else 
-    if(role.includes("Senior Manager")){
-      setDisable({
-        admin:false,
-        bhu:true,
-        manager:true,
-        operations:true,
-        finance:true
-      })
-    }else if(role.includes('Manager')){
-      setDisable({
-        admin:false,
-        bhu:true,
-        srManager:true,
-        operations:true,
-        finance:true
-      })
-    }else if(role.includes("Operations")){
-      setDisable({
-        admin:false,
-        bhu:true,
-        srManager:true,
-        manager:true,
-        finance:true
-      })
-    }else if(role.includes("Finance")){
-      setDisable({
-        admin:false,
-        bhu:true,
-        srManager:true,
-        manager:true,
-        operations:true
-      })
-    }else if(role.includes("BHU")){
-      setDisable({
-        admin:false,
-        operations:true,
-        srManager:true,
-        manager:true,
-        finance:true
-      })
-    }
-    else{
-      setDisable({
-        admin:false,
-        operations:false,
-        srManager:false,
-        manager:false,
-        finance:false
-      })
-    }
-  }
+// function manageRole(role) {
+//   console.log(role)
+//   if(role.includes("Admin") && role.length == 1){
+//     setDisable({
+//       srManager:false,
+//         manager:false,
+//         bhu:false,
+//         operations:false,
+//         finance:false,
+//         admin:false
+//     })
+//   }
+//   if(role.includes("Admin") && role.includes("Senior Manager") && role.length == 2){
+//     setDisable({
+//       srManager:false,
+//         manager:true,
+//         bhu:true,
+//         operations:true,
+//         finance:true,
+//         admin:false
+//     })
+//   }
+//   if(role.includes("Admin") && role.includes("Manager") && role.length == 2){
+//     setDisable({
+//       srManager:true,
+//         manager:false,
+//         bhu:true,
+//         operations:true,
+//         finance:true,
+//         admin:false
+//     })
+//   }  
+//   if(role.includes("Admin") && role.includes("Operations") && role.length == 2){
+//     setDisable({
+//       srManager:true,
+//         manager:true,
+//         bhu:true,
+//         operations:false,
+//         finance:true,
+//         admin:false
+//     })
+//   } 
+//   if(role.includes("Admin") && role.includes("Finance") && role.length == 2){
+//     setDisable({
+//       srManager:true,
+//         manager:true,
+//         bhu:true,
+//         operations:true,
+//         finance:false,
+//         admin:false
+//     })
+//   }
+//   if(role.includes("Admin") && role.includes("BHU") && role.length == 2){
+//     setDisable({
+//       srManager:true,
+//         manager:true,
+//         bhu:false,
+//         operations:true,
+//         finance:true,
+//         admin:false
+//     })
+//   }
+//   if(role.includes("Senior Manager") && role.length == 1){
+//     setDisable({
+//       srManager:false,
+//         manager:true,
+//         bhu:true,
+//         operations:true,
+//         finance:true,
+//         admin:false
+//     })
+//   }
+//   if(role.includes("Manager") && role.length == 1){
+//     setDisable({
+//       srManager:true,
+//         manager:false,
+//         bhu:true,
+//         operations:true,
+//         finance:true,
+//         admin:false
+//     })
+//   }
+//   if(role.includes("Operations") && role.length == 1){
+//     setDisable({
+//       srManager:true,
+//         manager:true,
+//         bhu:true,
+//         operations:false,
+//         finance:true,
+//         admin:false
+//     })
+//   }
+//   if(role.includes("BHU") && role.length == 1){
+//     setDisable({
+//       srManager:true,
+//         manager:true,
+//         bhu:false,
+//         operations:true,
+//         finance:true,
+//         admin:false
+//     })
+//   }
+//   if(role.includes("Finance") && role.length == 1){
+//     setDisable({
+//       srManager:true,
+//         manager:true,
+//         bhu:true,
+//         operations:true,
+//         finance:false,
+//         admin:false
+//     })
+//   }
+//   if(role.length == 0){
+//     setDisable({
+//       srManager:false,
+//         manager:false,
+//         bhu:false,
+//         operations:false,
+//         finance:false,
+//         admin:false
+//     })
+//   } 
+// }
+
 
 
   const passwordGenerate = ()=>{
@@ -220,7 +277,7 @@ useEffect(()=>{
 },[])
 
   useEffect(() => {
-    manageRole(role);
+    // manageRole(role);
     getSupervisor(role);
     // auth_flag(role)
   }, [role]);
@@ -312,8 +369,11 @@ useEffect(()=>{
                 <Grid container sx={{ p: 3 }} spacing={4}>
                   <TextFieldWrapper
                     label="Emp.Code"
-                    placeHolder=""
-                    value={code}
+                    placeHolder="Employee Code"
+                    name="code"
+                    required={true}
+                    value={formError.code}
+                    onChange={handleChange}
                   />
                 </Grid>
 
@@ -352,6 +412,7 @@ useEffect(()=>{
                   <AddUserCheckBox
                     handleChange={handleChange}
                     disable={disable}
+                    setDisable={setDisable}
                     required={true}
                     error={formError.name}
                     onBlur={validate}
