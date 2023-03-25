@@ -80,3 +80,7 @@ export async function get_monthaly_rent(){
 export async function get_renewal(){
     return await axios.get(`${API_LIVE}/api/list_teure`)
 }
+
+export async function meta(){
+    return await axios.get(`${API_LIVE}/api/admin/meta`)
+}

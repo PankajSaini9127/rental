@@ -5,26 +5,10 @@ import {
   FormGroup,
   Grid,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
-function AddUserCheckBox({ handleChange, disable, value,setDisable }) {
-  const { manager, srManager, admin, operations, finance, bhu } = disable;
-
-
-
-// function handleChange (e){
-// setDisable(old=>({
-//   [e.target.name]:e.target.checked
-// }))
-
-
-// }
-
-
-
-
-
-
+function AddUserCheckBox({ handleChange,disable, value }) {
+    const {Manager,Senior_Manager,Admin,Finance,BHU,Operations} = disable
   return (
     <>
       <Grid
@@ -34,76 +18,78 @@ function AddUserCheckBox({ handleChange, disable, value,setDisable }) {
         sx={{ mb: "0px !important", "@media(max-width:900px)": { my: 1 } }}
       >
         <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>
-          <FormGroup>
+
+        <FormGroup>
             <FormControlLabel
-              control={<Checkbox name={"Admin"} value={disable['Admin']}/>}
+            name={"role"}
+              control={<Checkbox name={"role"} />}
               onChange={handleChange}
-              value={"Admin"}
-              disabled={admin ? true : false}
+              value={'Admin'}
+              disabled={Admin?true:false}
               label="Admin"
               labelPlacement="end"
-              
             />
           </FormGroup>
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox name={"Manager"} value={disable['Manager']}/>}
+              control={<Checkbox  />}
               onChange={handleChange}
-              disabled={manager ? true : false}
+              name={"role"}
+              disabled={Manager?true:false}
               label="Manager"
               labelPlacement="end"
-              value={"Manager"}
+              value={'Manager'}
               
             />
           </FormGroup>
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox  name={"Senior_Manager"} value={disable['Senior_Manager']}/>}
+              control={<Checkbox  />}
               onChange={handleChange}
-              disabled={srManager ? true : false}
+              name={"role"}
+              disabled={Senior_Manager?true:false}
               label="Senior Manager"
-              value={"Senior Manager"}
+              value={'Senior Manager'}
               labelPlacement="end"
-              
             />
           </FormGroup>
 
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox name={"Operations"}  value={disable['Operations']}/>}
+              control={<Checkbox name={"role"} />}
               onChange={handleChange}
               name={"role"}
               label="Operations"
-              disabled={operations ? true : false}
+              disabled={Operations?true:false}
               value="Operations"
               labelPlacement="end"
-              
             />
           </FormGroup>
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox name={"Finance"}  value={disable['Finance']}/>}
+              control={<Checkbox name={"role"} />}
               name={"role"}
               onChange={handleChange}
-              disabled={finance ? true : false}
+              disabled={Finance?true:false}
               label="Finance"
               value="Finance"
               labelPlacement="end"
-             
-            />
+                          />
+
           </FormGroup>
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox name={"BHU"} value={disable['BHU']}/>}
+              control={<Checkbox name={"role"} />}
               name={"role"}
               onChange={handleChange}
-              disabled={bhu ? true : false}
+              disabled={BHU?true:false}
               label="BHU"
-              value={"BHU"}
+              value={'BHU'}
               labelPlacement="end"
-              
-            />
+                       />
           </FormGroup>
+
+          
         </Box>
       </Grid>
     </>

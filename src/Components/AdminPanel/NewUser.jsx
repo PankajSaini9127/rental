@@ -1,11 +1,4 @@
-import {
-  Alert,
-  Box,
-  Button,
-  Grid,
-  Snackbar,
-  Stack,
-} from "@mui/material";
+import { Alert, Box, Button, Grid, Snackbar, Stack } from "@mui/material";
 import React, { startTransition, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -24,266 +17,166 @@ const initialState = {
   email: "",
   role: [],
   mobile: "",
-  supervisor: ""
+  supervisor: "",
 };
-
-
 
 function NewUser() {
   const navigate = useNavigate();
   const [randomPassword, setRandomPassword] = useState("");
+  const superVisor = [
+    "Admin",
+    "Finance",
+    "BHU",
+    "Operations",
+    "Senior_Manager",
+    "Manager",
+  ];
 
+  const [loading, setLoading] = useState(false);
+  // Disable Role CheckBox Base On Condition
+  const [disable, setDisable] = useState({});
+  const [formData, setFormData] = useState(initialState);
+  const [formError, setformError] = useState({});
 
-const [loading,setLoading] =useState(false)
-// Disable Role CheckBox Base On Condition
-const [disable, setDisable] = useState({})
-const [formData, setFormData] = useState(initialState);
-const [formError,setformError] = useState({});
-
-
-
- 
-
-
-function validate (e,role){
-   const error = {};
-   if(!name){
-    error.name= "Required ! Please Enter User's Name."
-   }else if(name.length < 4){
-    error.name = "Name Atleast 4 Character."
-   }
-   if(!mobile){
-    error.mobile = "Required ! Please Enter User's Mobile Number."
-   } else if(mobile.length < 10){
-    error.mobile = "Mobile Number Not Valid."
-   }
-   if(!email){
-    error.email = "Required ! Please Enter User's Email Address."
-   }
-
-
-   setformError(error)
-}  
-
-  function handleChange (e){
-   
-    if(e.target.name === "role"){
-    
-      setFormData(old=>(
-        {
-          ...old,
-          role : old.role.includes(e.target.value)? old.role.filter(row=>(row !== e.target.value)):[...old.role,e.target.value]
-        }
-      ))
-    }else{
-      setFormData({
-        ...formData,
-        [e.target.name]:e.target.value
-      })
+  function validate(e, role) {
+    const error = {};
+    if (!name) {
+      error.name = "Required ! Please Enter User's Name.";
+    } else if (name.length < 4) {
+      error.name = "Name Atleast 4 Character.";
     }
-    
+    if (!mobile) {
+      error.mobile = "Required ! Please Enter User's Mobile Number.";
+    } else if (mobile.length < 10) {
+      error.mobile = "Mobile Number Not Valid.";
+    }
+    if (!email) {
+      error.email = "Required ! Please Enter User's Email Address.";
+    }
+
+    setformError(error);
   }
 
-  console.log(role)
+  function handleChange(e) {
+    if (e.target.name === "role") {
+      setFormData((old) => ({
+        ...old,
+        role: old.role.includes(e.target.value)
+          ? old.role.filter((row) => row !== e.target.value)
+          : [...old.role, e.target.value],
+      }));
+    } else {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value,
+      });
+    }
+  }
 
-    const handleSubmit = (e)=>{
-      e.preventDefault()
-        if(Object.keys(formError).length < 1){
-        
-      if(role.length == 0){
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    validate();
+
+    if (Object.keys(formError).length < 1) {
+      if (role.length < 1) {
         setMsg({
-          open:true,
-          type:'error',
-          message:"Please Select Role"
-        })
-      }else{
-          apiCall(formData,randomPassword)
-        
+          open: true,
+          type: "error",
+          message: "Please Select Role",
+        });
+      } else {
+        apiCall(formData, randomPassword);
       }
     }
-    }
+  };
 
   //distructring elements from values
   const { name, email, role, mobile, code, supervisor } = formData;
 
-// state for set supervisor value  
+  // state for set supervisor value
   const [supervisorArray, setsupervisorArray] = useState([]);
 
-// Supervisor value  
+  // Supervisor value
   async function getSupervisor(role) {
+    let superVisor1 = [
+      "Finance",
+      "Operations",
+      "BHU",
+      "Senior Manager",
+      "Manager",
+    ];
 
-    let superVisor1 = ['Finance','BHU','Operations','Senior Manager','Manager'];
-    if(role == "Senior Manager"){
-   role.push("Manager")
-    }
-    if(role == 'BHU'){
-      role.push("Manager",'Senior Manager')
-    }
-    if(role == 'Operations'){
-      role.push("Manager",'Senior Manager','BHU')
-    }
-    
-
-    superVisor1 = superVisor1.filter(row=>!role.includes(row))
+    var finalQuerry = [];
+    if (role.includes("Manager")) {
+      finalQuerry = ["Manager"];
+    } else if (role.includes("Senior Manager")) {
+      finalQuerry = ["Manager", "Senior Manager", "Admin"];
+    } else if (role.includes("BHU")) {
+      finalQuerry = ["Manager", "Senior Manager", "Admin"];
+    } else if (role.includes("Operations")) {
+      finalQuerry = ["Manager", "Senior Manager", "BHU", "Admin"];
+    } 
+    superVisor1 = superVisor1.filter((row) => !finalQuerry.includes(row));
 
     const supervisor = await GetSupervisor(superVisor1);
     setsupervisorArray(supervisor.data.map((item) => item.name));
   }
 
-
-
-// Role Check Box Disable Manage  
-// function manageRole(role) {
-//   console.log(role)
-//   if(role.includes("Admin") && role.length == 1){
-//     setDisable({
-//       srManager:false,
-//         manager:false,
-//         bhu:false,
-//         operations:false,
-//         finance:false,
-//         admin:false
-//     })
-//   }
-//   if(role.includes("Admin") && role.includes("Senior Manager") && role.length == 2){
-//     setDisable({
-//       srManager:false,
-//         manager:true,
-//         bhu:true,
-//         operations:true,
-//         finance:true,
-//         admin:false
-//     })
-//   }
-//   if(role.includes("Admin") && role.includes("Manager") && role.length == 2){
-//     setDisable({
-//       srManager:true,
-//         manager:false,
-//         bhu:true,
-//         operations:true,
-//         finance:true,
-//         admin:false
-//     })
-//   }  
-//   if(role.includes("Admin") && role.includes("Operations") && role.length == 2){
-//     setDisable({
-//       srManager:true,
-//         manager:true,
-//         bhu:true,
-//         operations:false,
-//         finance:true,
-//         admin:false
-//     })
-//   } 
-//   if(role.includes("Admin") && role.includes("Finance") && role.length == 2){
-//     setDisable({
-//       srManager:true,
-//         manager:true,
-//         bhu:true,
-//         operations:true,
-//         finance:false,
-//         admin:false
-//     })
-//   }
-//   if(role.includes("Admin") && role.includes("BHU") && role.length == 2){
-//     setDisable({
-//       srManager:true,
-//         manager:true,
-//         bhu:false,
-//         operations:true,
-//         finance:true,
-//         admin:false
-//     })
-//   }
-//   if(role.includes("Senior Manager") && role.length == 1){
-//     setDisable({
-//       srManager:false,
-//         manager:true,
-//         bhu:true,
-//         operations:true,
-//         finance:true,
-//         admin:false
-//     })
-//   }
-//   if(role.includes("Manager") && role.length == 1){
-//     setDisable({
-//       srManager:true,
-//         manager:false,
-//         bhu:true,
-//         operations:true,
-//         finance:true,
-//         admin:false
-//     })
-//   }
-//   if(role.includes("Operations") && role.length == 1){
-//     setDisable({
-//       srManager:true,
-//         manager:true,
-//         bhu:true,
-//         operations:false,
-//         finance:true,
-//         admin:false
-//     })
-//   }
-//   if(role.includes("BHU") && role.length == 1){
-//     setDisable({
-//       srManager:true,
-//         manager:true,
-//         bhu:false,
-//         operations:true,
-//         finance:true,
-//         admin:false
-//     })
-//   }
-//   if(role.includes("Finance") && role.length == 1){
-//     setDisable({
-//       srManager:true,
-//         manager:true,
-//         bhu:true,
-//         operations:true,
-//         finance:false,
-//         admin:false
-//     })
-//   }
-//   if(role.length == 0){
-//     setDisable({
-//       srManager:false,
-//         manager:false,
-//         bhu:false,
-//         operations:false,
-//         finance:false,
-//         admin:false
-//     })
-//   } 
-// }
-
-
-
-  const passwordGenerate = ()=>{
-    var length = 6,
-        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-        random = "";
-    for (var i = 0, n = charset.length; i < length; ++i) {
-        random += charset.charAt(Math.floor(Math.random() * n));
-        setRandomPassword(random)
+  // Role Check Box Disable Manage
+  function manageRole(role) {
+    console.log(role);
+    let setVal = {};
+    if (!role.includes("Admin") && role.length > 0) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            Admin: false,
+            [role[0] === "Senior Manager" ? "Senior_Manager" : role[0]]: false,
+          })
+      );
+      setDisable(setVal);
+    } else if (role.length < 2) {
+      superVisor.map((row) => (setVal = { ...setVal, [row]: false }));
+      setDisable(setVal);
+    } else if (role.includes("Admin") && role.length === 2) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            Admin: false,
+            [role[1] === "Senior Manager" ? "Senior_Manager" : role[1]]: false,
+          })
+      );
+      setDisable(setVal);
     }
-    
   }
 
-
-
-useEffect(()=>{
-  passwordGenerate()
-},[])
+  const passwordGenerate = () => {
+    var length = 6,
+      charset =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      random = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+      random += charset.charAt(Math.floor(Math.random() * n));
+      setRandomPassword(random);
+    }
+  };
 
   useEffect(() => {
-    // manageRole(role);
+    passwordGenerate();
+  }, []);
+
+  useEffect(() => {
+    manageRole(role);
     getSupervisor(role);
     // auth_flag(role)
   }, [role]);
 
-
- const [msg, setMsg] = useState({
+  const [msg, setMsg] = useState({
     open: false,
     type: "",
     message: "",
@@ -291,11 +184,11 @@ useEffect(()=>{
 
   const { open, type, message } = msg;
 
-// For save data in DB   
- const apiCall = async (values,randomPassword) => {
-  values = {...values, password:randomPassword}
-  setLoading(true)
-    const result = await AddUser(values)
+  // For save data in DB
+  const apiCall = async (values, randomPassword) => {
+    values = { ...values, password: randomPassword };
+    setLoading(true);
+    const result = await AddUser(values);
     // console.log(result)
     if (result.status === 201) {
       setMsg({
@@ -311,13 +204,13 @@ useEffect(()=>{
         message: result.data.message,
       });
     }
-    setLoading(false)
+    setLoading(false);
   };
 
-// on Alert close
+  // on Alert close
   const handleClose = () => {
     if (msg.type === "success") {
-       navigate('/userManagement')
+      navigate("/userManagement");
     }
     setMsg({
       open: false,
@@ -386,7 +279,7 @@ useEffect(()=>{
                     onChange={handleChange}
                     required={true}
                     error={formError.name}
-                    onBlur={validate}
+                    //onBlur={validate}
                   />
                   <TextFieldWrapper
                     label="Email"
@@ -395,7 +288,7 @@ useEffect(()=>{
                     name="email"
                     onChange={handleChange}
                     required={true}
-                    onBlur={validate}
+                    //onBlur={validate}
                     error={formError.email}
                   />
                   <TextFieldWrapper
@@ -405,7 +298,7 @@ useEffect(()=>{
                     name="mobile"
                     onChange={handleChange}
                     required={true}
-                    onBlur={validate}
+                    //onBlur={validate}
                     error={formError.mobile}
                     maxLength={10}
                   />
@@ -415,7 +308,7 @@ useEffect(()=>{
                     setDisable={setDisable}
                     required={true}
                     error={formError.name}
-                    onBlur={validate}
+                    //onBlur={validate}
                   />
 
                   <SelectComponent
@@ -440,8 +333,8 @@ useEffect(()=>{
                         lineHeight: "32px",
                         textTransform: "capitalize",
                       }}
-                      type='submit'
-                      disabled={loading?true:false}
+                      type="submit"
+                      disabled={loading ? true : false}
                     >
                       Submit
                     </Button>

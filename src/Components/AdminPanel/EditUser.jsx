@@ -7,6 +7,8 @@ import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import AdminCheckBox from "../StyleComponents/AdminCheckBox";
 import { EditUserInfo, GetSupervisor, get_user } from "../../Services/Services";
 
+import { useDispatch } from "react-redux";
+import {setAlert} from "../../store/action/action"
 const initialState ={
   code:"123456",
     name:"",
@@ -23,9 +25,10 @@ function EditUser() {
   const navigate =useNavigate()
   const { id } = useParams();
     const [formVal, setFormVal]= useState(initialState)
-    
+    const dispatch = useDispatch();
 
     const [disable, setDisable] = useState({manager:false,srManager:false,admin:false,bhu:false,finance:false})
+  const  superVisor = ['Admin','Finance','BHU','Operations','Senior_Manager','Manager'];
     
 const [supervisorArray, setsupervisorArray] = useState([])
 
@@ -37,135 +40,47 @@ const [supervisorArray, setsupervisorArray] = useState([])
 
 
     async function getSupervisor (role){
-      const supervisor = await GetSupervisor(role)
+      let superVisor1 = ['Finance','BHU','Operations','Senior Manager','Manager'];
+ 
+      var finalQuerry = []
+      if (role.includes("Manager")) {
+        finalQuerry = ['Manager']
+      }
+      else if (role.includes("Senior Manager")) {
+        finalQuerry = ['Manager','Senior Manager']
+      } else if (role.includes("BHU")) {
+        finalQuerry = ['Manager','Senior Manager']
+      } else if (role.includes("Operations")) {
+        finalQuerry = ["Manager", "Senior Manager", "BHU"];
+      }
+      
+
+    superVisor1 = superVisor1.filter(row=>!finalQuerry.includes(row))
+
+      const supervisor = await GetSupervisor(superVisor1)
       setsupervisorArray(supervisor.data.map((item)=>item.name))
     }
 
 // Role Check Box Disable Manage  
 function manageRole(role) {
   console.log(role)
-  if(role.includes("Admin") && role.length == 1){
-    setDisable({
-      srManager:false,
-        manager:false,
-        bhu:false,
-        operations:false,
-        finance:false,
-        admin:false
-    })
+  let setVal = {}
+   if(!role.includes("Admin") && role.length > 0)
+   {
+    superVisor.map(row=>setVal = {...setVal,[row] : true, Admin : false, [role[0] === "Senior Manager" ? "Senior_Manager" : role[0]] : false })
+    setDisable(setVal)
+   }
+   else if (role.length < 2)
+   {
+    superVisor.map(row=>setVal = {...setVal,[row] : false })
+    setDisable(setVal)
+   }
+   else if (role.includes("Admin") && role.length === 2)
+   {
+    superVisor.map(row=>setVal = {...setVal,[row] : true, Admin : false,[role[1] === "Senior Manager" ? "Senior_Manager" : role[1]] : false  })
+    setDisable(setVal)
+   }
   }
-  if(role.includes("Admin") && role.includes("Senior Manager") && role.length == 2){
-    setDisable({
-      srManager:false,
-        manager:true,
-        bhu:true,
-        operations:true,
-        finance:true,
-        admin:false
-    })
-  }
-  if(role.includes("Admin") && role.includes("Manager") && role.length == 2){
-    setDisable({
-      srManager:true,
-        manager:false,
-        bhu:true,
-        operations:true,
-        finance:true,
-        admin:false
-    })
-  }  
-  if(role.includes("Admin") && role.includes("Operations") && role.length == 2){
-    setDisable({
-      srManager:true,
-        manager:true,
-        bhu:true,
-        operations:false,
-        finance:true,
-        admin:false
-    })
-  } 
-  if(role.includes("Admin") && role.includes("Finance") && role.length == 2){
-    setDisable({
-      srManager:true,
-        manager:true,
-        bhu:true,
-        operations:true,
-        finance:false,
-        admin:false
-    })
-  }
-  if(role.includes("Admin") && role.includes("BHU") && role.length == 2){
-    setDisable({
-      srManager:true,
-        manager:true,
-        bhu:false,
-        operations:true,
-        finance:true,
-        admin:false
-    })
-  }
-  if(role.includes("Senior Manager") && role.length == 1){
-    setDisable({
-      srManager:false,
-        manager:true,
-        bhu:true,
-        operations:true,
-        finance:true,
-        admin:false
-    })
-  }
-  if(role.includes("Manager") && role.length == 1){
-    setDisable({
-      srManager:true,
-        manager:false,
-        bhu:true,
-        operations:true,
-        finance:true,
-        admin:false
-    })
-  }
-  if(role.includes("Operations") && role.length == 1){
-    setDisable({
-      srManager:true,
-        manager:true,
-        bhu:true,
-        operations:false,
-        finance:true,
-        admin:false
-    })
-  }
-  if(role.includes("BHU") && role.length == 1){
-    setDisable({
-      srManager:true,
-        manager:true,
-        bhu:false,
-        operations:true,
-        finance:true,
-        admin:false
-    })
-  }
-  if(role.includes("Finance") && role.length == 1){
-    setDisable({
-      srManager:true,
-        manager:true,
-        bhu:true,
-        operations:true,
-        finance:false,
-        admin:false
-    })
-  }
-  if(role.length == 0){
-    setDisable({
-      srManager:false,
-        manager:false,
-        bhu:false,
-        operations:false,
-        finance:false,
-        admin:false
-    })
-  } 
-}
-
     
     const {name,email,role,mobile,code,supervisor} = formVal;
 
@@ -193,16 +108,6 @@ const getData = async(id)=>{
      })
 }
 
-const updateData = async(id,formVal)=>{
-  const data = await EditUserInfo(id,formVal)
-  if(data.data.success){
-    setMsg({
-      open:"true",
-      type:"success",
-      message:data.data.message
-    })
-  }
-}
 
     const handleClose = ()=>{
       if(msg.type === "success"){
@@ -216,10 +121,33 @@ const updateData = async(id,formVal)=>{
     }
 
 
-    const handleSubmit =(e)=>{
-      e.preventDefault()
-      updateData(id,formVal)
+    async function handleSubmit (e){
+
+      try {
+        e.preventDefault()
+        const response = await EditUserInfo(id,formVal)
+
+        if(response.status === 200)
+        { 
+          dispatch(setAlert({
+            open : true,
+            variant : 'success',
+            message : response.data.message 
+          }))
+        }
+        else {
+          dispatch(setAlert({
+            open : true,
+            variant : 'error',
+            message : response.data.message 
+          }))
+        }
+      } catch (error) {
+        console.log(error)
+      }
+
     }
+
 
     
 

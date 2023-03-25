@@ -1,9 +1,29 @@
 import { Box, Grid, Stack } from '@mui/material'
-import React from 'react'
+import React,{useEffect,useState} from 'react'
+import { meta } from '../../Services/Services'
 import { DashboardItem, MyHeader } from '../StyledComponent'
 import AdminHamburgerMenu from './AdminHamburgerMenu'
+ 
 
 function UserDashboard() {
+
+  const [metaData,setMeta] = useState({})
+
+  useEffect(() => {
+    getMetaData();
+  }, []);
+
+  async function getMetaData(){
+    let response = await meta()
+
+    if(response)
+    {
+      setMeta(response.data)
+    }
+
+  }
+  
+
   return (<>
         <MyHeader>User Dashboard</MyHeader>
     <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
@@ -15,9 +35,11 @@ function UserDashboard() {
 <Grid container sx={{justifyContent:"center"}}>
   <Grid item md={10}>
         <Grid container spacing={3}>
-            <DashboardItem service="Total Sr Manager" value="5" />
-            <DashboardItem service="Total Manager" value="5" />
-            <DashboardItem service="Total Operation" value="5" />
+            <DashboardItem service="Total Sr Manager" value={metaData.Senior_Manager} />
+            <DashboardItem service="Total Manager" value={metaData.Manager} />
+            <DashboardItem service="Total Operation" value={metaData.Operations} />
+            <DashboardItem service="Total BHU" value={metaData.BHU} />
+            <DashboardItem service="Total Finance" value={metaData.Finance} />
           </Grid>
           </Grid>
           </Grid>
