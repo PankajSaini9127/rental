@@ -74,8 +74,8 @@ function IncrementType({ Year, Percentage, Amount, label,increment ,onChange,nam
     <>
       <Grid item container spacing={2}>
         <ValueWrapper value={Year} />
-        <TextFieldWrapper value={increment} label={label} onChange={onChange} name={name} />
-        <TextFieldWrapper value={Amount} label="Rental Amount" />
+        <TextFieldWrapper value={increment || ''} label={label} onChange={onChange} name={name} />
+        <TextFieldWrapper value={Amount || ''} label="Rental Amount" />
       </Grid>
     </>
   );
@@ -109,14 +109,40 @@ if(value === "Percentage"){
    total5 = total4 + yearValue.year5;
 }
 useEffect(()=>{
-  setIncrement({
-    year1:total1,
-    year2:total2,
-    year3:total3,
-    year4:total4,
-    year5:total5
-  })
-},[yearValue])
+  if(tenure === "11 month")
+  {
+    setIncrement({
+      year1:0,
+      year2:0, 
+      year3:0, 
+      year4:0, 
+      year5:0,
+    })
+  }
+  else{
+    let index = parseInt(tenure.split(' ')[0]);
+    let arr = [
+      total1,
+      total2,
+      total3,
+      total4,
+      total5,
+    ] 
+    let final = {}
+    arr.map((total,i)=>{
+      if ((i+1) <= index)
+      {
+        final = {...final, ['year'+(i+1)] : total }
+      }
+    } )
+
+    console.log(final)
+
+    setIncrement(final)
+
+
+  }
+},[yearValue,value,tenure])
 
 function handleChange (e){
     setYearValue({
@@ -124,6 +150,9 @@ function handleChange (e){
       [e.target.name]:Number(e.target.value)
     })
 }
+
+
+
     return (
       <>
       {tenure === "11 Month"? null:
@@ -139,7 +168,7 @@ function handleChange (e){
           Amount={increment.year1}
           label="Percentage"
           name="year1"
-          increment={yearValue.year1}
+          increment={yearValue.year1 || ''}
           onChange={handleChange}
         />
         <IncrementType
@@ -148,37 +177,49 @@ function handleChange (e){
           Amount={increment.year2}
           label="Percentage"
           name="year2"
-          increment={yearValue.year2}
+          increment={yearValue.year2 || ''}
           onChange={handleChange}
 
         />
+      {
+          tenure === "3 Year" || tenure === "4 Year" || tenure === "5 Year"?
+          <>
         <IncrementType
           Year="Year 3"
-          Percentage="12%"
+          Percentage="15%"
           Amount={increment.year3}
           label="Percentage"
-          increment={yearValue.year3}
+          increment={yearValue.year3 || ''}
           onChange={handleChange}
           name="year3"
         />
+        </>
+        :null
+        }
         {
-          tenure === "5 Year"?
+          tenure === "4 Year" || tenure === "5 Year"?
           <>
         <IncrementType
           Year="Year 4"
-          Percentage="12%"
+          Percentage="15%"
           Amount={increment.year4}
           label="Percentage"
-          value= {yearValue.year4}
+          increment={yearValue.year4 || ''}
           onChange={handleChange}
           name="year4"
         />
+        </>
+        :null
+        }
+        {
+          tenure === "5 Year"?
+          <>
         <IncrementType
           Year="Year 5"
           Percentage="15%"
           Amount={increment.year5}
           label="Percentage"
-          value={yearValue.year5}
+          increment={yearValue.year5 || ''}
           onChange={handleChange}
           name="year5"
         />
@@ -195,52 +236,67 @@ function handleChange (e){
         <IncrementType
           Year="Year 1"
           Percentage="0"
-          Amount={increment.year1}
+          Amount={increment.year1 || ''}
           label="Value"
-          increment={yearValue.year1}
+          increment={yearValue.year1 || ''}
           onChange={handleChange}
           name="year1"
         />
         <IncrementType
           Year="Year 2"
           Percentage="1000"
-          Amount={increment.year2}
+          Amount={increment.year2 || ''}
           label="Value"
-          increment={yearValue.year2}
+          increment={yearValue.year2 || ''}
           onChange={handleChange}
           name="year2"
         />
+
+         {
+          tenure === "3 Year" || tenure === "4 Year" || tenure === "5 Year"?
+          <>
         <IncrementType
           Year="Year 3"
-          Percentage="1000"
+          Percentage="15%"
           Amount={increment.year3}
           label="Value"
-          increment={yearValue.year3}
+          increment={yearValue.year3 || ''}
           onChange={handleChange}
           name="year3"
         />
-         {
-          tenure === "5 Year"?
+        </>
+        :null
+        }
+        {
+          tenure === "4 Year" || tenure === "5 Year"?
           <>
         <IncrementType
           Year="Year 4"
-          Percentage="1500"
+          Percentage="15%"
           Amount={increment.year4}
           label="Value"
-          increment={yearValue.year4}
+          increment={yearValue.year4 || ''}
           onChange={handleChange}
           name="year4"
         />
+        </>
+        :null
+        }
+        {
+          tenure === "5 Year"?
+          <>
         <IncrementType
           Year="Year 5"
-          Percentage="1500"
+          Percentage="15%"
           Amount={increment.year5}
           label="Value"
-          increment={yearValue.year5}
+          increment={yearValue.year5 || ''}
           onChange={handleChange}
           name="year5"
         />
-        </> : null}
+        </>
+        :null
+        }
       </Grid>
      : ""}
   

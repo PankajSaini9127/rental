@@ -13,7 +13,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addLandLoard } from "../../store/action/action";
 
-const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
+const TextFieldWrapper = ({ type,label, placeHolder, value, name, onChange }) => {
   const fieldStyle = {
     height: "50px",
     color: "rgba(16, 99, 173, 0.47)",
@@ -27,14 +27,14 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
           variant="outlined"
           label={label}
           name={name}
-          type={"text"}
+          type={type}
           onChange={(e) => onChange(e)}
           fullWidth
           required
           InputProps={{
             disableUnderline: true,
             style: {
-              color: "rgba(16, 99, 173, 0.47)",
+              // color: "rgba(16, 99, 173, 0.47)",
               fontSize: "15px",
             },
           }}
@@ -49,6 +49,14 @@ const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
 
 const Landblord = ({ value, setValue, index }) => {
   function handleChange(e) {
+    
+    // console.log(e.target.name,e.target.value)
+     let name_regX =  /^[a-zA-Z ]*$/
+
+    if((e.target.name === "leeseName" && e.target.value.match(name_regX)) 
+    || e.target.name === "percentage"
+    )
+    {
     
     if (value[index]) {
       setValue((old) =>
@@ -71,6 +79,7 @@ const Landblord = ({ value, setValue, index }) => {
       ]);
     }
   }
+  }
 
   return (
     <>
@@ -84,8 +93,8 @@ const Landblord = ({ value, setValue, index }) => {
           <TextFieldWrapper
             label={"Name of Landlord"}
             placeHolder={"Name of Landlord"}
-            name={"name"}
-            value={value[index] && value[index].name ? value[index].name : ""}
+            name={"leeseName"}
+            value={value[index] && value[index].leeseName ? value[index].leeseName : ""}
             onChange={handleChange}
           />
         </Grid>
@@ -139,8 +148,15 @@ function DialogBox({ value, setValue }) {
     setOpen(false);
   };
 
+  const [noLandlord,setLandlord] = useState(1)
   const handleChange = (e) => {
-    setValue(Array.from({length : e.target.value},i=>i));
+
+    if(e.target.value > 0)
+    {
+      setLandlord(e.target.value)
+      setValue(Array.from({length : e.target.value},i=>i));
+    }
+
   };
 
   return (
@@ -162,15 +178,16 @@ function DialogBox({ value, setValue }) {
             py: 5,
             "@media(max-width:900px)": { width: "300px", py: 6 },
           }}
-          spacing={2}
+          // spacing={2}
         >
           <Grid item md={10}>
             <TextFieldWrapper
               label="Enter No of Landlord"
               placeHolder="Enter No of Landlord"
-              // width="230px"
+              type = 'number'
               grid="10"
               name={"landblord"}
+              value = {noLandlord}
               onChange={handleChange}
             />
           </Grid>
@@ -184,10 +201,10 @@ function DialogBox({ value, setValue }) {
             backgroundColor: "#FFFFFF",
             justifyContent: "center",
             alignItems: "center",
-            py: 10,
+            py: 2,
             "@media(max-width:900px)": { width: "300px", py: 6 },
           }}
-          spacing={4}
+          // spacing={4}
         >
           <Grid item md={10}>
             {value.length > 0 ? (

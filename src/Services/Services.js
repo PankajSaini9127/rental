@@ -84,3 +84,11 @@ export async function get_renewal(){
 export async function meta(){
     return await axios.get(`${API_LIVE}/api/admin/meta`)
 }
+
+export async function getStateList(search){
+    return await axios.get(`${API_LIVE}/api/stateList?search=${search}`)
+}
+
+export async function getCityList(search){
+    return await axios.get(`${API_LIVE}/api/cityList?search=${search}`)
+}

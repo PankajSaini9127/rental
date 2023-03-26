@@ -38,25 +38,32 @@ function NewUser() {
   const [formData, setFormData] = useState(initialState);
   const [formError, setformError] = useState({});
 
-  function validate() {
+  function validate(e) {
     const error = {};
-    if (name.length < 4) {
-      error.name = "Name Atleast 4 Character."
-      return false
+    console.log(e.target.name, e.target.value);
+    if (
+      e.target.value.length !== 0 &&
+      e.target.value.length < 4 &&
+      e.target.name === "name"
+    ) {
+      error.name = "Name must be of 4 character.";
+    } else if (
+      e.target.value.length !== 0 &&
+      e.target.value.length < 10 &&
+      e.target.name === "mobile"
+    ) {
+      error.mobile = "Mobile Number Not Valid.";
     }
-    if (mobile.length >= 10 && mobile.length > 0) {
-      error.mobile = "Mobile Number Not Valid."
-      return false
-    }
-    return true
+
+    setformError(error);
   }
 
   function handleChange(e) {
-    if(validate()){
-console.log("aa")
-    }else{
-      console.log("bb")
-    }
+    //     if(validate()){
+    // console.log("aa")
+    //     }else{
+    //       console.log("bb")
+    //     }
     if (e.target.name === "role") {
       setFormData((old) => ({
         ...old,
@@ -64,22 +71,20 @@ console.log("aa")
           ? old.role.filter((row) => row !== e.target.value)
           : [...old.role, e.target.value],
       }));
-    }else if(e.target.name === 'name'){
+    } else if (e.target.name === "name") {
       setFormData({
         ...formData,
-        [e.target.name]: e.target.value.replace(/[^a-z]/gi, '')
+        [e.target.name]: e.target.value.replace(/[^a-z]/gi, ""),
       });
-    } else if(e.target.name == 'mobile'){
+    } else if (e.target.name == "mobile") {
       const re = /^[0-9\b]+$/;
-      if (e.target.value === '' || re.test(e.target.value)){
+      if (e.target.value === "" || re.test(e.target.value)) {
         setFormData({
           ...formData,
           [e.target.name]: e.target.value,
         });
       }
-      
-    }
-    else {
+    } else {
       setFormData({
         ...formData,
         [e.target.name]: e.target.value,
@@ -90,8 +95,8 @@ console.log("aa")
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    
-
+    console.log(formError)
+   
     if (Object.keys(formError).length < 1) {
       if (role.length < 1) {
         setMsg({
@@ -119,19 +124,24 @@ console.log("aa")
       "BHU",
       "Senior Manager",
       "Manager",
+      "Role",
     ];
 
     var finalQuerry = [];
     if (role.includes("Manager")) {
-      finalQuerry = ["Manager"];
+      finalQuerry = ["Senior Manager"];
     } else if (role.includes("Senior Manager")) {
-      finalQuerry = ["Manager", "Senior Manager", "Admin"];
+      finalQuerry = ["BHU"];
     } else if (role.includes("BHU")) {
-      finalQuerry = ["Manager", "Senior Manager", "Admin"];
+      finalQuerry = ["Operations"];
     } else if (role.includes("Operations")) {
-      finalQuerry = ["Manager", "Senior Manager", "BHU", "Admin"];
-    } 
-    superVisor1 = superVisor1.filter((row) => !finalQuerry.includes(row));
+      finalQuerry = ["Finance"];
+    } else if (role.includes("Finance")) {
+      finalQuerry = ["Role"];
+    }
+    superVisor1 = superVisor1.filter((row) => {
+      return finalQuerry.includes(row);
+    });
 
     const supervisor = await GetSupervisor(superVisor1);
     setsupervisorArray(supervisor.data.map((item) => item.name));
@@ -290,7 +300,10 @@ console.log("aa")
                     placeHolder="Full Name"
                     value={name}
                     name="name"
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      validate(e);
+                      handleChange(e);
+                    }}
                     required={true}
                     error={formError.name}
                     //onBlur={validate}
@@ -302,7 +315,7 @@ console.log("aa")
                     name="email"
                     onChange={handleChange}
                     required={true}
-                    type={'email'}
+                    type={"email"}
                     error={formError.email}
                   />
                   <TextFieldWrapper
@@ -310,10 +323,13 @@ console.log("aa")
                     placeHolder="Mobile Number"
                     value={mobile}
                     name="mobile"
-                    onChange={handleChange}
                     required={true}
                     error={formError.mobile}
                     maxLength={10}
+                    onChange={(e) => {
+                      validate(e);
+                      handleChange(e);
+                    }}
                   />
                   <AddUserCheckBox
                     handleChange={handleChange}

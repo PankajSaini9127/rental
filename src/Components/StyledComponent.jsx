@@ -18,7 +18,7 @@ import {
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useState } from "react";
-
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 // header
 const MyHeader = styled("h5")({
@@ -133,15 +133,19 @@ const PasswordField = ({label, placeHolder, value, name, onChange,errMsg,onBlur,
 }
 
 // Document Upload
-const DocumentUpload = ({ label, placeHolder,handleChange, name }) => {
+const DocumentUpload = ({ label, placeHolder,handleChange, name, uploaded }) => {
   return (
     <Grid item md={4.1} xs={6}>
       {/* <MyTextfield /> */}
       <FormControl fullWidth>
         <FormLabel>
+        {uploaded ? 
           <Typography variant="body1" sx={labelStyle}>
+          Uploaded <CheckCircleIcon/>
+        </Typography>: <Typography variant="body1" sx={labelStyle}>
             {label}
           </Typography>
+          }
         </FormLabel>
 
         <Button
@@ -160,7 +164,7 @@ const DocumentUpload = ({ label, placeHolder,handleChange, name }) => {
         >
           <Typography sx={{fontSize:"16px", textAlign:"left",width:"100%",'@media(max-width:900px)':{fontSize:'10px'}}}> {placeHolder}</Typography>
          
-          <input hidden accept="image/*" name = {name} multiple type="file" onChange={handleChange}/>
+          <input  hidden accept="image/*" name = {name} multiple type="file" onChange={handleChange}/>
         </Button>
 
         

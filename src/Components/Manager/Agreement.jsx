@@ -9,6 +9,10 @@ import {
   Stack,
   useTheme,
   useMediaQuery,
+  Autocomplete,
+  TextField,
+  MenuItem,
+  FormControl,
 } from "@mui/material";
 
 // Custom Style Component
@@ -20,7 +24,6 @@ import {
   TextFieldWrapper,
 } from "../StyledComponent";
 
-
 // Components
 
 import HamburgerMenu from "../HamburgerMenu";
@@ -29,44 +32,47 @@ import DialogBox from "./DialogBox";
 import {
   add_agreement,
   add_landlord,
+  getStateList,
   uploadDoc,
+  getCityList,
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 import PermissionAlert from "./Alert";
 
-
-
-
 function Agreement() {
   const { landloard } = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  const codeGenerater = ()=>{
+  const codeGenerater = () => {
     var length = 6,
-    charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-    random = "";
-for (var i = 0, n = charset.length; i < length; ++i) {
-    random += charset.charAt(Math.floor(Math.random() * n));
-    setData({...data,code:random})
-}
-  }
+      charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
+      random = "";
+    for (var i = 0, n = charset.length; i < length; ++i) {
+      random += charset.charAt(Math.floor(Math.random() * n));
+      setData({ ...data, code: random });
+    }
+  };
 
-  useEffect(()=>{
-    codeGenerater()
-  },[])
-
-  const [document, setDocuments] = useState({});
+  useEffect(() => {
+    codeGenerater();
+  }, []);
+  console.log(">>>>", landloard);
+  const [i, setIndex] = useState(0);
   const [data, setData] = useState({
-    landlord: [],
+    landlord: [...landloard],
     code: "",
     lockInYear: "",
     noticePeriod: "",
     deposite: "",
-    monthlyRent: '',
+    monthlyRent: "",
     yearlyIncrement: "",
-    tenure:""
+    tenure: "",
   });
+
+  useEffect(() => {
+    setData((old) => ({ ...old, landlord: [...landloard] }));
+  }, [landloard]);
 
   const [landblord, setLandblord] = useState([1]);
 
@@ -75,16 +81,26 @@ for (var i = 0, n = charset.length; i < length; ++i) {
   const [formError, setFormError] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
 
-  const [increment, setIncrement] = useState({year1:"",year2:"",year3:"",year4:"",year5:""})
-  const [yearValue, setYearValue] = useState({year1:1,year2:10,year3:12,year4:12,year5:15})
+  const [stateList, setStateList] = useState([]);
+  const [cityList, setCityList] = useState({});
 
+  const [increment, setIncrement] = useState({
+    year1: "",
+    year2: "",
+    year3: "",
+    year4: "",
+    year5: "",
+  });
+  const [yearValue, setYearValue] = useState({
+    year1: 0,
+    year2: 0,
+    year3: 0,
+    year4: 0,
+    year5: 0,
+  });
 
   // upload document
   async function handleChangeFile(e) {
-
-  
-
-
     const FD = new FormData();
     FD.append("photo", e.target.files[0]);
     let response = await uploadDoc(FD);
@@ -109,9 +125,57 @@ for (var i = 0, n = charset.length; i < length; ++i) {
     }
   }
 
+  const [errorObj,setError] = useState({})
+
   //handle Change for uncommon feilds
   function handleChange(e, i) {
-    // console.log(data)
+    
+    console.log(e.target.name,e.target.value)
+    var error = false 
+    switch (e.target.name) {
+      case 'leeseName':
+        if(!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
+        break;
+      case 'state':
+        // console.log('state',e.target.value.match(/^[a-zA-Z ]*$/))
+        if(!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
+        break;
+      case 'pincode':
+        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
+      case 'aadharNo':
+        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
+      case 'mobileNo':
+        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
+      case 'alternateMobile':
+        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
+      case 'bankName':
+          if(!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
+          break;
+      case 'benificiaryName':
+          if(!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
+          break;
+        case 'accountNo':
+          if(!e.target.value.match(/^[0-9]*$/)) error = true;
+          break;
+      case 'deposite':
+        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
+   
+      case 'panNo':
+        e.target.value = e.target.value.toUpperCase()
+        if(!e.target.value.match(/^.{0,10}$/)) error = true;
+        break;
+      default:
+        break;
+    }
+console.log(error)
+    if(!error)
+    {
+
     if (data.landlord[i]) {
       setData((old) => ({
         ...old,
@@ -137,16 +201,45 @@ for (var i = 0, n = charset.length; i < length; ++i) {
       }));
     }
   }
+  
+  }
+
 
   // handle Change for common feilds
   function handleCommonChange(e, i) {
+
+    var error = false 
+    switch (e.target.name) {
+      case 'gstNo':
+        if(!e.target.value.match(/^[a-z0-9]{0,15}$/)) error = true;
+        break;
+      case 'lockInYear':
+        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
+      case 'rental_amount':
+        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
+      case 'noticePeriod':
+      if(!e.target.value.match(/^[0-9]*$/)) error = true;
+          break;
+      case 'monthlyRent':
+        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
+        case 'deposite':
+          if(!e.target.value.match(/^[0-9]*$/)) error = true;
+          break;
+      default:
+        break;
+    }
+
+    if(!error)
     setData((old) => ({ ...old, [e.target.name]: e.target.value }));
   }
 
   // on form submit
 
   const handleConfirm = () => {
-    setOpen(false)
+    setOpen(false);
     // console.log(data)
     const {
       code,
@@ -163,7 +256,12 @@ for (var i = 0, n = charset.length; i < length; ++i) {
       cheque,
       tax_receipt,
       noc,
-      tenure
+      tenure,
+      year1,
+      year2,
+      year3,
+      year4,
+      year5,
     } = data;
     const { landlord } = data;
 
@@ -183,21 +281,22 @@ for (var i = 0, n = charset.length; i < length; ++i) {
         cheque,
         tax_receipt,
         noc,
-        tenure
+        tenure,
+        year1,
+        year2,
+        year3,
+        year4,
+        year5,
+
       },
       landlord
     );
   };
 
-
-  
-
-
-
   const APICall = async (values, landlordData) => {
-    
     const agreement = await add_agreement(values);
-
+console.log(data)
+    return 1
     if (agreement.data.success) {
       const agreement_id = agreement.data.agreement[0];
 
@@ -221,85 +320,128 @@ for (var i = 0, n = charset.length; i < length; ++i) {
       });
       const result = await add_landlord(landlordData);
 
-      if(result)
-      {
-        dispatch(setAlert({
-          open : true,
-          variant : 'success',
-          message : 'Agrement submited.'
-        }))
+      if (result) {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "success",
+            message: "Agrement submited.",
+          })
+        );
       }
     }
   };
 
-useEffect(()=>{
-  // console.log(formError)
-   if(Object.keys(formError).length === 0 && isSubmit){
-    setOpen(true)
-   }
-},[formError])
+  useEffect(() => {
+    // console.log(formError)
+    if (Object.keys(formError).length === 0 && isSubmit) {
+      setOpen(true);
+    }
+  }, [formError]);
 
   // form validation
-  function validate(data){
+  function validate(data) {
     const regexEmail = "^[a-zA-Z0-9]+@[a-zA-Z0-9.-]+$";
     const error = {};
-    if(!data.landlord[0].pincode){
-      error.pincode = "Please Enter Pincode"
-    }else 
-    if(data.landlord[0].pincode.length < 6 || data.landlord[0].pincode.length > 6){
-      error.pincode = "Please Enter Valid Pincode"
+    if (!data.landlord[0].pincode) {
+      error.pincode = "Please Enter Pincode";
+    } else if (
+      data.landlord[0].pincode.length < 6 ||
+      data.landlord[0].pincode.length > 6
+    ) {
+      error.pincode = "Please Enter Valid Pincode";
     }
-    if(!data.landlord[0].aadharNo){
-       error.aadharNo = "Please Enter Aadhar Number !"
-    }else
-    if(data.landlord[0].aadharNo.length < 12 || data.landlord[0].aadharNo.length > 12){
-       error.aadharNo = "Aadhar Number Must be 12 Digit"
+    if (!data.landlord[0].aadharNo) {
+      error.aadharNo = "Please Enter Aadhar Number !";
+    } else if (
+      data.landlord[0].aadharNo.length < 12 ||
+      data.landlord[0].aadharNo.length > 12
+    ) {
+      error.aadharNo = "Aadhar Number Must be 12 Digit";
     }
-    if(!data.landlord[0].mobileNo.length){
-      error.mobileNo = "Please Enter Mobile Number !"
-    }else 
-    if(data.landlord[0].mobileNo.length < 10 || data.landlord[0].mobileNo.length > 12){
-      error.mobileNo = "Please Enter Valid Mobile Number !"
-    } 
-    if(data.landlord[0].alternateMobile.length < 10 || data.landlord[0].alternateMobile.length > 12){
-      error.alternateMobile = "Please Enter Valid Mobile Number !"
+    if (!data.landlord[0].mobileNo.length) {
+      error.mobileNo = "Please Enter Mobile Number !";
+    } else if (
+      data.landlord[0].mobileNo.length < 10 ||
+      data.landlord[0].mobileNo.length > 12
+    ) {
+      error.mobileNo = "Please Enter Valid Mobile Number !";
     }
-    
-    if(!data.landlord[0].email){
-      error.email = "Please Enter Email Address !"
-    } 
-    
-    setFormError(error)
+    if (
+      data.landlord[0].alternateMobile.length < 10 ||
+      data.landlord[0].alternateMobile.length > 12
+    ) {
+      error.alternateMobile = "Please Enter Valid Mobile Number !";
+    }
 
+    if (!data.landlord[0].email) {
+      error.email = "Please Enter Email Address !";
+    }
 
-  } 
-
-  //confirmation alert
-  const [open,setOpen]= useState(false)
-
-  const handleSubmit = (e)=>{
-    e.preventDefault();
-    validate(data)
-    setIsSubmit(true)
-    // setOpen(true)
+    setFormError(error);
   }
 
-  const handleCancel = ()=>{
-    setOpen(false)
+  //confirmation alert
+  const [open, setOpen] = useState(false);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setData(old=>({...old,...increment}))
+    validate(data);
+    setIsSubmit(true);
+    // setOpen(true)
+  };
+
+  const handleCancel = () => {
+    setOpen(false);
+  };
+
+  // funciton for fetching state list
+  async function handleStateSearch(e, i) {
+    setIndex(i);
+    let response = await getStateList(e.target.value);
+
+    if (response.status === 200) {
+      setStateList(response.data);
+    } else setStateList([]);
+  }
+
+  useEffect(() => {
+    handleCitySearch();
+  }, [data.landlord[i]]);
+
+  // funciton for fetching state list
+  async function handleCitySearch() {
+    console.log(i);
+    console.log(data.landlord[i].state);
+    let search = stateList.filter(
+      (row) => row.name === data.landlord[i].state && row.id
+    );
+
+    console.log(search);
+    let response = await getCityList(search[0].id);
+
+    if (response.status === 200) {
+      setCityList((old) => ({ ...old, [i]: response.data }));
+    } else setCityList([]);
   }
 
   return (
     <>
-
-     {/* alert for submit form */}
-     <PermissionAlert handleClose={handleCancel} handleConfirm={handleConfirm} open={open} message={"Before Final Submission Please Check Carefully ."}/>
+      {/* alert for submit form */}
+      <PermissionAlert
+        handleClose={handleCancel}
+        handleConfirm={handleConfirm}
+        open={open}
+        message={"Before Final Submission Please Check Carefully ."}
+      />
 
       {/* dialog box ( popup box ) */}
       <DialogBox value={landblord} setValue={setLandblord} />
       {/* {console.log(landblord)} */}
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
         {/* side nav     */}
-        <HamburgerMenu  navigateTo={'listing'} />
+        <HamburgerMenu navigateTo={"listing"} />
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>New Agreement</MyHeader>
@@ -328,17 +470,17 @@ useEffect(()=>{
                     backgroundColor="rgba(3, 193, 243, 0.2);"
                     value={data.code}
                     name="code"
-                  
                   />
 
                   {landblord.map((row, i) => (
                     <>
-                      {/* {console.log(landblord)} */}
+                      {console.log(data.landlord)}
                       <TextFieldWrapper
                         label="Name Of Lesse"
                         placeHolder="Enter Name Of Lesse"
                         name="leeseName"
                         required={true}
+                        // error = {errorObj.leeseName}
                         value={
                           data.landlord[i] && data.landlord[i].leeseName
                             ? data.landlord[i].leeseName
@@ -346,33 +488,97 @@ useEffect(()=>{
                         }
                         onChange={(e) => handleChange(e, i)}
                       />
-                      <TextFieldWrapper
-                        label="State"
-                        placeHolder="Enter State"
-                        name="state"
-                        required={true}
-                        value={
-                          data.landlord[i] && data.landlord[i].state
-                            ? data.landlord[i].state
-                            : ""
-                        }
-                        onChange={(e) => handleChange(e, i)}
-                        index={i}
-                      />
+                      <Grid
+                        item
+                        md={4}
+                        xs={6}
+                        sx={{
+                          mb: "0px !important",
+                          "@media(max-width:900px)": { my: 1 },
+                        }}
+                      >
+                        <FormControl fullWidth>
+                          <Autocomplete
+                            freeSolo
+                            fullWidth
+                            id="free-solo-2-demo"
+                            disableClearable
+                            onChange={(e, val) => {
+                              setData((old) => ({
+                                ...old,
+                                landlord: old.landlord.map((row, id) => {
+                                  if (i === id) {
+                                    return {
+                                      ...row,
+                                      state:  val, 
+                                    };
+                                  }
+                                  return row;
+                                }),
+                              }));
+                            }}
+                            options={stateList.map((option) => option.name)}
+                            renderInput={(params) => (
+                              <TextField
+                                fullWidth
+                                name="state"
+                                value={
+                                  data.landlord[i] && data.landlord[i].state
+                                    ? data.landlord[i].state
+                                    : ""
+                                }
+                                {...params}
+                                label="State"
+                                onChange={(e) => {
+                                  handleChange(e, i);
+                                  handleStateSearch(e, i);
+                                }}
+                                InputProps={{
+                                  ...params.InputProps,
+                                  type: "search",
+                                }}
+                              />
+                            )}
+                          />
+                        </FormControl>
+                      </Grid>
 
-                      <TextFieldWrapper
-                        label="City"
-                        placeHolder="Enter City"
-                        name="city"
-                        required={true}
-                        value={
-                          data.landlord[i] && data.landlord[i].city
-                            ? data.landlord[i].city
-                            : ""
-                        }
-                        onChange={(e) => handleChange(e, i)}
-                        index={i}
-                      />
+                      <Grid
+                        item
+                        md={4}
+                        xs={6}
+                        sx={{
+                          mb: "0px !important",
+                          "@media(max-width:900px)": { my: 1 },
+                        }}
+                      >
+                        <FormControl fullWidth>
+                          <TextField
+                            label="City"
+                            placeHolder="Enter City"
+                            select
+                            fullWidth
+                            name="city"
+                            required={true}
+                            value={
+                              data.landlord[i] && data.landlord[i].city
+                                ? data.landlord[i].city
+                                : ""
+                            }
+                            onChange={(e) => handleChange(e, i)}
+                            index={i}
+                          >
+                            {cityList[i] &&
+                              cityList[i].map((item) => {
+                                return (
+                                  <MenuItem value={item.city}>
+                                    {item.city}
+                                  </MenuItem>
+                                );
+                              })}
+                          </TextField>
+                        </FormControl>
+                      </Grid>
                       <TextFieldWrapper
                         label="Location"
                         placeHolder="Enter Location"
@@ -442,20 +648,7 @@ useEffect(()=>{
                         index={i}
                       />
 
-                      <TextFieldWrapper
-                        label="GST Number"
-                        placeHolder="Enter GST No."
-                        required={true}
-                        name="gstNo"
-                        maxLength={15}
-                        value={
-                          data.landlord[i] && data.landlord[i].gstNo
-                            ? data.landlord[i].gstNo
-                            : ""
-                        }
-                        onChange={(e) => handleChange(e, i)}
-                        index={i}
-                      />
+                     
                       <TextFieldWrapper
                         label="Mobile Number"
                         placeHolder="Enter Mobile No."
@@ -503,6 +696,19 @@ useEffect(()=>{
                     </>
                   ))}
 
+            <TextFieldWrapper
+                        label="GST Number"
+                        placeHolder="Enter GST No."
+                        required={true}
+                        name="gstNo"
+                        maxLength={15}
+                        value={
+                          data.gstNo
+                            || ""
+                        }
+                        onChange={handleCommonChange}
+                      />
+
                   <TextFieldWrapper
                     label="Lock In Year(If Applicable)"
                     placeHolder="Enter Lock in Year"
@@ -533,33 +739,39 @@ useEffect(()=>{
                     onChange={handleCommonChange}
                   />
 
-                   <SelectComponent
+                  <SelectComponent
                     label={"Agreement Tenure"}
                     required={true}
                     name="tenure"
-                    options={["11 Month","3 Year", "5 Year"]}
+                    options={["11 Month", "2 Year","3 Year","4 Year", "5 Year"]}
                     value={data.tenure}
                     onChange={handleCommonChange}
-                   />
-                   {
-                    data.tenure === ""?null
-                    :
-                    data.tenure === "11 Month"?null:
-                  <SelectComponent
-                    label={"Yearly Increment"}
-                    required={true}
-                    name="yearlyIncrement"
-                    options={["Percentage","Value"]}
-                    value={data.yearlyIncrement}
-                    onChange={handleCommonChange}
                   />
-                   }
+                  {data.tenure === "" ? null : data.tenure ===
+                    "11 Month" ? null : (
+                    <SelectComponent
+                      label={"Yearly Increment"}
+                      required={true}
+                      name="yearlyIncrement"
+                      options={["Percentage", "Value"]}
+                      value={data.yearlyIncrement}
+                      onChange={handleCommonChange}
+                    />
+                  )}
                 </Grid>
 
                 {/* basic details end here */}
 
                 {/* Increment Yearly */}
-                <YearlyIncrement yearValue={yearValue} setYearValue={setYearValue} tenure={data.tenure} value={data.yearlyIncrement} rent={data.monthlyRent} increment={increment} setIncrement={setIncrement} />
+                <YearlyIncrement
+                  yearValue={yearValue}
+                  setYearValue={setYearValue}
+                  tenure={data.tenure}
+                  value={data.yearlyIncrement}
+                  rent={data.monthlyRent}
+                  increment={increment}
+                  setIncrement={setIncrement}
+                />
 
                 {/* Bank Details start here*/}
                 <Typography
@@ -575,28 +787,38 @@ useEffect(()=>{
 
                 {landblord.map((_, i) => (
                   <>
-                    
-                    <Grid container sx={{ px: 3,mb:"25px" }} spacing={isSmall ? 2 : 4}>
+                    <Grid
+                      container
+                      sx={{ px: 3, mb: "25px" }}
+                      spacing={isSmall ? 2 : 4}
+                    >
                       <Grid item xs={12}>
-                      {landblord.length > 0 ? (
-                      <Typography color={'var( --main-color)'}>  {landloard.length > 0 ? landloard[i].name : ""}</Typography>
-                    ) : (
-                      ""
-                    )}
+                        {landloard.length > 0 ? (
+                          <Typography color={"var( --main-color)"}>
+                            {" "}
+                            {landloard.length > 0 ? landloard[i].leeseName : ""}
+                          </Typography>
+                        ) : (
+                          ""
+                        )}
                       </Grid>
                       <TextFieldWrapper
                         label="Bank Name"
                         placeHolder="Enter Bank Name"
                         name="bankName"
                         required={true}
-                        value={data.bankName}
+                        value={ data.landlord[i] && data.landlord[i].bankName
+                          ? data.landlord[i].bankName
+                          : ""}
                         onChange={(e) => handleChange(e, i)}
                       />
                       <TextFieldWrapper
                         label="Benificiary Name"
                         placeHolder="Enter Benificiary Name"
                         name="benificiaryName"
-                        value={data.benificiaryName}
+                        value={ data.landlord[i] && data.landlord[i].benificiaryName
+                          ? data.landlord[i].benificiaryName
+                          : ""}
                         required={true}
                         onChange={(e) => handleChange(e, i)}
                       />
@@ -605,7 +827,9 @@ useEffect(()=>{
                         placeHolder="Enter Account No."
                         name="accountNo"
                         required={true}
-                        value={data.accountNo}
+                        value={ data.landlord[i] && data.landlord[i].accountNo
+                          ? data.landlord[i].accountNo
+                          : ""}
                         onChange={(e) => handleChange(e, i)}
                       />
                       <TextFieldWrapper
@@ -613,7 +837,9 @@ useEffect(()=>{
                         placeHolder="Enter IFSC Code"
                         name="ifscCode"
                         required={true}
-                        value={data.ifscCode}
+                        value={ data.landlord[i] && data.landlord[i].ifscCode
+                          ? data.landlord[i].ifscCode
+                          : ""}
                         onChange={(e) => handleChange(e, i)}
                       />
                     </Grid>
@@ -637,38 +863,40 @@ useEffect(()=>{
                 </Typography>
                 {landblord.map((_, i) => (
                   <>
-                    
                     <Grid
                       container
                       spacing={isSmall ? 2 : 4}
                       sx={{ px: 1, justifyContent: "space-evenly", mb: 3 }}
                     >
                       <Grid item xs={12}>
-                      <Typography  color={'var( --main-color)'}>
-                      {landloard.length > 0 ? landloard[i].name : ""}
-                    </Typography>
+                        <Typography color={"var( --main-color)"}>
+                          {landloard.length > 0 ? landloard[i].leeseName : ""}
+                        </Typography>
                       </Grid>
+                      {console.log(data.landlord.lenght)}
                       <DocumentUpload
+                        uploaded = {landloard[i] ? data[`${(landloard[i].leeseName + "@aadhar_card").replace(" ","")}`] ?  true : false: false}
                         label="Upload Aadhar Card"
                         placeHolder="Upload Aadhar Card"
-                        handleChange={handleChangeFile}
+                        handleChange={handleChangeFile} 
                         name={
                           landloard[i]
-                            ? `${(landloard[i].name + "@aadhar_card").replace(
+                            ? `${(landloard[i].leeseName + "@aadhar_card").replace(
                                 " ",
                                 ""
                               )}`
                             : "adhar"
                         }
                       />
-
+{console.log(data)}
                       <DocumentUpload
                         label="Upload Pan Card"
+                        uploaded = {landloard[i] ? data[`${(landloard[i].leeseName + "@pan_card").replace(" ","")}`] ?  true : false: false}
                         placeHolder={"Upload Pan Card"}
                         handleChange={handleChangeFile}
                         name={
                           landloard[i]
-                            ? `${(landloard[i].name + "@pan_card").replace(
+                            ? `${(landloard[i].leeseName + "@pan_card").replace(
                                 " ",
                                 ""
                               )}`
@@ -699,20 +927,23 @@ useEffect(()=>{
                   spacing={isSmall ? 2 : 4}
                   sx={{ px: 1, justifyContent: "space-evenly" }}
                 >
-                  <DocumentUpload
+                  {data.gstNo && <DocumentUpload
                     label="Upload GST Certificate"
+                    uploaded = {data.gst_certificate && true}
                     placeHolder="Upload GST Certificate"
                     handleChange={handleChangeFile}
                     name={"gst_certificate"}
-                  />
+                  />}
                   <DocumentUpload
                     label="Upload Draft Agreement"
+                    uploaded = {data.draft_agreement && true}
                     placeHolder="Upload Draft Agreement"
                     handleChange={handleChangeFile}
                     name={"draft_agreement"}
                   />
                   <DocumentUpload
                     label="Upload Electricity Bill"
+                    uploaded = {data.electricity_bill && true}
                     placeHolder={"Upload Electricity Bill"}
                     handleChange={handleChangeFile}
                     name={"electricity_bill"}
@@ -721,30 +952,35 @@ useEffect(()=>{
                   <DocumentUpload
                     label="Upload POA(If Applicable)"
                     placeHolder="Upload POA"
+                    uploaded = {data.poa && true}
                     handleChange={handleChangeFile}
                     name={"poa"}
                   />
 
                   <DocumentUpload
                     label="Upload Maintaince Bill"
+                    uploaded = {data.maintaince_bill && true}
                     placeHolder={"Upload Maintaince Bill"}
                     handleChange={handleChangeFile}
                     name={"maintaince_bill"}
                   />
 
                   <DocumentUpload
-                    label="Upload Cencel Bank Cheque"
-                    placeHolder="Upload Cencel Bank Cheque"
+                    label="Upload Cancle Bank Cheque"
+                    placeHolder="Upload Cancle Bank Cheque"
+                    uploaded = {data.cheque && true}
                     handleChange={handleChangeFile}
                     name={"cheque"}
                   />
                   <DocumentUpload
                     label="Upload Property Tax Receipt"
+                    uploaded = {data.tax_receipt && true}
                     placeHolder={"Upload Property Tax Receipt"}
                     handleChange={handleChangeFile}
                     name={"tax_receipt"}
                   />
                   <DocumentUpload
+                    uploaded = {data.noc && true}
                     label="Upload Noc(If Mutiple Oweners)"
                     placeHolder="NOC"
                     handleChange={handleChangeFile}
