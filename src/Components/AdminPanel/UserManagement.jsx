@@ -29,9 +29,9 @@ async function SearchAPi(searchValue){
 }
 
 useEffect(()=>{
-  if(searchValue.length >= 3){
+  // if(searchValue.length >= 3){
     SearchAPi(searchValue)
-  }
+  // }
 },[searchValue])
 
   //api Call

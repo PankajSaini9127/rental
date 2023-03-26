@@ -130,8 +130,8 @@ function LoginComponent({
                 <FormControl sx={{ my: 1 }} fullWidth className="LoginInput">
                   <TextField
                     variant="outlined"
-                    placeholder="Enter Username/Email"
-                    label="Username/Email"
+                    placeholder="Enter Email Adress"
+                    label="Email Address"
                     value={username}
                     name="username"
                     onChange={handleChange}

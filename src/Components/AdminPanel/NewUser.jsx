@@ -38,26 +38,25 @@ function NewUser() {
   const [formData, setFormData] = useState(initialState);
   const [formError, setformError] = useState({});
 
-  function validate(e, role) {
+  function validate() {
     const error = {};
-    if (!name) {
-      error.name = "Required ! Please Enter User's Name.";
-    } else if (name.length < 4) {
-      error.name = "Name Atleast 4 Character.";
+    if (name.length < 4) {
+      error.name = "Name Atleast 4 Character."
+      return false
     }
-    if (!mobile) {
-      error.mobile = "Required ! Please Enter User's Mobile Number.";
-    } else if (mobile.length < 10) {
-      error.mobile = "Mobile Number Not Valid.";
+    if (mobile.length >= 10 && mobile.length > 0) {
+      error.mobile = "Mobile Number Not Valid."
+      return false
     }
-    if (!email) {
-      error.email = "Required ! Please Enter User's Email Address.";
-    }
-
-    setformError(error);
+    return true
   }
 
   function handleChange(e) {
+    if(validate()){
+console.log("aa")
+    }else{
+      console.log("bb")
+    }
     if (e.target.name === "role") {
       setFormData((old) => ({
         ...old,
@@ -65,7 +64,22 @@ function NewUser() {
           ? old.role.filter((row) => row !== e.target.value)
           : [...old.role, e.target.value],
       }));
-    } else {
+    }else if(e.target.name === 'name'){
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value.replace(/[^a-z]/gi, '')
+      });
+    } else if(e.target.name == 'mobile'){
+      const re = /^[0-9\b]+$/;
+      if (e.target.value === '' || re.test(e.target.value)){
+        setFormData({
+          ...formData,
+          [e.target.name]: e.target.value,
+        });
+      }
+      
+    }
+    else {
       setFormData({
         ...formData,
         [e.target.name]: e.target.value,
@@ -76,7 +90,7 @@ function NewUser() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    validate();
+    
 
     if (Object.keys(formError).length < 1) {
       if (role.length < 1) {
@@ -288,7 +302,7 @@ function NewUser() {
                     name="email"
                     onChange={handleChange}
                     required={true}
-                    //onBlur={validate}
+                    type={'email'}
                     error={formError.email}
                   />
                   <TextFieldWrapper
@@ -298,7 +312,6 @@ function NewUser() {
                     name="mobile"
                     onChange={handleChange}
                     required={true}
-                    //onBlur={validate}
                     error={formError.mobile}
                     maxLength={10}
                   />
