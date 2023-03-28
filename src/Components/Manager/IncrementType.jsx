@@ -95,11 +95,12 @@ let total3;
 let total4;
 let total5;
 if(value === "Percentage"){
-  total1 = rent/100*yearValue.year1 + rent;
-   total2 = total1/100*yearValue.year2 + rent;
-   total3 = total2/100*yearValue.year3 + rent;
-   total4 = total3/100*yearValue.year4 + rent;
-   total5 = total4/100*yearValue.year5 +rent;
+  total1 = parseFloat(rent/100*yearValue.year1+ rent).toFixed(2);
+  total2 = parseFloat(total1/100*yearValue.year2+ rent).toFixed(2);
+  total3 = parseFloat(total2/100*yearValue.year3+ rent).toFixed(2);
+  total4 = parseFloat(total3/100*yearValue.year4+ rent).toFixed(2);
+  total5 = parseFloat(total4/100*yearValue.year5+rent).toFixed(2);
+
 }else
  if(value === "Value"){
    total1 = rent + yearValue.year1;

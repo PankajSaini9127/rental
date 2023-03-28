@@ -36,119 +36,127 @@ import {
   uploadDoc,
   getDetails,
   getCityList,
-  editAgreement
+  editAgreement,
+  getBankName,
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 import PermissionAlert from "./Alert";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
-
-function EditAgreement({history}) {
+function EditAgreement({ history }) {
+  const navigate =useNavigate()
   const { landloard } = useSelector((state) => state);
   const dispatch = useDispatch();
-  const [agreement,setAgreement] = useState([]) 
-  const {id} = useParams()
+  const [agreement, setAgreement] = useState([]);
+  const { id } = useParams();
   const [stateList, setStateList] = useState([]);
-  const [cityList, setCityList] = useState({}); 
+  const [cityList, setCityList] = useState([]);
   // const history = props.history
 
   // modified by yashwant
-  const [preData,setPreData] = useState({landlord : [], code : '',
-    lockInYear : ''
-    ,noticePeriod : ''
-    ,deposite : ''
-    ,monthlyRent : ''
-    ,yearlyIncrement : ''
-    ,status : ''
-    ,gst_certificate : ''
-    ,draft_agreement : ''
-    ,electricity_bill : ''
-    ,poa : ''
-    ,maintaince_bill : ''
-    ,cheque : ''
-    ,tax_receipt : ''
-    ,noc : ''
-  })
-useEffect(()=>{
-fetchData()
-},[])
+  const [preData, setPreData] = useState({
+    landlord: [],
+    code: "",
+    lockInYear: "",
+    address: "",
+    pincode: "",
+    state: "",
+    city: "",
+    locaiton: "",
+    noticePeriod: "",
+    deposite: "",
+    monthlyRent: "",
+    yearlyIncrement: "",
+    status: "",
+    gst_certificate: "",
+    draft_agreement: "",
+    electricity_bill: "",
+    poa: "",
+    maintaince_bill: "",
+    cheque: "",
+    tax_receipt: "",
+    noc: "",
+  });
+  useEffect(() => {
+    fetchData();
+  }, []);
 
+  async function fetchData() {
+    try {
+      let response = await getDetails(id);
 
-async function fetchData(){
-  try {
-    let response = await getDetails(id);
+      if (response.status === 200) {
+        let {
+          id,
+          code,
+          pincode,
+          state,
+          address,
+          location,
+          city,
+          lockInYear,
+          monthlyRent,
+          noticePeriod,
+          yearlyIncrement,
+          deposite,
+          gst_certificate,
+          draft_agreement,
+          electricity_bill,
+          poa,
+          maintaince_bill,
+          cheque,
+          tax_receipt,
+          noc,
+          tenure,
+          year1,
+          year2,
+          year3,
+          year4,
+          year5,
+          landlord,
+        } = response.data;
 
-
-    if(response.status === 200)
-    {
-     let {
-      id,
-      code,
-      lockInYear,
-      monthlyRent,
-      noticePeriod,
-      yearlyIncrement,
-      deposite,
-      gst_certificate,
-      draft_agreement,
-      electricity_bill,
-      poa,
-      maintaince_bill,
-      cheque,
-      tax_receipt,
-      noc,
-      tenure,
-      year1,
-      year2,
-      year3,
-      year4,
-      year5, landlord} = response.data
-
-      setPreData({id,code,
-        lockInYear,
-        monthlyRent,
-        noticePeriod,
-        yearlyIncrement,
-        deposite,
-        gst_certificate,
-        draft_agreement,
-        electricity_bill,
-        poa,
-        maintaince_bill,
-        cheque,
-        tax_receipt,
-        noc,
-        tenure,
-        year1,
-        year2,
-        year3,
-        year4,
-        year5, landlord})
+        setPreData({
+          id,
+          code,
+          pincode,
+          state,
+          address,
+          location,
+          city,
+          lockInYear,
+          monthlyRent,
+          noticePeriod,
+          yearlyIncrement,
+          deposite,
+          gst_certificate,
+          draft_agreement,
+          electricity_bill,
+          poa,
+          maintaince_bill,
+          cheque,
+          tax_receipt,
+          noc,
+          tenure,
+          year1,
+          year2,
+          year3,
+          year4,
+          year5,
+          landlord,
+        });
+      }
+    } catch (error) {
+      //console.log('err>>',error)
     }
-
-  } catch (error) {
-    //console.log('err>>',error)
   }
 
-}
 
 
-
-
-  const codeGenerater = () => {
-    var length = 6,
-      charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-      random = "";
-    for (var i = 0, n = charset.length; i < length; ++i) {
-      random += charset.charAt(Math.floor(Math.random() * n));
-      setData({ ...data, code: random });
-    }
-  };
-
-  useEffect(() => {
-    codeGenerater();
-  }, []);
+  // useEffect(() => {
+  //   codeGenerater();
+  // }, []);
   //console.log(">>>>", landloard);
   const [i, setIndex] = useState(0);
   const [data, setData] = useState({
@@ -172,8 +180,6 @@ async function fetchData(){
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
   const [formError, setFormError] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
-
-
 
   const [increment, setIncrement] = useState({
     year1: "",
@@ -222,109 +228,117 @@ async function fetchData(){
   function handleChange(e, i) {
     // console.log(preData)
     //console.log(e.target.name,e.target.value)
-    var error = false 
+    var error = false;
     switch (e.target.name) {
-      case 'leeseName':
-        if(!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
+      case "leeseName":
+        if (!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
         break;
-      case 'state':
-        // //console.log('state',e.target.value.match(/^[a-zA-Z ]*$/))
-        if(!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
+      
+      case "aadharNo":
+        if (!e.target.value.match(/^[0-9]*$/)) error = true;
         break;
-      case 'pincode':
-        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+      case "mobileNo":
+        if (!e.target.value.match(/^[0-9]*$/)) error = true;
         break;
-      case 'aadharNo':
-        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+      case "alternateMobile":
+        if (!e.target.value.match(/^[0-9]*$/)) error = true;
         break;
-      case 'mobileNo':
-        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+      case "bankName":
+        if (!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
         break;
-      case 'alternateMobile':
-        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+      case "benificiaryName":
+        if (!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
         break;
-      case 'bankName':
-          if(!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
-          break;
-      case 'benificiaryName':
-          if(!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
-          break;
-        case 'accountNo':
-          if(!e.target.value.match(/^[0-9]*$/)) error = true;
-          break;
-      case 'deposite':
-        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+      case "accountNo":
+        if (!e.target.value.match(/^[0-9]*$/)) error = true;
         break;
-   
-      case 'panNo':
-        e.target.value = e.target.value.toUpperCase()
-        if(!e.target.value.match(/^.{0,10}$/)) error = true;
+      case "deposite":
+        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
+
+      case "panNo":
+        e.target.value = e.target.value.toUpperCase();
+        if (!e.target.value.match(/^.{0,10}$/)) error = true;
         break;
       default:
         break;
     }
-//console.log(error)
-    if(!error)
+    if (
+      e.target.name === 'ifscCode' && 
+      e.target.value.length === 11
+    )
     {
+      console.log(e.target.name)
+      getBankeDetails(e.target.value,i);
 
-    if (preData.landlord[i]) {
-      setPreData((old) => ({
-        ...old,
-        landlord: old.landlord.map((row, id) => {
-          if (i === id) {
-            return {
-              ...row,
+    }
+    //console.log(error)
+    if (!error) {
+      if (preData.landlord[i]) {
+        setPreData((old) => ({
+          ...old,
+          landlord: old.landlord.map((row, id) => {
+            if (i === id) {
+              return {
+                ...row,
+                [e.target.name]: e.target.value,
+              };
+            }
+            return row;
+          }),
+        }));
+      } else {
+        setPreData((old) => ({
+          ...old,
+          landlord: [
+            ...old.landlord,
+            {
               [e.target.name]: e.target.value,
-            };
-          }
-          return row;
-        }),
-      }));
-    } else {
-      setPreData((old) => ({
-        ...old,
-        landlord: [
-          ...old.landlord,
-          {
-            [e.target.name]: e.target.value,
-          },
-        ],
-      }));
+            },
+          ],
+        }));
+      }
     }
   }
-  
-  }
-
 
   // handle Change for common feilds
   function handleCommonChange(e, i) {
-
-    var error = false 
+    var error = false;
     switch (e.target.name) {
-      case 'gstNo':
-        if(!e.target.value.match(/^[a-z0-9]{0,15}$/)) error = true;
+      case "state":
+        // //console.log('state',e.target.value.match(/^[a-zA-Z ]*$/))
+        if (!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
         break;
-      case 'lockInYear':
-        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+      case "pincode":
+        if (!e.target.value.match(/^[0-9]*$/)) error = true;
         break;
-      case 'rental_amount':
-        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+      case "gstNo":
+        if (!e.target.value.match(/^[a-z0-9]{0,15}$/)) error = true;
         break;
-      case 'noticePeriod':
-      if(!e.target.value.match(/^[0-9]*$/)) error = true;
-          break;
-      case 'monthlyRent':
-        if(!e.target.value.match(/^[0-9]*$/)) error = true;
+      case "lockInYear":
+        if (!e.target.value.match(/^[0-9]*$/)) error = true;
         break;
-        case 'deposite':
-          if(!e.target.value.match(/^[0-9]*$/)) error = true;
-          break;
+      case "rental_amount":
+        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
+      case "noticePeriod":
+        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
+      case "monthlyRent":
+        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
+      case "deposite":
+        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        break;
       default:
         break;
     }
 
-    if(!error)
-    setPreData((old) => ({ ...old, [e.target.name]: e.target.value }));
+
+  
+
+    if (!error)
+      setPreData((old) => ({ ...old, [e.target.name]: e.target.value }));
   }
 
   // on form submit
@@ -353,11 +367,23 @@ async function fetchData(){
       year2,
       year3,
       year4,
-      year5,landlord
+      year5,
+      pincode,
+      state,
+      address,
+      location,
+      city,
+      landlord,
     } = preData;
 
     APICall(
-      {id,
+      {
+        pincode,
+      state,
+      address,
+      location,
+      city,
+        id,
         code,
         lockInYear,
         monthlyRent,
@@ -378,7 +404,7 @@ async function fetchData(){
         year3,
         year4,
         year5,
-        landlord
+        landlord,
       },
       landlord
     );
@@ -387,17 +413,17 @@ async function fetchData(){
   const APICall = async (values, landlordData) => {
     const agreement = await editAgreement(values);
 
-      if (agreement.status === 200) {
-        console.log(history)
-        window.location.href = '/listing'
-        dispatch(
-          setAlert({
-            open: true,
-            variant: "success",
-            message: "Agrement Edited Successfully.",
-          })
-        );
-      }
+    if (agreement.status === 200) {
+      // console.log(history);
+      window.location.href = "/listing";
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "success",
+          message: "Agrement Edited Successfully.",
+        })
+      );
+    }
   };
 
   useEffect(() => {
@@ -449,27 +475,26 @@ async function fetchData(){
   //   setFormError(error);
   // }
 
-  
   //confirmation alert
   const [open, setOpen] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(preData)
-    setPreData(old=>({...old,...increment}))
+    console.log(preData);
+    setPreData((old) => ({ ...old, ...increment }));
     // validate(preData.landLord);
     setIsSubmit(true);
-    setOpen(true)
+    setOpen(true);
   };
 
   const handleCancel = () => {
     setOpen(false);
   };
 
-  // funciton for fetching state list
-  async function handleStateSearch(e, i) {
+   // funciton for fetching state list
+   async function handleStateSearch(e, i) {
     setIndex(i);
-    let response = await getStateList(e.target.value.toUpperCase());
+    let response = await getStateList(e.target.value);
 
     if (response.status === 200) {
       setStateList(response.data);
@@ -478,28 +503,40 @@ async function fetchData(){
 
   useEffect(() => {
     handleCitySearch();
-  }, [preData.landlord[i]]);
+  }, [preData.state]);
 
   // funciton for fetching state list
   async function handleCitySearch() {
-    // console.log(i);
-    // console.log(preData.landlord[i].state);
+    console.log(i);
+    console.log(preData.state);
     let search = stateList.filter(
-      (row) => row.name.toLowerCase() === preData.landlord[i].state.toLowerCase() && row.id
+      (row) => row.name === preData.state && row.id
     );
 
     // console.log(search);
     let response = await getCityList(search[0].id);
 
     if (response.status === 200) {
-      setCityList((old) => ({ ...old, [i]: response.data }));
+      setCityList(response.data);
     } else setCityList([]);
   }
 
-  const navigate =useNavigate()
+  async function getBankeDetails(data,i) {
+    let res = await getBankName(data);
+    if (res) {
+      setPreData((old) => ({
+        ...old,
+        landlord: old.landlord.map((row, index) => {
+          if (index === i) {
+            return { ...row, bankName: res.data.BANK };
+          } else return row;
+        }),
+      }));
+    }
+  }
+
   return (
     <>
-    
       {/* alert for submit form */}
       <PermissionAlert
         handleClose={handleCancel}
@@ -513,6 +550,8 @@ async function fetchData(){
       {/* {//console.log(landblord)} */}
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
         {/* side nav     */}
+        {/* <HamburgerMenu navigateTo={"listing"} /> */}
+
         <HamburgerMenu
          navigateHome={'dashboard'}
           handleListing={()=>navigate('/listing')}
@@ -545,225 +584,119 @@ async function fetchData(){
                   <TextFieldWrapper
                     label="Code"
                     placeHolder=""
+                    disabled={true}
                     backgroundColor="rgba(3, 193, 243, 0.2);"
-                    value={data.code}
+                    value={preData.code}
                     name="code"
                   />
-                  {/* {console.log(preData)} */}
-                  {preData && preData.landlord.map((row, i) => (
-                    <>
-                      {/* {//console.log(data.landlord)} */}
-                      <TextFieldWrapper
-                        label="Name Of Lesse"
-                        placeHolder="Enter Name Of Lesse"
-                        required={true}
-                        // error = {errorObj.leeseName}
-                        name="name"
-                        value={preData.landlord[i].name}
-                        onChange={(e) => handleChange(e, i)}
-                      />
-                      <Grid
-                        item
-                        md={4}
-                        xs={6}
-                        sx={{
-                          mb: "0px !important",
-                          "@media(max-width:900px)": { my: 1 },
-                        }}
-                      >
-                        <FormControl fullWidth>
-                          <Autocomplete
-                            freeSolo
-                            fullWidth
-                            id="free-solo-2-demo"
-                            disableClearable
-                            value = {preData.landlord[i].state || ''}
-                            onChange={(e, val) => {
-                              setPreData((old) => ({
-                                ...old,
-                                landlord: old.landlord.map((row, id) => {
-                                  console.log(id)
-                                  if (i === id) {
-                                    return {
-                                      ...row,
-                                      state:  val, 
-                                    };
-                                  }
-                                  return row;
-                                }),
-                              }));
-                            }}
-                            options={stateList.map((option) => option.name)}
-                            renderInput={(params) => (
-                              <TextField
-                                fullWidth
-                                name="state"
-                                // placeholder={preData.landlord[i].state || ""}
-                                value={preData.landlord[i].state || ''}
-                                {...params}
-                                label="State"
-                                onChange={(e) => {
-                                  handleChange(e, i);
-                                  handleStateSearch(e, i);
-                                }}
-                                InputProps={{
-                                  ...params.InputProps,
-                                  type: "search",
-                                }}
-                              />
-                            )}
-                          />
-                        </FormControl>
-                      </Grid>
 
-                      <Grid
-                        item
-                        md={4}
-                        xs={6}
-                        sx={{
-                          mb: "0px !important",
-                          "@media(max-width:900px)": { my: 1 },
+                  <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth>
+                      <Autocomplete
+                        freeSolo
+                        fullWidth
+                        id="free-solo-2-demo"
+                        disableClearable
+                        value={preData.state || ""}
+                        onChange={(e, val) => {
+                          setPreData((old) => ({
+                            ...old,
+                            state: val,
+                          }));
                         }}
-                      >
-                        <FormControl fullWidth>
+                        options={stateList.map((option) => option.name)}
+                        renderInput={(params) => (
                           <TextField
-                            label="City"
-                            placeHolder="Enter City"
-                            select
                             fullWidth
-                            name="city"
-                            required={true}
-                            value={preData.landlord[i].city}
-                            onChange={(e) => handleChange(e, i)}
-                            index={i}
-                          >
-                            {cityList[i] &&
-                              cityList[i].map((item) => {
-                                return (
-                                  <MenuItem value={item.city}>
-                                    {item.city}
-                                  </MenuItem>
-                                );
-                              })}
-                                <MenuItem value={preData.landlord[i].city}>
-                                    {preData.landlord[i].city}
-                                  </MenuItem>
-                          </TextField>
-                        </FormControl>
-                      </Grid>
-                      <TextFieldWrapper
-                        label="Location"
-                        placeHolder="Enter Location"
-                        name="location"
-                        value={
-                          preData.landlord[i].location
-                        }
-                        onChange={(e) => handleChange(e, i)}
-                        index={i}
+                            name="state"
+                            // placeholder={preData.landlord[i].state || ""}
+                            value={preData.state || ""}
+                            {...params}
+                            label="State"
+                            onChange={(e) => {
+                              handleCommonChange(e);
+                              handleStateSearch(e, i);
+                            }}
+                            InputProps={{
+                              ...params.InputProps,
+                              type: "search",
+                            }}
+                          />
+                        )}
                       />
-                      <TextFieldWrapper
-                        label="Pincode"
-                        placeHolder="Enter Pincode"
-                        name="pincode"
-                        required={true}
-                        maxLength={6}
-                        value={preData.landlord[i].pincode
-                        }
-                        onChange={(e) => handleChange(e, i)}
-                        index={i}
-                        error={formError.pincode}
-                      />
-                      <TextFieldWrapper
-                        label="Address"
-                        placeHolder="Enter Address"
-                        required={true}
-                        name="address"
-                        value={
-                          preData.landlord[i].address
-                        }
-                        onChange={(e) => handleChange(e, i)}
-                        index={i}
-                      />
-                      <TextFieldWrapper
-                        label="Aadhar Number"
-                        placeHolder="Enter Aadhar No."
-                        required={true}
-                        name="aadharNo"
-                        maxLength={12}
-                        value={
-                          preData.landlord[i].aadharNo
-                                                  }
-                        onChange={(e) => handleChange(e, i)}
-                        index={i}
-                        error={formError.aadharNo}
-                      />
-                      <TextFieldWrapper
-                        label="Pan Number"
-                        placeHolder="Enter Pan No."
-                        name="panNo"
-                        maxLength={10}
-                        value={
-                          preData.landlord[i].panNo
-                                                }
-                        onChange={(e) => handleChange(e, i)}
-                        index={i}
-                      />
+                    </FormControl>
+                  </Grid>
 
-                     
-                      <TextFieldWrapper
-                        label="Mobile Number"
-                        placeHolder="Enter Mobile No."
+                  <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth>
+                      <TextField
+                        label="City"
+                        placeHolder="Enter City"
+                        select
+                        fullWidth
+                        name="city"
                         required={true}
-                        name="mobileNo"
-                        maxLength={10}
-                        error={formError.mobileNo}
-                        value={
-                          preData.landlord[i].mobileNo
-                        }
-                        onChange={(e) => handleChange(e, i)}
+                        value={preData.city || ''}
+                        onChange={handleCommonChange}
                         index={i}
-                      />
-                      <TextFieldWrapper
-                        label="Alternate Number"
-                        placeHolder="Enter Alternate No."
-                        name="alternateMobile"
-                        maxLength={10}
-                        value={
-                          preData.landlord[i].alternateMobile
-                        }
-                        error={formError.alternateMobile}
-                        onChange={(e) => handleChange(e, i)}
-                        index={i}
-                      />
-
-                      <TextFieldWrapper
-                        label="Email"
-                        placeHolder="Enter Email"
-                        required={true}
-                        name="email"
-                        value={
-                           preData.landlord[i].email
-                        }
-                        onChange={(e) => handleChange(e, i)}
-                        index={i}
-                        error={formError.email}
-                      />
-                      <TextFieldWrapper
-                        label="GST Number"
-                        placeHolder="Enter GST No."
-                        required={true}
-                        name="gstNo"
-                        maxLength={15}
-                        value={preData.landlord[i].gstNo}
-                        onChange={(e)=>handleChange(e, i)}
-                      />
-                    </>
-                  ))
-
-}
+                      >
+                        {cityList &&
+                          cityList.map((item) => {
+                            return (
+                              <MenuItem value={item.city}>{item.city}</MenuItem>
+                            );
+                          })}
+                        <MenuItem value={preData.city}>{preData.city}</MenuItem>
+                      </TextField>
+                    </FormControl>
+                  </Grid>
                   <TextFieldWrapper
-                    label="Lock In Year(If Applicable)"
-                    placeHolder="Enter Lock in Year"
+                    label="Location"
+                    placeHolder="Enter Location"
+                    name="location"
+                    value={preData.location || ''}
+                    onChange={handleCommonChange}
+                    index={i}
+                  />
+                  <TextFieldWrapper
+                    label="Pincode"
+                    placeHolder="Enter Pincode"
+                    name="pincode"
+                    required={true}
+                    maxLength={6}
+                    value={preData.pincode}
+                    onChange={handleCommonChange}
+                    index={i}
+                    error={formError.pincode}
+                  />
+                  <TextFieldWrapper
+                    label="Address"
+                    placeHolder="Enter Address"
+                    required={true}
+                    name="address"
+                    value={preData.address}
+                    onChange={handleCommonChange}
+                    index={i}
+                  />
+                  <TextFieldWrapper
+                    label="Lock In Month(If Applicable)"
+                    placeHolder="Enter Lock in Month"
                     name="lockInYear"
                     value={preData.lockInYear}
                     onChange={handleCommonChange}
@@ -795,8 +728,14 @@ async function fetchData(){
                     label={"Agreement Tenure"}
                     required={true}
                     name="tenure"
-                    options={["11 Month", "2 Year","3 Year","4 Year", "5 Year"]}
-                    value={preData.tenure || ''}
+                    options={[
+                      "11 Month",
+                      "2 Year",
+                      "3 Year",
+                      "4 Year",
+                      "5 Year",
+                    ]}
+                    value={preData.tenure || ""}
                     onChange={handleCommonChange}
                   />
                   {preData.tenure === "" ? null : preData.tenure ===
@@ -825,7 +764,7 @@ async function fetchData(){
                   setIncrement={setIncrement}
                 />
 
-                {/* Bank Details start here*/}
+                {/* landlord Details start here*/}
                 <Typography
                   variant="body1"
                   color="var(--main-color)"
@@ -834,60 +773,135 @@ async function fetchData(){
                   fontWeight="600"
                   my="20px"
                 >
-                  Bank Detail
+                  Landlord Detail
                 </Typography>
 
-                {preData.landlord.length > 0 &&  preData.landlord.map((_, i) => (
-                  <>
-                    <Grid
-                      container
-                      sx={{ px: 3, mb: "25px" }}
-                      spacing={isSmall ? 2 : 4}
-                    >
-                      <Grid item xs={12}>
-                        {preData.landlord.length > 0 ? (
-                          <Typography color={"var( --main-color)"}>
-                          {preData.landlord[i].leeseName}
-                          </Typography>
-                        ) : (
-                          ""
-                        )}
+                {preData.landlord.length > 0 &&
+                  preData.landlord.map((_, i) => (
+                    <>
+                      <Grid
+                        container
+                        sx={{ px: 3, mb: "25px" }}
+                        spacing={isSmall ? 2 : 4}
+                      >
+                        <Grid item xs={12}>
+                          {preData.landlord.length > 0 ? (
+                            <Typography color={"var( --main-color)"}>
+                              {preData.landlord[i].leeseName}
+                            </Typography>
+                          ) : (
+                            ""
+                          )}
+                        </Grid>
+
+                        <TextFieldWrapper
+                          label="Name Of Lesse"
+                          placeHolder="Enter Name Of Lesse"
+                          required={true}
+                          // error = {errorObj.leeseName}
+                          name="name"
+                          value={preData.landlord[i].name}
+                          onChange={(e) => handleChange(e, i)}
+                        />
+
+                        <TextFieldWrapper
+                          label="Aadhar Number"
+                          placeHolder="Enter Aadhar No."
+                          required={true}
+                          name="aadharNo"
+                          maxLength={12}
+                          value={preData.landlord[i].aadharNo}
+                          onChange={(e) => handleChange(e, i)}
+                          index={i}
+                          error={formError.aadharNo}
+                        />
+                        <TextFieldWrapper
+                          label="Pan Number"
+                          placeHolder="Enter Pan No."
+                          name="panNo"
+                          maxLength={10}
+                          value={preData.landlord[i].panNo}
+                          onChange={(e) => handleChange(e, i)}
+                          index={i}
+                        />
+
+                        <TextFieldWrapper
+                          label="Mobile Number"
+                          placeHolder="Enter Mobile No."
+                          required={true}
+                          name="mobileNo"
+                          maxLength={10}
+                          error={formError.mobileNo}
+                          value={preData.landlord[i].mobileNo}
+                          onChange={(e) => handleChange(e, i)}
+                          index={i}
+                        />
+                        <TextFieldWrapper
+                          label="Alternate Number"
+                          placeHolder="Enter Alternate No."
+                          name="alternateMobile"
+                          maxLength={10}
+                          value={preData.landlord[i].alternateMobile}
+                          error={formError.alternateMobile}
+                          onChange={(e) => handleChange(e, i)}
+                          index={i}
+                        />
+
+                        <TextFieldWrapper
+                          label="Email"
+                          placeHolder="Enter Email"
+                          required={true}
+                          name="email"
+                          value={preData.landlord[i].email}
+                          onChange={(e) => handleChange(e, i)}
+                          index={i}
+                          error={formError.email}
+                        />
+                        <TextFieldWrapper
+                          label="GST Number"
+                          placeHolder="Enter GST No."
+                          required={true}
+                          name="gstNo"
+                          maxLength={15}
+                          value={preData.landlord[i].gstNo}
+                          onChange={(e) => handleChange(e, i)}
+                        />
+                        <TextFieldWrapper
+                          label="Bank IFSC Code"
+                          placeHolder="Enter IFSC Code"
+                          name="ifscCode"
+                          required={true}
+                          value={preData.landlord[i].ifscCode}
+                          onChange={(e) => handleChange(e, i)}
+                        />
+                        <TextFieldWrapper
+                          label="Bank Name"
+                          disabled={true}
+                          placeHolder="Enter Bank Name"
+                          name="bankName"
+                          required={true}
+                          value={preData.landlord[i].bankName}
+                          onChange={(e) => handleChange(e, i)}
+                        />
+                        <TextFieldWrapper
+                          label="Benificiary Name"
+                          placeHolder="Enter Benificiary Name"
+                          name="benificiaryName"
+                          value={preData.landlord[i].benificiaryName}
+                          required={true}
+                          onChange={(e) => handleChange(e, i)}
+                        />
+                        <TextFieldWrapper
+                          label="Bank A/C Number "
+                          placeHolder="Enter Account No."
+                          name="accountNo"
+                          required={true}
+                          value={preData.landlord[i].accountNo}
+                          onChange={(e) => handleChange(e, i)}
+                        />
                       </Grid>
-                      <TextFieldWrapper
-                        label="Bank Name"
-                        placeHolder="Enter Bank Name"
-                        name="bankName"
-                        required={true}
-                        value={ preData.landlord[i].bankName}
-                        onChange={(e) => handleChange(e, i)}
-                      />
-                      <TextFieldWrapper
-                        label="Benificiary Name"
-                        placeHolder="Enter Benificiary Name"
-                        name="benificiaryName"
-                        value={ preData.landlord[i].benificiaryName}
-                        required={true}
-                        onChange={(e) => handleChange(e, i)}
-                      />
-                      <TextFieldWrapper
-                        label="Bank A/C Number "
-                        placeHolder="Enter Account No."
-                        name="accountNo"
-                        required={true}
-                        value={ preData.landlord[i].accountNo}
-                        onChange={(e) => handleChange(e, i)}
-                      />
-                      <TextFieldWrapper
-                        label="Bank IFSC Code"
-                        placeHolder="Enter IFSC Code"
-                        name="ifscCode"
-                        required={true}
-                        value={ preData.landlord[i].ifscCode}
-                        onChange={(e) => handleChange(e, i)}
-                      />
-                    </Grid>
-                  </>
-                ))}
+                    </>
+                  ))}
 
                 {/* Bank Details ends here*/}
 
@@ -904,46 +918,55 @@ async function fetchData(){
                 >
                   Upload Document
                 </Typography>
-                {preData.landlord.length > 0 && preData.landlord.map((_, i) => (
-                  <>
-                    <Grid
-                      container
-                      spacing={isSmall ? 2 : 4}
-                      sx={{ px: 1, justifyContent: "space-evenly", mb: 3 }}
-                    >
-                      <Grid item xs={12}>
-                        <Typography color={"var( --main-color)"}>
-                          {preData.landlord[i].leeseName}
-                        </Typography>
+                {preData.landlord.length > 0 &&
+                  preData.landlord.map((_, i) => (
+                    <>
+                      <Grid
+                        container
+                        spacing={isSmall ? 2 : 4}
+                        sx={{ px: 1, justifyContent: "", mb: 3 }}
+                      >
+                        <Grid item xs={12}>
+                          <Typography color={"var( --main-color)"}>
+                            {preData.landlord[i].leeseName}
+                          </Typography>
+                        </Grid>
+
+                        {/* {console.log('>>>>',preData.landlord[i])} */}
+                        <Grid item xs={6}>
+                          <DocumentUpload
+                            uploaded={
+                              preData.landlord[i].aadhar_card ? true : false
+                            }
+                            label="Upload Aadhar Card"
+                            placeHolder="Upload Aadhar Card"
+                            handleChange={handleChangeFile}
+                            name={"aadhar_card"}
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <DocumentUpload
+                            label="Upload Pan Card"
+                            uploaded={
+                              preData.landlord[i].pan_card ? true : false
+                            }
+                            placeHolder={"Upload Pan Card"}
+                            handleChange={handleChangeFile}
+                            name={"pan_card"}
+                          />
+                        </Grid>
+                        <Grid item xs={6}>
+                          <DocumentUpload
+                            label="Upload GST Certificate"
+                            uploaded={preData.gst_certificate && true}
+                            placeHolder="Upload GST Certificate"
+                            handleChange={handleChangeFile}
+                            name={"gst_certificate"}
+                          />
+                        </Grid>
                       </Grid>
-                      
-                      {/* {console.log('>>>>',preData.landlord[i])} */}
-                      <DocumentUpload
-                        uploaded = { preData.landlord[i].aadhar_card ?  true : false}
-                        label="Upload Aadhar Card"
-                        placeHolder="Upload Aadhar Card"
-                        handleChange={handleChangeFile} 
-                        name={'aadhar_card'}
-                      />
-
-                      <DocumentUpload
-                        label="Upload Pan Card"
-                        uploaded = {preData.landlord[i].pan_card ?  true :  false}
-                        placeHolder={"Upload Pan Card"}
-                        handleChange={handleChangeFile}
-                        name={"pan_card"}
-                      />
-
-<DocumentUpload
-                    label="Upload GST Certificate"
-                    uploaded = {preData.gst_certificate && true}
-                    placeHolder="Upload GST Certificate"
-                    handleChange={handleChangeFile}
-                    name={"gst_certificate"}
-                  />
-                    </Grid>
-                  </>
-                ))}
+                    </>
+                  ))}
 
                 {landblord.length > 0 ? (
                   <Typography
@@ -963,61 +986,71 @@ async function fetchData(){
                 <Grid
                   container
                   spacing={isSmall ? 2 : 4}
-                  sx={{ px: 1, justifyContent: "space-evenly" }}
+                  sx={{ px: 1, justifyContent: "" }}
                 >
-                   
-                  <DocumentUpload
-                    label="Upload Draft Agreement"
-                    uploaded = {preData.draft_agreement && true}
-                    placeHolder="Upload Draft Agreement"
-                    handleChange={handleChangeFile}
-                    name={"draft_agreement"}
-                  />
-                  <DocumentUpload
-                    label="Upload Electricity Bill"
-                    uploaded = {preData.electricity_bill && true}
-                    placeHolder={"Upload Electricity Bill"}
-                    handleChange={handleChangeFile}
-                    name={"electricity_bill"}
-                  />
-
-                  <DocumentUpload
-                    label="Upload POA(If Applicable)"
-                    placeHolder="Upload POA"
-                    uploaded = {preData.poa && true}
-                    handleChange={handleChangeFile}
-                    name={"poa"}
-                  />
-
-                  <DocumentUpload
-                    label="Upload Maintaince Bill"
-                    uploaded = {preData.maintaince_bill && true}
-                    placeHolder={"Upload Maintaince Bill"}
-                    handleChange={handleChangeFile}
-                    name={"maintaince_bill"}
-                  />
-
-                  <DocumentUpload
-                    label="Upload Cancle Bank Cheque"
-                    placeHolder="Upload Cancle Bank Cheque"
-                    uploaded = {preData.cheque && true}
-                    handleChange={handleChangeFile}
-                    name={"cheque"}
-                  />
-                  <DocumentUpload
-                    label="Upload Property Tax Receipt"
-                    uploaded = {preData.tax_receipt && true}
-                    placeHolder={"Upload Property Tax Receipt"}
-                    handleChange={handleChangeFile}
-                    name={"tax_receipt"}
-                  />
-                  <DocumentUpload
-                    uploaded = {preData.noc && true}
-                    label="Upload Noc(If Mutiple Oweners)"
-                    placeHolder="NOC"
-                    handleChange={handleChangeFile}
-                    name={"noc"}
-                  />
+                  <Grid item xs={6}>
+                    <DocumentUpload
+                      label="Upload Draft Agreement"
+                      uploaded={preData.draft_agreement && true}
+                      placeHolder="Upload Draft Agreement"
+                      handleChange={handleChangeFile}
+                      name={"draft_agreement"}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <DocumentUpload
+                      label="Upload Electricity Bill"
+                      uploaded={preData.electricity_bill && true}
+                      placeHolder={"Upload Electricity Bill"}
+                      handleChange={handleChangeFile}
+                      name={"electricity_bill"}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <DocumentUpload
+                      label="Upload POA(If Applicable)"
+                      placeHolder="Upload POA"
+                      uploaded={preData.poa && true}
+                      handleChange={handleChangeFile}
+                      name={"poa"}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <DocumentUpload
+                      label="Upload Maintaince Bill"
+                      uploaded={preData.maintaince_bill && true}
+                      placeHolder={"Upload Maintaince Bill"}
+                      handleChange={handleChangeFile}
+                      name={"maintaince_bill"}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <DocumentUpload
+                      label="Upload Cancle Bank Cheque"
+                      placeHolder="Upload Cancle Bank Cheque"
+                      uploaded={preData.cheque && true}
+                      handleChange={handleChangeFile}
+                      name={"cheque"}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <DocumentUpload
+                      label="Upload Property Tax Receipt"
+                      uploaded={preData.tax_receipt && true}
+                      placeHolder={"Upload Property Tax Receipt"}
+                      handleChange={handleChangeFile}
+                      name={"tax_receipt"}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <DocumentUpload
+                      uploaded={preData.noc && true}
+                      label="Upload Noc(If Mutiple Oweners)"
+                      placeHolder="NOC"
+                      handleChange={handleChangeFile}
+                      name={"noc"}
+                    />
+                  </Grid>
                 </Grid>
 
                 {/* Document upload section end here */}

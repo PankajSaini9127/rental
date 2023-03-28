@@ -52,7 +52,7 @@ const fieldStyle = {
 
 
 // Text Field Style
-const TextFieldWrapper = ({type, label, placeHolder, value, name, onChange,error,required,maxLength,onBlur}) => {
+const TextFieldWrapper = ({disabled,type, label, placeHolder, value, name, onChange,error,required,maxLength,onBlur}) => {
   return (
     <Grid item md={4} xs={6} sx={{'@media(max-width:900px)':{my:1}}}>
       <FormControl fullWidth sx={{p:'0px !important'}}>
@@ -60,6 +60,7 @@ const TextFieldWrapper = ({type, label, placeHolder, value, name, onChange,error
         <TextField
           variant="outlined"
           name={name}
+          disabled = {disabled}
           // color='secodary'
           onChange={(e) => onChange(e)}
           error={error ?true:false}

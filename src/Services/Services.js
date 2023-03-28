@@ -121,3 +121,7 @@ export async function get_search_srmanager (id,name){
 export async function send_to_bhu (data,id){
     return await axios.put(`${API_LIVE}/api/updateAgreement/${id}`,data)
 }
+
+export async function getBankName(data){
+    return await axios.get(`https://ifsc.razorpay.com/${data}`)
+}
