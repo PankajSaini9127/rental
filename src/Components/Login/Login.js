@@ -7,11 +7,13 @@ import axios from 'axios';
 import { AuthContext } from "../../App";
 import { ADD_AUTH } from "../ContextAPI/Action";
 import { LoginAPI } from "../../Services/Services";
+import { setAuth } from "../../store/action/action";
+import { useDispatch } from "react-redux";
 
 export default function Login() {
   const data = { username: "manager", password: "manager" };
 
-  const { dispatch } = useContext(AuthContext)
+  const dispatch =useDispatch()
 
   const navigate = useNavigate();
 
@@ -34,7 +36,7 @@ export default function Login() {
   const { role } = formValue;
 
 
-  const Get_DATA = async () => {
+  const Get_DATA = async (dispatch) => {
     const user = await LoginAPI({ email: formValue.username })
     const data = user.data;
 
@@ -49,23 +51,23 @@ export default function Login() {
 
           if (role === "Manager") {
             setErr({ open: false });
-            dispatch(ADD_AUTH(data.result[0]))
+            dispatch(setAuth(data.result[0]))
             navigate(`/dashboard`)
           }
           else
             if (role === "Senior Manager") {
               setErr({ open: false });
-              dispatch(ADD_AUTH(data.result[0]))
+              dispatch(setAuth(data.result[0]))
               navigate(`/srManagerDashboard`)
             }
             else
               if (role === "Admin") {
                 setErr({ open: false });
-                dispatch(ADD_AUTH(data.result[0]))
+                dispatch(setAuth(data.result[0]))
                 navigate(`/userDashboard`)
               } else if (role === "Operations") {
                 setErr({ open: false });
-                dispatch(ADD_AUTH(data.result[0]))
+                dispatch(setAuth(data.result[0]))
                 navigate(`/operationsListing`)
               }
                else {
@@ -93,7 +95,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
 
     e.preventDefault();
-    Get_DATA()
+    Get_DATA(dispatch)
 
     // if (
     //   formValue.password === data.password

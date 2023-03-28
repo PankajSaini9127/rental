@@ -1,5 +1,6 @@
 import { Grid, Stack } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 
 //css
@@ -9,6 +10,8 @@ import HamburgerMenu from "../HamburgerMenu";
 import { DashboardItem, MyHeader } from "../StyledComponent";
 
 function Dashboard() {
+
+  const navigate =useNavigate()
 
   const data = [ 
     {service:"Total Agreement", value:10},
@@ -23,7 +26,13 @@ function Dashboard() {
       <MyHeader>Dashboard</MyHeader>
 
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-        <HamburgerMenu  navigateTo={'listing'} />
+      <HamburgerMenu
+      navigateHome={'dashboard'}
+          handleListing={()=>navigate('/listing')}
+          monthlyRent={() => navigate("/monthly-payment")}
+          renewal={() => navigate(`/renewal`)}
+          monthlyBtn='true'
+        />
 
         {/* dashboard content */}
         <Grid container sx={{ justifyContent: "center" }}>

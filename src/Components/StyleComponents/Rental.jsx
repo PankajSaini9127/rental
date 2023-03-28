@@ -4,11 +4,11 @@ const DataFieldStyle = ({ field, value }) => {
     const typographyStyle = {
       textTransform: "capitalize",
       color:"var(--main-color)",
-      fontSize: "20px",
-      "@media(max-width:900px)": { fontSize: "18px" },
+      fontSize: "17px",
+      "@media(max-width:900px)": { fontSize: "14px" },
     };
     return (
-      <Grid item md={4} xs={6}>
+      <Grid item md={3} xs={6} sx={{p:0}}>
         <Typography variant="body1" sx={typographyStyle}>
           {" "}
           {field}
@@ -23,7 +23,7 @@ const DataFieldStyle = ({ field, value }) => {
   
   const YearField = ({ year, amount }) => {
   
-    const fieldStyle ={fontSize:'20px',color:"var(--main-color)",'@media(max-width:900px)':{fontSize:'18px'}}
+    const fieldStyle ={fontSize:'17px',color:"var(--main-color)",'@media(max-width:900px)':{fontSize:'14px'}}
     return (
       <Grid item md={1} xs={4}>
         <Typography variant="body1" 

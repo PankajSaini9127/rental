@@ -1,36 +1,113 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import DataTable from "./DataTable";
 
 import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
 import { Stack } from "@mui/material";
+import { get_agreements, get_search_manager } from "../../Services/Services";
+import { useDispatch } from "react-redux";
+import { AuthContext } from "../../App";
+import { useNavigate } from "react-router-dom";
+import { getRowIdFromRowModel } from "@mui/x-data-grid/hooks/features/rows/gridRowsUtils";
 
 
 function Listing() {
   const [Select, setSelect] = useState("New Agreement");
+  const [data, setData] = useState([]);
+
+  
+  const {state:{adminReCall}} = useContext(AuthContext)
 
   const handleChange = (e) => {
     setSelect(e.target.value);
   };
 
+  const [agreement, setAgreement] = useState({});
+
+  const [loading, setLoading] = useState(false);
+  const [check,setCheck] = useState([])
 
 
+  const APICALL = async () => {
+    setLoading(true);
+    setData([]);
+    const result = await get_agreements();
+
+    if (result.status === 200) {
+      const data = result.data.ids.reverse();
+      console.log(result)
+      setAgreement(result.data.agreement);
+      setData(data);
+      
+      setLoading(false);
+    }
+  };
+  
+  
+ //search
+ const [searchValue,setsearchValue] =useState('');
+
+  
+ async function SearchAPi(searchValue){
+   const search = await get_search_manager(searchValue)
+   setData(search.data.ids)
+  setAgreement(search.data.agreement)
+  // console.log(search)
+ } 
+
+
+useEffect(()=>{
+    // if(searchValue.length >= 1){
+      SearchAPi(searchValue)
+    // }
+},[searchValue])
+
+ 
+
+const row = data.map((item) => {
+    
+    return {
+      id: agreement[item].agreement_id,
+      status: agreement[item].status,
+      code: agreement[item].code,
+      name: agreement[item].name,
+      location: agreement[item].location,
+      rentalAmount: agreement[item].monthlyRent,
+      checkbox: agreement[item].status
+    };
+  });
+
+  useEffect(() => {
+    APICALL();
+  }, [adminReCall]); 
+
+const navigate =useNavigate()
 
  return (
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-        <HamburgerMenu navigateTo={'listing'}/>
+      <HamburgerMenu
+          handleListing={()=>navigate('/listing')}
+          monthlyRent={() => navigate("/monthly-payment")}
+          renewal={() => navigate(`/renewal`)}
+          monthlyBtn='true'
+        />
 
         <ListingComponent
           title={'Rental Agreement'}
           buttonText="Upload"
           buttonText1="Add Agreement"
           addbtn={true}
-          value={Select}
           Table={DataTable}
           onChange={handleChange}
           dropDown={false}
+          loading={loading}
+          rows={row}
+        searchValue={searchValue}
+        setsearchValue={setsearchValue}
+        check={check}
+        setCheck={setCheck}
         />
       </Stack>
     </>

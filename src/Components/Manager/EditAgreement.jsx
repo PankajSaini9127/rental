@@ -41,7 +41,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 import PermissionAlert from "./Alert";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 function EditAgreement({history}) {
@@ -496,6 +496,7 @@ async function fetchData(){
     } else setCityList([]);
   }
 
+  const navigate =useNavigate()
   return (
     <>
     
@@ -512,7 +513,13 @@ async function fetchData(){
       {/* {//console.log(landblord)} */}
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
         {/* side nav     */}
-        <HamburgerMenu navigateTo={"listing"} />
+        <HamburgerMenu
+         navigateHome={'dashboard'}
+          handleListing={()=>navigate('/listing')}
+          monthlyRent={() => navigate("/monthly-payment")}
+          renewal={() => navigate(`/renewal`)}
+          monthlyBtn='true'
+        />
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Edit Agreement</MyHeader>

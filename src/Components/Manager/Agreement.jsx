@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import { useNavigate } from "react-router-dom";
+
 // MUI Components
 import {
   Box,
@@ -41,8 +43,10 @@ import { setAlert } from "../../store/action/action";
 import PermissionAlert from "./Alert";
 
 function Agreement() {
-  const { landloard } = useSelector((state) => state);
+  const { landloard,auth } = useSelector((state) => state);
   const dispatch = useDispatch();
+
+  const manager_id = auth.id;
 
   const codeGenerater = () => {
     var length = 6,
@@ -287,11 +291,66 @@ console.log(error)
         year3,
         year4,
         year5,
-
+        manager_id:manager_id,
+        status: "Sent To Sr Manager"
       },
       landlord
     );
   };
+
+function handleHold (){
+
+  const {
+    code,
+    lockInYear,
+    monthlyRent,
+    noticePeriod,
+    yearlyIncrement,
+    deposite,
+    gst_certificate,
+    draft_agreement,
+    electricity_bill,
+    poa,
+    maintaince_bill,
+    cheque,
+    tax_receipt,
+    noc,
+    tenure,
+    year1,
+    year2,
+    year3,
+    year4,
+    year5,
+  } = data;
+  const { landlord } = data;
+  APICall(
+    {
+      code,
+      lockInYear,
+      monthlyRent,
+      noticePeriod,
+      yearlyIncrement,
+      deposite,
+      gst_certificate,
+      draft_agreement,
+      electricity_bill,
+      poa,
+      maintaince_bill,
+      cheque,
+      tax_receipt,
+      noc,
+      tenure,
+      year1,
+      year2,
+      year3,
+      year4,
+      year5,
+      manager_id:manager_id,
+      status: "Hold"
+    },
+    landlord
+  );
+}
 
   const APICall = async (values, landlordData) => {
     const agreement = await add_agreement(values);
@@ -423,6 +482,8 @@ console.log(error)
     } else setCityList([]);
   }
 
+  const navigate =useNavigate()
+
   return (
     <>
       {/* alert for submit form */}
@@ -438,7 +499,13 @@ console.log(error)
       {/* {console.log(landblord)} */}
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
         {/* side nav     */}
-        <HamburgerMenu navigateTo={"listing"} />
+        <HamburgerMenu
+      navigateHome={'dashboard'}
+          handleListing={()=>navigate('/listing')}
+          monthlyRent={() => navigate("/monthly-payment")}
+          renewal={() => navigate(`/renewal`)}
+          monthlyBtn='true'
+        />
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>New Agreement</MyHeader>
@@ -556,7 +623,7 @@ console.log(error)
                             select
                             fullWidth
                             name="city"
-                            required={true}
+                            // required={true}
                             value={
                               data.landlord[i] && data.landlord[i].city
                                 ? data.landlord[i].city
@@ -1046,6 +1113,7 @@ console.log(error)
                           height: "40px",
                         },
                       }}
+                      onClick={handleHold}
                     >
                       Hold
                     </Button>

@@ -99,3 +99,25 @@ export async function getDetails(search){
 export async function editAgreement(data){
     return await axios.patch(`${API_LIVE}/api/editAgreement`,data)
 }
+
+export async function get_search_manager (name){
+    return await axios.post(`${API_LIVE}/api/search/manager`,{name})
+}
+
+
+//senior manager start here
+
+export async function get_srm_agreements(id){
+    return await axios.get(`${API_LIVE}/api/srmanager/get-agreement/${id}`)
+}
+
+//search in srmanager
+export async function get_search_srmanager (id,name){
+    return await axios.post(`${API_LIVE}/api/srmanager-search/${id}`,{name})
+}
+
+
+//send to BHU 
+export async function send_to_bhu (data,id){
+    return await axios.put(`${API_LIVE}/api/updateAgreement/${id}`,data)
+}

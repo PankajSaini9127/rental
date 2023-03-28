@@ -1,12 +1,13 @@
 import { Stack } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
 import ManagerTable from "./ManagerTable";
-import config from '../../config.json'
+import { get_search_srmanager, get_srm_agreements } from "../../Services/Services";
+import { useSelector } from "react-redux";
 
 
 
@@ -15,108 +16,72 @@ const options = ["New Agreement","Monthly Payment","Rental"]
 
 
 
-const row = [
-  {
-    id: 1,
-    status: "Pending",
-    code: 123,
-    name: "John Doe",
-    location:"Rajsthan",
-    manager:"John Doe",
-    rentalAmount:10000,
-  },
-  {
-    id: 2,
-    status: "Approved",
-    code: 123,
-    name: "John Doe",
-    location:"Rajsthan",
-    manager:"John Doe",
-    rentalAmount:10000,
-  },
-  {
-    id: 3,
-    status: "Rejected",
-    code: 123,
-    name: "John Doe",
-    location:"Rajsthan",
-    manager:"John Doe",
-    rentalAmount:10000,
-  },
-  {
-    id: 4,
-    status: "Approved",
-    code: 123,
-    name: "John Doe",
-    location:"Rajsthan",
-    manager:"John Doe",
-    rentalAmount:10000,
-  },
-  {
-    id: 5,
-    status: "Approved",
-    code: 123,
-    name: "John Doe",
-    location:"Rajsthan",
-    manager:"John Doe",
-    rentalAmount:10000,
-  },
-  {
-    id: 6,
-    status: "Pending",
-    code: 123,
-    name: "John Doe",
-    location:"Rajsthan",
-    manager:"John Doe",
-    rentalAmount:10000,
-  },
-  {
-    id: 7,
-    status: "Rejected",
-    code: 123,
-    name: "John Doe",
-    location:"Rajsthan",
-    manager:"John Doe",
-    rentalAmount:10000,
-  }
-  
-];
-
 
 
 function SrManagerListing() { 
 
+  const {auth} = useSelector(state=>state);
 
-const [data, setData] =useState([])
+  const login_srm_id = auth.id;
 
- const getData = async()=>{
-  const response = await axios.get(`${config.API_LIVE}/api/srmanager/agreement`)
-  setData(response.data.agreements.reverse())
+const [data, setData] =useState({ids:[]})
+
+ const getData = async(id)=>{
+  const response = await get_srm_agreements(id);
+  setData(response.data)
  } 
+ 
+ data.ids = data.ids.reverse()
 
- const rows = data.map((item)=>{
+ const rows = data.ids.map((item)=>{
+ 
   return {
-    id: item.id,
-    status: item.status,
-    code: item.code,
-    name: item.leeseName,
-    location:item.location,
-    manager:item.manager,
-    rentalAmount:item.monthlyRent
+    i: data.agreement[item].id,
+    id: data.agreement[item].agreement_id,
+    status: data.agreement[item].status,
+    code: data.agreement[item].code,
+    name: data.agreement[item].name,
+    location:data.agreement[item].location,
+    manager:data.agreement[item].manager,
+    rentalAmount:data.agreement[item].monthlyRent
   }
  })
 
- useEffect(()=>{
-  getData()
+
+
+ const [searchValue,setsearchValue] =useState('');
+ 
+ //search
+ async function SearchAPi(id,searchValue){
+  const search = await get_search_srmanager(id,searchValue)
+  // setAgreement(search.data.agreement)
+  setData(search.data)
+  console.log(search.data)
+}
+
+useEffect(()=>{
+  // if(searchValue.length >= 1){
+    SearchAPi(login_srm_id,searchValue)
+  // }
+},[searchValue])
+
+
+useEffect(()=>{
+  getData(login_srm_id)
  },[])
 
+const navigate = useNavigate()
 
   return (
     <>
+{
+  data.success &&
 
 <Stack sx={{flexWrap:"wap",flexDirection:"row"}}>
-
-<HamburgerMenu/>
+<HamburgerMenu
+          handleListing={()=>navigate('/srManagerListing')}
+          navigateHome={"srManagerDashboard"}
+        />
       <ListingComponent
         title="Rental Agreement"
         buttonText="Upload"
@@ -124,9 +89,14 @@ const [data, setData] =useState([])
         value={'New Agreement'}
         Table={ManagerTable}
         rows={rows}
+        dropDown={false}
+        
+        searchValue={searchValue}
+        setsearchValue={setsearchValue}
       />
 
 </Stack>
+}
     </>
   );
 }

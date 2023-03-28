@@ -1,6 +1,6 @@
-import { Alert, Box, Button, Grid, Snackbar } from "@mui/material";
+import { Alert, Box, Button, Grid, Snackbar,Checkbox } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../../config.json";
 
@@ -10,19 +10,25 @@ import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PermissionAlert from "./Alert";
-import { delete_agreement, get_agreements } from "../../Services/Services";
+import { delete_agreement, get_agreements, send_to_bhu } from "../../Services/Services";
+import { useDispatch, useSelector } from "react-redux";
+import { AuthContext } from "../../App";
 
-function DataTable() {
-  const [data, setData] = useState([]);
-  const [agreement, setAgreement] = useState({});
+function DataTable({rows,loading,check,setCheck}) {
+ 
+  const { dispatch } = useContext(AuthContext);
+const [ids,setIds]= useState([])
 
-  const [loading, setLoading] = useState(false);
+const {auth} = useSelector(s=>s);
+
+const manager_id = auth.id;
+
 
   const [err, setErr] = useState({
     open: false,
     type: "",
     message: "",
-  });
+  })
 
   //altet close
   const handleClose = () => {
@@ -33,30 +39,17 @@ function DataTable() {
     });
   };
 
-  // api call for get data
-
-  const APICALL = async () => {
-    setLoading(true);
-    setData([]);
-    const result = await get_agreements();
-
-    if (result.status === 200) {
-      const data = result.data.ids.reverse();
-      setAgreement(result.data.agreement);
-      setData(data);
-      setLoading(false);
-    }
-  };
-
   // api for delete record
-  const deleteAPI = async (id) => {
+const deleteAPI = async (id) => {
     const deleteItem = await delete_agreement(id);
     if (deleteItem.data.success) {
+      dispatch({ type: "ADMIN_RECALL" })
       setErr({
         open: true,
         type: "warning",
         message: deleteItem.data.message,
       });
+      
     } else {
       setErr({
         open: true,
@@ -64,27 +57,11 @@ function DataTable() {
         message: deleteItem.data.message,
       });
     }
-  };
+};
 
-  useEffect(() => {
-    APICALL();
-  }, []);
+const navigate = useNavigate();
 
-  const row = data.map((item) => {
-    // console.log(item)
-    return {
-      id: agreement[item].agreement_id,
-      status: agreement[item].status,
-      code: agreement[item].code,
-      name: agreement[item].name,
-      location: agreement[item].location,
-      rentalAmount: agreement[item].monthlyRent,
-    };
-  });
-
-  const navigate = useNavigate();
-
-  const renderDetailsButton = (e) => {
+const renderDetailsButton = (e) => {
     const id = e.id;
 
     return (
@@ -133,11 +110,64 @@ function DataTable() {
     );
   };
 
-  const columns = [
+const detailsButton = (e) => {
+    const id = e.id;
+  
+  
+    return (
+      
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            style={{
+              backgroundColor: "#e3c739",
+              color: "white",
+              fontSize: "12px",
+              textTransform: "capitalize",
+              width:"100%"
+            }}
+            onClick={(e) => {
+              e.stopPropagation(); // don't select this row after clicking
+              navigate(`/managerApproval/${id}`)
+            }}
+          >
+            View
+          </Button>
+    );
+  };
+ 
+const handleSwitch = (e)=>{
+  if(ids.includes(e.target.name)){
+    setIds(old=>old.filter((i)=> i !== e.target.name))
+  }else{
+
+    setIds(old=>[...old,e.target.name])
+  }
+}  
+  
+  
+const columns = [
+  {
+    field: "checkbox",
+    width: 20,
+    type: "number",
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    renderCell: (params) => 
+      <Checkbox
+      disabled={params.formattedValue === "Hold"? false : true}
+        onChange={handleSwitch}
+        name={params.id}
+        checked={ids.includes(params.id)}
+        ></Checkbox>
+        // {console.log(params.formattedValue)}
+    ,
+  },
     {
       field: "code",
       headerName: "Code",
-      width: 130,
+      width: 90,
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -145,30 +175,38 @@ function DataTable() {
     {
       field: "name",
       headerName: "Name",
-      width: 230,
+      width:170,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "location",
       headerName: "Location",
-      width: 230,
+      width: 190,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "rentalAmount",
       headerName: "Rental Amount",
-      width: 200,
+      width: 180,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "status",
       headerName: "Status",
-      width: 160,
+      width: 140,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+    },
+    {
+      field: "view",
+      headerName: "View",
+      width: 150,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      renderCell: detailsButton
     },
     {
       field: "action",
@@ -178,11 +216,25 @@ function DataTable() {
       headerAlign: "center",
       renderCell: renderDetailsButton,
     },
-  ];
+];
 
-  //form delete alert
 
-  const [deleteAlert, setDeleteAlert] = useState({ open: false, id: "" });
+
+const handleSelect = (ids)=>{
+  
+   setIds(ids)
+}
+
+const handleSelectSend = (e)=>{
+  console.log(ids)
+  ids.map(async(id)=>{
+    const response = await send_to_bhu({status:"Sent Sr Manager", manager_id},id)  
+    console.log(response)
+  })
+}
+
+ //form delete alert
+const [deleteAlert, setDeleteAlert] = useState({ open: false, id: "" });
 
   const handleConfirm = () => {
     deleteAPI(deleteAlert.id);
@@ -194,6 +246,12 @@ function DataTable() {
   };
   return (
     <>
+{
+      ids.length > 0 && <Box sx={{display:'flex',justifyContent:'flex-end'}}>
+      <Button variant="contained" sx={{textTransform:'capitalize',m:1,mx:3}} onClick={handleSelectSend} >Send To Sr Manager</Button>
+      </Box>
+    }
+
       <Snackbar
         open={err.open}
         autoHideDuration={6000}
@@ -248,12 +306,12 @@ function DataTable() {
         }}
       >
         <DataGrid
-          rows={row}
+          rows={rows}
           columns={columns}
           pageSize={6}
           rowsPerPageOptions={[6]}
           loading={loading}
-          checkboxSelection
+          // checkboxSelection
           sx={{ color: "black !important", minWidth: "50px" }}
           getCellClassName={(parms) => {
             let cellClass = [];
@@ -271,10 +329,9 @@ function DataTable() {
               cellClass.push("red statusCell");
             }
             cellClass.push("allCell");
-
             return cellClass;
           }}
-          // onSelectionModelChange={(ids) => {console.log(ids)}}
+          onSelectionModelChange={handleSelect}
         ></DataGrid>
       </Box>
     </>

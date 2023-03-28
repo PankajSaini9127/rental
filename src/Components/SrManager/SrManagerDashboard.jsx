@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material'
 import { Stack } from '@mui/system'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../../App'
 import HamburgerMenu from '../HamburgerMenu'
 import { DashboardItem, MyHeader } from '../StyledComponent'
@@ -17,14 +18,17 @@ const data = [
 
 function SrManagerDashboard() {
 
-  
+  const navigate = useNavigate();
 
   return (
     <>
     <MyHeader>Dashboard</MyHeader>
 
 <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-  <HamburgerMenu  navigateTo={'srManagerListing'}/>
+       <HamburgerMenu
+          handleListing={()=>navigate('/srManagerListing')}
+          navigateHome={"srManagerDashboard"}
+        />
 
   {/* dashboard content */}
   <Grid container sx={{ justifyContent: "center" }}>

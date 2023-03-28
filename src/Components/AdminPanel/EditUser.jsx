@@ -1,4 +1,5 @@
-import { Alert, Box, Button, Grid, Snackbar, Stack } from "@mui/material";
+import { Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Stack } from "@mui/material";
+
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -99,7 +100,7 @@ function EditUser() {
     });
 
     const supervisor = await GetSupervisor(superVisor1);
-    setsupervisorArray(supervisor.data.map((item) => item.name));
+    setsupervisorArray(supervisor.data);
   }
 
   // Role Check Box Disable Manage
@@ -312,13 +313,41 @@ function EditUser() {
                     value={role}
                   />
 
-                  <SelectComponent
+                  {/* <SelectComponent
                     value={supervisor}
                     name="supervisor"
                     label={"Supervisor"}
                     options={supervisorArray}
                     onChange={handleChange}
-                  />
+                  /> */}
+
+<Grid item md={4} xs={6} sx={{mb:'0px !important','@media(max-width:900px)':{my:1}}}>
+      <FormControl fullWidth >
+      <InputLabel id="demo-simple-select-label">{"Supervisor"}</InputLabel>
+        <Select
+          name={"supervisor"}
+          onChange={(e) => handleChange(e)}
+          variant="outlined"
+          labelId="demo-simple-select-label"
+          value={supervisor}
+          label={"Supervisor"}
+          sx={{
+            mt: "0px !important",
+            color: "rgba(16, 99, 173, 0.47)",
+            width: "100%",
+            height:'50px !important',
+            boxShadow: "none",
+            
+          }}
+        >
+          {
+            supervisorArray.map((item,i)=>{
+              return <MenuItem value={item.id} key={item.id} >{item.name}</MenuItem>
+            })
+          }
+        </Select>
+      </FormControl>
+    </Grid>
                 </Grid>
                 <Grid container sx={{ justifyContent: "space-evenly", mt: 3 }}>
                   <Grid item sm={3.0}>

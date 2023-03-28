@@ -117,10 +117,11 @@ const dispatch = useDispatch()
                           onChange={handleChange}
                           value={value.password}
                           name={'password'}
+                          type={showPassword? 'text' :'password'}
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end" onClick={passwordToggle}>
-                               {!showPassword? <Visibility />:<VisibilityOff/>} 
+                               {!showPassword? <Visibility />: <VisibilityOff/> } 
                               </InputAdornment>
                             ),
                           }}
@@ -135,10 +136,11 @@ const dispatch = useDispatch()
                           onChange={handleChange}
                           value={value.cPassword}
                           name="cPassword"
+                          type={showPassword? 'text' :'password'}
                           InputProps={{
                             endAdornment: (
-                              <InputAdornment position="end">
-                                {showPassword? <Visibility />:<VisibilityOff/>}
+                              <InputAdornment position="end" onClick={passwordToggle}>
+                                {!showPassword? <Visibility />:<VisibilityOff/>}
                               </InputAdornment>
                             ),
                           }}

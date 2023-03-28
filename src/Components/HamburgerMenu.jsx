@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Grid, IconButton, Stack} from "@mui/material";
 import React, { useState } from "react";
 
 //icons hero section
@@ -10,11 +10,22 @@ import { Vector1, Vector2, Vector3, VectorLogout } from "./Vector";
 import { NavExpand, NavItem } from "./StyleComponents/HamburgerStyled";
 
 import MenuIcon from '@mui/icons-material/Menu';
+import { useDispatch } from "react-redux";
 
-function HamburgerMenu({navigateTo,navigate2}) {
+function HamburgerMenu({handleListing,navigateHome,monthlyRent,renewal,monthlyBtn}) {
   const [expand, setExpand] = useState(false);
 
+  const dispatch = useDispatch()
+
    const navigate = useNavigate()
+
+
+   // logout function
+function logout (){
+  localStorage.clear()
+  dispatch({type :"LOGOUT"})
+  navigate('/')
+} 
 
   return (
     <>
@@ -48,16 +59,22 @@ function HamburgerMenu({navigateTo,navigate2}) {
               width: "50px",
               backgroundSize: "cover",
             }}
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate(`/${navigateHome}`)}
           />
           
 
           {!expand ? (
             <>
-              <NavItem Vector={Vector1} navigateTO={navigateTo}/>
-              <NavItem Vector={Vector2} navigateTO={"monthly-payment"}/>
-              <NavItem Vector={Vector3} navigateTO={"renewal"}/>
-              <NavItem Vector={VectorLogout} navigateTO={''} />
+              <NavItem Vector={Vector1} onClick={handleListing}/>
+              {
+                monthlyBtn &&
+                <>
+                <NavItem Vector={Vector2} onClick={monthlyRent}/>
+               <NavItem Vector={Vector3} onClick={renewal}/>
+               </>
+              }
+              
+              <NavItem Vector={VectorLogout} navigateTO={''} onClick={logout}/>
             </>
           ) : (
             <Stack container spacing={2}>
@@ -65,16 +82,21 @@ function HamburgerMenu({navigateTo,navigate2}) {
 
               <NavExpand
                 msg="New Agreement"
-                navigateTO={navigateTo}
+                onClick={handleListing}
                 Vector={Vector1}
               />
-              <NavExpand
+              {
+                monthlyBtn && <>
+                <NavExpand
                 msg="Monthly Payments"
-                navigateTO={'monthly-payment'}
+                onClick={monthlyRent}
                 Vector={Vector2}
               />
-              <NavExpand msg="Renewal" Vector={Vector3} navigateTO={'renewal'}/>
-              <NavExpand msg="Log-out" Vector={VectorLogout} navigateTO={''}/>
+              <NavExpand msg="Renewal" Vector={Vector3}  onClick={renewal}/>
+                </>
+              }
+              
+              <NavExpand msg="Logout" Vector={VectorLogout}  onClick={logout}/>
             </Stack>
           )}
         </Stack>

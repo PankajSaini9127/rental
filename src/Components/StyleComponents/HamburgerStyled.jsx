@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const NavExpand = ({msg, navigateTO,Vector})=>{
+const NavExpand = ({msg, navigateTO,Vector,onClick})=>{
 
     const navigate = useNavigate()
     
@@ -20,9 +20,7 @@ const NavExpand = ({msg, navigateTO,Vector})=>{
           cursor:'pointer',
           '@media(max-width:900px)':{width:'180px'}
         }}
-        onClick={() => {
-          navigate(`/${navigateTO}`);
-        }}
+        onClick={()=>{onClick()}}
       >
   
        <Box sx={{width:"50px"}}><Vector/></Box>
@@ -43,10 +41,9 @@ const NavExpand = ({msg, navigateTO,Vector})=>{
     )
   }
   
-  const NavItem = ({Vector,navigateTO})=>{
-    const navigate = useNavigate()
+  const NavItem = ({Vector,onClick})=>{
     return(
-              <Box sx={{cursor:'pointer'}} onClick={()=>navigate(`/${navigateTO}`)}>
+              <Box sx={{cursor:'pointer'}} onClick={onClick}>
                   <Vector/>
                   </Box>
     )

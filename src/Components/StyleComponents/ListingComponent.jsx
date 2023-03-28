@@ -33,7 +33,9 @@ function ListingComponent({
   addUserBtn,
   dropDown,
   serachValue,
-  setsearchValue
+  setsearchValue,
+  check,
+  setCheck
 }) {
 
   const navigate = useNavigate()
@@ -172,7 +174,7 @@ function ListingComponent({
 
       </Grid>
 
-      <Table rows={rows} />
+      <Table rows={rows} setCheck={setCheck} check={check}/>
     </Box>
   );
 }
