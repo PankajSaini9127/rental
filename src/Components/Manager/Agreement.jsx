@@ -169,6 +169,9 @@ function Agreement() {
         e.target.value = e.target.value.toUpperCase()
         if(!e.target.value.match(/^.{0,10}$/)) error = true;
         break;
+      case 'gstNo':
+        if(!e.target.value.match(/^.{0,15}$/)) error = true;
+        break;
       default:
         break;
     }
@@ -210,9 +213,6 @@ console.log(error)
 
     var error = false 
     switch (e.target.name) {
-      case 'gstNo':
-        if(!e.target.value.match(/^[a-z0-9]{0,15}$/)) error = true;
-        break;
       case 'lockInYear':
         if(!e.target.value.match(/^[0-9]*$/)) error = true;
         break;
@@ -305,7 +305,7 @@ console.log(error)
         let gst = `${(row.leeseName + "@gst").replace(" ","")}`;
         return {
           ...row,
-          percentageShare: row.percentage,
+          // percentageShare: row.percentage,
           name: row.leeseName,
           agreement_id,
           aadhar_card: data[aadhar_card],
@@ -690,21 +690,24 @@ console.log(error)
                         index={i}
                         error={formError.email}
                       />
-                    </>
-                  ))}
-
-            <TextFieldWrapper
+                        <TextFieldWrapper
                         label="GST Number"
                         placeHolder="Enter GST No."
                         required={true}
                         name="gstNo"
                         maxLength={15}
                         value={
-                          data.gstNo
-                            || ""
+                          data.landlord[i] && data.landlord[i].gstNo
+                          ? data.landlord[i].gstNo
+                          : ""
                         }
-                        onChange={handleCommonChange}
+                        onChange={(e) => handleChange(e, i)}
+
                       />
+                    </>
+                  ))}
+
+          
 
                   <TextFieldWrapper
                     label="Lock In Year(If Applicable)"
