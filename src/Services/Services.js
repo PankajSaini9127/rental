@@ -92,3 +92,10 @@ export async function getStateList(search){
 export async function getCityList(search){
     return await axios.get(`${API_LIVE}/api/cityList?search=${search}`)
 }
+
+export async function getDetails(search){
+    return await axios.get(`${API_LIVE}/api/getDetails?id=${search}`)
+}
+export async function editAgreement(data){
+    return await axios.patch(`${API_LIVE}/api/editAgreement`,data)
+}

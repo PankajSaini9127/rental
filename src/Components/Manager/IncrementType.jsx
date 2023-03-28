@@ -136,7 +136,7 @@ useEffect(()=>{
       }
     } )
 
-    console.log(final)
+    // console.log(final)
 
     setIncrement(final)
 

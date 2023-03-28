@@ -295,29 +295,26 @@ console.log(error)
 
   const APICall = async (values, landlordData) => {
     const agreement = await add_agreement(values);
-console.log(data)
-    return 1
+    // return 1
     if (agreement.data.success) {
       const agreement_id = agreement.data.agreement[0];
-
+      
       landlordData = landlordData.map((row, index) => {
-        let aadhar_card = `${(landloard[index].name + "@aadhar_card").replace(
-          " ",
-          ""
-        )}`;
-        let pan_card = `${(landloard[index].name + "@pan_card").replace(
-          " ",
-          ""
-        )}`;
+        let aadhar_card = `${(row.leeseName + "@aadhar_card").replace(" ","")}`;
+        let pan_card = `${(row.leeseName + "@pan_card").replace(" ","")}`;
+        let gst = `${(row.leeseName + "@gst").replace(" ","")}`;
         return {
           ...row,
-          percentageShare: landloard[index].percentage,
-          name: landloard[index].name,
+          percentageShare: row.percentage,
+          name: row.leeseName,
           agreement_id,
           aadhar_card: data[aadhar_card],
           pan_card: data[pan_card],
+          gst: data[gst],
         };
       });
+      console.log(">>>>",landlordData)
+
       const result = await add_landlord(landlordData);
 
       if (result) {
@@ -389,7 +386,7 @@ console.log(data)
     setData(old=>({...old,...increment}))
     validate(data);
     setIsSubmit(true);
-    // setOpen(true)
+    setOpen(true)
   };
 
   const handleCancel = () => {
@@ -474,7 +471,7 @@ console.log(data)
 
                   {landblord.map((row, i) => (
                     <>
-                      {console.log(data.landlord)}
+                      {/* {console.log(data.landlord)} */}
                       <TextFieldWrapper
                         label="Name Of Lesse"
                         placeHolder="Enter Name Of Lesse"
@@ -888,7 +885,7 @@ console.log(data)
                             : "adhar"
                         }
                       />
-{console.log(data)}
+{/* {console.log(data)} */}
                       <DocumentUpload
                         label="Upload Pan Card"
                         uploaded = {landloard[i] ? data[`${(landloard[i].leeseName + "@pan_card").replace(" ","")}`] ?  true : false: false}
@@ -903,6 +900,21 @@ console.log(data)
                             : "pan"
                         }
                       />
+
+<DocumentUpload
+                    label="Upload GST Certificate"
+                    uploaded = {landloard[i] ? data[`${(landloard[i].leeseName + "@gst").replace(" ","")}`] ?  true : false: false}
+                    placeHolder="Upload GST Certificate"
+                    handleChange={handleChangeFile}
+                    name={
+                      landloard[i]
+                        ? `${(landloard[i].leeseName + "@gst").replace(
+                            " ",
+                            ""
+                          )}`
+                        : "gst"
+                    }
+                  />
                     </Grid>
                   </>
                 ))}
@@ -927,13 +939,7 @@ console.log(data)
                   spacing={isSmall ? 2 : 4}
                   sx={{ px: 1, justifyContent: "space-evenly" }}
                 >
-                  {data.gstNo && <DocumentUpload
-                    label="Upload GST Certificate"
-                    uploaded = {data.gst_certificate && true}
-                    placeHolder="Upload GST Certificate"
-                    handleChange={handleChangeFile}
-                    name={"gst_certificate"}
-                  />}
+            
                   <DocumentUpload
                     label="Upload Draft Agreement"
                     uploaded = {data.draft_agreement && true}

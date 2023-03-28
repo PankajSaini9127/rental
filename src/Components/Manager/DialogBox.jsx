@@ -138,6 +138,7 @@ function DialogBox({ value, setValue }) {
     setAlert({open:true,message:"Percentage Share Should Be 100 %"})
    }
    else{
+    console.log(data)
     setAlert({open:false,message:""})
     dispatch(addLandLoard(data));
     handleClose()
