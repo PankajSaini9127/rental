@@ -138,11 +138,14 @@ const detailsButton = (e) => {
   };
  
 const handleSwitch = (e)=>{
+  console.log(ids.includes(e.target.name))
+  console.log(ids)
   if(ids.includes(e.target.name)){
-    setIds(old=>old.filter((i)=> i !== e.target.name))
+    console.log('out')
+    setIds(ids.filter((i)=> i !== e.target.name))
   }else{
-
-    setIds(old=>[...old,e.target.name])
+    console.log('in',e.target.name,ids)
+    setIds([...ids,e.target.name])
   }
 }  
   
@@ -154,14 +157,16 @@ const columns = [
     type: "number",
     headerClassName: "dataGridHeader",
     headerAlign: "center",
-    renderCell: (params) => 
-      <Checkbox
-      disabled={params.formattedValue === "Hold"? false : true}
+    renderCell: (params) =><> 
+      {params.formattedValue === "Hold" ?
+        <Checkbox
         onChange={handleSwitch}
         name={params.id}
         checked={ids.includes(params.id)}
-        ></Checkbox>
-        // {console.log(params.formattedValue)}
+        /> : 
+          <Checkbox
+        disabled={true}/>}
+        </>
     ,
   },
     {

@@ -274,7 +274,9 @@ function Agreement() {
       state,
       address,
       location,
-      city
+      city,
+      manager_id,
+
     } = data;
     const { landlord } = data;
 
@@ -314,8 +316,13 @@ function Agreement() {
   };
 
   function handleHold (){
-
+console.log(data)
     const {
+      pincode,
+      state,
+      address,
+      location,
+      city,
       code,
       lockInYear,
       monthlyRent,
@@ -340,6 +347,11 @@ function Agreement() {
     const { landlord } = data;
     APICall(
       {
+        pincode,
+        state,
+        address,
+        location,
+        city,
         code,
         lockInYear,
         monthlyRent,
@@ -370,8 +382,7 @@ function Agreement() {
 
   const APICall = async (values, landlordData) => {
     const agreement = await add_agreement(values);
-    console.log(">>>>", landlordData);
-    console.log(">>>>", data);
+
     // return 1
     if (agreement.data.success) {
       const agreement_id = agreement.data.agreement[0];
@@ -383,6 +394,8 @@ function Agreement() {
         )}`;
         let pan_card = `${(row.leeseName + "@pan_card").replace(" ", "")}`;
         let gst = `${(row.leeseName + "@gst").replace(" ", "")}`;
+        console.log(">>>>", landlordData);
+        console.log(">>>>", data);
         return {
           ...row,
           // percentageShare: row.percentage,

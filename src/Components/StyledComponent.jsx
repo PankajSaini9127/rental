@@ -136,7 +136,7 @@ const PasswordField = ({label, placeHolder, value, name, onChange,errMsg,onBlur,
 // Document Upload
 const DocumentUpload = ({ label, placeHolder,handleChange, name, uploaded }) => {
   return (
-    <Grid item md={4.1} xs={6}>
+    <Grid item  xs={12}>
       {/* <MyTextfield /> */}
       <FormControl fullWidth>
         <FormLabel>
