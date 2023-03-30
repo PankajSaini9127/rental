@@ -60,7 +60,7 @@ function UserManagementTable({ rows }) {
             color="primary"
             size="small"
             style={{
-              backgroundColor: "#e3c739",
+              backgroundColor: "#62CDFF",
               color: "white",
               fontSize: "12px",
               textTransform: "capitalize",
@@ -90,24 +90,24 @@ function UserManagementTable({ rows }) {
     {
       field: "name",
       headerName: "Name",
-      width: 180,
+      width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "role",
       headerName: "Role",
-      width: 150,
+      width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
-    {
-      field: "supervisor",
-      headerName: "Supervisor",
-      width: 140,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-    },
+    // {
+    //   field: "supervisor",
+    //   headerName: "Supervisor",
+    //   width: 140,
+    //   headerClassName: "dataGridHeader",
+    //   headerAlign: "center",
+    // },
     {
       field: "email",
       headerName: "Email",
@@ -118,7 +118,7 @@ function UserManagementTable({ rows }) {
     {
       field: "contactno",
       headerName: "Contact No.",
-      width: 120,
+      width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },

@@ -1,7 +1,7 @@
 import { DataGrid } from '@mui/x-data-grid';
 import React,{useState} from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Box, Button, Checkbox } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useSelector } from 'react-redux';
 import { send_to_bhu } from '../../Services/Services';
 
@@ -45,39 +45,10 @@ function ManagerTable({rows}) {
           </Button>
     );
   };
-  const handleSwitch = (e)=>{
-    console.log(ids.includes(e.target.name))
-    console.log(ids)
-    if(ids.includes(e.target.name)){
-      console.log('out')
-      setIds(ids.filter((i)=> i !== e.target.name))
-    }else{
-      console.log('in',e.target.name,ids)
-      setIds([...ids,e.target.name])
-    }
-  } 
+  
   
 const columns = [
      
-  {
-    field: "checkbox",
-    width: 20,
-    type: "number",
-    headerClassName: "dataGridHeader",
-    headerAlign: "center",
-    renderCell: (params) =><> 
-    {console.log(params)}
-      {params.formattedValue === "Sent Sr Manager" ?
-        <Checkbox
-        onChange={handleSwitch}
-        name={params.id}
-        checked={ids.includes(params.id)}
-        /> : 
-          <Checkbox
-        disabled={true}/>}
-        </>
-    ,
-  },
       {
         field: "code",
         headerName: "Code",
@@ -196,7 +167,7 @@ function handleSelect (){
         columns={columns}
         pageSize={6}
         rowsPerPageOptions={[6]}
-        // checkboxSelection
+        checkboxSelection
         sx={{ color: "black !important",  minWidth:"50px" }}
         getCellClassName={(parms) => {
          
@@ -218,7 +189,7 @@ function handleSelect (){
           
           return(cellClass)
         }}
-        // onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
+        onSelectionModelChange={(ids) => onRowsSelectionHandler(ids)}
       >
 
       </DataGrid>

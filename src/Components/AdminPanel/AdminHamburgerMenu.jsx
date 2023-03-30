@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { VectorLogout, VectorUser } from "../Vector";
 import { NavExpand, NavItem } from "../StyleComponents/HamburgerStyled";
 
-import MenuIcon from '@mui/icons-material/Menu';
+import MenuIcon from "@mui/icons-material/Menu";
 
 function AdminHamburgerMenu() {
   const [expand, setExpand] = useState(false);
@@ -20,47 +20,59 @@ function AdminHamburgerMenu() {
     <>
       {/* hambergur menu  */}
       <Grid
-        sx={{ ml: "10px"}}
+        sx={{ ml: "10px" }}
         className={expand ? "HeroSectionMenu" : ""}
         // onMou
-        
       >
         <Stack sx={{ flexDirection: "column" }} spacing={2}>
-        <Box
+          <Box
             sx={{
               height: "50px",
               width: "50px",
-              display:'grid',
-              placeItems:'center'
-            }} 
-          
+              display: "grid",
+              placeItems: "center",
+            }}
           >
-            <IconButton color="primary" onClick={() => setExpand(!expand)} ><MenuIcon/></IconButton>
+            <IconButton color="primary" onClick={() => setExpand(!expand)}>
+              <MenuIcon />
+            </IconButton>
           </Box>
-          
+
           <Box
             sx={{
               background: `url(${Logo})`,
               height: "50px",
               width: "50px",
               backgroundSize: "cover",
-            }} 
-            onClick={()=>navigate('/userDashboard')}
+            }}
+            onClick={() => navigate("/userDashboard")}
           />
-         
 
           {!expand ? (
             <>
-              <NavItem Vector={VectorUser} navigateTO="userManagement"/>
-              <NavItem Vector={VectorLogout}  navigateTO=""/>
-              </>
+            {/* yashwant */}
+              <NavItem Vector={VectorUser} 
+            onClick={() => navigate("/userDashboard")}
+               />
+              <NavItem Vector={VectorLogout} navigateTO="" />
+            </>
           ) : (
-            <Stack container  spacing={2} >
+            <Stack container spacing={2}>
               {/* onclick */}
-             
-             <NavExpand msg="User" navigateTO={'userManagement'} Vector={VectorUser} NavItem={NavItem}/>
-             <NavExpand msg="LogOut" navigateTO="" Vector={VectorLogout} NavItem={NavItem}/>
+              <NavExpand
+                msg="User"
+                navigateTO={"userManagement"}
+                Vector={VectorUser}
+                NavItem={NavItem}
+                onClick={() => navigate("/userManagement")}
+              />
+              <NavExpand
+                msg="LogOut"
+                // navigateTO=""
+                Vector={VectorLogout}
+                navigateTO="userManagement"
 
+              />
             </Stack>
           )}
         </Stack>

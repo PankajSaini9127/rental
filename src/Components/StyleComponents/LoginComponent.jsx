@@ -32,7 +32,7 @@ function LoginComponent({
 }) {
   const { password, username, role } = formValue;
 
-  const options = ["Admin", "Senior Manager", "Manager", "Operations"];
+  const options = ["Admin", "Manager", "Senior Manager","BHU", "Operations", "Finance"];
 
   const [showPassword, setShowPassword] = useState(false);
 

@@ -22,8 +22,17 @@ import SendBack from './Components/SrManager/SendBack'
 //opertaions Section
 import OperationsLogin from './Components/Operations/Login'
 import OperationsListing from './Components/Operations/OperationsListing'
+import OperationsDashboard from './Components/Operations/OperationsDashboard'
 import ApprovalRequest from './Components/Operations/ApprovalRequest'
 import RejectApproval from './Components/Operations/RejectApproval'
+
+//BHU Section
+// import OperationsLogin from './Components/Operations/Login'
+import BHUListing from './Components/BHU/BHUListing'
+import BHUDashBoard from './Components/BHU/BHUDashboard'
+import BHUapproval from './Components/BHU/BHUapproval'
+// import ApprovalRequest from './Components/Operations/ApprovalRequest'
+// import RejectApproval from './Components/Operations/RejectApproval'
 
 //Admin Section 
 import AdminLogin from './Components/AdminPanel/AdminLogin'
@@ -67,10 +76,22 @@ function MyRouter() {
 
          {/* Operations Section */}
 
-        <Route exact path='/operationsLogin' element={<OperationsLogin/>}/>
+         <Route exact path='/operationsDashboard' element={<OperationsDashboard/>}/>
+         <Route exact path='/operationsLogin' element={<OperationsLogin/>}/>
         <Route exact path='/operationsListing' element={<OperationsListing/>}/>
         <Route exact path='/operationsApproval/:id' element={<ApprovalRequest/>}/>
         <Route exact path='/operationsReject' element={<RejectApproval/>}/>
+
+         {/* BHU Section */}
+
+        {/* <Route exact path='/operationsLogin' element={<OperationsLogin/>}/> */}
+        <Route exact path='/BHUListing' element={<BHUListing/>}/>
+        <Route exact path='/BHUDashboard' element={<BHUDashBoard/>}/>
+        <Route exact path='/BHUapproval/:id' element={<BHUapproval/>}/>
+
+        {/* <Route exact path='/operationsApproval/:id' element={<ApprovalRequest/>}/>
+        <Route exact path='/operationsReject' element={<RejectApproval/>}/> */}
+
 
 
        {/* Admin Section */}

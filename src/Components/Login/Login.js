@@ -60,6 +60,11 @@ export default function Login() {
               dispatch(setAuth(data.result[0]))
               navigate(`/srManagerDashboard`)
             }
+            else if (role === "BHU") {
+              setErr({ open: false });
+              dispatch(setAuth(data.result[0]))
+              navigate(`/BHUDashboard`)
+            }
             else
               if (role === "Admin") {
                 setErr({ open: false });
@@ -68,7 +73,8 @@ export default function Login() {
               } else if (role === "Operations") {
                 setErr({ open: false });
                 dispatch(setAuth(data.result[0]))
-                navigate(`/operationsListing`)
+                // navigate(`/operationsListing`)
+                navigate(`/operationsDashboard`)
               }
                else {
                 setErr({ open: true, type: 'error', msg: "Role Not Valid !" });

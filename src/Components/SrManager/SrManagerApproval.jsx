@@ -212,6 +212,10 @@ console.log(agreement)
                         field={"state"}
                         value={agreement[ids[0]].state[id]}
                       />
+                       <DataFieldStyle
+                        field={"city"}
+                        value={agreement[ids[0]].city[id]}
+                      />
                       <DataFieldStyle
                         field={"location"}
                         value={agreement[ids[0]].location[id]}
@@ -224,6 +228,7 @@ console.log(agreement)
                         field={"address"}
                         value={agreement[ids[0]].address[id]}
                       />
+                     
                       <DataFieldStyle
                         field={"aadhar number"}
                         value={agreement[ids[0]].aadharNo[id]}

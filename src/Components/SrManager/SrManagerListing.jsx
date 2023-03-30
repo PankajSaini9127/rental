@@ -38,6 +38,7 @@ const [data, setData] =useState({ids:[]})
   return {
     i: data.agreement[item].id,
     id: data.agreement[item].agreement_id,
+    checkbox: data.agreement[item].status,
     status: data.agreement[item].status,
     code: data.agreement[item].code,
     name: data.agreement[item].name,

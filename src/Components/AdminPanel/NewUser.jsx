@@ -75,7 +75,7 @@ function NewUser() {
     } else if (e.target.name === "name") {
       setFormData({
         ...formData,
-        [e.target.name]: e.target.value.replace(/[^a-z]/gi, ""),
+        [e.target.name]: e.target.value,
       });
     } else if (e.target.name == "mobile") {
       const re = /^[0-9\b]+$/;

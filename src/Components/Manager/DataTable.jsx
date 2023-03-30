@@ -63,16 +63,19 @@ const navigate = useNavigate();
 
 const renderDetailsButton = (e) => {
     const id = e.id;
+    
 
     return (
+      <>{ e.status === 'Hold' &&
       <Grid container>
+      
         <Grid item md={6} sx={{ color: "white !important" }}>
           <Button
             variant="contained"
             color="primary"
             size="small"
             style={{
-              backgroundColor: "#e3c739",
+              backgroundColor: "#62CDFF",
               color: "white",
               fontSize: "12px",
               textTransform: "capitalize",
@@ -87,26 +90,28 @@ const renderDetailsButton = (e) => {
           </Button>
         </Grid>
         <Grid item md={6}>
-          <Button
+        <Button
             variant="contained"
+            color="primary"
             size="small"
+            style={{
+              backgroundColor: "#f13c3c",
+              color: "white",
+              fontSize: "12px",
+              textTransform: "capitalize",
+            }}
             startIcon={<DeleteIcon />}
             onClick={(e) => {
               e.stopPropagation(); // don't select this row after clicking
               // deleteAPI(id)
               setDeleteAlert({ open: true, id: id });
             }}
-            sx={{
-              fontSize: "12px",
-              color: "white",
-              backgroundColor: "red",
-              textTransform: "capitalize",
-            }}
+          
           >
             Delete
           </Button>
         </Grid>
-      </Grid>
+      </Grid>}</>
     );
   };
 
@@ -121,11 +126,11 @@ const detailsButton = (e) => {
             color="primary"
             size="small"
             style={{
-              backgroundColor: "#e3c739",
+              backgroundColor: "rgb(103 185 68 / 89%)",
               color: "white",
               fontSize: "12px",
               textTransform: "capitalize",
-              width:"100%"
+              // width:"100%"
             }}
             onClick={(e) => {
               e.stopPropagation(); // don't select this row after clicking

@@ -6,12 +6,16 @@ import HamburgerMenu from "../HamburgerMenu";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
 import ManagerTable from "./ManagerTable";
-import { get_search_srmanager, get_Operations_agreements } from "../../Services/Services";
+import { get_search_srmanager, get_BHU_agreements } from "../../Services/Services";
 import { useSelector } from "react-redux";
- 
+
 
 
 const options = ["New Agreement","Monthly Payment","Rental"]
+
+
+
+
 
 
 function SrManagerListing() { 
@@ -23,7 +27,7 @@ function SrManagerListing() {
 const [data, setData] =useState({ids:[]})
 
  const getData = async(id)=>{
-  const response = await get_Operations_agreements(id);
+  const response = await get_BHU_agreements(id);
   setData(response.data)
  } 
  
@@ -32,8 +36,10 @@ const [data, setData] =useState({ids:[]})
  const rows = data.ids.map((item)=>{
  
   return {
+    checkbox: data.agreement[item].status,
     i: data.agreement[item].id,
     id: data.agreement[item].agreement_id,
+    state: data.agreement[item].state,
     status: data.agreement[item].status,
     code: data.agreement[item].code,
     name: data.agreement[item].name,
@@ -49,12 +55,11 @@ const [data, setData] =useState({ids:[]})
  
  //search
  async function SearchAPi(id,searchValue){
-   
-   if(searchValue){
+  if(searchValue){
   const search = await get_search_srmanager(id,searchValue)
+  // setAgreement(search.data.agreement)
   setData(search.data)
-  console.log(search.data)
-   }
+  }
 }
 
 useEffect(()=>{
@@ -77,8 +82,8 @@ const navigate = useNavigate()
 
 <Stack sx={{flexWrap:"wap",flexDirection:"row"}}>
 <HamburgerMenu
-          handleListing={()=>navigate('/operationsListing')}
-          navigateHome={"operationsDashboard"}
+          handleListing={()=>navigate('/BHUListing')}
+          navigateHome={"BHUDashboard"}
         />
       <ListingComponent
         title="Rental Agreement"

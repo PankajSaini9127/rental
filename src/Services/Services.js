@@ -125,3 +125,19 @@ export async function send_to_bhu (data,id){
 export async function getBankName(data){
     return await axios.get(`https://ifsc.razorpay.com/${data}`)
 }
+
+// BHU Services 
+
+export async function get_BHU_agreements(data){
+    return await axios.get(`${API_LIVE}/api/BHU/get-agreement/${data}`)
+}
+
+//send to BHU 
+export async function send_to_operations (data,id){
+    return await axios.put(`${API_LIVE}/api/BHU/updateAgreement/${id}`,data)
+}
+
+
+export async function get_Operations_agreements(data){
+    return await axios.get(`${API_LIVE}/api/operations/get-agreement/${data}`)
+}

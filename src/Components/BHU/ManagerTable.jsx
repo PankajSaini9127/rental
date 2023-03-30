@@ -3,7 +3,7 @@ import React,{useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Checkbox } from "@mui/material";
 import { useSelector } from 'react-redux';
-import { send_to_bhu } from '../../Services/Services';
+import { send_to_operations } from '../../Services/Services';
 
  
 
@@ -38,7 +38,7 @@ function ManagerTable({rows}) {
             }}
             onClick={(e) => {
               e.stopPropagation(); // don't select this row after clicking
-              navigate(`/srManagerApproval/${id}`)
+              navigate(`/BHUapproval/${id}`)
             }}
           >
             View
@@ -58,7 +58,6 @@ function ManagerTable({rows}) {
   } 
   
 const columns = [
-     
   {
     field: "checkbox",
     width: 20,
@@ -67,7 +66,7 @@ const columns = [
     headerAlign: "center",
     renderCell: (params) =><> 
     {console.log(params)}
-      {params.formattedValue === "Sent Sr Manager" ?
+      {params.formattedValue === "Sent To BHU" ?
         <Checkbox
         onChange={handleSwitch}
         name={params.id}
@@ -138,7 +137,7 @@ const onRowsSelectionHandler = (ids) => {
 
 function handleSelect (){
   ids.map(async(id)=>{
-    const response = await send_to_bhu({status:"Sent To BHU", srm_id},id)  
+    const response = await send_to_operations({status:"Sent To Operations", srm_id},id)  
     console.log(response)
   })
    
@@ -150,7 +149,7 @@ function handleSelect (){
     <>
     {
       ids.length > 0 && <Box sx={{display:'flex',justifyContent:'flex-end'}}>
-      <Button variant="contained" sx={{textTransform:'capitalize',m:1,mx:3}} onClick={handleSelect} >Send To BHU</Button>
+      <Button variant="contained" sx={{textTransform:'capitalize',m:1,mx:3}} onClick={handleSelect} >Send To Operations</Button>
       </Box>
     }
     
