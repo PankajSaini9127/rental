@@ -66,8 +66,8 @@ const columns = [
     headerClassName: "dataGridHeader",
     headerAlign: "center",
     renderCell: (params) =><> 
-    {console.log(params)}
-      {params.formattedValue === "Sent Sr Manager" ?
+    {/* {console.log(params)} */}
+      {params.formattedValue === "Sent Sr Manager" || params.formattedValue === "Sent To Sr Manager"  ?
         <Checkbox
         onChange={handleSwitch}
         name={params.id}
@@ -181,7 +181,7 @@ function handleSelect (){
           maxHeight:"30px !important",
           minHeight:"25px !important",
           alignSelf:"center",
-          mx:"20px !important",
+          mx:"1",
           textAlign:"center !important",
           borderRadius:"10px !important"
         },
@@ -210,7 +210,7 @@ function handleSelect (){
             cellClass.push( "yellow statusCell") ;
           } else if (
             parms.field === "status" &&
-            parms.row.status === "Rejected"
+            parms.row.status === "Sent Back For Rectification"
           ) {
             cellClass.push("red statusCell")  ;
           }

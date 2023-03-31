@@ -5,96 +5,86 @@ import { useNavigate, useParams } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
-import ManagerTable from "./ManagerTable";
-import { get_search_srmanager, get_Operations_agreements } from "../../Services/Services";
+import {
+  get_search_srmanager,
+  get_Operations_agreements,
+} from "../../Services/Services";
 import { useSelector } from "react-redux";
- 
+import OperationsTable from "./OperationsTable";
 
+const options = ["New Agreement", "Monthly Payment", "Rental"];
 
-const options = ["New Agreement","Monthly Payment","Rental"]
+function SrManagerListing() {
+  const { auth } = useSelector((state) => state);
 
+  const login_operations_id = auth.id;
 
-function SrManagerListing() { 
+  const [data, setData] = useState({ ids: [] });
 
-  const {auth} = useSelector(state=>state);
+  const getData = async (id) => {
+    const response = await get_Operations_agreements(id);
+    setData(response.data);
+  };
 
-  const login_srm_id = auth.id;
+  data.ids = data.ids.reverse();
 
-const [data, setData] =useState({ids:[]})
+  const rows = data.ids.map((item) => {
+    return {
+      i: data.agreement[item].id,
+      id: data.agreement[item].agreement_id,
+      status: data.agreement[item].status,
+      code: data.agreement[item].code,
+      name: data.agreement[item].name,
+      location: data.agreement[item].location,
+      manager: data.agreement[item].manager_name,
+      rentalAmount: data.agreement[item].monthlyRent,
+      sr_manager: data.agreement[item].sr_manager,
+    };
+  });
 
- const getData = async(id)=>{
-  const response = await get_Operations_agreements(id);
-  setData(response.data)
- } 
- 
- data.ids = data.ids.reverse()
+  const [searchValue, setsearchValue] = useState("");
 
- const rows = data.ids.map((item)=>{
- 
-  return {
-    i: data.agreement[item].id,
-    id: data.agreement[item].agreement_id,
-    status: data.agreement[item].status,
-    code: data.agreement[item].code,
-    name: data.agreement[item].name,
-    location:data.agreement[item].location,
-    manager:data.agreement[item].manager,
-    rentalAmount:data.agreement[item].monthlyRent
+  //search
+  async function SearchAPi(id, searchValue) {
+    if (searchValue) {
+      const search = await get_search_srmanager(id, searchValue);
+      setData(search.data);
+    }
   }
- })
 
+  useEffect(() => {
+    // if(searchValue.length >= 1){
+    SearchAPi(login_operations_id, searchValue);
+    // }
+  }, [searchValue]);
 
+  useEffect(() => {
+    getData(login_operations_id);
+  }, []);
 
- const [searchValue,setsearchValue] =useState('');
- 
- //search
- async function SearchAPi(id,searchValue){
-   
-   if(searchValue){
-  const search = await get_search_srmanager(id,searchValue)
-  setData(search.data)
-  console.log(search.data)
-   }
-}
-
-useEffect(()=>{
-  // if(searchValue.length >= 1){
-    SearchAPi(login_srm_id,searchValue)
-  // }
-},[searchValue])
-
-
-useEffect(()=>{
-  getData(login_srm_id)
- },[])
-
-const navigate = useNavigate()
+  const navigate = useNavigate();
 
   return (
     <>
-{
-  data.success &&
-
-<Stack sx={{flexWrap:"wap",flexDirection:"row"}}>
-<HamburgerMenu
-          handleListing={()=>navigate('/operationsListing')}
-          navigateHome={"operationsDashboard"}
-        />
-      <ListingComponent
-        title="Rental Agreement"
-        buttonText="Upload"
-        options={options}
-        value={'New Agreement'}
-        Table={ManagerTable}
-        rows={rows}
-        dropDown={false}
-        
-        searchValue={searchValue}
-        setsearchValue={setsearchValue}
-      />
-
-</Stack>
-}
+      {data.success && (
+        <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
+          <HamburgerMenu
+            navigateHome={"operationsDashboard"}
+            handleListing={() => navigate("/operationsListing")}
+          />
+          <ListingComponent
+            title="Rental Agreement"
+            buttonText="Upload"
+            options={options}
+            value={"New Agreement"}
+            Table={OperationsTable}
+            rows={rows}
+            dropDown={false}
+            searchValue={searchValue}
+            setsearchValue={setsearchValue}
+          />
+        </Stack>
+      )}
     </>
   );
 }

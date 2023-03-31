@@ -39,6 +39,7 @@ export default function Login() {
   const Get_DATA = async (dispatch) => {
     const user = await LoginAPI({ email: formValue.username })
     const data = user.data;
+    console.log(data)
 
     if (data.success) {
       if (data.result[0].password === formValue.password) {

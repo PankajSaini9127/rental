@@ -79,7 +79,7 @@ const initialRefresh = {
 export const refresh = (state = initialRefresh, action) => {
     switch (action.type) {
         case 'REFRESH':
-            return state = action.payload;
+            return state = !state
         default:
             return state;
     }

@@ -63,10 +63,9 @@ const navigate = useNavigate();
 
 const renderDetailsButton = (e) => {
     const id = e.id;
-    
 
     return (
-      <>{ e.status === 'Hold' &&
+      <>{ e.row.status === 'Hold' &&
       <Grid container>
       
         <Grid item md={6} sx={{ color: "white !important" }}>
@@ -185,28 +184,28 @@ const columns = [
     {
       field: "name",
       headerName: "Name",
-      width:170,
+      width:180,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "location",
       headerName: "Location",
-      width: 190,
+      width: 170,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "rentalAmount",
       headerName: "Rental Amount",
-      width: 180,
+      width: 170,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "status",
       headerName: "Status",
-      width: 140,
+      width: 220,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
@@ -300,15 +299,17 @@ const [deleteAlert, setDeleteAlert] = useState({ open: false, id: "" });
             backgroundColor: "#FFEBE7",
             color: "#CF482A",
           },
+          "& .hold": {
+            backgroundColor: "#97b8ae",
+            color: "#CF482A",
+          },
           "& .statusCell": {
-            maxWidth: "92px !important",
-            minWidth: "92px !important",
             maxHeight: "30px !important",
             minHeight: "25px !important",
             textAlign: "center !important",
             borderRadius: "10px !important",
             m: "auto",
-            mx: 6,
+            mx:1
           },
           "& .allCell": {
             justifyContent: "center !important",
@@ -324,24 +325,27 @@ const [deleteAlert, setDeleteAlert] = useState({ open: false, id: "" });
           // checkboxSelection
           sx={{ color: "black !important", minWidth: "50px" }}
           getCellClassName={(parms) => {
-            let cellClass = [];
-            if (parms.field === "status" && parms.row.status === "Approved") {
-              cellClass.push("green statusCell");
+            let cellClass = []
+            if (parms.field === "status" && parms.row.status === "Sent To Finance") {
+              cellClass.push("green statusCell") ;
             } else if (
               parms.field === "status" &&
-              parms.row.status === "Pending"
+              (parms.row.status === "Sent To Sr Manager" || parms.row.status === "Sent To BHU" ||  parms.row.status === "Sent To Operations")
             ) {
-              cellClass.push("yellow statusCell");
+              cellClass.push( "yellow statusCell") ;
             } else if (
               parms.field === "status" &&
-              parms.row.status === "Rejected"
+              parms.row.status === "Sent Back For Rectification"
             ) {
-              cellClass.push("red statusCell");
+              cellClass.push("red statusCell")  ;
+            }else if(parms.field === "status" && parms.row.status === "Hold" ){
+              cellClass.push("statusCell hold")
             }
-            cellClass.push("allCell");
-            return cellClass;
+            cellClass.push('allCell')
+            
+            return(cellClass)
           }}
-          onSelectionModelChange={handleSelect}
+          // onSelectionModelChange={handleSelect}
         ></DataGrid>
       </Box>
     </>

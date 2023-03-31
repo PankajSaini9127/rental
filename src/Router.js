@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
+import { Route, Routes, useNavigate } from 'react-router-dom'
 
 //components
 
@@ -9,33 +9,27 @@ import Dashboard from './Components/Manager/Dashboard'
 import Listing from './Components/Manager/Listing';
 import Agreement from './Components/Manager/Agreement';
 import EditAgreement from './Components/Manager/EditAgreement';
+import ManagerApproval from './Components/Manager/ManagerApproval';
 import MonthalyList from './Components/MonthalyPayment/MonthalyList'
 import RenewalList from './Components/Renewal/RenewalList'
 
 //sr MAnager section
-import ManagerLogin from './Components/SrManager/SrManagerLogin';
 import SrManagerDashboard from './Components/SrManager/SrManagerDashboard'
 import SrManagerListing from './Components/SrManager/SrManagerListing'
 import SrManagerApproval from './Components/SrManager/SrManagerApproval'
-import SendBack from './Components/SrManager/SendBack'
 
 //opertaions Section
-import OperationsLogin from './Components/Operations/Login'
 import OperationsListing from './Components/Operations/OperationsListing'
 import OperationsDashboard from './Components/Operations/OperationsDashboard'
 import ApprovalRequest from './Components/Operations/ApprovalRequest'
-import RejectApproval from './Components/Operations/RejectApproval'
+// import RejectApproval from './Components/Operations/RejectApproval'
 
 //BHU Section
-// import OperationsLogin from './Components/Operations/Login'
 import BHUListing from './Components/BHU/BHUListing'
 import BHUDashBoard from './Components/BHU/BHUDashboard'
 import BHUapproval from './Components/BHU/BHUapproval'
-// import ApprovalRequest from './Components/Operations/ApprovalRequest'
-// import RejectApproval from './Components/Operations/RejectApproval'
 
 //Admin Section 
-import AdminLogin from './Components/AdminPanel/AdminLogin'
 import NewUser from './Components/AdminPanel/NewUser'
 import UserDashboard from './Components/AdminPanel/UserDashboard'
 import UserManagement from './Components/AdminPanel/UserManagement'
@@ -45,7 +39,7 @@ import ForgotPassword from './Components/ResetPassword/ForgotPassword'
 import EmailVerify from './Components/ResetPassword/EmailVerify'
 import ResetPassword from './Components/ResetPassword/ResetPassword'
 import EditUser from './Components/AdminPanel/EditUser';
-import ManagerApproval from './Components/Manager/ManagerApproval';
+
 
 function MyRouter() {
   const history = useNavigate();
@@ -58,7 +52,6 @@ function MyRouter() {
         <Route exact path='/dashboard' element={<Dashboard/>}/>
         <Route exact path='/newAgreement' element={<Agreement/>}/>
         <Route exact path='/editAgreement/:id' history = {history} element={<EditAgreement/>}/>
-        {/* <Route exact path='/editAgreement' element={<EditAgreement/>}/> */}
         <Route exact path='/listing' element={<Listing/>}/>
         <Route exact path='/monthly-payment' element={<MonthalyList/>}/>
         <Route exact path='/renewal' element={<RenewalList/>}/>
@@ -67,36 +60,26 @@ function MyRouter() {
 
          {/* Sr Manager */}
 
-        <Route exact path='/srManagerLogin' element={<ManagerLogin/>}/>
         <Route exact path='/srManagerDashboard' element={<SrManagerDashboard/>}/>
         <Route exact path='/srManagerListing' element={<SrManagerListing/>}/>
         <Route exact path='/srManagerApproval/:id' element={<SrManagerApproval/>}/>
-        <Route exact path='/backToManager' element={<SendBack/>}/>
 
 
          {/* Operations Section */}
 
          <Route exact path='/operationsDashboard' element={<OperationsDashboard/>}/>
-         <Route exact path='/operationsLogin' element={<OperationsLogin/>}/>
         <Route exact path='/operationsListing' element={<OperationsListing/>}/>
-        <Route exact path='/operationsApproval/:id' element={<ApprovalRequest/>}/>
-        <Route exact path='/operationsReject' element={<RejectApproval/>}/>
+        <Route exact path='/operations-approval/:id' element={<ApprovalRequest/>}/>
 
          {/* BHU Section */}
-
-        {/* <Route exact path='/operationsLogin' element={<OperationsLogin/>}/> */}
         <Route exact path='/BHUListing' element={<BHUListing/>}/>
         <Route exact path='/BHUDashboard' element={<BHUDashBoard/>}/>
         <Route exact path='/BHUapproval/:id' element={<BHUapproval/>}/>
 
-        {/* <Route exact path='/operationsApproval/:id' element={<ApprovalRequest/>}/>
-        <Route exact path='/operationsReject' element={<RejectApproval/>}/> */}
 
 
 
        {/* Admin Section */}
-
-        <Route exact path='/adminLogin' element={<AdminLogin/>}/>
         <Route exact path='/userDashboard' element={<UserDashboard/>}/>
         <Route exact path='/userManagement' element={<UserManagement/>}/>
         <Route exact path='/newUser' element={<NewUser/>}/>

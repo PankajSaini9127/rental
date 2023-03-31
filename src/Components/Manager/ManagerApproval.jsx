@@ -16,15 +16,18 @@ import { MyHeader } from "../StyledComponent";
 import config from "../../config.json";
 import { useEffect, useState } from "react";
 
+//download file
+import { saveAs } from "file-saver";
+
 const DocumentView = ({ title, img }) => {
   return (
     <Grid item xs={6}>
       <Typography
         variant="body1"
-        fontSize={"20px"}
+        fontSize={"18px"}
         color={"primary"}
         textTransform={"capitalize"}
-        sx={{ "@media(max-width:900px)": { fontSize: "18px" } }}
+        sx={{ "@media(max-width:900px)": { fontSize: "16px" } }}
       >
         {" "}
         {title}
@@ -45,7 +48,7 @@ const DocumentView = ({ title, img }) => {
             textTransform: "capitalize",
             color: "rgba(16, 99, 173, 0.47)",
             height: "100%",
-            width: "100%",
+            width: "50%",
           }}
         >
           <Link
@@ -55,12 +58,35 @@ const DocumentView = ({ title, img }) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
+              textDecoration: "none",
             }}
             href={img}
-          
+            target="_blank"
           >
-            {" "}
-            view/Download{" "}
+            View
+          </Link>
+        </Button>
+        <Button
+          variant="text"
+          sx={{
+            textTransform: "capitalize",
+            color: "rgba(16, 99, 173, 0.47)",
+            height: "100%",
+            width: "50%",
+          }}
+        >
+          <Link
+            sx={{
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              textDecoration: "none",
+            }}
+            onClick={() => saveAs(img, title)}
+          >
+            Download
           </Link>
         </Button>
       </Box>
@@ -163,30 +189,77 @@ function ManagerApproval() {
                   <DataFieldStyle
                     field={"code"}
                     value={agreement[ids[0]].code}
+
                   />
-                  {
-                  Array.from({length:agreement[ids[0]].leeseName.length},(row,id)=>(
-                
-                    <>
-                      <DataFieldStyle
-                        field={"name of leese"}
-                        value={agreement[ids[0]].leeseName[id]}
-                      />
-                      <DataFieldStyle
+
+<DataFieldStyle
                         field={"state"}
-                        value={agreement[ids[0]].state[id]}
+                        value={agreement[ids[0]].state}
                       />
                       <DataFieldStyle
                         field={"location"}
-                        value={agreement[ids[0]].location[id]}
+                        value={agreement[ids[0]].location}
                       />
                       <DataFieldStyle
                         field={"pincode"}
-                        value={agreement[ids[0]].pincode[id]}
+                        value={agreement[ids[0]].pincode}
                       />
                       <DataFieldStyle
                         field={"address"}
-                        value={agreement[ids[0]].address[id]}
+                        value={agreement[ids[0]].address}
+                      />
+                      
+
+                  <DataFieldStyle
+                    field={"lock in year"}
+                    value={agreement[ids[0]].lockInYear}
+                  />
+                  <DataFieldStyle
+                    field={"notice period in month"}
+                    value={agreement[ids[0]].noticePeriod}
+                  />
+                  <DataFieldStyle
+                    field={"deposit"}
+                    value={agreement[ids[0]].deposite}
+                  />
+                  <DataFieldStyle
+                    field={"monthly rental"}
+                    value={agreement[ids[0]].monthlyRent}
+                  />
+                  <DataFieldStyle
+                    field={"tenure"}
+                    value={agreement[ids[0]].tenure}
+                  />
+                  {
+                    agreement[ids[0]].tenure !== "11 Month" &&
+                    <>
+                     <DataFieldStyle
+                    field={"yearly Increment"}
+                    value={agreement[ids[0]].yearlyIncrement}
+                  />
+                  <Grid container spacing={1} sx={{ mt: 6 }}>
+                    <YearField year={"Year 1"} amount={agreement[ids[0]].year1} />
+                    <YearField year={"Year 2"} amount={agreement[ids[0]].year2} />
+                   {(agreement[ids[0]].tenure === '3 Year' || agreement[ids[0]].tenure === '4 Year' || agreement[ids[0]].tenure === '5 Year' )&& <YearField year={"Year 3"} amount={agreement[ids[0]].year3} />}
+                   {(agreement[ids[0]].tenure === '4 Year' || agreement[ids[0]].tenure === '5 Year' ) && <YearField year={"Year 4"} amount={agreement[ids[0]].year4} />}
+                   {agreement[ids[0]].tenure === '5 Year' && <YearField year={"Year 5"} amount={agreement[ids[0]].year5} />}
+                  </Grid>
+                    </>
+                  }
+                 
+
+                
+
+                  {
+                  Array.from({length:agreement[ids[0]].leeseName.length},(row,id)=>(
+                
+                    <Grid container sx={{mt:3}} spacing={2}>
+                      <Grid item xs={12}>
+                      <Typography variant='body1' >Landlord {id + 1} Details</Typography>
+                      </Grid>
+                      <DataFieldStyle
+                        field={"name of leese"}
+                        value={agreement[ids[0]].name[id]}
                       />
                       <DataFieldStyle
                         field={"aadhar number"}
@@ -212,33 +285,15 @@ function ManagerApproval() {
                         field={"email"}
                         value={agreement[ids[0]].email[id]}
                       />
-                    </>
+                      <DataFieldStyle
+                        field={"Percentage Share"}
+                        value={agreement[ids[0]].percentage[id]}
+                      />
+                    </Grid>
                   ))}
 
-                  <DataFieldStyle
-                    field={"lock in year"}
-                    value={agreement[ids[0]].lockInYear}
-                  />
-                  <DataFieldStyle
-                    field={"notice period in month"}
-                    value={agreement[ids[0]].noticePeriod}
-                  />
-                  <DataFieldStyle
-                    field={"deposit"}
-                    value={agreement[ids[0]].deposite}
-                  />
-                  <DataFieldStyle
-                    field={"monthly rental"}
-                    value={agreement[ids[0]].monthlyRent}
-                  />
-
-                  <Grid container spacing={1} sx={{ mt: 6 }}>
-                    <YearField year={"year 1"} amount={3000} />
-                    <YearField year={"year 2"} amount={3000} />
-                    <YearField year={"year 3"} amount={3000} />
-                    <YearField year={"year 4"} amount={3000} />
-                    <YearField year={"year 5"} amount={3000} />
-                  </Grid>
+                   
+                  
                 </Grid>
               </Grid>
 
@@ -249,7 +304,10 @@ function ManagerApproval() {
                 <Grid container spacing={2}>
                   {
                   Array.from({length:agreement[ids[0]].leeseName.length},(row,id)=>(
-                    <>
+                    <Grid container>
+                       <Grid item xs={12} sx={{mt:2,mb:1}}>
+                      <Typography variant='body1' >Landlord {id + 1} Details</Typography>
+                      </Grid>
                       <DataFieldStyle
                         field={"bank name"}
                         value={agreement[ids[0]].bankName[id]}
@@ -266,68 +324,73 @@ function ManagerApproval() {
                         field={"bank ifsc code"}
                         value={agreement[ids[0]].ifscCode[id]}
                       />
-                    </>
+                    </Grid>
                   ))}
                 </Grid>
               </Grid>
 
               {/* Bank Details Ends here */}
 
+                  {/* Bank Details Ends here */}
+
               {/* Document Section start here */}
-              <Heading heading={"Document Download"} />
+              <Heading heading={"Document View/Download"} />
 
-              <Grid item md={8}>
-                <Grid container spacing={2}>
-                  {
-                  Array.from({length:agreement[ids[0]].leeseName.length},(row,id)=>(
-                    <>
-                      <DocumentView
-                        title={"aadhar Card"}
-                        img={agreement[ids[0]].aadhar_card[id]}
-                      />
-                      <DocumentView
-                        title={"pan card"}
-                        img={agreement[ids[0]].pan_card[id]}
-                      />
-                    </>
-                  ))}
+<Grid item md={8}>
+  
+    {Array.from(
+      { length: agreement[ids[0]].leeseName.length },
+      (row, id) => (
+        <Grid container spacing={2}>
+          <Grid item xs={12} sx={{mt:2,mb:1}}>
+                      <Typography variant='body1' >Landlord {id + 1} Details</Typography>
+                      </Grid>
+          <DocumentView
+            title={"aadhar Card"}
+            img={agreement[ids[0]].aadhar_card[id]}
+          />
+          <DocumentView
+            title={"pan card"}
+            img={agreement[ids[0]].pan_card[id]}
+          />
+        </Grid>
+      )
+    )}
+<Grid container spacing={2} sx={{mt:2}}>
+  
+    <DocumentView
+      title={"GST Certificate"}
+      img={agreement[ids[0]].gst_certificate}
+    />
+    <DocumentView
+      title={"draft agreement"}
+      img={agreement[ids[0]].draft_agreement}
+    />
+    <DocumentView
+      title={"electricity bill"}
+      img={agreement[ids[0]].electricity_bill}
+    />
+    <DocumentView
+      title={"Cancel bank cheque"}
+      img={agreement[ids[0]].cheque}
+    />
+    <DocumentView
+      title={"maintaince bill"}
+      img={agreement[ids[0]].maintaince_bill}
+    />
+    <DocumentView title={"POA"} img={agreement[ids[0]].poa} />
+    <DocumentView
+      title={"Property tax receipt"}
+      img={agreement[ids[0]].tax_receipt}
+    />
+    <DocumentView
+      title={"noc (if multiple owner)"}
+      img={agreement[ids[0]].noc}
+    />
+  </Grid>
+</Grid>
 
-                  <DocumentView
-                    title={"GST Certificate"}
-                    img={agreement[ids[0]].gst_certificate}
-                  />
-                  <DocumentView
-                    title={"draft agreement"}
-                    img={agreement[ids[0]].draft_agreement}
-                  />
-                  <DocumentView
-                    title={"electricity bill"}
-                    img={agreement[ids[0]].electricity_bill}
-                  />
-                  <DocumentView
-                    title={"cencil bank cheque"}
-                    img={agreement[ids[0]].cheque}
-                  />
-                  <DocumentView
-                    title={"maintaince bill"}
-                    img={agreement[ids[0]].maintaince_bill}
-                  />
-                  <DocumentView
-                    title={"POA"}
-                    img={agreement[ids[0]].poa}
-                  />
-                  <DocumentView
-                    title={"Property tax receipt"}
-                    img={agreement[ids[0]].tax_receipt}
-                  />
-                  <DocumentView
-                    title={"noc (if multiple owner)"}
-                    img={agreement[ids[0]].noc}
-                  />
-                </Grid>
-              </Grid>
-
-              {/* document section ends here */}
+{/* document section ends here */}
 
               {/* Buttons start here*/}
 

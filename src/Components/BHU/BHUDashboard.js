@@ -25,9 +25,9 @@ function SrManagerDashboard() {
     <MyHeader>Dashboard</MyHeader>
 
 <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-       <HamburgerMenu
+<HamburgerMenu
+      navigateHome={'BHUDashboard'}
           handleListing={()=>navigate('/BHUListing')}
-          navigateHome={"BHUDashboard"}
         />
 
   {/* dashboard content */}

@@ -52,6 +52,7 @@ export async function get_agreements (){
 }
 
 export async function add_agreement (data){
+    console.log(data)
     return  axios.post(`${API_LIVE}/api/newAgreement`,data);
 }
 
@@ -116,6 +117,11 @@ export async function get_search_srmanager (id,name){
     return await axios.post(`${API_LIVE}/api/srmanager-search/${id}`,{name})
 }
 
+//send back to manager 
+export async function send_back_to_manager (data,id){
+    return await axios.put(`${API_LIVE}/api/updateAgreement/${id}`,data)
+}
+
 
 //send to BHU 
 export async function send_to_bhu (data,id){
@@ -140,4 +146,10 @@ export async function send_to_operations (data,id){
 
 export async function get_Operations_agreements(data){
     return await axios.get(`${API_LIVE}/api/operations/get-agreement/${data}`)
+}
+
+
+//operations 
+export async function get_agreement_operation (id){
+    axios.get(`${config.API_LIVE}/api/operations/getagreement/${id}`)
 }

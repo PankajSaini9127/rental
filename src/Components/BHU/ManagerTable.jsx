@@ -2,8 +2,9 @@ import { DataGrid } from '@mui/x-data-grid';
 import React,{useState} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Checkbox } from "@mui/material";
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { send_to_operations } from '../../Services/Services';
+import { setAlert } from '../../store/action/action';
 
  
 
@@ -17,6 +18,8 @@ function ManagerTable({rows}) {
   const {auth} = useSelector(s=>s)
 
   const srm_id = auth.id ;
+
+  const dispatch = useDispatch()
 
 
   const renderDetailsButton = (e) => {
@@ -80,7 +83,7 @@ const columns = [
       {
         field: "code",
         headerName: "Code",
-        width: 120,
+        width: 100,
         type: "number",
         headerClassName: "dataGridHeader",
         headerAlign: "center",
@@ -88,42 +91,49 @@ const columns = [
       {
         field: "name",
         headerName: "Name",
-        width: 180,
+        width: 160,
         headerClassName: "dataGridHeader",
         headerAlign: "center",
       },
       {
         field: "location",
         headerName: "Location",
-        width: 160,
+        width: 130,
         headerClassName: "dataGridHeader",
         headerAlign: "center",
       },
       {
         field: "manager",
         headerName: "Manager",
-        width: 160,
+        width: 130,
+        headerClassName: "dataGridHeader",
+        headerAlign: "center",
+      },
+      {
+        field: "sr_manager",
+        headerName: "Sr Manager",
+        width: 130,
         headerClassName: "dataGridHeader",
         headerAlign: "center",
       },
       {
         field: "rentalAmount",
         headerName: "Rental Amount",
-        width: 150,
+        width: 120,
         headerClassName: "dataGridHeader",
         headerAlign: "center",
       },
       {
           field: "status",
           headerName: "Status",
-          width: 200,
+          width: 190,
           headerClassName: "dataGridHeader",
           headerAlign: "center",
         },
       {
           field: "view",
           headerName: "View",
-          width: 150,
+          width: 130,
           headerClassName: "dataGridHeader",
           headerAlign: "center",
           renderCell: renderDetailsButton,
@@ -131,14 +141,30 @@ const columns = [
   
 ];
 
-const onRowsSelectionHandler = (ids) => {
-    setIds(ids)
-  };
+// const onRowsSelectionHandler = (ids) => {
+//     setIds(ids)
+//   };
 
 function handleSelect (){
   ids.map(async(id)=>{
     const response = await send_to_operations({status:"Sent To Operations", srm_id},id)  
-    console.log(response)
+    if (response.data.success) {
+      dispatch(
+        setAlert({
+          vatiant: "success",
+          open: true,
+          message: "Approved And Sent To Operations",
+        })
+      );
+    } else {
+      dispatch(
+        setAlert({
+          vatiant: "error",
+          open: true,
+          message: "Something went wrong! Please again later.",
+        })
+      );
+    }
   })
    
     
@@ -180,7 +206,7 @@ function handleSelect (){
           maxHeight:"30px !important",
           minHeight:"25px !important",
           alignSelf:"center",
-          mx:"20px !important",
+          mx:1,
           textAlign:"center !important",
           borderRadius:"10px !important"
         },
@@ -209,7 +235,7 @@ function handleSelect (){
             cellClass.push( "yellow statusCell") ;
           } else if (
             parms.field === "status" &&
-            parms.row.status === "Rejected"
+            parms.row.status === "Sent Back For Rectification"
           ) {
             cellClass.push("red statusCell")  ;
           }

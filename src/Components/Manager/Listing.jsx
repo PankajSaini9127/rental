@@ -16,6 +16,7 @@ function Listing() {
   const [Select, setSelect] = useState("New Agreement");
   const [data, setData] = useState([]);
 
+ 
   
   const {state:{adminReCall}} = useContext(AuthContext)
 
@@ -24,6 +25,7 @@ function Listing() {
   };
 
   const [agreement, setAgreement] = useState({});
+
 
   const [loading, setLoading] = useState(false);
   const [check,setCheck] = useState([])
@@ -35,8 +37,7 @@ function Listing() {
     const result = await get_agreements();
 
     if (result.status === 200) {
-      const data = result.data.ids.reverse();
-      console.log(result)
+      const data = result.data.ids;
       setAgreement(result.data.agreement);
       setData(data);
       
@@ -53,7 +54,6 @@ function Listing() {
    const search = await get_search_manager(searchValue)
    setData(search.data.ids)
   setAgreement(search.data.agreement)
-  // console.log(search)
  } 
 
 
