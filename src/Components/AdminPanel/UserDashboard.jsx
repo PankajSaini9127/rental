@@ -27,7 +27,10 @@ function UserDashboard() {
   return (<>
         <MyHeader>User Dashboard</MyHeader>
     <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        <AdminHamburgerMenu/>
+    <AdminHamburgerMenu
+        navigateListing={'/userManagement'}
+        navigateHome={'/userDashboard'}
+        />
 
         <Box sx={{flexGrow:1}}>
 

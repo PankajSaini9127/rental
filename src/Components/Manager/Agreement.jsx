@@ -144,7 +144,6 @@ function Agreement() {
     }
   }
 
-  const [errorObj, setError] = useState({});
 
   //handle Change for uncommon feilds
   function handleChange(e, i) {
@@ -429,13 +428,15 @@ function Agreement() {
     }
   };
 
-  async function getBankeDetails(data) {
+  async function getBankeDetails(data,i) {
     let res = await getBankName(data);
+  
     if (res) {
       setData((old) => ({
         ...old,
         landlord: old.landlord.map((row, index) => {
           if (index === i) {
+           
             return { ...row, bankName: res.data.BANK };
           } else return row;
         }),
@@ -915,13 +916,13 @@ function Agreement() {
                           placeHolder="Enter Bank Name"
                           name="bankName"
                           required={true}
-                          disabled={true}
+                          // disabled={true}
                           value={
                             data.landlord[i] && data.landlord[i].bankName
                               ? data.landlord[i].bankName
                               : ""
                           }
-                          onChange={(e) => handleChange(e, i)}
+                          // onChange={(e) => handleChange(e, i)}
                         />
                         <TextFieldWrapper
                           label="Benificiary Name"

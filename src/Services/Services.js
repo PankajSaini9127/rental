@@ -3,6 +3,12 @@ import config from "../config.json"
 
 const API_LIVE = config.API_LIVE
 
+
+//Super Admin Login
+export async function super_admin_Login(data){
+    return await axios.post(`${API_LIVE}/api/auth/super-admin-creds`,data)
+}
+
 //Admin Section start here
 export async function LoginAPI(data){
     const user = await axios.post(`${API_LIVE}/api/auth/login`,data)
@@ -66,7 +72,7 @@ export async function uploadDoc (data){
 
 export async function get_agreement_id (id) {
     return axios.post(`${API_LIVE}/api/agreement/${id}`)
-}
+}   
 
 export async function delete_agreement (id){
     return axios.delete(`${API_LIVE}/api/delAgreement/${id}`)
@@ -119,7 +125,7 @@ export async function get_search_srmanager (id,name){
 
 //send back to manager 
 export async function send_back_to_manager (data,id){
-    return await axios.put(`${API_LIVE}/api/updateAgreement/${id}`,data)
+    return await axios.put(`${API_LIVE}/api/send-back/${id}`,data)
 }
 
 

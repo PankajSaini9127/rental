@@ -30,9 +30,9 @@ function LoginComponent({
   formValue,
   handleChange,
 }) {
-  const { password, username, role } = formValue;
+  const { password, email, role } = formValue;
 
-  const options = ["Admin", "Manager", "Senior Manager","BHU", "Operations", "Finance"];
+  const options = ["Super Admin","Admin", "Manager", "Senior Manager","BHU", "Operations", "Finance"];
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -132,8 +132,8 @@ function LoginComponent({
                     variant="outlined"
                     placeholder="Enter Email Adress"
                     label="Email Address"
-                    value={username}
-                    name="username"
+                    value={email}
+                    name="email"
                     onChange={handleChange}
                     required
                   />

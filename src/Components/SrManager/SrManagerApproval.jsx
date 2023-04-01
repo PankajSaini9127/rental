@@ -119,34 +119,12 @@ function SrManagerApproval() {
   const [ids, setIds] = useState([]);
   const [sendBackMsg, setSendBackMsg] = useState("");
 
-
   const { auth } = useSelector((s) => s);
   const srm_id = auth.id;
 
-  const dispatch = useDispatch();
+const dispatch = useDispatch();
 
-  const [msg, setMsg] = useState({
-    open: false,
-    type: "",
-    message: "",
-  });
 
-  const handleClose = () => {
-    if (msg.type === "success") {
-      navigate("/listing");
-      setMsg({
-        open: false,
-        type: "",
-        message: "",
-      });
-    } else {
-      setMsg({
-        open: false,
-        type: "",
-        message: "",
-      });
-    }
-  };
 
   const getData = async (id) => {
     setAgreement({});
@@ -154,8 +132,6 @@ function SrManagerApproval() {
     setAgreement(agreement.data.agreement);
     setIds(agreement.data.ids);
   };
-
-  
 
   useEffect(() => {
     getData(id);
@@ -184,46 +160,46 @@ function SrManagerApproval() {
 
   //Send Back to manager
   async function handleSendBack() {
-    if(sendBackMsg.length <= 0){
-      dispatch(
-        setAlert({
-          variant:'error',
-          open: true,
-          message: "Remark Required !.",
-        })
-      )
-    }else{
-    const response = await send_back_to_manager(
-      {
-        status: "Sent Back For Rectification",
-        rectification_msg: sendBackMsg,
-      },
-      id
-    );
-    if (response.data.success) {
-      dispatch(
-        setAlert({
-          variant: "success",
-          open: true,
-          message: "Send back For Rectification",
-        })
-      );
-    } else {
+    if (sendBackMsg.length <= 0) {
       dispatch(
         setAlert({
           variant: "error",
           open: true,
-          message: "Something went wrong! Please again later.",
+          message: "Remark Required !.",
         })
       );
+    } else {
+      const response = await send_back_to_manager(
+        {
+          status: "Sent Back For Rectification",
+          remark: sendBackMsg
+        },
+        id
+      );
+      if (response.data.success) {
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Send back For Rectification",
+          })
+        );
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          })
+        );
+      }
     }
-  }
   }
 
   return (
     <>
       {ids.length > 0 && (
-        <Stack sx={{ flexDirection: "row" }}>
+        <Stack sx={{ flexDirection: "row" ,mb:4}}>
           <HamburgerMenu
             handleListing={() => navigate("/srManagerListing")}
             navigateHome={"srManagerDashboard"}
@@ -461,72 +437,101 @@ function SrManagerApproval() {
 
               {/* document section ends here */}
 
-              <Grid
-                item
-                container
-                xs={12}
-                sx={{ mt: 5, justifyContent: "space-around" }}
-              >
-                <Grid item xs={8}>
-                  <TextField
-                    type="text"
-                    multiline
-                    rows={3}
-                    fullWidth
-                    variant="outlined"
-                    label="Remark *"
-                    placeholder="Remark *"
-                    value={sendBackMsg}
-                    onChange={(e) => setSendBackMsg(e.target.value)}
-                  />
-                </Grid>
-              </Grid>
+              {/* Remark Section Starts here */}
+              {
+                agreement[ids[0]].remark.length > 0 &&
+                <Grid
+                    item
+                    container
+                    xs={12}
+                    sx={{ mt: 5, justifyContent: "space-around" }}
+                  >
+                    <Grid item xs={8}>
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
+                        variant="outlined"
+                        label="Remark *"
+                        placeholder="Remark *"
+                        value={agreement[ids[0]].remark}
+                      />
+                    </Grid>
+                  </Grid>
+              }
+              
+              {/* Remark Section Ends here */}
+
 
               {/* Buttons start here*/}
 
               {agreement[ids[0]].status === "Sent To Sr Manager" && (
-                <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                <>
                   <Grid
+                    item
                     container
-                    spacing={2}
-                    sx={{ justifyContent: "space-evenly" }}
+                    xs={12}
+                    sx={{ mt: 5, justifyContent: "space-around" }}
                   >
-                    <Grid item md={6} xs={11}>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          height: "65px",
-                          borderRadius: "12px",
-                          backgroundColor: "primary",
-                          width: "100%",
-                          color: "#FFFFFF",
-                          textTransform: "capitalize",
-                          fontSize: "18px",
-                        }}
-                        onClick={handleSubmit}
-                      >
-                        Approved And Send To BHU
-                      </Button>
-                    </Grid>
-                    <Grid item md={6} xs={11}>
-                      <Button
+                    <Grid item xs={8}>
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
                         variant="outlined"
-                        sx={{
-                          color: "var(--main-color)",
-                          height: "65px",
-                          borderRadius: "12px",
-                          backgroundColor: "primary",
-                          width: "100%",
-                          textTransform: "capitalize",
-                          fontSize: "18px",
-                        }}
-                        onClick={handleSendBack}
-                      >
-                        Send Back To Manager
-                      </Button>
+                        label="Remark *"
+                        placeholder="Remark *"
+                        value={sendBackMsg}
+                        onChange={(e) => setSendBackMsg(e.target.value)}
+                      />
                     </Grid>
                   </Grid>
-                </Grid>
+
+                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                    <Grid
+                      container
+                      spacing={2}
+                      sx={{ justifyContent: "space-evenly" }}
+                    >
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            height: "65px",
+                            borderRadius: "12px",
+                            backgroundColor: "primary",
+                            width: "100%",
+                            color: "#FFFFFF",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                          }}
+                          onClick={handleSubmit}
+                        >
+                          Approved And Send To BHU
+                        </Button>
+                      </Grid>
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            color: "var(--main-color)",
+                            height: "65px",
+                            borderRadius: "12px",
+                            backgroundColor: "primary",
+                            width: "100%",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                          }}
+                          onClick={handleSendBack}
+                        >
+                          Send Back To Manager
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </>
               )}
 
               {/* buttons end here */}

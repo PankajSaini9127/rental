@@ -146,7 +146,7 @@ function SrManagerApproval() {
   return (
     <>
       {ids.length > 0 && (
-        <Stack sx={{ flexDirection: "row" }}>
+        <Stack sx={{ flexDirection: "row",mb:4 }}>
           <HamburgerMenu
             navigateHome={"BHUDashboard"}
             handleListing={() => navigate("/BHUListing")}
@@ -343,29 +343,32 @@ function SrManagerApproval() {
 
               {/* Bank Details Ends here */}
 
-              <Grid
-                item
-                container
-                xs={12}
-                sx={{ mt: 5, justifyContent: "space-around" }}
-              >
-                <Grid item xs={10}>
-                  <TextField
-                    type="text"
-                    multiline
-                    rows={3}
-                    fullWidth
-                    variant="outlined"
-                    label="Remark *"
-                    placeholder="Remark *"
-                    value={sendBackMsg}
-                    onChange={(e) => setSendBackMsg(e.target.value)}
-                  />
-                </Grid>
-              </Grid>
+             
 
-              <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+              
                 {agreement[ids[0]].status === "Sent To BHU" && (
+                  <>
+                   <Grid
+                   item
+                   container
+                   xs={12}
+                   sx={{ mt: 5, justifyContent: "space-around" }}
+                 >
+                   <Grid item xs={10}>
+                     <TextField
+                       type="text"
+                       multiline
+                       rows={3}
+                       fullWidth
+                       variant="outlined"
+                       label="Remark *"
+                       placeholder="Remark *"
+                       value={sendBackMsg}
+                       onChange={(e) => setSendBackMsg(e.target.value)}
+                     />
+                   </Grid>
+                 </Grid>
+                 <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                   <Grid
                     container
                     spacing={2}
@@ -406,8 +409,9 @@ function SrManagerApproval() {
                       </Button>
                     </Grid>
                   </Grid>
+                  </Grid>
+                  </>
                 )}
-              </Grid>
 
               {/* buttons end here */}
             </Grid>

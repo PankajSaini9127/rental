@@ -83,21 +83,21 @@ function ApprowalRequest() {
 
   const handleSubmit = async (e) => {
     const response = await send_to_operations(
-      { status: "Sent To Operations", Operations_id },
+      { status: "Sent To Finance Team", Operations_id },
       id
     );
     if (response.data.success) {
       dispatch(
         setAlert({
-          vatiant: "success",
+          variant: "success",
           open: true,
-          message: "Approved And Sent To Operations",
+          message: "Approved And Sent To Finance Team",
         })
       );
     } else {
       dispatch(
         setAlert({
-          vatiant: "error",
+          variant: "error",
           open: true,
           message: "Something went wrong! Please again later.",
         })
@@ -146,7 +146,7 @@ function ApprowalRequest() {
   return (
     <>
       {ids.length > 0 && (
-        <Stack sx={{ flexDirection: "row" }}>
+        <Stack sx={{ flexDirection: "row",mb:4 }}>
           <HamburgerMenu
             navigateHome={"operationsDashboard"}
             handleListing={() => navigate("/operationsListing")}
@@ -343,7 +343,11 @@ function ApprowalRequest() {
 
               {/* Bank Details Ends here */}
 
-              <Grid
+              
+
+                {agreement[ids[0]].status === "Sent To Operations" && (
+                  <>
+                  <Grid
                 item
                 container
                 xs={12}
@@ -363,9 +367,7 @@ function ApprowalRequest() {
                   />
                 </Grid>
               </Grid>
-
               <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
-                {agreement[ids[0]].status === "Sent To Operations" && (
                   <Grid
                     container
                     spacing={2}
@@ -406,8 +408,9 @@ function ApprowalRequest() {
                       </Button>
                     </Grid>
                   </Grid>
-                )}
               </Grid>
+              </>
+                )}
 
               {/* buttons end here */}
             </Grid>

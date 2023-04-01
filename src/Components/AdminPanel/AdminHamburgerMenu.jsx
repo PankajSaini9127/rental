@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Grid, IconButton, Stack } from "@mui/material";
 import React, { useState } from "react";
 
 //icons hero section
@@ -10,11 +10,19 @@ import { VectorLogout, VectorUser } from "../Vector";
 import { NavExpand, NavItem } from "../StyleComponents/HamburgerStyled";
 
 import MenuIcon from "@mui/icons-material/Menu";
+import { useDispatch } from "react-redux";
 
-function AdminHamburgerMenu() {
+function AdminHamburgerMenu({navigateListing,navigateHome}) {
   const [expand, setExpand] = useState(false);
+  const dispatch = useDispatch()
 
   const navigate = useNavigate();
+
+  function logout (){
+    localStorage.clear()
+    dispatch({type :"LOGOUT"})
+    navigate('/')
+  } 
 
   return (
     <>
@@ -45,33 +53,31 @@ function AdminHamburgerMenu() {
               width: "50px",
               backgroundSize: "cover",
             }}
-            onClick={() => navigate("/userDashboard")}
+            onClick={() => navigate(navigateHome)}
           />
 
           {!expand ? (
             <>
-            {/* yashwant */}
-              <NavItem Vector={VectorUser} 
-            onClick={() => navigate("/userDashboard")}
-               />
-              <NavItem Vector={VectorLogout} navigateTO="" />
+              <NavItem
+                Vector={VectorUser}
+                onClick={() => navigate(`${navigateListing}`)}
+              />
+              <NavItem Vector={VectorLogout} onClick={logout}/>
             </>
           ) : (
             <Stack container spacing={2}>
               {/* onclick */}
               <NavExpand
-                msg="User"
-                navigateTO={"userManagement"}
+                msg="Users"
                 Vector={VectorUser}
                 NavItem={NavItem}
-                onClick={() => navigate("/userManagement")}
+                onClick={() => navigate(`${navigateListing}`)}
               />
               <NavExpand
                 msg="LogOut"
                 // navigateTO=""
                 Vector={VectorLogout}
-                navigateTO="userManagement"
-
+                onClick={logout}
               />
             </Stack>
           )}

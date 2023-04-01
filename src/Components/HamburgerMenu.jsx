@@ -74,7 +74,7 @@ function logout (){
                </>
               }
               
-              <NavItem Vector={VectorLogout} navigateTO={''} onClick={logout}/>
+              <NavItem Vector={VectorLogout} onClick={logout}/>
             </>
           ) : (
             <Stack container spacing={2}>

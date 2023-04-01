@@ -1,4 +1,17 @@
-import { Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Stack } from "@mui/material";
+import {
+  Alert,
+  Autocomplete,
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Snackbar,
+  Stack,
+  TextField,
+} from "@mui/material";
 
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,12 +20,13 @@ import {
   SelectComponent,
   TextFieldWrapper,
 } from "../StyledComponent";
-import AdminHamburgerMenu from "./AdminHamburgerMenu";
+
 import AdminCheckBox from "../StyleComponents/AdminCheckBox";
-import { EditUserInfo, GetSupervisor, get_user } from "../../Services/Services";
+import { EditUserInfo, GetSupervisor, getCityList, getStateList, get_user } from "../../Services/Services";
 
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/action/action";
+import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
 const initialState = {
   code: "123456",
   name: "",
@@ -20,13 +34,20 @@ const initialState = {
   role: [],
   mobile: "",
   supervisor: "",
+  state: "",
+  city: "",
+  location: "",
 };
 
-function EditUser() {
+function SuperAdminUserEdit() {
   const navigate = useNavigate();
   const { id } = useParams();
   const [formVal, setFormVal] = useState(initialState);
   const dispatch = useDispatch();
+
+  
+  const [stateList,setStateList] = useState([])
+  const [cityList,setCityList] = useState([])
 
   const [disable, setDisable] = useState({
     manager: false,
@@ -89,7 +110,7 @@ function EditUser() {
     } else if (role.includes("Senior Manager")) {
       finalQuerry = ["BHU"];
     } else if (role.includes("BHU")) {
-      finalQuerry = [ "Operations"];
+      finalQuerry = ["Operations"];
     } else if (role.includes("Operations")) {
       finalQuerry = ["Finance"];
     } else if (role.includes("Finance")) {
@@ -135,7 +156,8 @@ function EditUser() {
     }
   }
 
-  const { name, email, role, mobile, code, supervisor } = formVal;
+  const { name, email, role, mobile, code, supervisor, city, location, state } =
+    formVal;
 
   useEffect(() => {
     manageRole(role);
@@ -146,20 +168,7 @@ function EditUser() {
 
   const getData = async (id) => {
     const data = await get_user(id);
-
-    const { name, code, password, email, role, supervisor, mobile } =
-      data.data[0];
-
-    setFormVal({
-      ...formVal,
-      name,
-      code,
-      password,
-      email,
-      role: JSON.parse(role),
-      supervisor,
-      mobile,
-    });
+    setFormVal(data.data[0]);
   };
 
   const handleClose = () => {
@@ -227,12 +236,41 @@ function EditUser() {
     getData(id);
   }, []);
 
+  // funciton for fetching state list
+async function handleStateSearch(e, i) {
+  let response = await getStateList(e.target.value);
+
+  if (response.status === 200) {
+    setStateList(response.data);
+  } else setStateList([]);
+}
+
+useEffect(() => {
+  handleCitySearch();
+}, [state]);
+
+// funciton for fetching state list
+async function handleCitySearch() {
+  // console.log(i);
+  console.log(state);
+  let search = stateList.filter((row) => row.name === state && row.id);
+
+  // console.log(search);
+  let response = await getCityList(search[0].id);
+  // console.log(response)
+
+  if (response.status === 200) {
+    // console.log(city)
+    setCityList(response.data);
+  } else setCityList([]);
+}
+
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-      <AdminHamburgerMenu
-        navigateListing={'/userManagement'}
-        navigateHome={'/userDashboard'}
+        <AdminHamburgerMenu
+          navigateListing={"/super-admin-listing"}
+          navigateHome={"/super-admin-dashboard"}
         />
 
         <Box sx={{ flexGrow: 1 }}>
@@ -309,6 +347,86 @@ function EditUser() {
                       handleChange(e);
                     }}
                   />
+                 <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth>
+                      <Autocomplete
+                        freeSolo
+                        fullWidth
+                        id="free-solo-2-demo"
+                        disableClearable
+                        onChange={(e, val) => {
+                          setFormVal((old) => ({ ...old, state: val }));
+                        }}
+                        options={stateList.map((option) => option.name)}
+                        renderInput={(params) => (
+                          <TextField
+                            fullWidth
+                            name="state"
+                            value={state}
+                            {...params}
+                            label="State"
+                            onChange={(e) => {
+                              handleChange(e);
+                              handleStateSearch(e);
+                            }}
+                            InputProps={{
+                              ...params.InputProps,
+                              type: "search",
+                            }}
+                          />
+                        )}
+                      />
+                    </FormControl>
+                  </Grid>
+
+                  <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth>
+                      <TextField
+                        label="City"
+                        placeHolder="Enter City"
+                        select
+                        fullWidth
+                        name="city"
+                        // required={true}
+                        value={city || ""}
+                        onChange={handleChange}
+                      >
+                        {cityList &&
+                          cityList.map((item) => {
+                            return (
+                              <MenuItem value={item.city}>{item.city}</MenuItem>
+                            );
+                          })}
+                      </TextField>
+                    </FormControl>
+                  </Grid>
+                  <TextFieldWrapper
+                    label="Location"
+                    placeHolder="Location"
+                    value={location}
+                    name="city"
+                    error={formError.location}
+                    onChange={(e) => {
+                      validate(e);
+                      handleChange(e);
+                    }}
+                  />
 
                   <AdminCheckBox
                     handleChange={handleChange}
@@ -316,41 +434,45 @@ function EditUser() {
                     value={role}
                   />
 
-                  {/* <SelectComponent
-                    value={supervisor}
-                    name="supervisor"
-                    label={"Supervisor"}
-                    options={supervisorArray}
-                    onChange={handleChange}
-                  /> */}
-
-<Grid item md={4} xs={6} sx={{mb:'0px !important','@media(max-width:900px)':{my:1}}}>
-      <FormControl fullWidth >
-      <InputLabel id="demo-simple-select-label">{"Supervisor"}</InputLabel>
-        <Select
-          name={"supervisor"}
-          onChange={(e) => handleChange(e)}
-          variant="outlined"
-          labelId="demo-simple-select-label"
-          value={supervisor}
-          label={"Supervisor"}
-          sx={{
-            mt: "0px !important",
-            color: "rgba(16, 99, 173, 0.47)",
-            width: "100%",
-            height:'50px !important',
-            boxShadow: "none",
-            
-          }}
-        >
-          {
-            supervisorArray.map((item,i)=>{
-              return <MenuItem value={item.id} key={item.id} >{item.name}</MenuItem>
-            })
-          }
-        </Select>
-      </FormControl>
-    </Grid>
+                  <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        {"Supervisor"}
+                      </InputLabel>
+                      <Select
+                        name={"supervisor"}
+                        onChange={(e) => handleChange(e)}
+                        variant="outlined"
+                        labelId="demo-simple-select-label"
+                        value={supervisor}
+                        label={"Supervisor"}
+                        disabled={role[0] === "Admin"? true : false}  
+                        sx={{
+                          mt: "0px !important",
+                          color: "rgba(16, 99, 173, 0.47)",
+                          width: "100%",
+                          height: "50px !important",
+                          boxShadow: "none",
+                        }}
+                      >
+                        {supervisorArray.map((item, i) => {
+                          return (
+                            <MenuItem value={item.id} key={item.id}>
+                              {item.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+                  </Grid>
                 </Grid>
                 <Grid container sx={{ justifyContent: "space-evenly", mt: 3 }}>
                   <Grid item sm={3.0}>
@@ -381,4 +503,4 @@ function EditUser() {
   );
 }
 
-export default EditUser;
+export default SuperAdminUserEdit;
