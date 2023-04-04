@@ -8,7 +8,7 @@ const DataFieldStyle = ({ field, value }) => {
       "@media(max-width:900px)": { fontSize: "14px" },
     };
     return (
-      <Grid item md={3} xs={6} sx={{p:0}}>
+      <Grid item md={3} xs={6} sx={{p:0,overflow:"auto"}}>
         <Typography variant="body1" sx={typographyStyle}>
           {" "}
           {field}
@@ -25,7 +25,7 @@ const DataFieldStyle = ({ field, value }) => {
   
     const fieldStyle ={fontSize:'17px',color:"var(--main-color)",'@media(max-width:900px)':{fontSize:'14px'}}
     return (
-      <Grid item md={1} xs={4}>
+      <Grid item md={2} xs={4}>
         <Typography variant="body1" 
          sx={fieldStyle}
         >

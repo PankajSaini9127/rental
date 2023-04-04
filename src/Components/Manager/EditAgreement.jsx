@@ -77,11 +77,14 @@ function EditAgreement({ history }) {
     cheque: "",
     tax_receipt: "",
     noc: "",
+    remark:""
   });
   useEffect(() => {
     fetchData();
   }, []);
 
+
+  console.log(preData)
   async function fetchData() {
     try {
       let response = await getDetails(id);
@@ -115,6 +118,7 @@ function EditAgreement({ history }) {
           year4,
           year5,
           landlord,
+          remark
         } = response.data;
 
         setYearValue({ 
@@ -152,6 +156,7 @@ function EditAgreement({ history }) {
           year4,
           year5,
           landlord,
+          remark
         });
       }
     } catch (error) {
@@ -541,6 +546,9 @@ function EditAgreement({ history }) {
       }));
     }
   }
+
+  const [remarkValue, setRemark] = useState(preData.remark);
+  // console.log(remarkValue)
 
   return (
     <>
@@ -1063,13 +1071,36 @@ function EditAgreement({ history }) {
 
                 {/* Document upload section end here */}
 
+                {preData.remark.length > 0 && (
+                <Grid
+                  item
+                  container
+                  xs={12}
+                  sx={{ mt: 5, justifyContent: "space-around" }}
+                >
+                  <Grid item xs={8}>
+                    <TextField
+                      type="text"
+                      multiline
+                      rows={3}
+                      fullWidth
+                      variant="outlined"
+                      label="Remark *"
+                      placeholder="Remark *"
+                      onChange={(e)=>setRemark(e.target.value)}
+                      value={remarkValue}
+                    />
+                  </Grid>
+                </Grid>
+              )}
+
                 {/* Button Start from here */}
                 <Grid
                   container
                   sx={{ justifyContent: "center", mt: 2 }}
                   spacing={4}
                 >
-                  <Grid item md={3} xs={6}>
+                  <Grid item md={4} xs={6}>
                     <Button
                       variant="contained"
                       type="submit"
@@ -1089,11 +1120,11 @@ function EditAgreement({ history }) {
                         },
                       }}
                     >
-                      Update
+                      Update {preData.remark.length > 0 && "And Send To Sr Manager"}
                     </Button>
                   </Grid>
 
-                  <Grid item md={3} xs={6}>
+                  <Grid item md={4} xs={6}>
                     <Button
                       variant="outlined"
                       color="primary"

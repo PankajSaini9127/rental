@@ -3,12 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
-import AdminHamburgerMenu from "./AdminHamburgerMenu";
-import UserManagementTable from "./UserManagementTable";
 import { AuthContext } from "../../App";
 import { GetUser, get_search } from "../../Services/Services";
+import SuperAdminTable from "./DataTable";
+import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
 
-function UserManagement() {
+function SuperAdminListing() {
   const navigate = useNavigate();
 
   const {
@@ -67,24 +67,23 @@ function UserManagement() {
   };
 
   const handleAddUser = () => {
-    navigate("/newUser");
+    navigate("/super-admin-newuser");
   };
 
   return (
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
         <AdminHamburgerMenu
-          navigateListing={"/userManagement"}
-          navigateHome={"/userDashboard"}
+          navigateListing={"/super-admin-listing"}
+          navigateHome={"/super-admin-dashboard"}
         />
-
         <ListingComponent
           title="User Management"
           buttonText="Add User"
           addUserBtn={true}
           onChange={handleChange}
           value={SelectValue}
-          Table={UserManagementTable}
+          Table={SuperAdminTable}
           rows={row}
           onButtonClick={handleAddUser}
           dropDown={false}
@@ -96,4 +95,4 @@ function UserManagement() {
   );
 }
 
-export default UserManagement;
+export default SuperAdminListing;

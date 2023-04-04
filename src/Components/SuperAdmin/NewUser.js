@@ -1,16 +1,30 @@
-import { Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Stack } from "@mui/material";
-
-import React, { startTransition, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import {
-  MyHeader,
-  SelectComponent,
-  TextFieldWrapper,
-} from "../StyledComponent";
+  Alert,
+  Autocomplete,
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Snackbar,
+  Stack,
+  TextField,
+} from "@mui/material";
 
-import AdminHamburgerMenu from "./AdminHamburgerMenu";
-import { AddUser, GetSupervisor, get_emp_code } from "../../Services/Services";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { MyHeader, TextFieldWrapper } from "../StyledComponent";
+
+import {
+  AddUser,
+  GetSupervisor,
+  getCityList,
+  getStateList,
+} from "../../Services/Services";
 import AddUserCheckBox from "../StyleComponents/AddUserCheckBox";
+import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
 
 const initialState = {
   code: "",
@@ -19,9 +33,11 @@ const initialState = {
   role: [],
   mobile: "",
   supervisor: "",
+  city: "",
+  state: "",
 };
 
-function NewUser() {
+function SuperAdminNewUser() {
   const navigate = useNavigate();
   const [randomPassword, setRandomPassword] = useState("");
   const superVisor = [
@@ -38,6 +54,9 @@ function NewUser() {
   const [disable, setDisable] = useState({});
   const [formData, setFormData] = useState(initialState);
   const [formError, setformError] = useState({});
+
+  const [stateList, setStateList] = useState([]);
+  const [cityList, setCityList] = useState([]);
 
   function validate(e) {
     const error = {};
@@ -96,8 +115,8 @@ function NewUser() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(formError)
-   
+    console.log(formError);
+
     if (Object.keys(formError).length < 1) {
       if (role.length < 1) {
         setMsg({
@@ -112,7 +131,8 @@ function NewUser() {
   };
 
   //distructring elements from values
-  const { name, email, role, mobile, code, supervisor } = formData;
+  const { name, email, role, mobile, code, supervisor, city, state } =
+    formData;
 
   // state for set supervisor value
   const [supervisorArray, setsupervisorArray] = useState([]);
@@ -235,7 +255,7 @@ function NewUser() {
   // on Alert close
   const handleClose = () => {
     if (msg.type === "success") {
-      navigate("/userManagement");
+      navigate("/super-admin-listing");
     }
     setMsg({
       open: false,
@@ -244,12 +264,41 @@ function NewUser() {
     });
   };
 
+  // funciton for fetching state list
+  async function handleStateSearch(e, i) {
+    let response = await getStateList(e.target.value);
+
+    if (response.status === 200) {
+      setStateList(response.data);
+    } else setStateList([]);
+  }
+
+  useEffect(() => {
+    handleCitySearch();
+  }, [state]);
+
+  // funciton for fetching state list
+  async function handleCitySearch() {
+    // console.log(i);
+    console.log(state);
+    let search = stateList.filter((row) => row.name === state && row.id);
+
+    // console.log(search);
+    let response = await getCityList(search[0].id);
+    // console.log(response)
+
+    if (response.status === 200) {
+      // console.log(city)
+      setCityList(response.data);
+    } else setCityList([]);
+  }
+
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
         <AdminHamburgerMenu
-        navigateListing={'/userManagement'}
-        navigateHome={'/userDashboard'}
+          navigateListing={"/super-admin-listing"}
+          navigateHome={"/super-admin-dashboard"}
         />
 
         <Box sx={{ flexGrow: 1 }}>
@@ -335,52 +384,121 @@ function NewUser() {
                       handleChange(e);
                     }}
                   />
+                  <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth>
+                      <Autocomplete
+                        freeSolo
+                        fullWidth
+                        id="free-solo-2-demo"
+                        disableClearable
+                        onChange={(e, val) => {
+                          setFormData((old) => ({ ...old, state: val }));
+                        }}
+                        options={stateList.map((option) => option.name)}
+                        renderInput={(params) => (
+                          <TextField
+                            fullWidth
+                            name="state"
+                            value={state}
+                            {...params}
+                            label="State"
+                            onChange={(e) => {
+                              handleChange(e);
+                              handleStateSearch(e);
+                            }}
+                            InputProps={{
+                              ...params.InputProps,
+                              type: "search",
+                            }}
+                          />
+                        )}
+                      />
+                    </FormControl>
+                  </Grid>
+
+                  <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth>
+                      <TextField
+                        label="City"
+                        placeHolder="Enter City"
+                        select
+                        fullWidth
+                        name="city"
+                        // required={true}
+                        value={city || ""}
+                        onChange={handleChange}
+                      >
+                        {cityList &&
+                          cityList.map((item) => {
+                            return (
+                              <MenuItem value={item.city}>{item.city}</MenuItem>
+                            );
+                          })}
+                      </TextField>
+                    </FormControl>
+                  </Grid>
                   <AddUserCheckBox
                     handleChange={handleChange}
                     disable={disable}
                     setDisable={setDisable}
                     required={true}
-                    error={formError.name}
-                    //onBlur={validate}
                   />
 
-                  {/* <SelectComponent
-                    value={supervisor}
-                    name="supervisor"
-                    label={"Supervisor"}
-                    options={supervisorArray}
-                    onChange={handleChange}
-                  /> */}
-
-
-<Grid item md={4} xs={6} sx={{mb:'0px !important','@media(max-width:900px)':{my:1}}}>
-      <FormControl fullWidth >
-      <InputLabel id="demo-simple-select-label">{"Supervisor"}</InputLabel>
-        <Select
-          name={"supervisor"}
-          onChange={(e) => handleChange(e)}
-          variant="outlined"
-          labelId="demo-simple-select-label"
-          value={supervisor}
-          label={"Supervisor"}
-          sx={{
-            mt: "0px !important",
-            color: "rgba(16, 99, 173, 0.47)",
-            width: "100%",
-            height:'50px !important',
-            boxShadow: "none",
-            
-          }}
-        >
-          {
-            supervisorArray.map((item,i)=>{
-              return <MenuItem value={item.id} key={item.id} >{item.name}</MenuItem>
-            })
-          }
-        </Select>
-      </FormControl>
-    </Grid>
-
+                  <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth>
+                      <InputLabel id="demo-simple-select-label">
+                        {"Supervisor"}
+                      </InputLabel>
+                      <Select
+                        name={"supervisor"}
+                        onChange={(e) => handleChange(e)}
+                        variant="outlined"
+                        labelId="demo-simple-select-label"
+                        value={supervisor}
+                        label={"Supervisor"}
+                        disabled={role[0] === "Admin" ? true : false}
+                        sx={{
+                          mt: "0px !important",
+                          color: "rgba(16, 99, 173, 0.47)",
+                          width: "100%",
+                          height: "50px !important",
+                          boxShadow: "none",
+                        }}
+                      >
+                        {supervisorArray.map((item, i) => {
+                          return (
+                            <MenuItem value={item.id} key={item.id}>
+                              {item.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+                  </Grid>
                 </Grid>
                 <Grid container sx={{ justifyContent: "space-evenly", mt: 3 }}>
                   <Grid item sm={3.0}>
@@ -412,4 +530,4 @@ function NewUser() {
   );
 }
 
-export default NewUser;
+export default SuperAdminNewUser;

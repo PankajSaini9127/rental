@@ -1,118 +1,231 @@
-import React from 'react'
-import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
+import React from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 
 //components
 
 //manager Section
-import Login from './Components/Login/Login'
-import Dashboard from './Components/Manager/Dashboard'
-import Listing from './Components/Manager/Listing';
-import Agreement from './Components/Manager/Agreement';
-import EditAgreement from './Components/Manager/EditAgreement';
-import MonthalyList from './Components/MonthalyPayment/MonthalyList'
-import RenewalList from './Components/Renewal/RenewalList'
+import Login from "./Components/Login/Login";
+import Dashboard from "./Components/Manager/Dashboard";
+import Listing from "./Components/Manager/Listing";
+import Agreement from "./Components/Manager/Agreement";
+import EditAgreement from "./Components/Manager/EditAgreement";
+import ManagerApproval from "./Components/Manager/ManagerApproval";
+import MonthalyList from "./Components/MonthalyPayment/MonthalyList";
+import RenewalList from "./Components/Renewal/RenewalList";
 
 //sr MAnager section
-import ManagerLogin from './Components/SrManager/SrManagerLogin';
-import SrManagerDashboard from './Components/SrManager/SrManagerDashboard'
-import SrManagerListing from './Components/SrManager/SrManagerListing'
-import SrManagerApproval from './Components/SrManager/SrManagerApproval'
-import SendBack from './Components/SrManager/SendBack'
+import SrManagerDashboard from "./Components/SrManager/SrManagerDashboard";
+import SrManagerListing from "./Components/SrManager/SrManagerListing";
+import SrManagerApproval from "./Components/SrManager/SrManagerApproval";
 
 //opertaions Section
-import OperationsLogin from './Components/Operations/Login'
-import OperationsListing from './Components/Operations/OperationsListing'
-import OperationsDashboard from './Components/Operations/OperationsDashboard'
-import ApprovalRequest from './Components/Operations/ApprovalRequest'
-import RejectApproval from './Components/Operations/RejectApproval'
-
-//BHU Section
-// import OperationsLogin from './Components/Operations/Login'
-import BHUListing from './Components/BHU/BHUListing'
-import BHUDashBoard from './Components/BHU/BHUDashboard'
-import BHUapproval from './Components/BHU/BHUapproval'
-// import ApprovalRequest from './Components/Operations/ApprovalRequest'
+import OperationsListing from "./Components/Operations/OperationsListing";
+import OperationsDashboard from "./Components/Operations/OperationsDashboard";
+import ApprovalRequest from "./Components/Operations/ApprovalRequest";
 // import RejectApproval from './Components/Operations/RejectApproval'
 
-//Admin Section 
-import AdminLogin from './Components/AdminPanel/AdminLogin'
-import NewUser from './Components/AdminPanel/NewUser'
-import UserDashboard from './Components/AdminPanel/UserDashboard'
-import UserManagement from './Components/AdminPanel/UserManagement'
+//BHU Section
+import BHUListing from "./Components/BHU/BHUListing";
+import BHUDashBoard from "./Components/BHU/BHUDashboard";
+import BHUapproval from "./Components/BHU/BHUapproval";
+
+//Admin Section
+import NewUser from "./Components/AdminPanel/NewUser";
+import UserDashboard from "./Components/AdminPanel/UserDashboard";
+import UserManagement from "./Components/AdminPanel/UserManagement";
 
 //Reset Password Section
-import ForgotPassword from './Components/ResetPassword/ForgotPassword'
-import EmailVerify from './Components/ResetPassword/EmailVerify'
-import ResetPassword from './Components/ResetPassword/ResetPassword'
-import EditUser from './Components/AdminPanel/EditUser';
-import ManagerApproval from './Components/Manager/ManagerApproval';
+import ForgotPassword from "./Components/ResetPassword/ForgotPassword";
+import EmailVerify from "./Components/ResetPassword/EmailVerify";
+import ResetPassword from "./Components/ResetPassword/ResetPassword";
+import EditUser from "./Components/AdminPanel/EditUser";
+import { useSelector } from "react-redux";
+import SuperAdminDashboard from "./Components/SuperAdmin/Super-admin-dashboard";
+import SuperAdminNewUser from "./Components/SuperAdmin/NewUser";
+import SuperAdminListing from "./Components/SuperAdmin/SuperUserListing";
+import SuperAdminUserEdit from "./Components/SuperAdmin/EditUser";
 
 function MyRouter() {
   const history = useNavigate();
+
+  const { auth } = useSelector((s) => s);
+
+  const { role, isAuth } = auth;
+
   return (
-
     <Routes>
+      <Route exact path="/" element={<Login />} />
 
+      <Route
+        exact
+        path="/dashboard"
+        element={isAuth && role === "Manager" ? <Dashboard /> : <Login />}
+      />
+      <Route
+        exact
+        path="/newAgreement"
+        element={isAuth && role === "Manager" ? <Agreement /> : <Login />}
+      />
+      <Route
+        exact
+        path="/editAgreement/:id"
+        history={history}
+        element={isAuth && role === "Manager" ? <EditAgreement /> : <Login />}
+      />
+      <Route
+        exact
+        path="/listing"
+        element={isAuth && role === "Manager" ? <Listing /> : <Login />}
+      />
+      <Route
+        exact
+        path="/monthly-payment"
+        element={isAuth && role === "Manager" ? <MonthalyList /> : <Login />}
+      />
+      <Route
+        exact
+        path="/renewal"
+        element={isAuth && role === "Manager" ? <RenewalList /> : <Login />}
+      />
+      <Route
+        exact
+        path="/managerApproval/:id"
+        element={isAuth && role === "Manager" ? <ManagerApproval /> : <Login />}
+      />
 
-        <Route exact path='/' element={<Login/>}/>
-        <Route exact path='/dashboard' element={<Dashboard/>}/>
-        <Route exact path='/newAgreement' element={<Agreement/>}/>
-        <Route exact path='/editAgreement/:id' history = {history} element={<EditAgreement/>}/>
-        {/* <Route exact path='/editAgreement' element={<EditAgreement/>}/> */}
-        <Route exact path='/listing' element={<Listing/>}/>
-        <Route exact path='/monthly-payment' element={<MonthalyList/>}/>
-        <Route exact path='/renewal' element={<RenewalList/>}/>
-        <Route exact path='/managerApproval/:id' element={<ManagerApproval/>}/>
+      {/* Sr Manager */}
 
+      <Route
+        exact
+        path="/srManagerDashboard"
+        element={
+          isAuth && role === "Sr Manager" ? <SrManagerDashboard /> : <Login />
+        }
+      />
+      <Route
+        exact
+        path="/srManagerListing"
+        element={
+          isAuth && role === "Sr Manager" ? <SrManagerListing /> : <Login />
+        }
+      />
+      <Route
+        exact
+        path="/srManagerApproval/:id"
+        element={
+          isAuth && role === "Sr Manager" ? <SrManagerApproval /> : <Login />
+        }
+      />
 
-         {/* Sr Manager */}
+      {/* Operations Section */}
 
-        <Route exact path='/srManagerLogin' element={<ManagerLogin/>}/>
-        <Route exact path='/srManagerDashboard' element={<SrManagerDashboard/>}/>
-        <Route exact path='/srManagerListing' element={<SrManagerListing/>}/>
-        <Route exact path='/srManagerApproval/:id' element={<SrManagerApproval/>}/>
-        <Route exact path='/backToManager' element={<SendBack/>}/>
+      <Route
+        exact
+        path="/operationsDashboard"
+        element={
+          isAuth && role === "Operations" ? <OperationsDashboard /> : <Login />
+        }
+      />
+      <Route
+        exact
+        path="/operationsListing"
+        element={
+          isAuth && role === "Operations" ? <OperationsListing /> : <Login />
+        }
+      />
+      <Route
+        exact
+        path="/operations-approval/:id"
+        element={
+          isAuth && role === "Operations" ? <ApprovalRequest /> : <Login />
+        }
+      />
 
+      {/* BHU Section */}
+      <Route
+        exact
+        path="/BHUListing"
+        element={isAuth && role === "BHU" ? <BHUListing /> : <Login />}
+      />
+      <Route
+        exact
+        path="/BHUDashboard"
+        element={isAuth && role === "BHU" ? <BHUDashBoard /> : <Login />}
+      />
+      <Route
+        exact
+        path="/BHUapproval/:id"
+        element={isAuth && role === "BHU" ? <BHUapproval /> : <Login />}
+      />
 
-         {/* Operations Section */}
+      {/* Admin Section */}
+      <Route
+        exact
+        path="/userDashboard"
+        element={isAuth && role === "Admin" ? <UserDashboard /> : <Login />}
+      />
+      <Route
+        exact
+        path="/userManagement"
+        element={isAuth && role === "Admin" ? <UserManagement /> : <Login />}
+      />
+      <Route
+        exact
+        path="/newUser"
+        element={isAuth && role === "Admin" ? <NewUser /> : <Login />}
+      />
+      <Route
+        exact
+        path="/editUser/:id"
+        element={isAuth && role === "Admin" ? <EditUser /> : <Login />}
+      />
 
-         <Route exact path='/operationsDashboard' element={<OperationsDashboard/>}/>
-         <Route exact path='/operationsLogin' element={<OperationsLogin/>}/>
-        <Route exact path='/operationsListing' element={<OperationsListing/>}/>
-        <Route exact path='/operationsApproval/:id' element={<ApprovalRequest/>}/>
-        <Route exact path='/operationsReject' element={<RejectApproval/>}/>
+      {/* super Admin */}
 
-         {/* BHU Section */}
+      <Route
+        exact
+        path="/super-admin-dashboard"
+        element={
+          isAuth && role === "Super Admin" ? <SuperAdminDashboard /> : <Login />
+        }
+      />
 
-        {/* <Route exact path='/operationsLogin' element={<OperationsLogin/>}/> */}
-        <Route exact path='/BHUListing' element={<BHUListing/>}/>
-        <Route exact path='/BHUDashboard' element={<BHUDashBoard/>}/>
-        <Route exact path='/BHUapproval/:id' element={<BHUapproval/>}/>
+      <Route
+        exact
+        path="/super-admin-newuser"
+        element={
+          isAuth && role === "Super Admin" ? <SuperAdminNewUser /> : <Login />
+        }
+      />
 
-        {/* <Route exact path='/operationsApproval/:id' element={<ApprovalRequest/>}/>
-        <Route exact path='/operationsReject' element={<RejectApproval/>}/> */}
+      <Route
+        exact
+        path="/super-admin-listing"
+        element={
+          isAuth && role === "Super Admin" ? <SuperAdminListing /> : <Login />
+        }
+      />
+      <Route
+        exact
+        path="/super-admin-edit/:id"
+        element={
+          isAuth && role === "Super Admin" ? <SuperAdminUserEdit /> : <Login />
+        }
+      />
 
+      {/* passowrd section Reset */}
 
-
-       {/* Admin Section */}
-
-        <Route exact path='/adminLogin' element={<AdminLogin/>}/>
-        <Route exact path='/userDashboard' element={<UserDashboard/>}/>
-        <Route exact path='/userManagement' element={<UserManagement/>}/>
-        <Route exact path='/newUser' element={<NewUser/>}/>
-        <Route exact path='/editUser/:id' element={<EditUser/>}/>
-
-
-
-        {/* passowrd section Reset */}
-
-        <Route path={'/resetPassword'} element={<ForgotPassword history = {history}/>} />
-        <Route path={'/emailVerify'} element={<EmailVerify/>} />
-        <Route path={'/newPassword/:email'} element={<ResetPassword history = {history}/>} />
-        
-
+      <Route
+        path={"/resetPassword"}
+        element={<ForgotPassword history={history} />}
+      />
+      <Route path={"/emailVerify"} element={<EmailVerify />} />
+      <Route
+        path={"/newPassword/:email"}
+        element={<ResetPassword history={history} />}
+      />
     </Routes>
-  )
+  );
 }
 
-export default MyRouter
+export default MyRouter;

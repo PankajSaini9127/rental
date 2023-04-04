@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Grid, Snackbar,Checkbox } from "@mui/material";
+import { Alert, Box, Button, Grid, Snackbar, Checkbox } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,25 +10,27 @@ import axios from "axios";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PermissionAlert from "./Alert";
-import { delete_agreement, get_agreements, send_to_bhu } from "../../Services/Services";
+import {
+  delete_agreement,
+  get_agreements,
+  send_to_bhu,
+} from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../App";
 
-function DataTable({rows,loading,check,setCheck}) {
- 
+function DataTable({ rows, loading, check, setCheck }) {
   const { dispatch } = useContext(AuthContext);
-const [ids,setIds]= useState([])
+  const [ids, setIds] = useState([]);
 
-const {auth} = useSelector(s=>s);
+  const { auth } = useSelector((s) => s);
 
-const manager_id = auth.id;
-
+  const manager_id = auth.id;
 
   const [err, setErr] = useState({
     open: false,
     type: "",
     message: "",
-  })
+  });
 
   //altet close
   const handleClose = () => {
@@ -40,16 +42,15 @@ const manager_id = auth.id;
   };
 
   // api for delete record
-const deleteAPI = async (id) => {
+  const deleteAPI = async (id) => {
     const deleteItem = await delete_agreement(id);
     if (deleteItem.data.success) {
-      dispatch({ type: "ADMIN_RECALL" })
+      dispatch({ type: "ADMIN_RECALL" });
       setErr({
         open: true,
         type: "warning",
         message: deleteItem.data.message,
       });
-      
     } else {
       setErr({
         open: true,
@@ -57,123 +58,146 @@ const deleteAPI = async (id) => {
         message: deleteItem.data.message,
       });
     }
-};
+  };
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
-const renderDetailsButton = (e) => {
+  const renderDetailsButton = (e) => {
     const id = e.id;
-    
 
     return (
-      <>{ e.status === 'Hold' &&
-      <Grid container>
-      
-        <Grid item md={6} sx={{ color: "white !important" }}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            style={{
-              backgroundColor: "#62CDFF",
-              color: "white",
-              fontSize: "12px",
-              textTransform: "capitalize",
-            }}
-            startIcon={<EditIcon />}
-            onClick={(e) => {
-              e.stopPropagation(); // don't select this row after clicking
-              id && navigate(`/editAgreement/${id}`, { id });
-            }}
-          >
-            Edit
-          </Button>
-        </Grid>
-        <Grid item md={6}>
-        <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            style={{
-              backgroundColor: "#f13c3c",
-              color: "white",
-              fontSize: "12px",
-              textTransform: "capitalize",
-            }}
-            startIcon={<DeleteIcon />}
-            onClick={(e) => {
-              e.stopPropagation(); // don't select this row after clicking
-              // deleteAPI(id)
-              setDeleteAlert({ open: true, id: id });
-            }}
-          
-          >
-            Delete
-          </Button>
-        </Grid>
-      </Grid>}</>
+      <>
+      {e.row.status === "Sent Back For Rectification" && (
+        <Grid container>
+           <Grid item md={6} sx={{ color: "white !important" }}>
+           <Button
+             variant="contained"
+             color="primary"
+             size="small"
+             style={{
+               backgroundColor: "#62CDFF",
+               color: "white",
+               fontSize: "12px",
+               textTransform: "capitalize",
+             }}
+             startIcon={<EditIcon />}
+             onClick={(e) => {
+               e.stopPropagation(); // don't select this row after clicking
+               id && navigate(`/editAgreement/${id}`, { id });
+             }}
+           >
+             Edit
+           </Button>
+         </Grid>
+         </Grid>
+      )}
+        {e.row.status === "Hold" && (
+          <Grid container>
+            <Grid item md={6} sx={{ color: "white !important" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{
+                  backgroundColor: "#62CDFF",
+                  color: "white",
+                  fontSize: "12px",
+                  textTransform: "capitalize",
+                }}
+                startIcon={<EditIcon />}
+                onClick={(e) => {
+                  e.stopPropagation(); // don't select this row after clicking
+                  id && navigate(`/editAgreement/${id}`, { id });
+                }}
+              >
+                Edit
+              </Button>
+            </Grid>
+            <Grid item md={6}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{
+                  backgroundColor: "#f13c3c",
+                  color: "white",
+                  fontSize: "12px",
+                  textTransform: "capitalize",
+                }}
+                startIcon={<DeleteIcon />}
+                onClick={(e) => {
+                  e.stopPropagation(); // don't select this row after clicking
+                  // deleteAPI(id)
+                  setDeleteAlert({ open: true, id: id });
+                }}
+              >
+                Delete
+              </Button>
+            </Grid>
+          </Grid>
+        )}
+      </>
     );
   };
 
-const detailsButton = (e) => {
+  const detailsButton = (e) => {
     const id = e.id;
-  
-  
+
     return (
-      
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            style={{
-              backgroundColor: "rgb(103 185 68 / 89%)",
-              color: "white",
-              fontSize: "12px",
-              textTransform: "capitalize",
-              // width:"100%"
-            }}
-            onClick={(e) => {
-              e.stopPropagation(); // don't select this row after clicking
-              navigate(`/managerApproval/${id}`)
-            }}
-          >
-            View
-          </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        size="small"
+        style={{
+          backgroundColor: "rgb(103 185 68 / 89%)",
+          color: "white",
+          fontSize: "12px",
+          textTransform: "capitalize",
+          // width:"100%"
+        }}
+        onClick={(e) => {
+          e.stopPropagation(); // don't select this row after clicking
+          navigate(`/managerApproval/${id}`);
+        }}
+      >
+        View
+      </Button>
     );
   };
- 
-const handleSwitch = (e)=>{
-  console.log(ids.includes(e.target.name))
-  console.log(ids)
-  if(ids.includes(e.target.name)){
-    console.log('out')
-    setIds(ids.filter((i)=> i !== e.target.name))
-  }else{
-    console.log('in',e.target.name,ids)
-    setIds([...ids,e.target.name])
-  }
-}  
-  
-  
-const columns = [
-  {
-    field: "checkbox",
-    width: 20,
-    type: "number",
-    headerClassName: "dataGridHeader",
-    headerAlign: "center",
-    renderCell: (params) =><> 
-      {params.formattedValue === "Hold" ?
-        <Checkbox
-        onChange={handleSwitch}
-        name={params.id}
-        checked={ids.includes(params.id)}
-        /> : 
-          <Checkbox
-        disabled={true}/>}
+
+  const handleSwitch = (e) => {
+    console.log(ids.includes(e.target.name));
+    console.log(ids);
+    if (ids.includes(e.target.name)) {
+      console.log("out");
+      setIds(ids.filter((i) => i !== e.target.name));
+    } else {
+      console.log("in", e.target.name, ids);
+      setIds([...ids, e.target.name]);
+    }
+  };
+
+  const columns = [
+    {
+      field: "checkbox",
+      width: 20,
+      type: "number",
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      renderCell: (params) => (
+        <>
+          {params.formattedValue === "Hold" ? (
+            <Checkbox
+              onChange={handleSwitch}
+              name={params.id}
+              checked={ids.includes(params.id)}
+            />
+          ) : (
+            <Checkbox disabled={true} />
+          )}
         </>
-    ,
-  },
+      ),
+    },
     {
       field: "code",
       headerName: "Code",
@@ -185,28 +209,28 @@ const columns = [
     {
       field: "name",
       headerName: "Name",
-      width:170,
+      width: 180,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "location",
       headerName: "Location",
-      width: 190,
+      width: 170,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "rentalAmount",
       headerName: "Rental Amount",
-      width: 180,
+      width: 170,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
     {
       field: "status",
       headerName: "Status",
-      width: 140,
+      width: 220,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
@@ -216,7 +240,7 @@ const columns = [
       width: 150,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      renderCell: detailsButton
+      renderCell: detailsButton,
     },
     {
       field: "action",
@@ -226,25 +250,25 @@ const columns = [
       headerAlign: "center",
       renderCell: renderDetailsButton,
     },
-];
+  ];
 
+  const handleSelect = (ids) => {
+    setIds(ids);
+  };
 
+  const handleSelectSend = (e) => {
+    console.log(ids);
+    ids.map(async (id) => {
+      const response = await send_to_bhu(
+        { status: "Sent Sr Manager", manager_id },
+        id
+      );
+      console.log(response);
+    });
+  };
 
-const handleSelect = (ids)=>{
-  
-   setIds(ids)
-}
-
-const handleSelectSend = (e)=>{
-  console.log(ids)
-  ids.map(async(id)=>{
-    const response = await send_to_bhu({status:"Sent Sr Manager", manager_id},id)  
-    console.log(response)
-  })
-}
-
- //form delete alert
-const [deleteAlert, setDeleteAlert] = useState({ open: false, id: "" });
+  //form delete alert
+  const [deleteAlert, setDeleteAlert] = useState({ open: false, id: "" });
 
   const handleConfirm = () => {
     deleteAPI(deleteAlert.id);
@@ -256,11 +280,17 @@ const [deleteAlert, setDeleteAlert] = useState({ open: false, id: "" });
   };
   return (
     <>
-{
-      ids.length > 0 && <Box sx={{display:'flex',justifyContent:'flex-end'}}>
-      <Button variant="contained" sx={{textTransform:'capitalize',m:1,mx:3}} onClick={handleSelectSend} >Send To Sr Manager</Button>
-      </Box>
-    }
+      {ids.length > 0 && (
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <Button
+            variant="contained"
+            sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
+            onClick={handleSelectSend}
+          >
+            Send To Sr Manager
+          </Button>
+        </Box>
+      )}
 
       <Snackbar
         open={err.open}
@@ -300,15 +330,17 @@ const [deleteAlert, setDeleteAlert] = useState({ open: false, id: "" });
             backgroundColor: "#FFEBE7",
             color: "#CF482A",
           },
+          "& .hold": {
+            // backgroundColor: "#97b8ae",
+            // color: "#CF482A",
+          },
           "& .statusCell": {
-            maxWidth: "92px !important",
-            minWidth: "92px !important",
             maxHeight: "30px !important",
             minHeight: "25px !important",
             textAlign: "center !important",
             borderRadius: "10px !important",
             m: "auto",
-            mx: 6,
+            mx: 1,
           },
           "& .allCell": {
             justifyContent: "center !important",
@@ -325,23 +357,35 @@ const [deleteAlert, setDeleteAlert] = useState({ open: false, id: "" });
           sx={{ color: "black !important", minWidth: "50px" }}
           getCellClassName={(parms) => {
             let cellClass = [];
-            if (parms.field === "status" && parms.row.status === "Approved") {
+            if (
+              parms.field === "status" &&
+              parms.row.status === "Sent To Finance"
+            ) {
               cellClass.push("green statusCell");
             } else if (
               parms.field === "status" &&
-              parms.row.status === "Pending"
+              (parms.row.status === "Sent To Sr Manager" ||
+                parms.row.status === "Sent To BHU" ||
+                parms.row.status === "Sent To Operations" ||
+                parms.row.status === "Sent To Finance Team")
             ) {
               cellClass.push("yellow statusCell");
             } else if (
               parms.field === "status" &&
-              parms.row.status === "Rejected"
+              parms.row.status === "Sent Back For Rectification"
             ) {
               cellClass.push("red statusCell");
+            } else if (
+              parms.field === "status" &&
+              parms.row.status === "Hold"
+            ) {
+              cellClass.push("statusCell hold");
             }
             cellClass.push("allCell");
+
             return cellClass;
           }}
-          onSelectionModelChange={handleSelect}
+          // onSelectionModelChange={handleSelect}
         ></DataGrid>
       </Box>
     </>

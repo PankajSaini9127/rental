@@ -26,13 +26,20 @@ function LoginComponent({
   discription,
   subTitle,
   handleSubmit,
-  err,
   formValue,
   handleChange,
 }) {
-  const { password, username, role } = formValue;
+  const { password, email, role } = formValue;
 
-  const options = ["Admin", "Manager", "Senior Manager","BHU", "Operations", "Finance"];
+  const options = [
+    { name: "Super Admin", value: "Super Admin" },
+    { name: "Admin", value: "admin" },
+    {name:"Manager",value:'manager'},
+    {name:"Senior Manager",value:'senior_manager'},
+    {name:"BHU",value:'bhu'},
+    {name:"Operations",value:'operations'},
+    {name:"Finance",value:"finance"},
+  ];
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -84,7 +91,7 @@ function LoginComponent({
         item
         container
         md={6}
-       xs={12}
+        xs={12}
         sx={{ justifyContent: "center", alignItems: "center" }}
       >
         <Grid item md={7} xs={11} sx={{ "@media(max-width:900px)": { mb: 2 } }}>
@@ -123,7 +130,6 @@ function LoginComponent({
           </Typography>
 
           <Box component="form" sx={{ mt: 2 }} onSubmit={handleSubmit}>
-            {err.open ? <Alert severity={err.type}>{err.msg}</Alert> : ""}
 
             <Grid container sx={{ justifyContent: "center" }} spacing={2}>
               <Grid item xs={12}>
@@ -132,8 +138,8 @@ function LoginComponent({
                     variant="outlined"
                     placeholder="Enter Email Adress"
                     label="Email Address"
-                    value={username}
-                    name="username"
+                    value={email}
+                    name="email"
                     onChange={handleChange}
                     required
                   />
@@ -181,7 +187,7 @@ function LoginComponent({
                     }}
                   >
                     {options.map((item, i) => {
-                      return <MenuItem value={item}>{item}</MenuItem>;
+                      return <MenuItem value={item.value}>{item.name}</MenuItem>;
                     })}
                   </Select>
                 </FormControl>

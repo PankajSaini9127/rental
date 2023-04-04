@@ -1,290 +1,395 @@
-import { Box, Button, Grid, Stack, Typography } from "@mui/material";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import {
+  Alert,
+  Box,
+  Button,
+  Grid,
+  Link,
+  Snackbar,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 import { DataFieldStyle, YearField } from "../StyleComponents/Rental";
 import { MyHeader } from "../StyledComponent";
+import { useEffect, useState } from "react";
+import {
+  get_agreement_id,
+  get_Operations_agreements,
+  send_back_to_manager,
+} from "../../Services/Services";
+import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
+import { useDispatch, useSelector } from "react-redux";
 
-import config from '../../config.json'
+import { send_to_operations } from "../../Services/Services";
 
-// const data =[
-//   {field:'code',value:'123456'},
-//   {field:'name of leese',value:'ABC'},
-//   {field:'state',value:'Rajsthan'},
-//   {field:'city',value:'Jodhpur'},
-//   {field:'location',value:'Jodhpur'},
-//   {field:'pincode',value:'123546'},
-//   {field:'address',value:'ABC Nehru colony sardarpura jodhpur'},
-//   {field:'aadhar number',value:'123456789101'},
-//   {field:'pan number',value:'123456'},
-//   {field:'gst number',value:'214587228545'},
-//   {field:'mobile number',value:'12345678910'},
-//   {field:'alternate mobile',value:'12345678901'},
-//   {field:'email',value:'bitwit@test.com'},
-//   {field:'lock in year(if applicable)',value:'no'},
-//   {field:'notice period in month',value:'2'},
-//   {field:'deposite amount',value:'11000'},
-//   {field:'monthly rental',value:'1500'},
-// ]
-
-const year = [
-  {year:'Year 1',amount:'3000'},
-  {year:'Year 2',amount:'3000'},
-  {year:'Year 3',amount:'3000'},
-  {year:'Year 4',amount:'3000'},
-  {year:'Year 5',amount:'3000'},
-  {year:'Year 6',amount:'3000'},
-]
-
-// const bankDetail = [
-//   {field:'bank name',value:'ABCD Bank'},
-//   {field:'benicificary name',value:'john deo'},
-//   {field:'Bank A/C number ',value:'111111111111'},
-//   {field:'Bank IFSC Code',value:'123456'},
-// ]
-
-// const documentView = [
-//   'aadhar card',
-//   'GST Certificate',
-//   'pan card',
-//   'draft agreement',
-//   'electricity bill',
-//    'cencil bank cheque',
-//    'maintaince bill',
-//    'POA',
-//    'Property tax receipt',
-//    'noc (if multiple owner)'
-
-//  ] 
-
-// const DocumentView = ({ title }) => {
-//   return (
-//     <Grid item xs={6}>
-//       <Typography
-//         variant="body1"
-//         fontSize={"20px"}
-//         color={"primary"}
-//         textTransform={"capitalize"}
-//         sx={{'@media(max-width:900px)':{fontSize:'18px'}}}
-//       >
-//         {" "}
-//         {title}
-//       </Typography>
-//       <Box
-//         sx={{
-//           height: "150px",
-//           border: "1px solid #03C1F3",
-//           borderRadius: "20px",
-//           display: "flex",
-//           justifyContent: "center",
-//           alignItems: "center",
-//         }}
-//       >
-//         <Button
-//           variant="text"
-//           sx={{
-//             textTransform: "capitalize",
-//             color: "rgba(16, 99, 173, 0.47)",
-//             height: "100%",
-//             width: "100%",
-//           }}
-//         >
-//           view/Download
-//         </Button>
-//       </Box>
-//     </Grid>
-//   );
-// };
+//download file
+import { setAlert } from "../../store/action/action";
 
 const Heading = ({ heading }) => {
   return (
-    <Grid item xs={12} sx={{ mt: 6, mb: 2 }}>
-      <Typography variant="body1" fontSize={"25px"} color={"primary"}>
+    <Grid item xs={11} sx={{ mt: 6, mb: 2 }}>
+      <Typography variant="body1" fontSize={"22px"} color={"primary"}>
         {heading}
       </Typography>
     </Grid>
   );
 };
 
-function ApprovalRequest() {
+function ApprowalRequest() {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  const {id} = useParams();
+  const [agreement, setAgreement] = useState({});
+  const [ids, setIds] = useState([]);
+
+  const [sendBackMsg, setSendBackMsg] = useState("");
+
+  const { auth } = useSelector((s) => s);
+
+  const Operations_id = auth.id;
+
+  const dispatch = useDispatch();
 
 
-  const [agreement, setAgreement] = useState([])
-  const {
-    leeseName,
-    code,
-    state,
-    city,
-    pincode,
-    location,
-    address,
-    panNo,
-    aadharNo,
-    gstNo,
-    mobileNo,
-    alternateMobile,
-    email,
-    lockInYear,
-    noticePeriod,
-    deposite,
-    monthlyRent,
-    bankName,
-    benificiaryName,
-    accountNo,
-    ifscCode,
-    manager
-  } = agreement;
+  const handleClose = () => {};
 
-  const getData = async()=>{
-    const data = await axios.get(`${config.API_LIVE}/api/operations/getagreement/${id}`)
-    if(data.data.success){
-      setAgreement(data.data.agreements[0])
+  const getData = async (id) => {
+    const agreement = await get_agreement_id(id);
+    setAgreement(agreement.data.agreement);
+    setIds(agreement.data.ids);
+  };
+
+
+
+  useEffect(() => {
+    getData(id);
+  }, []);
+
+  const handleSubmit = async (e) => {
+    const response = await send_to_operations(
+      { status: "Sent To Finance Team", Operations_id },
+      id
+    );
+    if (response.data.success) {
+      dispatch(
+        setAlert({
+          variant: "success",
+          open: true,
+          message: "Approved And Sent To Finance Team",
+        })
+      );
+      navigate("/operationsListing");
+    } else {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Something went wrong! Please again later.",
+        })
+      );
     }
-    
+  };
+
+ //Send Back to manager
+ async function handleSendBack() {
+  if(sendBackMsg.length <= 0){
+    dispatch(
+      setAlert({
+        variant:'error',
+        open: true,
+        message: "Remark Required !.",
+      })
+    )
+  }else{
+  const response = await send_back_to_manager(
+    {
+      status: "Sent Back For Rectification",
+      rectification_msg: sendBackMsg,
+    },
+    id
+  );
+  if (response.data.success) {
+    dispatch(
+      setAlert({
+        variant: "success",
+        open: true,
+        message: "Send back For Rectification",
+      })
+    );
+    navigate("/operationsListing")
+  } else {
+    dispatch(
+      setAlert({
+        variant: "error",
+        open: true,
+        message: "Something went wrong! Please again later.",
+      })
+    );
   }
-
-
-  useEffect(()=>{
-    getData()
-  },[])
-
-
-  const navigate = useNavigate()
-
-  const handleApproval = ()=>{
-      // navigate('-1')
-  }
-
-  const handleBack = ()=>{
-       navigate('/operationsReject')
-  }
-
-
+}
+}
 
   return (
     <>
-      <Stack sx={{ flexDirection: "row" }}>
-        <HamburgerMenu />
+      {ids.length > 0 && (
+        <Stack sx={{ flexDirection: "row",mb:4 }}>
+          <HamburgerMenu
+            navigateHome={"operationsDashboard"}
+            handleListing={() => navigate("/operationsListing")}
+          />
 
-        <Box sx={{ flexGrow: 1 }}>
+          <Box sx={{ flexGrow: 1 }}>
+            <MyHeader>New Agreement Approval</MyHeader>
 
-          <MyHeader>New Agreement Approval</MyHeader>
+            <Grid container sx={{ justifyContent: "center", mt: 2 }}>
+             
+              {/* Basic Details */}
+              <Grid item md={10}>
+                <Grid container spacing={2}>
+                  <DataFieldStyle
+                    field={"code"}
+                    value={agreement[ids[0]].code}
+                  />
 
-          <Grid container sx={{ justifyContent: "center" }}>
-            {/* Basic Details */}
-            <Grid item md={10}>
-              <Grid container spacing={2}>
-              <DataFieldStyle field={"code"} value={code} />
-                <DataFieldStyle field={"name of leese"} value={leeseName} />
-                <DataFieldStyle field={"state"} value={state} />
-                <DataFieldStyle field={"city"} value={city} />
-                <DataFieldStyle field={"location"} value={location} />
-                <DataFieldStyle field={"pincode"} value={pincode} />
-                <DataFieldStyle field={"address"} value={address} />
-                <DataFieldStyle field={"aadhar number"} value={aadharNo} />
-                <DataFieldStyle field={"pan number"} value={panNo} />
-                <DataFieldStyle field={"gst number"} value={gstNo} />
-                <DataFieldStyle field={"mobile number"} value={mobileNo} />
-                <DataFieldStyle field={"alternate mobile"} value={alternateMobile} />
-                <DataFieldStyle field={"email"} value={email} />
-                <DataFieldStyle field={"lock in year"} value={lockInYear} />
-                <DataFieldStyle
-                  field={"notice period in month"}
-                  value={noticePeriod}
-                />
-                <DataFieldStyle field={"deposit"} value={deposite} />
-                <DataFieldStyle field={"monthly rental"} value={monthlyRent} />
+                  <DataFieldStyle
+                    field={"state"}
+                    value={agreement[ids[0]].state}
+                  />
+                  <DataFieldStyle
+                    field={"location"}
+                    value={agreement[ids[0]].location}
+                  />
+                  <DataFieldStyle
+                    field={"pincode"}
+                    value={agreement[ids[0]].pincode}
+                  />
+                  <DataFieldStyle
+                    field={"address"}
+                    value={agreement[ids[0]].address}
+                  />
+                  <DataFieldStyle
+                    field={"lock in year"}
+                    value={agreement[ids[0]].lockInYear}
+                  />
+                  <DataFieldStyle
+                    field={"notice period in month"}
+                    value={agreement[ids[0]].noticePeriod}
+                  />
+                  <DataFieldStyle
+                    field={"deposit"}
+                    value={agreement[ids[0]].deposite}
+                  />
+                  <DataFieldStyle
+                    field={"monthly rental"}
+                    value={agreement[ids[0]].monthlyRent}
+                  />
+                  <DataFieldStyle
+                    field={"tenure"}
+                    value={agreement[ids[0]].tenure}
+                  />
+                  {agreement[ids[0]].tenure !== "11 Month" && (
+                    <>
+                      <DataFieldStyle
+                        field={"yearly Increment"}
+                        value={agreement[ids[0]].yearlyIncrement}
+                      />
+                      <Grid container spacing={1} sx={{ mt: 6 }}>
+                        <YearField
+                          year={"Year 1"}
+                          amount={agreement[ids[0]].year1}
+                        />
+                        <YearField
+                          year={"Year 2"}
+                          amount={agreement[ids[0]].year2}
+                        />
+                        {(agreement[ids[0]].tenure === "3 Year" ||
+                          agreement[ids[0]].tenure === "4 Year" ||
+                          agreement[ids[0]].tenure === "5 Year") && (
+                          <YearField
+                            year={"Year 3"}
+                            amount={agreement[ids[0]].year3}
+                          />
+                        )}
+                        {(agreement[ids[0]].tenure === "4 Year" ||
+                          agreement[ids[0]].tenure === "5 Year") && (
+                          <YearField
+                            year={"Year 4"}
+                            amount={agreement[ids[0]].year4}
+                          />
+                        )}
+                        {agreement[ids[0]].tenure === "5 Year" && (
+                          <YearField
+                            year={"Year 5"}
+                            amount={agreement[ids[0]].year5}
+                          />
+                        )}
+                      </Grid>
+                    </>
+                  )}
 
-
-                <Grid container spacing={1} sx={{ mt: 6 }}>
-
-                  {
-                    year.map((item,i)=>{
-                      return <YearField year={item.year} amount={item.amount} key={i}/>
-                    })
-                  }
+                  {Array.from(
+                    { length: agreement[ids[0]].leeseName.length },
+                    (row, id) => (
+                      <Grid container sx={{ mt: 3 }} spacing={2}>
+                        <Grid item xs={12}>
+                          <Typography variant="body1">
+                            Landlord {id + 1} Details
+                          </Typography>
+                        </Grid>
+                        <DataFieldStyle
+                          field={"name of leese"}
+                          value={agreement[ids[0]].name[id]}
+                        />
+                        <DataFieldStyle
+                          field={"aadhar number"}
+                          value={agreement[ids[0]].aadharNo[0]}
+                        />
+                        <DataFieldStyle
+                          field={"pan number"}
+                          value={agreement[ids[0]].panNo[id]}
+                        />
+                        <DataFieldStyle
+                          field={"gst number"}
+                          value={agreement[ids[0]].gstNo[id]}
+                        />
+                        <DataFieldStyle
+                          field={"mobile number"}
+                          value={agreement[ids[0]].mobileNo[id]}
+                        />
+                        <DataFieldStyle
+                          field={"alternate mobile"}
+                          value={agreement[ids[0]].alternateMobile[id]}
+                        />
+                        <DataFieldStyle
+                          field={"email"}
+                          value={agreement[ids[0]].email[id]}
+                        />
+                        <DataFieldStyle
+                          field={"Percentage Share"}
+                          value={agreement[ids[0]].percentage[id]}
+                        />
+                      </Grid>
+                    )
+                  )}
                 </Grid>
               </Grid>
-            </Grid>
 
-            {/* Bank Details start here */}
-            <Heading heading={"Bank Details"} />
+              {/* Bank Details start here */}
+              <Heading heading={"Bank Details"} />
 
-            <Grid item md={10}>
-              <Grid container spacing={2}>
-              <DataFieldStyle field={"bank name"} value={bankName} />
-                <DataFieldStyle field={"benicifiary name"} value={benificiaryName} />
-                <DataFieldStyle field={"bank A/C number"} value={accountNo} />
-                <DataFieldStyle field={"bank ifsc code"} value={ifscCode} />
-              </Grid>
-            </Grid>
-
-            {/* Bank Details Ends here */}
-
-            {/* Document Section start here */}
-            {/* <Heading heading={"Document Download"} />
-
-            <Grid item md={8}>
-              <Grid container spacing={2}>
-                  {
-                    documentView.map((item,i)=>{
-                      return <DocumentView title={item} />
-                    })
-                  }
-                  
-              </Grid>
-            </Grid> */}
-
-            {/* document section ends here */}
-
-            {/* Buttons start here*/}
-
-            <Grid item md={8}  sx={{ mt: 4, mb: 2 }}>
-              <Grid container spacing={2}>
-                <Grid item md={6} xs={11}>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      height: "65px",
-                      borderRadius: "12px",
-                      backgroundColor: "primary",
-                      width: "100%",
-                      color: "#FFFFFF",
-                      textTransform: "capitalize",
-                      fontSize: "20px",
-                    }}
-                    onClick={handleApproval}
-                  >
-                    Approved by finance team
-                  </Button>
+              <Grid item md={10}>
+                <Grid container spacing={2}>
+                  {Array.from(
+                    { length: agreement[ids[0]].leeseName.length },
+                    (row, id) => (
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
+                          <Typography variant="body1">
+                            Landlord {id + 1} Details
+                          </Typography>
+                        </Grid>
+                        <DataFieldStyle
+                          field={"bank name"}
+                          value={agreement[ids[0]].bankName[id]}
+                        />
+                        <DataFieldStyle
+                          field={"benicifiary name"}
+                          value={agreement[ids[0]].benificiaryName[id]}
+                        />
+                        <DataFieldStyle
+                          field={"bank A/C number"}
+                          value={agreement[ids[0]].accountNo[id]}
+                        />
+                        <DataFieldStyle
+                          field={"bank ifsc code"}
+                          value={agreement[ids[0]].ifscCode[id]}
+                        />
+                      </Grid>
+                    )
+                  )}
                 </Grid>
-                <Grid item md={6} xs={11}>
-                  <Button
+              </Grid>
+
+              {/* Bank Details Ends here */}
+
+              
+
+                {agreement[ids[0]].status === "Sent To Operations" && (
+                  <>
+                  <Grid
+                item
+                container
+                xs={12}
+                sx={{ mt: 5, justifyContent: "space-around" }}
+              >
+                <Grid item xs={10}>
+                  <TextField
+                    type="text"
+                    multiline
+                    rows={3}
+                    fullWidth
                     variant="outlined"
-                    sx={{
-                      height: "65px",
-                      borderRadius: "12px",
-                      width: "100%",
-                      color: "var(--main-color)",
-                      textTransform: "capitalize",
-                      fontSize: "20px",
-                    }}
-                    onClick={handleBack}
-                  >
-                    Send back to operations
-                  </Button>
+                    label="Remark *"
+                    placeholder="Remark *"
+                    value={sendBackMsg}
+                    onChange={(e) => setSendBackMsg(e.target.value)}
+                  />
                 </Grid>
               </Grid>
+              <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                  <Grid
+                    container
+                    spacing={2}
+                    sx={{ justifyContent: "space-evenly" }}
+                  >
+                    <Grid item md={6} xs={11}>
+                      <Button
+                        variant="contained"
+                        sx={{
+                          height: "65px",
+                          borderRadius: "12px",
+                          backgroundColor: "primary",
+                          width: "100%",
+                          color: "#FFFFFF",
+                          textTransform: "capitalize",
+                          fontSize: "18px",
+                        }}
+                        onClick={handleSubmit}
+                      >
+                        Approve And Send To Finance Team
+                      </Button>
+                    </Grid>
+                    <Grid item md={6} xs={11}>
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          color: "var(--main-color)",
+                          height: "65px",
+                          borderRadius: "12px",
+                          backgroundColor: "primary",
+                          width: "100%",
+                          textTransform: "capitalize",
+                          fontSize: "18px",
+                        }}
+                        onClick={handleSendBack}
+                      >
+                        Send Back
+                      </Button>
+                    </Grid>
+                  </Grid>
+              </Grid>
+              </>
+                )}
+
+              {/* buttons end here */}
             </Grid>
-            {/* buttons end here */}
-          </Grid>
-        </Box>
-      </Stack>
+          </Box>
+        </Stack>
+      )}
     </>
   );
 }
 
-export default ApprovalRequest;
+export default ApprowalRequest;

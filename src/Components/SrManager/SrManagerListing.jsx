@@ -1,7 +1,6 @@
 import { Stack } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
@@ -25,13 +24,19 @@ function SrManagerListing() {
   const login_srm_id = auth.id;
 
 const [data, setData] =useState({ids:[]})
+const [searchValue,setsearchValue] =useState('');
+console.log(data)
 
  const getData = async(id)=>{
   const response = await get_srm_agreements(id);
+  console.log(response)
   setData(response.data)
  } 
+
+//  console.log(data)
  
- data.ids = data.ids.reverse()
+//  data.ids = data.ids.reverse()
+
 
  const rows = data.ids.map((item)=>{
  
@@ -43,14 +48,14 @@ const [data, setData] =useState({ids:[]})
     code: data.agreement[item].code,
     name: data.agreement[item].name,
     location:data.agreement[item].location,
-    manager:data.agreement[item].manager,
+    manager:data.agreement[item].manager ,
     rentalAmount:data.agreement[item].monthlyRent
   }
  })
 
 
 
- const [searchValue,setsearchValue] =useState('');
+
  
  //search
  async function SearchAPi(id,searchValue){
@@ -61,9 +66,9 @@ const [data, setData] =useState({ids:[]})
 }
 
 useEffect(()=>{
-  // if(searchValue.length >= 1){
+  if(searchValue.length >= 1){
     SearchAPi(login_srm_id,searchValue)
-  // }
+  }
 },[searchValue])
 
 
@@ -73,10 +78,12 @@ useEffect(()=>{
 
 const navigate = useNavigate()
 
+
+
   return (
     <>
 {
-  data.success &&
+ data.ids.length > 0 &&
 
 <Stack sx={{flexWrap:"wap",flexDirection:"row"}}>
 <HamburgerMenu

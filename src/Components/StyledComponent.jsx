@@ -22,8 +22,8 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 // header
 const MyHeader = styled("h5")({
-  fontSize: "31px",
-  fontWeight: "700",
+  fontSize: "28px",
+  fontWeight: "600",
   lineHeight: "48px",
   marginLeft: "55px",
   color:'var(--main-color)',

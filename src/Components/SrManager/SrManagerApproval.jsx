@@ -6,6 +6,7 @@ import {
   Link,
   Snackbar,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
@@ -13,11 +14,17 @@ import HamburgerMenu from "../HamburgerMenu";
 import { DataFieldStyle, YearField } from "../StyleComponents/Rental";
 import { MyHeader } from "../StyledComponent";
 import { useEffect, useState } from "react";
-import { get_agreement_id } from "../../Services/Services";
+import {
+  get_agreement_id,
+  send_back_to_manager,
+  send_to_bhu,
+} from "../../Services/Services";
 import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
 
 //download file
-import {saveAs} from "file-saver";
+import { saveAs } from "file-saver";
+import { useDispatch, useSelector } from "react-redux";
+import { setAlert } from "../../store/action/action";
 
 const DocumentView = ({ title, img }) => {
   return (
@@ -58,7 +65,7 @@ const DocumentView = ({ title, img }) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              textDecoration:"none"
+              textDecoration: "none",
             }}
             href={img}
             target="_blank"
@@ -82,11 +89,11 @@ const DocumentView = ({ title, img }) => {
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              textDecoration:"none"
+              textDecoration: "none",
             }}
-            onClick={()=>saveAs(img,title)}
+            onClick={() => saveAs(img, title)}
           >
-           Download
+            Download
           </Link>
         </Button>
       </Box>
@@ -110,89 +117,100 @@ function SrManagerApproval() {
 
   const [agreement, setAgreement] = useState({});
   const [ids, setIds] = useState([]);
+  const [sendBackMsg, setSendBackMsg] = useState("");
 
-  const [msg, setMsg] = useState({
-    open: false,
-    type: "",
-    message: "",
-  });
+  const { auth } = useSelector((s) => s);
+  const srm_id = auth.id;
 
-  const handleClose = () => {
-    if (msg.type === "success") {
-      navigate("/listing");
-      setMsg({
-        open: false,
-        type: "",
-        message: "",
-      });
-    } else {
-      setMsg({
-        open: false,
-        type: "",
-        message: "",
-      });
-    }
-  };
+const dispatch = useDispatch();
+
+
 
   const getData = async (id) => {
-    const agreement = await get_agreement_id(id)
+    setAgreement({});
+    const agreement = await get_agreement_id(id);
     setAgreement(agreement.data.agreement);
-    setIds(agreement.data.ids)
+    setIds(agreement.data.ids);
   };
-
-console.log(agreement)
-  
-  const [open, setOpen] = useState(false)
-
-  //dialog box
-  const handleCancel = ()=>{
-       setOpen(false)
-  }
-
-  const handleReject = ()=>{
-    setOpen(true)
-  }
-
-
 
   useEffect(() => {
     getData(id);
   }, []);
 
-  const handleSubmit = (e) => {};
+  const handleSubmit = async (e) => {
+    const response = await send_to_bhu({ status: "Sent To BHU", srm_id }, id);
+    if (response.data.success) {
+      dispatch(
+        setAlert({
+          variant: "success",
+          open: true,
+          message: "Agreement Sent To BHU",
+        })
+      );
+      navigate('/srManagerListing')
+    } else {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Something went wrong! Please again later.",
+        })
+      );
+    }
+  };
+
+  //Send Back to manager
+  async function handleSendBack() {
+    if (sendBackMsg.length <= 0) {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Remark Required !.",
+        })
+      );
+    } else {
+      const response = await send_back_to_manager(
+        {
+          status: "Sent Back For Rectification",
+          remark: sendBackMsg
+        },
+        id
+      );
+      if (response.data.success) {
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Send back For Rectification",
+          })
+        );
+        navigate('/srManagerListing')
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          })
+        );
+      }
+    }
+  }
 
   return (
     <>
       {ids.length > 0 && (
-        <Stack sx={{ flexDirection: "row" }}>
-          <DialogBoxSBM open={open} handleClose={handleCancel} sendBack={'send back to manager'} navigate={''}/>
-         <HamburgerMenu
-          handleListing={()=>navigate('/srManagerListing')}
-          navigateHome={"srManagerDashboard"}
-        />
+        <Stack sx={{ flexDirection: "row" ,mb:4}}>
+          <HamburgerMenu
+            handleListing={() => navigate("/srManagerListing")}
+            navigateHome={"srManagerDashboard"}
+          />
 
           <Box sx={{ flexGrow: 1 }}>
             <MyHeader>New Agreement Approval</MyHeader>
 
-            <Grid container sx={{ justifyContent: "center",mt:2 }}>
-              {msg.open ? (
-                <Snackbar
-                  open={msg.open}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                  autoHideDuration={6000}
-                  onClose={handleClose}
-                >
-                  <Alert
-                    onClose={handleClose}
-                    severity={msg.type}
-                    sx={{ width: "100%" }}
-                  >
-                    {msg.message}
-                  </Alert>
-                </Snackbar>
-              ) : (
-                ""
-              )}
+            <Grid container sx={{ justifyContent: "center", mt: 2 }}>
               {/* Basic Details */}
               <Grid item md={10}>
                 <Grid container spacing={2}>
@@ -200,62 +218,23 @@ console.log(agreement)
                     field={"code"}
                     value={agreement[ids[0]].code}
                   />
-                  {
-                  Array.from({length:agreement[ids[0]].leeseName.length},(row,id)=>(
-                
-                    <>
-                      <DataFieldStyle
-                        field={"name of leese"}
-                        value={agreement[ids[0]].leeseName[id]}
-                      />
-                      <DataFieldStyle
-                        field={"state"}
-                        value={agreement[ids[0]].state[id]}
-                      />
-                       <DataFieldStyle
-                        field={"city"}
-                        value={agreement[ids[0]].city[id]}
-                      />
-                      <DataFieldStyle
-                        field={"location"}
-                        value={agreement[ids[0]].location[id]}
-                      />
-                      <DataFieldStyle
-                        field={"pincode"}
-                        value={agreement[ids[0]].pincode[id]}
-                      />
-                      <DataFieldStyle
-                        field={"address"}
-                        value={agreement[ids[0]].address[id]}
-                      />
-                     
-                      <DataFieldStyle
-                        field={"aadhar number"}
-                        value={agreement[ids[0]].aadharNo[id]}
-                      />
-                      <DataFieldStyle
-                        field={"pan number"}
-                        value={agreement[ids[0]].panNo[id]}
-                      />
-                      <DataFieldStyle
-                        field={"gst number"}
-                        value={agreement[ids[0]].gstNo[id]}
-                      />
-                      <DataFieldStyle
-                        field={"mobile number"}
-                        value={agreement[ids[0]].mobileNo[id]}
-                      />
-                      <DataFieldStyle
-                        field={"alternate mobile"}
-                        value={agreement[ids[0]].alternateMobile[id]}
-                      />
-                      <DataFieldStyle
-                        field={"email"}
-                        value={agreement[ids[0]].email[id]}
-                      />
-                    </>
-                  ))}
 
+                  <DataFieldStyle
+                    field={"state"}
+                    value={agreement[ids[0]].state}
+                  />
+                  <DataFieldStyle
+                    field={"location"}
+                    value={agreement[ids[0]].location}
+                  />
+                  <DataFieldStyle
+                    field={"pincode"}
+                    value={agreement[ids[0]].pincode}
+                  />
+                  <DataFieldStyle
+                    field={"address"}
+                    value={agreement[ids[0]].address}
+                  />
                   <DataFieldStyle
                     field={"lock in year"}
                     value={agreement[ids[0]].lockInYear}
@@ -272,14 +251,94 @@ console.log(agreement)
                     field={"monthly rental"}
                     value={agreement[ids[0]].monthlyRent}
                   />
+                  <DataFieldStyle
+                    field={"tenure"}
+                    value={agreement[ids[0]].tenure}
+                  />
+                  {agreement[ids[0]].tenure !== "11 Month" && (
+                    <>
+                      <DataFieldStyle
+                        field={"yearly Increment"}
+                        value={agreement[ids[0]].yearlyIncrement}
+                      />
+                      <Grid container spacing={1} sx={{ mt: 6 }}>
+                        <YearField
+                          year={"Year 1"}
+                          amount={agreement[ids[0]].year1}
+                        />
+                        <YearField
+                          year={"Year 2"}
+                          amount={agreement[ids[0]].year2}
+                        />
+                        {(agreement[ids[0]].tenure === "3 Year" ||
+                          agreement[ids[0]].tenure === "4 Year" ||
+                          agreement[ids[0]].tenure === "5 Year") && (
+                          <YearField
+                            year={"Year 3"}
+                            amount={agreement[ids[0]].year3}
+                          />
+                        )}
+                        {(agreement[ids[0]].tenure === "4 Year" ||
+                          agreement[ids[0]].tenure === "5 Year") && (
+                          <YearField
+                            year={"Year 4"}
+                            amount={agreement[ids[0]].year4}
+                          />
+                        )}
+                        {agreement[ids[0]].tenure === "5 Year" && (
+                          <YearField
+                            year={"Year 5"}
+                            amount={agreement[ids[0]].year5}
+                          />
+                        )}
+                      </Grid>
+                    </>
+                  )}
 
-                  <Grid container spacing={1} sx={{ mt: 6 }}>
-                    <YearField year={"year 1"} amount={3000} />
-                    <YearField year={"year 2"} amount={3000} />
-                    <YearField year={"year 3"} amount={3000} />
-                    <YearField year={"year 4"} amount={3000} />
-                    <YearField year={"year 5"} amount={3000} />
-                  </Grid>
+                  {Array.from(
+                    { length: agreement[ids[0]].leeseName.length },
+                    (row, id) => (
+                      <Grid container sx={{ mt: 3 }} spacing={2}>
+                        <Grid item xs={12}>
+                          <Typography variant="body1">
+                            Landlord {id + 1} Details
+                          </Typography>
+                        </Grid>
+                        <DataFieldStyle
+                          field={"name of leese"}
+                          value={agreement[ids[0]].name[id]}
+                        />
+                        <DataFieldStyle
+                          field={"aadhar number"}
+                          value={agreement[ids[0]].aadharNo[0]}
+                        />
+                        <DataFieldStyle
+                          field={"pan number"}
+                          value={agreement[ids[0]].panNo[id]}
+                        />
+                        <DataFieldStyle
+                          field={"gst number"}
+                          value={agreement[ids[0]].gstNo[id]}
+                        />
+                        <DataFieldStyle
+                          field={"mobile number"}
+                          value={agreement[ids[0]].mobileNo[id]}
+                        />
+                        <DataFieldStyle
+                          field={"alternate mobile"}
+                          value={agreement[ids[0]].alternateMobile[id]}
+                        />
+                        <DataFieldStyle
+                          field={"email"}
+                          value={agreement[ids[0]].email[id]}
+                        />
+                        <DataFieldStyle
+                          field={"Percentage Share"}
+                          value={agreement[ids[0]].percentage[id]}
+                        />
+                      </Grid>
+                    )
+                  )}
                 </Grid>
               </Grid>
 
@@ -287,28 +346,35 @@ console.log(agreement)
               <Heading heading={"Bank Details"} />
 
               <Grid item md={10}>
-                <Grid container spacing={2} >
-                  {
-                  Array.from({length:agreement[ids[0]].leeseName.length},(row,id)=>(
-                    <>
-                      <DataFieldStyle
-                        field={"bank name"}
-                        value={agreement[ids[0]].bankName[id]}
-                      />
-                      <DataFieldStyle
-                        field={"benicifiary name"}
-                        value={agreement[ids[0]].benificiaryName[id]}
-                      />
-                      <DataFieldStyle
-                        field={"bank A/C number"}
-                        value={agreement[ids[0]].accountNo[id]}
-                      />
-                      <DataFieldStyle
-                        field={"bank ifsc code"}
-                        value={agreement[ids[0]].ifscCode[id]}
-                      />
-                    </>
-                  ))}
+                <Grid container spacing={2}>
+                  {Array.from(
+                    { length: agreement[ids[0]].leeseName.length },
+                    (row, id) => (
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
+                          <Typography variant="body1">
+                            Landlord {id + 1} Details
+                          </Typography>
+                        </Grid>
+                        <DataFieldStyle
+                          field={"bank name"}
+                          value={agreement[ids[0]].bankName[id]}
+                        />
+                        <DataFieldStyle
+                          field={"benicifiary name"}
+                          value={agreement[ids[0]].benificiaryName[id]}
+                        />
+                        <DataFieldStyle
+                          field={"bank A/C number"}
+                          value={agreement[ids[0]].accountNo[id]}
+                        />
+                        <DataFieldStyle
+                          field={"bank ifsc code"}
+                          value={agreement[ids[0]].ifscCode[id]}
+                        />
+                      </Grid>
+                    )
+                  )}
                 </Grid>
               </Grid>
 
@@ -318,10 +384,15 @@ console.log(agreement)
               <Heading heading={"Document View/Download"} />
 
               <Grid item md={8}>
-                <Grid container spacing={2}>
-                  {
-                  Array.from({length:agreement[ids[0]].leeseName.length},(row,id)=>(
-                    <>
+                {Array.from(
+                  { length: agreement[ids[0]].leeseName.length },
+                  (row, id) => (
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
+                        <Typography variant="body1">
+                          Landlord {id + 1} Details
+                        </Typography>
+                      </Grid>
                       <DocumentView
                         title={"aadhar Card"}
                         img={agreement[ids[0]].aadhar_card[id]}
@@ -330,9 +401,10 @@ console.log(agreement)
                         title={"pan card"}
                         img={agreement[ids[0]].pan_card[id]}
                       />
-                    </>
-                  ))}
-
+                    </Grid>
+                  )
+                )}
+                <Grid container spacing={2}>
                   <DocumentView
                     title={"GST Certificate"}
                     img={agreement[ids[0]].gst_certificate}
@@ -353,10 +425,7 @@ console.log(agreement)
                     title={"maintaince bill"}
                     img={agreement[ids[0]].maintaince_bill}
                   />
-                  <DocumentView
-                    title={"POA"}
-                    img={agreement[ids[0]].poa}
-                  />
+                  <DocumentView title={"POA"} img={agreement[ids[0]].poa} />
                   <DocumentView
                     title={"Property tax receipt"}
                     img={agreement[ids[0]].tax_receipt}
@@ -370,54 +439,102 @@ console.log(agreement)
 
               {/* document section ends here */}
 
-              {/* Buttons start here*/}
-
-              {/* {agreement[ids[0]].status == "Hold" && ( */}
-              
-                <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
-                  <Grid container spacing={2} sx={{ justifyContent: "space-evenly" }}>
-                    <Grid item md={6} xs={11}>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          height: "65px",
-                          borderRadius: "12px",
-                          backgroundColor: "primary",
-                          width: "100%",
-                          color: "#FFFFFF",
-                          textTransform: "capitalize",
-                          fontSize: "18px",
-                        }}
-                        onClick={handleSubmit}
-                      >
-                        Approved And Send To BHU
-                      </Button>
-                    </Grid>
-                    <Grid item md={6} xs={11}>
-                      <Button
+              {/* Remark Section Starts here */}
+              {
+                agreement[ids[0]].remark.length > 0 &&
+                <Grid
+                    item
+                    container
+                    xs={12}
+                    sx={{ mt: 5, justifyContent: "space-around" }}
+                  >
+                    <Grid item xs={8}>
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
                         variant="outlined"
-                        
-                        sx={{
-                          color:'var(--main-color)',
-                          height: "65px",
-                          borderRadius: "12px",
-                          backgroundColor: "primary",
-                          width: "100%",
-                          textTransform: "capitalize",
-                          fontSize: "18px",
-                        }}
-                        onClick={handleReject}
-                      >
-                        Send Back To Manager
-                      </Button>
+                        label="Remark *"
+                        placeholder="Remark *"
+                        value={agreement[ids[0]].remark}
+                      />
                     </Grid>
                   </Grid>
-                </Grid>
+              }
+              
+              {/* Remark Section Ends here */}
 
-               
-             
 
-              {/* )} */}
+              {/* Buttons start here*/}
+
+              {agreement[ids[0]].status === "Sent To Sr Manager" && (
+                <>
+                  <Grid
+                    item
+                    container
+                    xs={12}
+                    sx={{ mt: 5, justifyContent: "space-around" }}
+                  >
+                    <Grid item xs={8}>
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
+                        variant="outlined"
+                        label="Remark *"
+                        placeholder="Remark *"
+                        value={sendBackMsg}
+                        onChange={(e) => setSendBackMsg(e.target.value)}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                    <Grid
+                      container
+                      spacing={2}
+                      sx={{ justifyContent: "space-evenly" }}
+                    >
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            height: "65px",
+                            borderRadius: "12px",
+                            backgroundColor: "primary",
+                            width: "100%",
+                            color: "#FFFFFF",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                          }}
+                          onClick={handleSubmit}
+                        >
+                          Approved And Send To BHU
+                        </Button>
+                      </Grid>
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            color: "var(--main-color)",
+                            height: "65px",
+                            borderRadius: "12px",
+                            backgroundColor: "primary",
+                            width: "100%",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                          }}
+                          onClick={handleSendBack}
+                        >
+                          Send Back To Manager
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </>
+              )}
 
               {/* buttons end here */}
             </Grid>

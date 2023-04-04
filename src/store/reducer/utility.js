@@ -16,15 +16,22 @@ export const alert = (state = initialAlert, action) => {
 const initialAuth = {
     isAuth: false,
     role: null,
-    token: null,
-    access: [],
+    name: null,
+    id: null,
 
 }
 
 export const auth = (state = initialAuth, action) => {
     switch (action.type) {
         case 'AUTH':
-            return state = action.payload;
+            return state = {
+                isAuth: true,
+                role: action.payload.role,
+                name:action.payload.name,
+                id:action.payload.id
+            };
+        case 'LOGOUT':
+            return state = initialAuth ;    
         default:
             return state;
     }
@@ -79,7 +86,7 @@ const initialRefresh = {
 export const refresh = (state = initialRefresh, action) => {
     switch (action.type) {
         case 'REFRESH':
-            return state = action.payload;
+            return state = !state
         default:
             return state;
     }

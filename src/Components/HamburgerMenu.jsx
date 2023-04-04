@@ -56,7 +56,7 @@ function logout (){
             sx={{
               background: `url(${Logo})`,
               height: "50px",
-              width: "50px",
+              width: "55px",
               backgroundSize: "cover",
             }}
             onClick={() => navigate(`/${navigateHome}`)}
@@ -74,7 +74,7 @@ function logout (){
                </>
               }
               
-              <NavItem Vector={VectorLogout} navigateTO={''} onClick={logout}/>
+              <NavItem Vector={VectorLogout} onClick={logout}/>
             </>
           ) : (
             <Stack container spacing={2}>
