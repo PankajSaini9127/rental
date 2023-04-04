@@ -393,7 +393,7 @@ function SuperAdminNewUser() {
                       "@media(max-width:900px)": { my: 1 },
                     }}
                   >
-                    <FormControl fullWidth>
+                    <FormControl fullWidth className="textFieldWrapper">
                       <Autocomplete
                         freeSolo
                         fullWidth
@@ -433,7 +433,7 @@ function SuperAdminNewUser() {
                       "@media(max-width:900px)": { my: 1 },
                     }}
                   >
-                    <FormControl fullWidth>
+                    <FormControl fullWidth className="textFieldWrapper">
                       <TextField
                         label="City"
                         placeHolder="Enter City"
@@ -469,7 +469,7 @@ function SuperAdminNewUser() {
                       "@media(max-width:900px)": { my: 1 },
                     }}
                   >
-                    <FormControl fullWidth>
+                    <FormControl fullWidth className="textFieldWrapper">
                       <InputLabel id="demo-simple-select-label">
                         {"Supervisor"}
                       </InputLabel>

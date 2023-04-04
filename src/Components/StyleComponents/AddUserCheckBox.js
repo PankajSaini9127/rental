@@ -26,7 +26,7 @@ function AddUserCheckBox({ handleChange,disable, value }) {
               onChange={handleChange}
               value={'Admin'}
               disabled={Admin?true:false}
-              label="admin"
+              label="Admin"
               labelPlacement="end"
             />
           </FormGroup>
@@ -38,7 +38,7 @@ function AddUserCheckBox({ handleChange,disable, value }) {
               disabled={Manager?true:false}
               label="Manager"
               labelPlacement="end"
-              value={'manager'}
+              value={'Manager'}
               
             />
           </FormGroup>
@@ -49,7 +49,7 @@ function AddUserCheckBox({ handleChange,disable, value }) {
               name={"role"}
               disabled={Senior_Manager?true:false}
               label="Senior Manager"
-              value={'senior_manager'}
+              value={'Senior_Manager'}
               labelPlacement="end"
             />
           </FormGroup>
@@ -61,7 +61,7 @@ function AddUserCheckBox({ handleChange,disable, value }) {
               name={"role"}
               label="Operations"
               disabled={Operations?true:false}
-              value="operations"
+              value="Operations"
               labelPlacement="end"
             />
           </FormGroup>
@@ -72,7 +72,7 @@ function AddUserCheckBox({ handleChange,disable, value }) {
               onChange={handleChange}
               disabled={Finance?true:false}
               label="Finance"
-              value="finance"
+              value="Finance"
               labelPlacement="end"
                           />
 

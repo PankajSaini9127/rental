@@ -24,11 +24,11 @@ function AdminCheckBox({ handleChange,disable, value,error }) {
             name={"role"}
               control={<Checkbox name={"role"} />}
               onChange={handleChange}
-              value={'admin'}
+              value={'Admin'}
               disabled={Admin?true:false}
               label="Admin"
               labelPlacement="end"
-              checked={ value?value.includes('admin')?true:false: null}
+              checked={ value?value.includes('Admin')?true:false: null}
             />
           </FormGroup>
           <FormGroup>
@@ -39,8 +39,8 @@ function AdminCheckBox({ handleChange,disable, value,error }) {
               disabled={Manager?true:false}
               label="Manager"
               labelPlacement="end"
-              value={'manager'}
-              checked={ value? value.includes('manager')?true:false :null }
+              value={'Manager'}
+              checked={ value? value.includes('Manager')?true:false :null }
             />
           </FormGroup>
           <FormGroup>
@@ -50,9 +50,9 @@ function AdminCheckBox({ handleChange,disable, value,error }) {
               name={"role"}
               disabled={Senior_Manager?true:false}
               label="Senior Manager"
-              value={'senior_manager'}
+              value={'Senior_Manager'}
               labelPlacement="end"
-              checked={value? value.includes('senior_manager')?true:false:null}
+              checked={value? value.includes('Senior_Manager')?true:false:null}
             />
           </FormGroup>
 
@@ -63,9 +63,9 @@ function AdminCheckBox({ handleChange,disable, value,error }) {
               name={"role"}
               label="Operations"
               disabled={Operations?true:false}
-              value="operations"
+              value="Operations"
               labelPlacement="end"
-              checked={ value? value.includes('operations')?true:false: null}
+              checked={ value? value.includes('Operations')?true:false: null}
             />
           </FormGroup>
           <FormGroup>
@@ -75,9 +75,9 @@ function AdminCheckBox({ handleChange,disable, value,error }) {
               onChange={handleChange}
               disabled={Finance?true:false}
               label="Finance"
-              value="finance"
+              value="Finance"
               labelPlacement="end"
-              checked={value? value.includes('finance')?true:false:null}
+              checked={value? value.includes('Finance')?true:false:null}
             />
 
           </FormGroup>
@@ -90,7 +90,7 @@ function AdminCheckBox({ handleChange,disable, value,error }) {
               label="BHU"
               value={'BHU'}
               labelPlacement="end"
-              checked={ value? value.includes('bhu')?true:false:null}
+              checked={ value? value.includes('BHU')?true:false:null}
             />
           </FormGroup>
 

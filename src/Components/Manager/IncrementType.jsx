@@ -329,7 +329,7 @@ const fieldStyle = {
 const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
   return (
     <Grid item md={4} xs={4}>
-      <FormControl fullWidth>
+      <FormControl fullWidth className="textFieldWrapper">
         <TextField
           variant="outlined"
           name={name}

@@ -33,12 +33,12 @@ function LoginComponent({
 
   const options = [
     { name: "Super Admin", value: "Super Admin" },
-    { name: "Admin", value: "admin" },
-    {name:"Manager",value:'manager'},
-    {name:"Senior Manager",value:'senior_manager'},
-    {name:"BHU",value:'bhu'},
-    {name:"Operations",value:'operations'},
-    {name:"Finance",value:"finance"},
+    { name: "Admin", value: "Admin" },
+    {name:"Manager",value:'Manager'},
+    {name:"Senior Manager",value:'Senior_Manager'},
+    {name:"BHU",value:'BHU'},
+    {name:"Operations",value:'Operations'},
+    {name:"Finance",value:"Finance"},
   ];
 
   const [showPassword, setShowPassword] = useState(false);
@@ -136,7 +136,7 @@ function LoginComponent({
                 <FormControl sx={{ my: 1 }} fullWidth className="LoginInput">
                   <TextField
                     variant="outlined"
-                    placeholder="Enter Email Adress"
+                    placeholder="Enter Email Address"
                     label="Email Address"
                     value={email}
                     name="email"
@@ -168,7 +168,7 @@ function LoginComponent({
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl fullWidth>
+                <FormControl fullWidth className="textFieldWrapper">
                   <InputLabel id="demo-simple-select-label">Role</InputLabel>
                   <Select
                     name={"role"}

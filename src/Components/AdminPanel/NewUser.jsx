@@ -344,17 +344,8 @@ function NewUser() {
                     //onBlur={validate}
                   />
 
-                  {/* <SelectComponent
-                    value={supervisor}
-                    name="supervisor"
-                    label={"Supervisor"}
-                    options={supervisorArray}
-                    onChange={handleChange}
-                  /> */}
-
-
 <Grid item md={4} xs={6} sx={{mb:'0px !important','@media(max-width:900px)':{my:1}}}>
-      <FormControl fullWidth >
+      <FormControl fullWidth className="textFieldWrapper">
       <InputLabel id="demo-simple-select-label">{"Supervisor"}</InputLabel>
         <Select
           name={"supervisor"}

@@ -42,8 +42,18 @@ function logout (){
 
         <Box
             sx={{
+              background: `url(${Logo})`,
+              height: "66px",
+              width: "89px",
+              backgroundSize: "cover",
+            }}
+            onClick={() => navigate(`/${navigateHome}`)}
+          />
+
+        <Box
+            sx={{
               height: "50px",
-              width: "50px",
+              width: "89px",
               display:'grid',
               placeItems:'center'
             }} 
@@ -52,15 +62,7 @@ function logout (){
             <IconButton color="primary" onClick={() => setExpand(!expand)} ><MenuIcon/></IconButton>
           </Box>
 
-          <Box
-            sx={{
-              background: `url(${Logo})`,
-              height: "50px",
-              width: "55px",
-              backgroundSize: "cover",
-            }}
-            onClick={() => navigate(`/${navigateHome}`)}
-          />
+        
           
 
           {!expand ? (

@@ -1,0 +1,19 @@
+.css-1lambp5 .MuiOutlinedInput-root {
+    padding: 2px !important;
+    border-color: red !important;
+}
+
+.css-l3ln04-MuiAutocomplete-root .MuiOutlinedInput-root {
+    padding: 2px !important;
+    border-color: red !important;
+}
+
+.css-l3ln04 .MuiOutlinedInput-root {
+    padding: 2px !important;
+    border-color: red !important;
+}
+
+.searchBar * {
+    border: #C4C4C4 !important;
+    border-color: red !important;
+}

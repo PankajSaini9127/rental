@@ -43,7 +43,7 @@ const NavExpand = ({msg, navigateTO,Vector,onClick})=>{
   
   const NavItem = ({Vector,onClick})=>{
     return(
-              <Box sx={{cursor:'pointer'}} onClick={onClick}>
+              <Box sx={{cursor:'pointer',width:"89px",display:'flex',justifyContent:'center'}} onClick={onClick}>
                   <Vector/>
                   </Box>
     )

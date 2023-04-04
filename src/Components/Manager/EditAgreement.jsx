@@ -445,47 +445,6 @@ function EditAgreement({ history }) {
     }
   }, [formError]);
 
-  // form validation
-  // function validate(data) {
-  //   const regexEmail = "^[a-zA-Z0-9]+@[a-zA-Z0-9.-]+$";
-  //   const error = {};
-  //   if (!data.landlord[0].pincode) {
-  //     error.pincode = "Please Enter Pincode";
-  //   } else if (
-  //     data.landlord[0].pincode.length < 6 ||
-  //     data.landlord[0].pincode.length > 6
-  //   ) {
-  //     error.pincode = "Please Enter Valid Pincode";
-  //   }
-  //   if (!data.landlord[0].aadharNo) {
-  //     error.aadharNo = "Please Enter Aadhar Number !";
-  //   } else if (
-  //     data.landlord[0].aadharNo.length < 12 ||
-  //     data.landlord[0].aadharNo.length > 12
-  //   ) {
-  //     error.aadharNo = "Aadhar Number Must be 12 Digit";
-  //   }
-  //   if (!data.landlord[0].mobileNo.length) {
-  //     error.mobileNo = "Please Enter Mobile Number !";
-  //   } else if (
-  //     data.landlord[0].mobileNo.length < 10 ||
-  //     data.landlord[0].mobileNo.length > 12
-  //   ) {
-  //     error.mobileNo = "Please Enter Valid Mobile Number !";
-  //   }
-  //   if (
-  //     data.landlord[0].alternateMobile.length < 10 ||
-  //     data.landlord[0].alternateMobile.length > 12
-  //   ) {
-  //     error.alternateMobile = "Please Enter Valid Mobile Number !";
-  //   }
-
-  //   if (!data.landlord[0].email) {
-  //     error.email = "Please Enter Email Address !";
-  //   }
-
-  //   setFormError(error);
-  // }
 
   //confirmation alert
   const [open, setOpen] = useState(false);
@@ -614,7 +573,7 @@ function EditAgreement({ history }) {
                       "@media(max-width:900px)": { my: 1 },
                     }}
                   >
-                    <FormControl fullWidth>
+                    <FormControl fullWidth className="textFieldWrapper">
                       <Autocomplete
                         freeSolo
                         fullWidth
@@ -659,7 +618,7 @@ function EditAgreement({ history }) {
                       "@media(max-width:900px)": { my: 1 },
                     }}
                   >
-                    <FormControl fullWidth>
+                    <FormControl fullWidth className="textFieldWrapper">
                       <TextField
                         label="City"
                         placeHolder="Enter City"

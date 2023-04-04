@@ -611,7 +611,7 @@ function Agreement() {
                       "@media(max-width:900px)": { my: 1 },
                     }}
                   >
-                    <FormControl fullWidth>
+                    <FormControl fullWidth className="textFieldWrapper">
                       <Autocomplete
                         freeSolo
                         fullWidth
@@ -651,7 +651,7 @@ function Agreement() {
                       "@media(max-width:900px)": { my: 1 },
                     }}
                   >
-                    <FormControl fullWidth>
+                    <FormControl fullWidth className="textFieldWrapper">
                       <TextField
                         label="City"
                         placeHolder="Enter City"
