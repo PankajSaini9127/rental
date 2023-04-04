@@ -143,15 +143,15 @@ function SuperAdminNewUser() {
       "Finance",
       "Operations",
       "BHU",
-      "Senior Manager",
+      "Senior_Manager",
       "Manager",
       "Role",
     ];
 
     var finalQuerry = [];
     if (role.includes("Manager")) {
-      finalQuerry = ["Senior Manager"];
-    } else if (role.includes("Senior Manager")) {
+      finalQuerry = ["Senior_Manager"];
+    } else if (role.includes("Senior_Manager")) {
       finalQuerry = ["BHU"];
     } else if (role.includes("BHU")) {
       finalQuerry = ["Operations"];
