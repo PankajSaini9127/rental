@@ -55,7 +55,7 @@ const fieldStyle = {
 const TextFieldWrapper = ({disabled,type, label, placeHolder, value, name, onChange,error,required,maxLength,onBlur}) => {
   return (
     <Grid item md={4} xs={6} sx={{'@media(max-width:900px)':{my:1}}}>
-      <FormControl fullWidth sx={{p:'0px !important'}}>
+      <FormControl fullWidth sx={{p:'0px !important'}} className="textFieldWrapper">
        
         <TextField
           variant="outlined"
@@ -180,7 +180,7 @@ const DocumentUpload = ({ label, placeHolder,handleChange, name, uploaded }) => 
 const SelectComponent = ({ label, value, name, onChange ,options,errMsg,onBlur,touched ,multiple}) => {
   return (
     <Grid item md={4} xs={6} sx={{mb:'0px !important','@media(max-width:900px)':{my:1}}}>
-      <FormControl fullWidth >
+      <FormControl fullWidth className="textFieldWrapper">
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
           name={name}

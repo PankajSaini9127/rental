@@ -42,7 +42,7 @@ function Dashboard() {
 
   return (
     <>
-      <MyHeader>Dashboard</MyHeader>
+      
 
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
         <HamburgerMenu
@@ -55,6 +55,7 @@ function Dashboard() {
 
         {/* dashboard content */}
         <Grid container sx={{ justifyContent: "center" }}>
+        <MyHeader>Dashboard</MyHeader>
           <Grid item xs={10}>
             <Grid container spacing={3}>
               {data.map((item, index) => {

@@ -3,10 +3,22 @@
 
  :root{
     
+   /* --main-color: #0164AE; */
    --main-color: #0164AE;
    /* --main-color:"red" */
 
  }
+
+
+::placeholder {
+  color: var(--main-color);
+  opacity: 1; /* Firefox */
+}
+
+fieldset{
+    border-radius: 25px;
+    border-color: #0164AE;
+}
 
 *{
     padding: 0;
@@ -163,15 +175,27 @@ background: rgba(1, 100, 174, 0.78);
     left:21px;  
 }
 .textFieldWrapper *{
-  border-color: #C8C8C8 !important;
+  border-color: #0164AE !important;
+  border-radius: 20px !important;
   color: black;
 }
+
+.css-1ymkqpa{
+  border-color: #0164AE !important;
+}
+*::placeholder {
+    color: #0164AE !important;
+}
+.css-1ymkqpa *{
+  color:#0164AE !important;
+}
 .textFieldWrapper label{
-  color : #C8C8C8 !important;
+  color : #0164AE !important;
 }
 
 .LoginInput * {
-  border-color: #C8C8C8 !important;
+  border-color: #0164AE !important;
+  border-radius: 20px !important;
   color:black !important;
 }
 

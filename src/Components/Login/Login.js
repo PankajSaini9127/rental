@@ -69,7 +69,7 @@ export default function Login() {
         if (data.success) {
           const login_user = data.result[0];
           if (login_user.is_auth === 1 || role === "Admin") {
-            if (role === "senior_manager") {
+            if (role === "Senior_Manager") {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
@@ -80,7 +80,7 @@ export default function Login() {
               );
               navigate(`/srManagerDashboard`);
             }else
-            if (role === "manager") {
+            if (role === "Manager") {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
@@ -90,7 +90,7 @@ export default function Login() {
                 })
               );
               navigate(`/dashboard`);
-            }  else if (role === "bhu") {
+            }  else if (role === "BHU") {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
@@ -100,7 +100,7 @@ export default function Login() {
                 })
               );
               navigate(`/BHUDashboard`);
-            } else if (role === "admin") {
+            } else if (role === "Admin") {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
@@ -110,7 +110,7 @@ export default function Login() {
                 })
               );
               navigate(`/userDashboard`);
-            } else if (role === "operations") {
+            } else if (role === "Operations") {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({

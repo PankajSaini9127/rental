@@ -33,6 +33,16 @@ function AdminHamburgerMenu({navigateListing,navigateHome}) {
         // onMou
       >
         <Stack sx={{ flexDirection: "column" }} spacing={2}>
+          
+        <Box
+            sx={{
+              background: `url(${Logo})`,
+              height: "55px",
+              width: "65px",
+              backgroundSize: "cover",
+            }}
+            onClick={() => navigate(navigateHome)}
+          />
           <Box
             sx={{
               height: "50px",
@@ -46,15 +56,6 @@ function AdminHamburgerMenu({navigateListing,navigateHome}) {
             </IconButton>
           </Box>
 
-          <Box
-            sx={{
-              background: `url(${Logo})`,
-              height: "50px",
-              width: "50px",
-              backgroundSize: "cover",
-            }}
-            onClick={() => navigate(navigateHome)}
-          />
 
           {!expand ? (
             <>

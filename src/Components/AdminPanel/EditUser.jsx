@@ -20,6 +20,8 @@ const initialState = {
   role: [],
   mobile: "",
   supervisor: "",
+  state:"",
+  city:""
 };
 
 function EditUser() {
@@ -35,6 +37,7 @@ function EditUser() {
     bhu: false,
     finance: false,
   });
+
   const superVisor = [
     "Admin",
     "Finance",
@@ -147,7 +150,7 @@ function EditUser() {
   const getData = async (id) => {
     const data = await get_user(id);
 
-    const { name, code, password, email, role, supervisor, mobile } =
+    const { name, code, password, email, role, supervisor, mobile,state,city } =
       data.data[0];
 
     setFormVal({
@@ -158,7 +161,7 @@ function EditUser() {
       email,
       role: JSON.parse(role),
       supervisor,
-      mobile,
+      mobile,state,city
     });
   };
 
@@ -314,6 +317,7 @@ function EditUser() {
                     handleChange={handleChange}
                     disable={disable}
                     value={role}
+              
                   />
 
                   {/* <SelectComponent
@@ -325,7 +329,7 @@ function EditUser() {
                   /> */}
 
 <Grid item md={4} xs={6} sx={{mb:'0px !important','@media(max-width:900px)':{my:1}}}>
-      <FormControl fullWidth >
+      <FormControl fullWidth className="textFieldWrapper">
       <InputLabel id="demo-simple-select-label">{"Supervisor"}</InputLabel>
         <Select
           name={"supervisor"}

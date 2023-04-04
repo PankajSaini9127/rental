@@ -167,6 +167,7 @@ function SuperAdminUserEdit() {
 
   const getData = async (id) => {
     const data = await get_user(id);
+    data.data[0].role = JSON.parse(data.data[0].role)
     setFormVal(data.data[0]);
   };
 
@@ -355,12 +356,13 @@ async function handleCitySearch() {
                       "@media(max-width:900px)": { my: 1 },
                     }}
                   >
-                    <FormControl fullWidth>
+                    <FormControl fullWidth className="textFieldWrapper">
                       <Autocomplete
                         freeSolo
                         fullWidth
                         id="free-solo-2-demo"
                         disableClearable
+                        value={state || formVal.state}
                         onChange={(e, val) => {
                           setFormVal((old) => ({ ...old, state: val }));
                         }}
@@ -369,7 +371,7 @@ async function handleCitySearch() {
                           <TextField
                             fullWidth
                             name="state"
-                            value={state}
+                            value={state || formVal.state}
                             {...params}
                             label="State"
                             onChange={(e) => {
@@ -395,7 +397,7 @@ async function handleCitySearch() {
                       "@media(max-width:900px)": { my: 1 },
                     }}
                   >
-                    <FormControl fullWidth>
+                    <FormControl fullWidth className="textFieldWrapper">
                       <TextField
                         label="City"
                         placeHolder="Enter City"
@@ -403,7 +405,7 @@ async function handleCitySearch() {
                         fullWidth
                         name="city"
                         // required={true}
-                        value={city || ""}
+                        value={formVal.city || city}
                         onChange={handleChange}
                       >
                         {cityList &&
@@ -412,6 +414,7 @@ async function handleCitySearch() {
                               <MenuItem value={item.city}>{item.city}</MenuItem>
                             );
                           })}
+                           <MenuItem value={formVal.city}>{formVal.city}</MenuItem>
                       </TextField>
                     </FormControl>
                   </Grid>
@@ -431,7 +434,7 @@ async function handleCitySearch() {
                       "@media(max-width:900px)": { my: 1 },
                     }}
                   >
-                    <FormControl fullWidth>
+                    <FormControl fullWidth className="textFieldWrapper">
                       <InputLabel id="demo-simple-select-label">
                         {"Supervisor"}
                       </InputLabel>
