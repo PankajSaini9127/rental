@@ -99,14 +99,14 @@ function SuperAdminUserEdit() {
       "Finance",
       "BHU",
       "Operations",
-      "Senior Manager",
+      "Senior_Manager",
       "Manager",
     ];
 
     var finalQuerry = [];
     if (role.includes("Manager")) {
-      finalQuerry = ["Senior Manager"];
-    } else if (role.includes("Senior Manager")) {
+      finalQuerry = ["Senior_Manager"];
+    } else if (role.includes("Senior_Manager")) {
       finalQuerry = ["BHU"];
     } else if (role.includes("BHU")) {
       finalQuerry = ["Operations"];
@@ -120,6 +120,7 @@ function SuperAdminUserEdit() {
     });
 
     const supervisor = await GetSupervisor(superVisor1);
+    console.log(superVisor1)
     setsupervisorArray(supervisor.data);
   }
 
