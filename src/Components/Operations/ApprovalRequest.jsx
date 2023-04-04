@@ -52,11 +52,6 @@ function ApprowalRequest() {
 
   const dispatch = useDispatch();
 
-  const [msg, setMsg] = useState({
-    open: false,
-    type: "",
-    message: "",
-  });
 
   const handleClose = () => {};
 
@@ -66,16 +61,7 @@ function ApprowalRequest() {
     setIds(agreement.data.ids);
   };
 
-  const [open, setOpen] = useState(false);
 
-  //dialog box
-  const handleCancel = () => {
-    setOpen(false);
-  };
-
-  const handleReject = () => {
-    setOpen(true);
-  };
 
   useEffect(() => {
     getData(id);
@@ -94,6 +80,7 @@ function ApprowalRequest() {
           message: "Approved And Sent To Finance Team",
         })
       );
+      navigate("/operationsListing");
     } else {
       dispatch(
         setAlert({
@@ -131,6 +118,7 @@ function ApprowalRequest() {
         message: "Send back For Rectification",
       })
     );
+    navigate("/operationsListing")
   } else {
     dispatch(
       setAlert({
@@ -156,24 +144,7 @@ function ApprowalRequest() {
             <MyHeader>New Agreement Approval</MyHeader>
 
             <Grid container sx={{ justifyContent: "center", mt: 2 }}>
-              {msg.open ? (
-                <Snackbar
-                  open={msg.open}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                  autoHideDuration={6000}
-                  onClose={handleClose}
-                >
-                  <Alert
-                    onClose={handleClose}
-                    severity={msg.type}
-                    sx={{ width: "100%" }}
-                  >
-                    {msg.message}
-                  </Alert>
-                </Snackbar>
-              ) : (
-                ""
-              )}
+             
               {/* Basic Details */}
               <Grid item md={10}>
                 <Grid container spacing={2}>

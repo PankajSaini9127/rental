@@ -1,20 +1,16 @@
 import {
-  Alert,
   Box,
   Button,
   Grid,
   Link,
-  Snackbar,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 import { DataFieldStyle, YearField } from "../StyleComponents/Rental";
 import { MyHeader } from "../StyledComponent";
-import config from "../../config.json";
 import { useEffect, useState } from "react";
 
 //download file
@@ -118,30 +114,7 @@ function ManagerApproval() {
   const [agreement, setAgreement] = useState({});
   const [ids, setIds] = useState([]);
 
-  const [msg, setMsg] = useState({
-    open: false,
-    type: "",
-    message: "",
-  });
-
   const dispatch = useDispatch();
-
-  const handleClose = () => {
-    if (msg.type === "success") {
-      navigate("/listing");
-      setMsg({
-        open: false,
-        type: "",
-        message: "",
-      });
-    } else {
-      setMsg({
-        open: false,
-        type: "",
-        message: "",
-      });
-    }
-  };
 
   const getData = async (id) => {
     const agreement = await get_agreement_id(id);
@@ -168,6 +141,7 @@ function ManagerApproval() {
           message: "Agreement Sent To Sr Manager",
         })
       );
+      navigate("/listing");
     } else {
       dispatch(
         setAlert({
@@ -182,8 +156,9 @@ function ManagerApproval() {
   return (
     <>
       {ids.length > 0 && (
-        <Stack sx={{ flexDirection: "row",mb:4 }}>
+        <Stack sx={{ flexDirection: "row", mb: 4 }}>
           <HamburgerMenu
+            navigateHome={"dashboard"}
             handleListing={() => navigate("/listing")}
             monthlyRent={() => navigate("/monthly-payment")}
             renewal={() => navigate(`/renewal`)}
@@ -193,25 +168,7 @@ function ManagerApproval() {
           <Box sx={{ flexGrow: 1 }}>
             <MyHeader>New Agreement Approval</MyHeader>
 
-            <Grid container sx={{ justifyContent: "center" }}>
-              {msg.open ? (
-                <Snackbar
-                  open={msg.open}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                  autoHideDuration={6000}
-                  onClose={handleClose}
-                >
-                  <Alert
-                    onClose={handleClose}
-                    severity={msg.type}
-                    sx={{ width: "100%" }}
-                  >
-                    {msg.message}
-                  </Alert>
-                </Snackbar>
-              ) : (
-                ""
-              )}
+            <Grid container sx={{ justifyContent: "center", mt: 3 }}>
               {/* Basic Details */}
               <Grid item md={10}>
                 <Grid container spacing={2}>

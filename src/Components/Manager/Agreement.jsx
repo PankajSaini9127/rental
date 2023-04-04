@@ -84,7 +84,6 @@ function Agreement() {
     location: "",
     city: "",
   });
-  console.log(data);
 
   useEffect(() => {
     setData((old) => ({ ...old, landlord: [...landloard] }));
@@ -186,7 +185,7 @@ function Agreement() {
     }
     if (e.target.name === "ifscCode" && e.target.value.length === 11) {
       console.log(e.target.name);
-      getBankeDetails(e.target.value, i);
+      getBankDetails(e.target.value, i);
     }
     console.log(error);
     if (!error) {
@@ -219,8 +218,8 @@ function Agreement() {
 
   // handle Change for common feilds
   function handleCommonChange(e, i) {
-    console.log(e.target.name);
-    console.log(data.state);
+    // console.log(e.target.name);
+    // console.log(data.state);
     var error = false;
     switch (e.target.name) {
       case "state":
@@ -285,6 +284,7 @@ function Agreement() {
       city,
     } = data;
 
+
     const { landlord } = data;
 
     APICall(
@@ -321,7 +321,16 @@ function Agreement() {
     );
   };
 
-  function handleHold() {
+    function handleHold(id) {
+
+      console.log(increment)
+      // setData({ ...data, ...increment });
+      // console.log(data)
+   handleHoldApiCall(id,{...data,...increment})
+  }
+
+  async function handleHoldApiCall (id,data){
+    // console.log(data)
     const {
       pincode,
       state,
@@ -349,14 +358,14 @@ function Agreement() {
       year4,
       year5,
     } = data;
+    console.log(year1,
+      year2,
+      year3,
+      year4,
+      year5)
     const { landlord } = data;
     APICall(
       {
-        pincode,
-        state,
-        address,
-        location,
-        city,
         code,
         lockInYear,
         monthlyRent,
@@ -377,14 +386,20 @@ function Agreement() {
         year3,
         year4,
         year5,
-        manager_id: manager_id,
+        pincode,
+        state,
+        address,
+        location,
+        city,
+        manager_id: id,
         status: "Hold",
       },
       landlord
     );
   }
 
-  const APICall = async (values, landlordData) => {
+ async function APICall  (values, landlordData){
+    // console.log(values)
     const agreement = await add_agreement(values);
 
     // return 1
@@ -416,7 +431,7 @@ function Agreement() {
       const result = await add_landlord(landlordData);
 
       if (result) {
-        window.Location.href = "/listing";
+        navigate("/listing");
         dispatch(
           setAlert({
             open: true,
@@ -428,7 +443,7 @@ function Agreement() {
     }
   };
 
-  async function getBankeDetails(data,i) {
+  async function getBankDetails(data,i) {
     let res = await getBankName(data);
   
     if (res) {
@@ -1201,7 +1216,7 @@ function Agreement() {
                     <Button
                       variant="outlined"
                       color="primary"
-                      onClick={handleHold}
+                      onClick={()=>handleHold(manager_id)}
                       sx={{
                         height: "60px",
                         width: "100%",

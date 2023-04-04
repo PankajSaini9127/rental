@@ -36,7 +36,6 @@ const initialState = {
   supervisor: "",
   state: "",
   city: "",
-  location: "",
 };
 
 function SuperAdminUserEdit() {
@@ -156,7 +155,7 @@ function SuperAdminUserEdit() {
     }
   }
 
-  const { name, email, role, mobile, code, supervisor, city, location, state } =
+  const { name, email, role, mobile, code, supervisor, city, state } =
     formVal;
 
   useEffect(() => {
@@ -416,17 +415,6 @@ async function handleCitySearch() {
                       </TextField>
                     </FormControl>
                   </Grid>
-                  <TextFieldWrapper
-                    label="Location"
-                    placeHolder="Location"
-                    value={location}
-                    name="city"
-                    error={formError.location}
-                    onChange={(e) => {
-                      validate(e);
-                      handleChange(e);
-                    }}
-                  />
 
                   <AdminCheckBox
                     handleChange={handleChange}

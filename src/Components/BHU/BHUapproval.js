@@ -45,19 +45,13 @@ function SrManagerApproval() {
 
   const [sendBackMsg, setSendBackMsg] = useState("");
 
+
   const { auth } = useSelector((s) => s);
 
   const srm_id = auth.id;
 
   const dispatch = useDispatch();
 
-  const [msg, setMsg] = useState({
-    open: false,
-    type: "",
-    message: "",
-  });
-
-  const handleClose = () => {};
 
   const getData = async (id) => {
     const agreement = await get_agreement_id(id);
@@ -65,16 +59,7 @@ function SrManagerApproval() {
     setIds(agreement.data.ids);
   };
 
-  const [open, setOpen] = useState(false);
-
-  //dialog box
-  const handleCancel = () => {
-    setOpen(false);
-  };
-
-  const handleReject = () => {
-    setOpen(true);
-  };
+  
 
   useEffect(() => {
     getData(id);
@@ -94,6 +79,7 @@ function SrManagerApproval() {
           message: "Approved And Sent To Operations",
         })
       );
+      navigate('/BHUListing')
     } else {
       dispatch(
         setAlert({
@@ -131,6 +117,7 @@ function SrManagerApproval() {
         message: "Send back For Rectification",
       })
     );
+    navigate('/BHUListing')
   } else {
     dispatch(
       setAlert({
@@ -156,24 +143,7 @@ function SrManagerApproval() {
             <MyHeader>New Agreement Approval</MyHeader>
 
             <Grid container sx={{ justifyContent: "center", mt: 2 }}>
-              {msg.open ? (
-                <Snackbar
-                  open={msg.open}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                  autoHideDuration={6000}
-                  onClose={handleClose}
-                >
-                  <Alert
-                    onClose={handleClose}
-                    severity={msg.type}
-                    sx={{ width: "100%" }}
-                  >
-                    {msg.message}
-                  </Alert>
-                </Snackbar>
-              ) : (
-                ""
-              )}
+            
               {/* Basic Details */}
               <Grid item md={10}>
                 <Grid container spacing={2}>

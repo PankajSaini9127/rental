@@ -75,7 +75,11 @@ export async function get_agreement_id (id) {
 }   
 
 export async function delete_agreement (id){
-    return axios.delete(`${API_LIVE}/api/delAgreement/${id}`)
+    return await axios.delete(`${API_LIVE}/api/delAgreement/${id}`)
+}
+
+export async function getMetaData (){
+     return await axios.get(`${API_LIVE}/api/dashboard/get-meta`)
 }
 
 

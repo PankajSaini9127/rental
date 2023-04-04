@@ -88,6 +88,7 @@ const navigate =useNavigate()
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
       <HamburgerMenu
+          navigateHome={"dashboard"}
           handleListing={()=>navigate('/listing')}
           monthlyRent={() => navigate("/monthly-payment")}
           renewal={() => navigate(`/renewal`)}

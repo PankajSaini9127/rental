@@ -67,6 +67,30 @@ function DataTable({ rows, loading, check, setCheck }) {
 
     return (
       <>
+      {e.row.status === "Sent Back For Rectification" && (
+        <Grid container>
+           <Grid item md={6} sx={{ color: "white !important" }}>
+           <Button
+             variant="contained"
+             color="primary"
+             size="small"
+             style={{
+               backgroundColor: "#62CDFF",
+               color: "white",
+               fontSize: "12px",
+               textTransform: "capitalize",
+             }}
+             startIcon={<EditIcon />}
+             onClick={(e) => {
+               e.stopPropagation(); // don't select this row after clicking
+               id && navigate(`/editAgreement/${id}`, { id });
+             }}
+           >
+             Edit
+           </Button>
+         </Grid>
+         </Grid>
+      )}
         {e.row.status === "Hold" && (
           <Grid container>
             <Grid item md={6} sx={{ color: "white !important" }}>
@@ -307,8 +331,8 @@ function DataTable({ rows, loading, check, setCheck }) {
             color: "#CF482A",
           },
           "& .hold": {
-            backgroundColor: "#97b8ae",
-            color: "#CF482A",
+            // backgroundColor: "#97b8ae",
+            // color: "#CF482A",
           },
           "& .statusCell": {
             maxHeight: "30px !important",

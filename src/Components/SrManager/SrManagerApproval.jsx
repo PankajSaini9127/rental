@@ -147,6 +147,7 @@ const dispatch = useDispatch();
           message: "Agreement Sent To BHU",
         })
       );
+      navigate('/srManagerListing')
     } else {
       dispatch(
         setAlert({
@@ -184,6 +185,7 @@ const dispatch = useDispatch();
             message: "Send back For Rectification",
           })
         );
+        navigate('/srManagerListing')
       } else {
         dispatch(
           setAlert({

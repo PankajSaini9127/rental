@@ -35,7 +35,6 @@ const initialState = {
   supervisor: "",
   city: "",
   state: "",
-  location: "",
 };
 
 function SuperAdminNewUser() {
@@ -132,7 +131,7 @@ function SuperAdminNewUser() {
   };
 
   //distructring elements from values
-  const { name, email, role, mobile, code, supervisor, city, location, state } =
+  const { name, email, role, mobile, code, supervisor, city, state } =
     formData;
 
   // state for set supervisor value
@@ -385,20 +384,6 @@ function SuperAdminNewUser() {
                       handleChange(e);
                     }}
                   />
-                  {/* <TextFieldWrapper
-                    label="State"
-                    placeHolder="State"
-                    value={state}
-                    name="state"
-                    required={true}
-                    error={formError.mobile}
-                    maxLength={10}
-                    onChange={(e) => {
-                      validate(e);
-                      handleChange(e);
-                    }}
-                  /> */}
-
                   <Grid
                     item
                     md={4}
@@ -468,35 +453,12 @@ function SuperAdminNewUser() {
                       </TextField>
                     </FormControl>
                   </Grid>
-                  <TextFieldWrapper
-                    label="Location"
-                    placeHolder="Location"
-                    value={location}
-                    name="location"
-                    required={true}
-                    error={formError.mobile}
-                    maxLength={10}
-                    onChange={(e) => {
-                      validate(e);
-                      handleChange(e);
-                    }}
-                  />
                   <AddUserCheckBox
                     handleChange={handleChange}
                     disable={disable}
                     setDisable={setDisable}
                     required={true}
-                    error={formError.name}
-                    //onBlur={validate}
                   />
-
-                  {/* <SelectComponent
-                    value={supervisor}
-                    name="supervisor"
-                    label={"Supervisor"}
-                    options={supervisorArray}
-                    onChange={handleChange}
-                  /> */}
 
                   <Grid
                     item

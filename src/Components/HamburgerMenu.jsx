@@ -56,7 +56,7 @@ function logout (){
             sx={{
               background: `url(${Logo})`,
               height: "50px",
-              width: "50px",
+              width: "55px",
               backgroundSize: "cover",
             }}
             onClick={() => navigate(`/${navigateHome}`)}
