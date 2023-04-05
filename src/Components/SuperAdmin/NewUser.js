@@ -20,6 +20,7 @@ import { MyHeader, TextFieldWrapper } from "../StyledComponent";
 import {
   AddUser,
   GetSupervisor,
+  GetSupervisorSRM,
   getCityList,
   getStateList,
 } from "../../Services/Services";
@@ -43,7 +44,7 @@ function SuperAdminNewUser() {
   const superVisor = [
     "Admin",
     "Finance",
-    "BHU",
+    "BUH",
     "Operations",
     "Senior_Manager",
     "Manager",
@@ -142,7 +143,7 @@ function SuperAdminNewUser() {
     let superVisor1 = [
       "Finance",
       "Operations",
-      "BHU",
+      "BUH",
       "Senior_Manager",
       "Manager",
       "Role",
@@ -152,11 +153,11 @@ function SuperAdminNewUser() {
     if (role.includes("Manager")) {
       finalQuerry = ["Senior_Manager"];
     } else if (role.includes("Senior_Manager")) {
-      finalQuerry = ["BHU"];
-    } else if (role.includes("BHU")) {
+      finalQuerry = ["BUH"];
+    } else if (role.includes("BUH")) {
       finalQuerry = ["Operations"];
     } else if (role.includes("Operations")) {
-      finalQuerry = ["Finance"];
+      finalQuerry = ["BUH"];
     } else if (role.includes("Finance")) {
       finalQuerry = ["Role"];
     }
@@ -164,15 +165,22 @@ function SuperAdminNewUser() {
       return finalQuerry.includes(row);
     });
 
-    const supervisor = await GetSupervisor(superVisor1);
-    setsupervisorArray(supervisor.data);
+    console.log(role)
+    if(role.includes("Manager")){
+      const supervisor = await GetSupervisor({role:superVisor1,state,city});
+      setsupervisorArray(supervisor.data);
+    }else if(role.includes("Senior_Manager")||role.includes("Operations")){
+      const supervisor = await GetSupervisorSRM(superVisor1);
+      setsupervisorArray(supervisor.data);
+    }
+    
   }
 
   // Role Check Box Disable Manage
   function manageRole(role) {
     console.log(role);
     let setVal = {};
-    if (!role.includes("Admin") && role.length > 0) {
+    if (role.includes("Manager") || role.includes("Operations") && role.length > 0) {
       superVisor.map(
         (row) =>
           (setVal = {
@@ -183,10 +191,51 @@ function SuperAdminNewUser() {
           })
       );
       setDisable(setVal);
-    } else if (role.length < 2) {
+    }else if(role.includes('Admin') && role.length === 1){
+      superVisor.map((row)=>(
+        setVal={
+          ...setVal,
+          [row]:true,
+          Operations:false,
+          Manager:false
+        }
+      ));
+      setDisable(setVal);
+    }else if(role.includes("Senior_Manager")){
+      superVisor.map((row)=>(
+        setVal={
+          ...setVal,
+          [row]:true,
+          Senior_Manager:false
+        }
+      ));
+      setDisable(setVal);
+    }
+    else if(role.includes("Finance")){
+      superVisor.map((row)=>(
+        setVal={
+          ...setVal,
+          [row]:true,
+          Finance:false
+        }
+      ));
+      setDisable(setVal);
+    }
+    else if(role.includes("BUH")){
+      superVisor.map((row)=>(
+        setVal={
+          ...setVal,
+          [row]:true,
+          BUH:false
+        }
+      ));
+      setDisable(setVal);
+    }
+     else if (role.length < 2) {
       superVisor.map((row) => (setVal = { ...setVal, [row]: false }));
       setDisable(setVal);
-    } else if (role.includes("Admin") && role.length === 2) {
+    }
+     else if (role.includes("Admin") && role.length === 2) {
       superVisor.map(
         (row) =>
           (setVal = {
@@ -241,6 +290,7 @@ function SuperAdminNewUser() {
         type: "success",
         message: result.data.message,
       });
+      navigate('/super-admin-listing')
     }
     if (result.status === 208) {
       setMsg({
@@ -410,6 +460,7 @@ function SuperAdminNewUser() {
                             value={state}
                             {...params}
                             label="State"
+                            required
                             onChange={(e) => {
                               handleChange(e);
                               handleStateSearch(e);
@@ -443,6 +494,7 @@ function SuperAdminNewUser() {
                         // required={true}
                         value={city || ""}
                         onChange={handleChange}
+                        required
                       >
                         {cityList &&
                           cityList.map((item) => {

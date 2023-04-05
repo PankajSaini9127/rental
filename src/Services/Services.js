@@ -19,8 +19,8 @@ export async function get_user(id){
     return await axios.post(`${API_LIVE}/api/admin/user/${id}`)
 }
 
-export async function GetUser (){
-    return await axios.get(`${API_LIVE}/api/admin/user`)
+export async function GetUser (data){
+    return await axios.post(`${API_LIVE}/api/admin/user`,data)
 }
 
 export async function EditUserInfo (id,data){
@@ -34,6 +34,10 @@ export async function AddUser (data){
 export async function GetSupervisor (role){
     return await axios.post(`${API_LIVE}/api/admin/selectRole`,role);
 }
+export async function GetSupervisorSRM (role){
+    return await axios.post(`${API_LIVE}/api/admin/selectRole-srm`,role);
+}
+
 
 export async function UpdateStatusAPI (id,data){
     return await axios.put(`${API_LIVE}/api/admin/updateStatus/${id}`,{"status":data})

@@ -1,4 +1,4 @@
-import { Alert, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Stack } from "@mui/material";
+import { Alert, Autocomplete, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Stack, TextField } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,7 +9,7 @@ import {
 } from "../StyledComponent";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import AdminCheckBox from "../StyleComponents/AdminCheckBox";
-import { EditUserInfo, GetSupervisor, get_user } from "../../Services/Services";
+import { EditUserInfo, GetSupervisor, GetSupervisorSRM, getCityList, getStateList, get_user } from "../../Services/Services";
 
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/action/action";
@@ -30,18 +30,22 @@ function EditUser() {
   const [formVal, setFormVal] = useState(initialState);
   const dispatch = useDispatch();
 
+  
+  const [stateList, setStateList] = useState([]);
+  const [cityList, setCityList] = useState([])
+
   const [disable, setDisable] = useState({
     manager: false,
     srManager: false,
     admin: false,
-    bhu: false,
+    BUH: false,
     finance: false,
   });
 
   const superVisor = [
     "Admin",
     "Finance",
-    "BHU",
+    "BUH",
     "Operations",
     "Senior_Manager",
     "Manager",
@@ -80,21 +84,22 @@ function EditUser() {
   async function getSupervisor(role) {
     let superVisor1 = [
       "Finance",
-      "BHU",
       "Operations",
-      "Senior Manager",
+      "BUH",
+      "Senior_Manager",
       "Manager",
+      "Role",
     ];
 
     var finalQuerry = [];
     if (role.includes("Manager")) {
       finalQuerry = ["Senior_Manager"];
     } else if (role.includes("Senior_Manager")) {
-      finalQuerry = ["BHU"];
-    } else if (role.includes("BHU")) {
-      finalQuerry = [ "Operations"];
+      finalQuerry = ["BUH"];
+    } else if (role.includes("BUH")) {
+      finalQuerry = ["Operations"];
     } else if (role.includes("Operations")) {
-      finalQuerry = ["Finance"];
+      finalQuerry = ["BUH"];
     } else if (role.includes("Finance")) {
       finalQuerry = ["Role"];
     }
@@ -102,15 +107,22 @@ function EditUser() {
       return finalQuerry.includes(row);
     });
 
-    const supervisor = await GetSupervisor(superVisor1);
-    setsupervisorArray(supervisor.data);
+    console.log(role)
+    if(role.includes("Manager")){
+      const supervisor = await GetSupervisor({role:superVisor1,state,city});
+      setsupervisorArray(supervisor.data);
+    }else if(role.includes("Senior_Manager")||role.includes("Operations")){
+      const supervisor = await GetSupervisorSRM(superVisor1);
+      setsupervisorArray(supervisor.data);
+    }
+    
   }
 
   // Role Check Box Disable Manage
   function manageRole(role) {
     console.log(role);
     let setVal = {};
-    if (!role.includes("Admin") && role.length > 0) {
+    if (role.includes("Manager") || role.includes("Operations") && role.length > 0) {
       superVisor.map(
         (row) =>
           (setVal = {
@@ -121,10 +133,51 @@ function EditUser() {
           })
       );
       setDisable(setVal);
-    } else if (role.length < 2) {
+    }else if(role.includes('Admin') && role.length === 1){
+      superVisor.map((row)=>(
+        setVal={
+          ...setVal,
+          [row]:true,
+          Operations:false,
+          Manager:false
+        }
+      ));
+      setDisable(setVal);
+    }else if(role.includes("Senior_Manager")){
+      superVisor.map((row)=>(
+        setVal={
+          ...setVal,
+          [row]:true,
+          Senior_Manager:false
+        }
+      ));
+      setDisable(setVal);
+    }
+    else if(role.includes("Finance")){
+      superVisor.map((row)=>(
+        setVal={
+          ...setVal,
+          [row]:true,
+          Finance:false
+        }
+      ));
+      setDisable(setVal);
+    }
+    else if(role.includes("BUH")){
+      superVisor.map((row)=>(
+        setVal={
+          ...setVal,
+          [row]:true,
+          BUH:false
+        }
+      ));
+      setDisable(setVal);
+    }
+     else if (role.length < 2) {
       superVisor.map((row) => (setVal = { ...setVal, [row]: false }));
       setDisable(setVal);
-    } else if (role.includes("Admin") && role.length === 2) {
+    }
+     else if (role.includes("Admin") && role.length === 2) {
       superVisor.map(
         (row) =>
           (setVal = {
@@ -138,7 +191,7 @@ function EditUser() {
     }
   }
 
-  const { name, email, role, mobile, code, supervisor } = formVal;
+  const { name, email, role, mobile, code, supervisor,state,city } = formVal;
 
   useEffect(() => {
     manageRole(role);
@@ -175,11 +228,19 @@ function EditUser() {
       message: "",
     });
   };
-
+console.log(new Date().toISOString().slice(0, 10)
+)
   async function handleSubmit(e) {
     try {
       e.preventDefault();
-      const response = await EditUserInfo(id, formVal);
+      if (role.length < 1) {
+        setMsg({
+          open: true,
+          type: "error",
+          message: "Please Select Role",
+        });
+      } else {
+      const response = await EditUserInfo(id, {...formVal,modify:new Date().toISOString().slice(0, 10)});
 
       if (response.status === 200) {
         dispatch(
@@ -189,6 +250,7 @@ function EditUser() {
             message: response.data.message,
           })
         );
+        navigate('/userManagement')
       } else {
         dispatch(
           setAlert({
@@ -198,6 +260,8 @@ function EditUser() {
           })
         );
       }
+  }
+
     } catch (error) {
       console.log(error);
     }
@@ -229,6 +293,36 @@ function EditUser() {
   useEffect(() => {
     getData(id);
   }, []);
+
+
+     // funciton for fetching state list
+     async function handleStateSearch(e, i) {
+      let response = await getStateList(e.target.value);
+  
+      if (response.status === 200) {
+        setStateList(response.data);
+      } else setStateList([]);
+    }
+  
+    useEffect(() => {
+      handleCitySearch();
+    }, [state]);
+  
+    // funciton for fetching state list
+    async function handleCitySearch() {
+      // console.log(i);
+      console.log(state);
+      let search = stateList.filter((row) => row.name === state && row.id);
+  
+      // console.log(search);
+      let response = await getCityList(search[0].id);
+      // console.log(response)
+  
+      if (response.status === 200) {
+        // console.log(city)
+        setCityList(response.data);
+      } else setCityList([]);
+    }
 
   return (
     <>
@@ -279,6 +373,7 @@ function EditUser() {
                     placeHolder=""
                     value={code}
                     onChange={handleChange}
+                    required={true}
                   />
                 </Grid>
                 <Grid container sx={{ px: 3 }} spacing={4}>
@@ -287,6 +382,7 @@ function EditUser() {
                     placeHolder="Full Name"
                     value={name}
                     name="name"
+                    required={true}
                     error={formError.name}
                     onChange={(e) => {
                       validate(e);
@@ -298,6 +394,7 @@ function EditUser() {
                     placeHolder="Email"
                     value={email}
                     name="email"
+                    required={true}
                     onChange={handleChange}
                   />
                   <TextFieldWrapper
@@ -306,13 +403,86 @@ function EditUser() {
                     value={mobile}
                     name="mobile"
                     maxLength={10}
+                    required={true}
                     error={formError.mobile}
                     onChange={(e) => {
                       validate(e);
                       handleChange(e);
                     }}
                   />
+ <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth className="textFieldWrapper">
+                      <Autocomplete
+                        freeSolo
+                        fullWidth
+                        id="free-solo-2-demo"
+                        disableClearable
+                        value={state || formVal.state}
+                        onChange={(e, val) => {
+                          setFormVal((old) => ({ ...old, state: val }));
+                        }}
+                        options={stateList.map((option) => option.name)}
+                        renderInput={(params) => (
+                          <TextField
+                            fullWidth
+                            name="state"
+                            value={state || formVal.state}
+                            {...params}
+                            label="State"
+                            required
+                            onChange={(e) => {
+                              handleChange(e);
+                              handleStateSearch(e);
+                            }}
+                            InputProps={{
+                              ...params.InputProps,
+                              type: "search",
+                            }}
+                          />
+                        )}
+                      />
+                    </FormControl>
+                  </Grid>
 
+                  <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth className="textFieldWrapper">
+                      <TextField
+                        label="City"
+                        placeHolder="Enter City"
+                        select
+                        fullWidth
+                        name="city"
+                        required
+                        // required={true}
+                        value={formVal.city || city}
+                        onChange={handleChange}
+                      >
+                        {cityList &&
+                          cityList.map((item) => {
+                            return (
+                              <MenuItem value={item.city}>{item.city}</MenuItem>
+                            );
+                          })}
+                           <MenuItem value={formVal.city}>{formVal.city}</MenuItem>
+                      </TextField>
+                    </FormControl>
+                  </Grid>
                   <AdminCheckBox
                     handleChange={handleChange}
                     disable={disable}

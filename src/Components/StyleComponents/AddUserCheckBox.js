@@ -8,7 +8,7 @@ import {
 import React from "react";
 
 function AddUserCheckBox({ handleChange,disable, value }) {
-    const {Manager,Senior_Manager,Admin,Finance,BHU,Operations} = disable
+    const {Manager,Senior_Manager,Admin,Finance,BUH,Operations} = disable
   return (
     <>
       <Grid
@@ -82,9 +82,9 @@ function AddUserCheckBox({ handleChange,disable, value }) {
               control={<Checkbox name={"role"} />}
               name={"role"}
               onChange={handleChange}
-              disabled={BHU?true:false}
-              label="BHU"
-              value={'BHU'}
+              disabled={BUH?true:false}
+              label="BUH"
+              value={'BUH'}
               labelPlacement="end"
                        />
           </FormGroup>

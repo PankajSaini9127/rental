@@ -331,8 +331,8 @@ function DataTable({ rows, loading, check, setCheck }) {
             color: "#CF482A",
           },
           "& .hold": {
-            // backgroundColor: "#97b8ae",
-            // color: "#CF482A",
+            backgroundColor: "#CCCCCC",
+            color: "#FFFFFF",
           },
           "& .statusCell": {
             maxHeight: "30px !important",

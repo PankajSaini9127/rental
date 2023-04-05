@@ -185,7 +185,7 @@ const dispatch = useDispatch();
             message: "Send back For Rectification",
           })
         );
-        navigate('/srManagerListing')
+        // navigate('/srManagerListing')
       } else {
         dispatch(
           setAlert({

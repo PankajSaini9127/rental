@@ -32,7 +32,7 @@ function SrManagerDashboard() {
           <MyHeader>Dashboard</MyHeader>
   {/* dashboard content */}
   <Grid container sx={{ justifyContent: "center" }}>
-    <Grid item xs={10}>
+    <Grid item xs={10} sx={{mt:4}}>
          
       <Grid
         container

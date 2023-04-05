@@ -18,6 +18,8 @@ const initialAuth = {
     role: null,
     name: null,
     id: null,
+    state:null,
+    city:null,
 
 }
 
@@ -28,7 +30,9 @@ export const auth = (state = initialAuth, action) => {
                 isAuth: true,
                 role: action.payload.role,
                 name:action.payload.name,
-                id:action.payload.id
+                id:action.payload.id,
+                state:action.payload.state,
+                city:action.payload.city
             };
         case 'LOGOUT':
             return state = initialAuth ;    

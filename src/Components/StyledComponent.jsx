@@ -25,7 +25,7 @@ const MyHeader = styled("h5")({
   fontSize: "28px",
   fontWeight: "600",
   lineHeight: "48px",
-  marginLeft: "55px",
+  marginLeft: "25px",
   color:'var(--main-color)',
   "@media(max-width:600px)": { fontSize: "20px", ml: "20px" },
 });
@@ -61,12 +61,10 @@ const TextFieldWrapper = ({disabled,type, label, placeHolder, value, name, onCha
           variant="outlined"
           name={name}
           disabled = {disabled}
-          // color='secodary'
           onChange={(e) => onChange(e)}
           error={error ?true:false}
           label={label}
           onBlur={onBlur}
-
 type = {type}
          
           required={required?true:false}

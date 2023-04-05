@@ -138,6 +138,20 @@ function UserManagementTable({ rows }) {
       renderCell: ActiveBtn,
     },
     {
+      field: "created",
+      headerName: "Created",
+      width: 120,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
+      field: "modification",
+      headerName: "Last Modificarion",
+      width: 120,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
       field: "actions",
       headerName: "Actions",
       width: 100,

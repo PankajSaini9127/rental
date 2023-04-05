@@ -7,9 +7,14 @@ import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import UserManagementTable from "./UserManagementTable";
 import { AuthContext } from "../../App";
 import { GetUser, get_search } from "../../Services/Services";
+import { useSelector } from "react-redux";
 
 function UserManagement() {
   const navigate = useNavigate();
+
+  const {auth} = useSelector(s=>s);
+
+  const {city,state} = auth;
 
   const {
     state: { adminReCall },
@@ -35,10 +40,10 @@ function UserManagement() {
   const getUsers = async () => {
     try {
       setData([]);
-      const users = await GetUser();
+      const users = await GetUser({city,state});
       if (users.data.length > 0) {
-        const reverse = users.data.reverse();
-        setData(reverse);
+        setData(users.data);
+        console.log(users)
       }
     } catch (error) {
       console.log(error);
@@ -50,6 +55,7 @@ function UserManagement() {
   }, [adminReCall]);
 
   const row = data.map((item, i) => {
+    
     return {
       id: item.id,
       status: item.status,
@@ -59,6 +65,8 @@ function UserManagement() {
       email: item.email,
       contactno: item.mobile,
       supervisor: item.supervisor,
+      created:item.time.slice(0, 10),
+      modification:item.modify
     };
   });
 
@@ -80,6 +88,7 @@ function UserManagement() {
 
         <ListingComponent
           title="User Management"
+          title1={"Rental Management System"}
           buttonText="Add User"
           addUserBtn={true}
           onChange={handleChange}
