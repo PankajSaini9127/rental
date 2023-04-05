@@ -25,7 +25,7 @@ function UserDashboard() {
   
 
   return (<>
-        <MyHeader>User Dashboard</MyHeader>
+       
     <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
     <AdminHamburgerMenu
         navigateListing={'/userManagement'}
@@ -34,10 +34,10 @@ function UserDashboard() {
 
         <Box sx={{flexGrow:1}}>
 
-
 <Grid container sx={{justifyContent:"center"}}>
-  <Grid item md={10}>
-        <Grid container spacing={3}>
+  <Grid xs={12}> <MyHeader>User Dashboard</MyHeader></Grid>
+  <Grid item md={10} sx={{mt:4}}>
+        <Grid container spacing={4}>
             <DashboardItem service="Total Sr Manager" value={metaData.Senior_Manager} />
             <DashboardItem service="Total Manager" value={metaData.Manager} />
             <DashboardItem service="Total Operation" value={metaData.Operations} />

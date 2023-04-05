@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, Stack} from "@mui/material";
+import { Box, Grid, Stack} from "@mui/material";
 import React, { useState } from "react";
 
 //icons hero section
@@ -6,14 +6,16 @@ import Logo from "../assest/pic/Dashboard/logo1 2.png";
 
 import "../assest/CSS/hamburgerMenu.css";
 import { useNavigate } from "react-router-dom";
-import { Vector1, Vector2, Vector3, VectorLogout } from "./Vector";
+import { Vector1, Vector2, Vector3, VectorLogout, VectorUser } from "./Vector";
 import { NavExpand, NavItem } from "./StyleComponents/HamburgerStyled";
 
-import MenuIcon from '@mui/icons-material/Menu';
-import { useDispatch } from "react-redux";
+import Dashboard from "../assest/pic/Dashboard/chart.png";
+import { useDispatch, useSelector } from "react-redux";
 
 function HamburgerMenu({handleListing,navigateHome,monthlyRent,renewal,monthlyBtn}) {
   const [expand, setExpand] = useState(false);
+
+const {auth} = useSelector(s=>s)
 
   const dispatch = useDispatch()
 
@@ -50,16 +52,17 @@ function logout (){
             onClick={() => navigate(`/${navigateHome}`)}
           />
 
-        <Box
+<Box sx={{display: "grid",placeItems: "center",width:'89px'}}>
+          <Box
             sx={{
-              height: "50px",
-              width: "89px",
-              display:'grid',
-              placeItems:'center'
-            }} 
-          
-          >
-            <IconButton color="primary" onClick={() => setExpand(!expand)} ><MenuIcon/></IconButton>
+              background: `url(${Dashboard})`,
+              backgroundSize: "cover",
+              height: "45px",
+              width: "45px",
+              cursor:'pointer'
+            }}
+            onClick={() => navigate(navigateHome)}
+            />
           </Box>
 
         
@@ -67,7 +70,15 @@ function logout (){
 
           {!expand ? (
             <>
+            {
+              auth.role.includes("Admin") && <NavItem
+              Vector={VectorUser}
+              onClick={() => navigate('/userDashboard')}
+            />
+            }
+             
               <NavItem Vector={Vector1} onClick={handleListing}/>
+             
               {
                 monthlyBtn &&
                 <>
@@ -81,6 +92,12 @@ function logout (){
           ) : (
             <Stack container spacing={2}>
               {/* onclick */}
+              <NavExpand
+                msg="Users"
+                Vector={VectorUser}
+                NavItem={NavItem}
+                onClick={() => navigate(`/userDashboard`)}
+              />
 
               <NavExpand
                 msg="New Agreement"

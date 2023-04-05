@@ -55,9 +55,12 @@ function Dashboard() {
 
         {/* dashboard content */}
         <Grid container sx={{ justifyContent: "center" }}>
+          <Grid item xs={12}>
+
         <MyHeader>Dashboard</MyHeader>
-          <Grid item xs={10}>
-            <Grid container spacing={3}>
+          </Grid>
+          <Grid item xs={10} sx={{mt:4}}>
+            <Grid container spacing={4}>
               {data.map((item, index) => {
                 return (
                   <DashboardItem

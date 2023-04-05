@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 //icons hero section
 import Logo from "../../assest/pic/Dashboard/logo1 2.png";
+import Dashboard from "../../assest/pic/Dashboard/chart.png";
 
 import "../../assest/CSS/hamburgerMenu.css";
 import { useNavigate } from "react-router-dom";
@@ -37,23 +38,23 @@ function AdminHamburgerMenu({navigateListing,navigateHome}) {
         <Box
             sx={{
               background: `url(${Logo})`,
-              height: "55px",
-              width: "65px",
+              height: "65px",
+              width: "89px",
               backgroundSize: "cover",
             }}
-            onClick={() => navigate(navigateHome)}
+            
           />
+          <Box sx={{display: "grid",placeItems: "center",width:'89px'}}>
           <Box
             sx={{
-              height: "50px",
-              width: "50px",
-              display: "grid",
-              placeItems: "center",
+              background: `url(${Dashboard})`,
+              backgroundSize: "cover",
+              height: "45px",
+              width: "45px",
+              cursor:'pointer'
             }}
-          >
-            <IconButton color="primary" onClick={() => setExpand(!expand)}>
-              <MenuIcon />
-            </IconButton>
+            onClick={() => navigate(navigateHome)}
+            />
           </Box>
 
 

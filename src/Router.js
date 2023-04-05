@@ -59,38 +59,38 @@ function MyRouter() {
       <Route
         exact
         path="/dashboard"
-        element={isAuth && role === "Manager" ? <Dashboard /> : <Login />}
+        element={isAuth && role.includes("Manager") ? <Dashboard /> : <Login />}
       />
       <Route
         exact
         path="/newAgreement"
-        element={isAuth && role === "Manager" ? <Agreement /> : <Login />}
+        element={isAuth && role.includes("Manager") ? <Agreement /> : <Login />}
       />
       <Route
         exact
         path="/editAgreement/:id"
         history={history}
-        element={isAuth && role === "Manager" ? <EditAgreement /> : <Login />}
+        element={isAuth && role.includes("Manager")  ? <EditAgreement /> : <Login />}
       />
       <Route
         exact
         path="/listing"
-        element={isAuth && role === "Manager" ? <Listing /> : <Login />}
+        element={isAuth && role.includes("Manager")  ? <Listing /> : <Login />}
       />
       <Route
         exact
         path="/monthly-payment"
-        element={isAuth && role === "Manager" ? <MonthalyList /> : <Login />}
+        element={isAuth && role.includes("Manager")  ? <MonthalyList /> : <Login />}
       />
       <Route
         exact
         path="/renewal"
-        element={isAuth && role === "Manager" ? <RenewalList /> : <Login />}
+        element={isAuth && role.includes("Manager")  ? <RenewalList /> : <Login />}
       />
       <Route
         exact
         path="/managerApproval/:id"
-        element={isAuth && role === "Manager" ? <ManagerApproval /> : <Login />}
+        element={isAuth && role.includes("Manager")  ? <ManagerApproval /> : <Login />}
       />
 
       {/* Sr Manager */}
@@ -99,21 +99,21 @@ function MyRouter() {
         exact
         path="/srManagerDashboard"
         element={
-          isAuth && role === "Sr Manager" ? <SrManagerDashboard /> : <Login />
+          isAuth && role.includes("Sr Manager") ? <SrManagerDashboard /> : <Login />
         }
       />
       <Route
         exact
         path="/srManagerListing"
         element={
-          isAuth && role === "Sr Manager" ? <SrManagerListing /> : <Login />
+          isAuth && role.includes("Sr Manager") ? <SrManagerListing /> : <Login />
         }
       />
       <Route
         exact
         path="/srManagerApproval/:id"
         element={
-          isAuth && role === "Sr Manager" ? <SrManagerApproval /> : <Login />
+          isAuth && role.includes("Sr Manager") ? <SrManagerApproval /> : <Login />
         }
       />
 
@@ -123,21 +123,21 @@ function MyRouter() {
         exact
         path="/operationsDashboard"
         element={
-          isAuth && role === "Operations" ? <OperationsDashboard /> : <Login />
+          isAuth && role.includes("Operations") ? <OperationsDashboard /> : <Login />
         }
       />
       <Route
         exact
         path="/operationsListing"
         element={
-          isAuth && role === "Operations" ? <OperationsListing /> : <Login />
+          isAuth && role.includes("Operations") ? <OperationsListing /> : <Login />
         }
       />
       <Route
         exact
         path="/operations-approval/:id"
         element={
-          isAuth && role === "Operations" ? <ApprovalRequest /> : <Login />
+          isAuth && role.includes("Operations") ? <ApprovalRequest /> : <Login />
         }
       />
 
@@ -145,39 +145,39 @@ function MyRouter() {
       <Route
         exact
         path="/BHUListing"
-        element={isAuth && role === "BHU" ? <BHUListing /> : <Login />}
+        element={isAuth && role.includes("BHU") ? <BHUListing /> : <Login />}
       />
       <Route
         exact
         path="/BHUDashboard"
-        element={isAuth && role === "BHU" ? <BHUDashBoard /> : <Login />}
+        element={isAuth && role.includes("BHU") ? <BHUDashBoard /> : <Login />}
       />
       <Route
         exact
         path="/BHUapproval/:id"
-        element={isAuth && role === "BHU" ? <BHUapproval /> : <Login />}
+        element={isAuth && role.includes("BHU") ? <BHUapproval /> : <Login />}
       />
 
       {/* Admin Section */}
       <Route
         exact
         path="/userDashboard"
-        element={isAuth && role === "Admin" ? <UserDashboard /> : <Login />}
+        element={isAuth && role.includes("Admin") ? <UserDashboard /> : <Login />}
       />
       <Route
         exact
         path="/userManagement"
-        element={isAuth && role === "Admin" ? <UserManagement /> : <Login />}
+        element={isAuth && role.includes("Admin") ? <UserManagement /> : <Login />}
       />
       <Route
         exact
         path="/newUser"
-        element={isAuth && role === "Admin" ? <NewUser /> : <Login />}
+        element={isAuth && role.includes("Admin") ? <NewUser /> : <Login />}
       />
       <Route
         exact
         path="/editUser/:id"
-        element={isAuth && role === "Admin" ? <EditUser /> : <Login />}
+        element={isAuth && role.includes("Admin") ? <EditUser /> : <Login />}
       />
 
       {/* super Admin */}
@@ -186,7 +186,7 @@ function MyRouter() {
         exact
         path="/super-admin-dashboard"
         element={
-          isAuth && role === "Super Admin" ? <SuperAdminDashboard /> : <Login />
+          isAuth && role.includes("Super Admin") ? <SuperAdminDashboard /> : <Login />
         }
       />
 
@@ -194,7 +194,7 @@ function MyRouter() {
         exact
         path="/super-admin-newuser"
         element={
-          isAuth && role === "Super Admin" ? <SuperAdminNewUser /> : <Login />
+          isAuth && role.includes("Super Admin") ? <SuperAdminNewUser /> : <Login />
         }
       />
 
@@ -202,14 +202,14 @@ function MyRouter() {
         exact
         path="/super-admin-listing"
         element={
-          isAuth && role === "Super Admin" ? <SuperAdminListing /> : <Login />
+          isAuth && role.includes("Super Admin") ? <SuperAdminListing /> : <Login />
         }
       />
       <Route
         exact
         path="/super-admin-edit/:id"
         element={
-          isAuth && role === "Super Admin" ? <SuperAdminUserEdit /> : <Login />
+          isAuth && role.includes("Super Admin") ? <SuperAdminUserEdit /> : <Login />
         }
       />
 

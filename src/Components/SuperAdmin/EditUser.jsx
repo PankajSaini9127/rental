@@ -22,7 +22,7 @@ import {
 } from "../StyledComponent";
 
 import AdminCheckBox from "../StyleComponents/AdminCheckBox";
-import { EditUserInfo, GetSupervisor, getCityList, getStateList, get_user } from "../../Services/Services";
+import { EditUserInfo, GetSupervisor, GetSupervisorSRM, getCityList, getStateList, get_user } from "../../Services/Services";
 
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/action/action";
@@ -52,13 +52,13 @@ function SuperAdminUserEdit() {
     manager: false,
     srManager: false,
     admin: false,
-    bhu: false,
+    BUH: false,
     finance: false,
   });
   const superVisor = [
     "Admin",
     "Finance",
-    "BHU",
+    "BUH",
     "Operations",
     "Senior_Manager",
     "Manager",
@@ -97,21 +97,22 @@ function SuperAdminUserEdit() {
   async function getSupervisor(role) {
     let superVisor1 = [
       "Finance",
-      "BHU",
       "Operations",
+      "BUH",
       "Senior_Manager",
       "Manager",
+      "Role",
     ];
 
     var finalQuerry = [];
     if (role.includes("Manager")) {
       finalQuerry = ["Senior_Manager"];
     } else if (role.includes("Senior_Manager")) {
-      finalQuerry = ["BHU"];
-    } else if (role.includes("BHU")) {
+      finalQuerry = ["BUH"];
+    } else if (role.includes("BUH")) {
       finalQuerry = ["Operations"];
     } else if (role.includes("Operations")) {
-      finalQuerry = ["Finance"];
+      finalQuerry = ["BUH"];
     } else if (role.includes("Finance")) {
       finalQuerry = ["Role"];
     }
@@ -119,16 +120,22 @@ function SuperAdminUserEdit() {
       return finalQuerry.includes(row);
     });
 
-    const supervisor = await GetSupervisor(superVisor1);
-    console.log(superVisor1)
-    setsupervisorArray(supervisor.data);
+    console.log(role)
+    if(role.includes("Manager")){
+      const supervisor = await GetSupervisor({role:superVisor1,state,city});
+      setsupervisorArray(supervisor.data);
+    }else if(role.includes("Senior_Manager")||role.includes("Operations")){
+      const supervisor = await GetSupervisorSRM(superVisor1);
+      setsupervisorArray(supervisor.data);
+    }
+    
   }
 
   // Role Check Box Disable Manage
   function manageRole(role) {
     console.log(role);
     let setVal = {};
-    if (!role.includes("Admin") && role.length > 0) {
+    if (role.includes("Manager") || role.includes("Operations") && role.length > 0) {
       superVisor.map(
         (row) =>
           (setVal = {
@@ -139,10 +146,51 @@ function SuperAdminUserEdit() {
           })
       );
       setDisable(setVal);
-    } else if (role.length < 2) {
+    }else if(role.includes('Admin') && role.length === 1){
+      superVisor.map((row)=>(
+        setVal={
+          ...setVal,
+          [row]:true,
+          Operations:false,
+          Manager:false
+        }
+      ));
+      setDisable(setVal);
+    }else if(role.includes("Senior_Manager")){
+      superVisor.map((row)=>(
+        setVal={
+          ...setVal,
+          [row]:true,
+          Senior_Manager:false
+        }
+      ));
+      setDisable(setVal);
+    }
+    else if(role.includes("Finance")){
+      superVisor.map((row)=>(
+        setVal={
+          ...setVal,
+          [row]:true,
+          Finance:false
+        }
+      ));
+      setDisable(setVal);
+    }
+    else if(role.includes("BUH")){
+      superVisor.map((row)=>(
+        setVal={
+          ...setVal,
+          [row]:true,
+          BUH:false
+        }
+      ));
+      setDisable(setVal);
+    }
+     else if (role.length < 2) {
       superVisor.map((row) => (setVal = { ...setVal, [row]: false }));
       setDisable(setVal);
-    } else if (role.includes("Admin") && role.length === 2) {
+    }
+     else if (role.includes("Admin") && role.length === 2) {
       superVisor.map(
         (row) =>
           (setVal = {
@@ -186,6 +234,13 @@ function SuperAdminUserEdit() {
   async function handleSubmit(e) {
     try {
       e.preventDefault();
+      if (role.length < 1) {
+        setMsg({
+          open: true,
+          type: "error",
+          message: "Please Select Role",
+        });
+      } else {
       const response = await EditUserInfo(id, formVal);
 
       if (response.status === 200) {
@@ -196,6 +251,7 @@ function SuperAdminUserEdit() {
             message: response.data.message,
           })
         );
+        navigate('/super-admin-listing')
       } else {
         dispatch(
           setAlert({
@@ -205,6 +261,7 @@ function SuperAdminUserEdit() {
           })
         );
       }
+    }
     } catch (error) {
       console.log(error);
     }
@@ -315,11 +372,13 @@ async function handleCitySearch() {
                     placeHolder=""
                     value={code}
                     onChange={handleChange}
+                    required={true}
                   />
                 </Grid>
                 <Grid container sx={{ px: 3 }} spacing={4}>
                   <TextFieldWrapper
                     label="Full Name"
+                    required={true}
                     placeHolder="Full Name"
                     value={name}
                     name="name"
@@ -335,6 +394,7 @@ async function handleCitySearch() {
                     value={email}
                     name="email"
                     onChange={handleChange}
+                    required={true}
                   />
                   <TextFieldWrapper
                     label="Mobile Number"
@@ -343,6 +403,7 @@ async function handleCitySearch() {
                     name="mobile"
                     maxLength={10}
                     error={formError.mobile}
+                    required={true}
                     onChange={(e) => {
                       validate(e);
                       handleChange(e);
@@ -375,6 +436,7 @@ async function handleCitySearch() {
                             value={state || formVal.state}
                             {...params}
                             label="State"
+                            required
                             onChange={(e) => {
                               handleChange(e);
                               handleStateSearch(e);
@@ -405,6 +467,7 @@ async function handleCitySearch() {
                         select
                         fullWidth
                         name="city"
+                        required
                         // required={true}
                         value={formVal.city || city}
                         onChange={handleChange}

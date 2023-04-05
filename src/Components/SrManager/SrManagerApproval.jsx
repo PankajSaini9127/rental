@@ -185,7 +185,7 @@ const dispatch = useDispatch();
             message: "Send back For Rectification",
           })
         );
-        navigate('/srManagerListing')
+        // navigate('/srManagerListing')
       } else {
         dispatch(
           setAlert({
@@ -448,8 +448,13 @@ const dispatch = useDispatch();
                     xs={12}
                     sx={{ mt: 5, justifyContent: "space-around" }}
                   >
+                    
                     <Grid item xs={8}>
-                      <TextField
+                    <DataFieldStyle
+                    field={'Remark !'}
+                    value={agreement[ids[0]].remark}
+                    />
+                      {/* <TextField
                         type="text"
                         multiline
                         rows={3}
@@ -458,7 +463,7 @@ const dispatch = useDispatch();
                         label="Remark *"
                         placeholder="Remark *"
                         value={agreement[ids[0]].remark}
-                      />
+                      /> */}
                     </Grid>
                   </Grid>
               }

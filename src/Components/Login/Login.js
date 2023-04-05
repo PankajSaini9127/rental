@@ -68,14 +68,17 @@ export default function Login() {
 
         if (data.success) {
           const login_user = data.result[0];
+           
           if (login_user.is_auth === 1 || role === "Admin") {
+            login_user.role = JSON.parse(login_user.role)
+            console.log(login_user.role)
             if (role === "Senior_Manager") {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
-                  name: data.result[0].name,
-                  role: "Sr Manager",
-                  id: data.result[0].id,
+                  name: login_user.name,
+                  role: login_user.role,
+                  id: login_user.id,
                 })
               );
               navigate(`/srManagerDashboard`);
@@ -84,9 +87,9 @@ export default function Login() {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
-                  name: data.result[0].name,
-                  role: "Manager",
-                  id: data.result[0].id,
+                  name: login_user.name,
+                  role: login_user.role,
+                  id: login_user.id,
                 })
               );
               navigate(`/dashboard`);
@@ -94,9 +97,9 @@ export default function Login() {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
-                  name: data.result[0].name,
-                  role: "BHU",
-                  id: data.result[0].id,
+                  name: login_user.name,
+                  role:login_user.role,
+                  id: login_user.id,
                 })
               );
               navigate(`/BHUDashboard`);
@@ -104,9 +107,11 @@ export default function Login() {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
-                  name: data.result[0].name,
-                  role: "Admin",
-                  id: data.result[0].id,
+                  name: login_user.name,
+                  role: login_user.role,
+                  id: login_user.id,
+                  state:login_user.state,
+                  city:login_user.city
                 })
               );
               navigate(`/userDashboard`);
@@ -114,9 +119,9 @@ export default function Login() {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
-                  name: data.result[0].name,
-                  role: "Operations",
-                  id: data.result[0].id,
+                  name: login_user.name,
+                  role: login_user.role,
+                  id: login_user.id,
                 })
               );
               // navigate(`/operationsListing`)

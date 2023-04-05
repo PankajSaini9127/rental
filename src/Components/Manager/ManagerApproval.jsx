@@ -408,7 +408,11 @@ function ManagerApproval() {
                   sx={{ mt: 5, justifyContent: "space-around" }}
                 >
                   <Grid item xs={8}>
-                    <TextField
+                    <DataFieldStyle
+                    field={'Remark !'}
+                    value={agreement[ids[0]].remark}
+                    />
+                    {/* <TextField
                       type="text"
                       multiline
                       rows={3}
@@ -417,7 +421,7 @@ function ManagerApproval() {
                       label="Remark *"
                       placeholder="Remark *"
                       value={agreement[ids[0]].remark}
-                    />
+                    /> */}
                   </Grid>
                 </Grid>
               )}
