@@ -9,7 +9,7 @@ import {
 import React, { useState } from "react";
 
 function AdminCheckBox({ handleChange,disable, value,error }) {
-  const {Manager,Senior_Manager,Admin,Finance,BHU,Operations} = disable
+  const {Manager,Senior_Manager,Admin,Finance,BUH,Operations} = disable
   return (
     <>
       <Grid
@@ -86,11 +86,11 @@ function AdminCheckBox({ handleChange,disable, value,error }) {
               control={<Checkbox name={"role"} />}
               name={"role"}
               onChange={handleChange}
-              disabled={BHU?true:false}
-              label="BHU"
-              value={'BHU'}
+              disabled={BUH?true:false}
+              label="BUH"
+              value={'BUH'}
               labelPlacement="end"
-              checked={ value? value.includes('BHU')?true:false:null}
+              checked={ value? value.includes('BUH')?true:false:null}
             />
           </FormGroup>
 

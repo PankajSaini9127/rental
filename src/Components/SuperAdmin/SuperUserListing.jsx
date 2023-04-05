@@ -79,6 +79,7 @@ function SuperAdminListing() {
         />
         <ListingComponent
           title="User Management"
+          title1={'Rental Management System'}
           buttonText="Add User"
           addUserBtn={true}
           onChange={handleChange}
