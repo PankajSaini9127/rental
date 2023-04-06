@@ -159,10 +159,15 @@ useEffect(()=>{
 
 function handleChange (e){
   console.log(e.target.value)
-    setYearValue({
+
+  if (e.target.value.match(/^[0-9]*$/))
+ {   setYearValue({
       ...yearValue,
       [e.target.name]:e.target.value
-    })
+    })}
+    else{
+      console.log('')
+    }
 }
 
 

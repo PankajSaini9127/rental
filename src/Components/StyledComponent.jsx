@@ -95,14 +95,15 @@ const TextFieldWrapper = ({
           }}
           placeholder={placeHolder}
           value={value}
+          helperText = {error ? (
+            <span style = {{color:"red"}}>
+              {error}
+            </span>
+          ) : null}
           fullWidth
           sx={fieldStyle}
         />
-        {error ? (
-          <Typography variant="caption" color="red" ml={1} mt={3}>
-            {error}
-          </Typography>
-        ) : null}
+        
       </FormControl>
     </Grid>
   );
@@ -234,9 +235,11 @@ const DocumentUpload = ({
 const SelectComponent = ({
   label,
   value,
+  required,
   name,
   onChange,
   options,
+  error,
   errMsg,
   onBlur,
   touched,
@@ -260,6 +263,8 @@ const SelectComponent = ({
           value={value}
           label={label}
           onBlur={onBlur}
+          required = {required}
+          // helperText = {}
           error={errMsg && touched ? true : false}
           sx={{
             mt: "0px !important",
@@ -273,11 +278,8 @@ const SelectComponent = ({
             return <MenuItem value={item}>{item}</MenuItem>;
           })}
         </Select>
-        {errMsg && touched ? (
-          <Typography variant="body1" color="red" mt={1}>
-            {errMsg}
-          </Typography>
-        ) : null}
+        <Typography variant = 'caption' sx = {{color : 'red'}}>{error}</Typography>
+
       </FormControl>
     </Grid>
   );
