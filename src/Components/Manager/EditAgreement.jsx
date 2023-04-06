@@ -40,6 +40,7 @@ import {
   getCityList,
   editAgreement,
   getBankName,
+  getLocation,
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
@@ -465,35 +466,41 @@ function EditAgreement({ history }) {
     setOpen(false);
   };
 
-   // funciton for fetching state list
+   // function for fetching state list
    async function handleStateSearch(e, i) {
-    setIndex(i);
-    let response = await getStateList(e.target.value);
-
-    if (response.status === 200) {
-      setStateList(response.data);
-    } else setStateList([]);
+    if (e.target.value.length > 4) {
+      let response = await getLocation(e.target.value);
+      if (response.data[0].PostOffice) {
+        let address = response.data[0].PostOffice[0];
+        return setData((old) => ({
+          ...old,
+          state: address.State,
+          city: address.District,
+        }));
+      } else {
+        return setPreData((old) => ({ ...old, state: "", city: "" }));
+      }
+    }
   }
+  // useEffect(() => {
+  //   handleCitySearch();
+  // }, [preData.state]);
 
-  useEffect(() => {
-    handleCitySearch();
-  }, [preData.state]);
+  // // function for fetching state list
+  // async function handleCitySearch() {
+  //   console.log(i);
+  //   console.log(preData.state);
+  //   let search = stateList.filter(
+  //     (row) => row.name === preData.state && row.id
+  //   );
 
-  // funciton for fetching state list
-  async function handleCitySearch() {
-    console.log(i);
-    console.log(preData.state);
-    let search = stateList.filter(
-      (row) => row.name === preData.state && row.id
-    );
+  //   // console.log(search);
+  //   let response = await getCityList(search[0].id);
 
-    // console.log(search);
-    let response = await getCityList(search[0].id);
-
-    if (response.status === 200) {
-      setCityList(response.data);
-    } else setCityList([]);
-  }
+  //   if (response.status === 200) {
+  //     setCityList(response.data);
+  //   } else setCityList([]);
+  // }
 
   async function getBankeDetails(data,i) {
     let res = await getBankName(data);
@@ -641,31 +648,29 @@ function handleHold (){
                       "@media(max-width:900px)": { my: 1 },
                     }}
                   >
-                    <FormControl fullWidth className="textFieldWrapper">
+                  <FormControl fullWidth className="textFieldWrapper">
                       <Autocomplete
                         freeSolo
                         fullWidth
                         id="free-solo-2-demo"
                         disableClearable
-                        value={preData.state || ""}
+                        value = {preData.pincode || ''}
                         onChange={(e, val) => {
-                          setPreData((old) => ({
-                            ...old,
-                            state: val,
-                          }));
+                          setData((old) => ({ ...old, pincode: val }));
                         }}
                         options={stateList.map((option) => option.name)}
                         renderInput={(params) => (
                           <TextField
                             fullWidth
-                            name="state"
-                            // placeholder={preData.landlord[i].state || ""}
-                            value={preData.state || ""}
+                            required={true}
+                            placeholder={preData.pincode}
+                            name="pincode"
+                            value={preData.pincode || ""}
                             {...params}
-                            label="State"
+                            label="Pincode"
                             onChange={(e) => {
                               handleCommonChange(e);
-                              handleStateSearch(e, i);
+                              handleStateSearch(e);
                             }}
                             InputProps={{
                               ...params.InputProps,
@@ -677,6 +682,36 @@ function handleHold (){
                     </FormControl>
                   </Grid>
 
+                  <TextFieldWrapper
+                    label="State"
+                    disabled={true}
+                    name="state"
+                    required={true}
+                    maxLength={6}
+                    value={preData.state || ""}
+                    error={formError.state}
+                  />
+                  <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth className="textFieldWrapper">
+                      <TextField
+                        label="City"
+                        required={true}
+                        disabled={true}
+                        fullWidth
+                        name="city"
+                        value={preData.city || ""}
+                      />
+                    </FormControl>
+                  </Grid>
+{/* 
                   <Grid
                     item
                     md={4}
@@ -707,27 +742,19 @@ function handleHold (){
                         <MenuItem value={preData.city}>{preData.city}</MenuItem>
                       </TextField>
                     </FormControl>
-                  </Grid>
+
+                  </Grid> */}
 
                   <TextFieldWrapper
                     label="Location"
                     placeHolder="Enter Location"
                     name="location"
+                    disabled = {true}
                     value={preData.location || ''}
                     onChange={handleCommonChange}
                     index={i}
                   />
-                  <TextFieldWrapper
-                    label="Pincode"
-                    placeHolder="Enter Pincode"
-                    name="pincode"
-                    required={true}
-                    maxLength={6}
-                    value={preData.pincode}
-                    onChange={handleCommonChange}
-                    index={i}
-                    error={formError.pincode}
-                  />
+              
                   <TextFieldWrapper
                     label="Address"
                     placeHolder="Enter Address"

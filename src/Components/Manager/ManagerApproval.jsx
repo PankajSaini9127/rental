@@ -206,7 +206,7 @@ function ManagerApproval() {
                   />
                   <DataFieldStyle
                     field={"deposit"}
-                    value={agreement[ids[0]].deposite}
+                    value={agreement[ids[0]].deposit}
                   />
                   <DataFieldStyle
                     field={"monthly rental"}

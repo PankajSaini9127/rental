@@ -79,7 +79,7 @@ function Agreement() {
     yearlyIncrement: "",
     tenure: "",
     state: "",
-    deposit : 0,
+    deposit : "",
     pincode: "",
     location: "",
     city: "",
@@ -168,8 +168,8 @@ console.log(data)
     return regTest
 }
 
-  //handle Change for uncommon feilds
-  function handleChange(e, i) {
+  // use on onBlur for uncommon fields
+  function handleOnBlur(e, i) {
     let error = { state: false, message: null };
     // console.log(e.target.name, e.target.value);
     switch (e.target.name) {
@@ -178,7 +178,7 @@ console.log(data)
           error = { state: true, message: "Value must be Correct" };
         break;
       case "pincode":
-        if (!e.target.value.match(/^[0-9]*$/))
+        if (!e.target.value.match(/^.{0,6}$/))
           error = { state: true, message: "Value must be Correct" };
         if (e.target.value.length < 6 && e.target.value.length > 0)
           error = { ...error, message: "Pincode number must be of 6 digit." };
@@ -188,7 +188,7 @@ console.log(data)
         if (!e.target.value.match(/^[0-9]*$/))
           error = { ...error, state: true };
         if (e.target.value.length < 12 && e.target.value.length > 0)
-          error = { ...error, message: "Aadhar number must be of 12 digit." };
+          error = { ...error, message: "Aadhaar number must be of 12 digit." };
         else error = { ...error, message: null };
         break;
       case "mobileNo":
@@ -206,7 +206,7 @@ console.log(data)
       else error = { ...error, message: null };
         break;
       case "bankName":
-        if (!e.target.value.match(/^[a-zA-Z ]*$/))
+        if (!e.target.value === "Not Found")
           error = { state: true, message: "Value must be Correct" };
         break;
       case "benificiaryName":
@@ -214,7 +214,7 @@ console.log(data)
           error = { state: true, message: "Value must be Correct" };
         break;
       case "accountNo":
-        if (!e.target.value.match(/^.{0,17}$/))
+        if (!e.target.value.match(/^[0-9]*$/))
           error = { ...error, state: true };
         if (e.target.value.length > 17 && e.target.value.length > 0)
           error = { ...error, message: "Account can be of 17 digit only." };
@@ -224,12 +224,12 @@ console.log(data)
       case "email":
           // pattern match          
         if (!e.target.value.match(  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) && e.target.value.length > 0)
-          error = { ...error, message: "Email address should be like example@gmail.com." };
+          error = { ...error, message: "Email should be like example@gmail.com." };
         else error = { ...error, message: null };
         break;
       case "panNo":
         e.target.value = e.target.value.toUpperCase();
-        if (!e.target.value.match(/^.{0,10}$/))
+        if (!e.target.value.match(/^.{0,10}$/) && !e.target.value.match(/^[^@#$%^&*<>'\"/;`%]*$/))
           error = { state: true, message: null };
           // pattern match
         if (!e.target.value.match(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/) && e.target.value.length > 0)
@@ -242,7 +242,7 @@ console.log(data)
           error = { state: true, message: null };
           // pattern match
         if (!checksum(e.target.value)&& e.target.value.length > 0)
-          error = { ...error, message: "GST number should be like 27AAPFU0939F1ZV." };
+          error = { ...error, message: "GST should be like 27AAPFU0939F1ZV." };
         else error = { ...error, message: null };
         break;
       case "ifscCode":
@@ -253,37 +253,8 @@ console.log(data)
       default:
         break;
     }
-    if (e.target.name === "ifscCode" && e.target.value.length === 11) {
-      console.log(e.target.name);
-      getBankDetails(e.target.value, i);
-    }
-    if (!error.state) {
-      if (data.landlord[i]) {
-        setData((old) => ({
-          ...old,
-          landlord: old.landlord.map((row, id) => {
-            if (i === id) {
-              return {
-                ...row,
-                [e.target.name]: e.target.value,
-              };
-            }
-            return row;
-          }),
-        }));
-      } else {
-        setData((old) => ({
-          ...old,
-          landlord: [
-            ...old.landlord,
-            {
-              [e.target.name]: e.target.value,
-            },
-          ],
-        }));
-      }
-    }
-
+  
+  
     if (error.message) {
       if (formError.landlord[i]) {
         setFormError((old) => ({
@@ -337,23 +308,143 @@ console.log(data)
     }
   }
 
-  // handle Change for common feilds
-  function handleCommonChange(e, i) {
-    // console.log(e.target.name);
-    // console.log(data.state);
-    var error = false;
+  // use on Change for uncommon fields
+  function handleChange(e,i){
+    let error = { state: false, message: null };
+    // console.log(e.target.name, e.target.value);
     switch (e.target.name) {
-      case "state":
-        // console.log('state',e.target.value.match(/^[a-zA-Z ]*$/))
+      case "leeseName":
         if (!e.target.value.match(/^[a-zA-Z ]*$/))
           error = { state: true, message: "Value must be Correct" };
         break;
       case "pincode":
+        if (!e.target.value.match(/^.{0,6}$/))
+          error = { state: true, message: "Value must be Correct" };
+        break;
+      case "aadharNo":
         if (!e.target.value.match(/^[0-9]*$/))
+          error = { ...error, state: true };
+        if (e.target.value.length < 12 && e.target.value.length > 0)
+          error = { ...error, message: "Aadhaar number must be of 12 digit." };
+        else error = { ...error, message: null };
+        break;
+      case "mobileNo":
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { ...error, state: true };
+        if (e.target.value.length < 10 && e.target.value.length > 0)
+          error = { ...error, message: "Phone number must be of 10 digit." };
+        else error = { ...error, message: null };
+        break;
+      case "alternateMobile":
+        if (!e.target.value.match(/^[0-9]*$/))
+        error = { ...error, state: true };
+      if (e.target.value.length < 10 && e.target.value.length > 0)
+        error = { ...error, message: "Phone number must be of 10 digit." };
+      else error = { ...error, message: null };
+        break;
+      case "bankName":
+        if (e.target.value === "Not Found")
+          error = { state: true, message: "Value must be Correct" };
+        break;
+      case "benificiaryName":
+        if (!e.target.value.match(/^[a-zA-Z ]*$/))
+          error = { state: true, message: "Value must be Correct" };
+        break;
+      case "accountNo":
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { ...error, state: true };
+        if (e.target.value.length > 17 && e.target.value.length > 0)
+          error = { ...error, message: "Account can be of 17 digit only." };
+        else error = { ...error, message: null };
+        break;
+
+      case "email":
+          // pattern match          
+        if (!e.target.value.match(  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) && e.target.value.length > 0)
+          error = { ...error, message: "Email address should be like example@gmail.com." };
+        else error = { ...error, message: null };
+        break;
+      case "panNo":
+        e.target.value = e.target.value.toUpperCase();
+        if (!e.target.value.match(/^.{0,10}$/) && !e.target.value.match(/^[^@#$%^&*<>'\"/;`%]*$/))
+          error = { state: true, message: null };
+          // pattern match
+        if (!e.target.value.match(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/) && e.target.value.length > 0)
+          error = { ...error, message: "PAN number should be like NOOPS8327k." };
+        else error = { ...error, message: null };
+        break;
+      case "gstNo":
+        e.target.value = e.target.value.toUpperCase();
+        if (!e.target.value.match(/^.{0,15}$/))
+          error = { state: true, message: null };
+          // pattern match
+        if (!checksum(e.target.value)&& e.target.value.length > 0)
+          error = { ...error, message: "GST number should be like 27AAPFU0939F1ZV." };
+        else error = { ...error, message: null };
+        break;
+      case "ifscCode":
+        e.target.value = e.target.value.toUpperCase();
+        if (!e.target.value.match(/^.{0,11}$/))
+          error = { state: true, message: null };
+        break;
+      default:
+        break;
+    }
+    if (e.target.name === "ifscCode" && e.target.value.length === 11) {
+      console.log(e.target.name);
+      getBankDetails(e.target.value, i);
+    }
+    if (!error.state) {
+      if (data.landlord[i]) {
+        setData((old) => ({
+          ...old,
+          landlord: old.landlord.map((row, id) => {
+            if (i === id) {
+              return {
+                ...row,
+                [e.target.name]: e.target.value,
+              };
+            }
+            return row;
+          }),
+        }));
+      } else {
+        setData((old) => ({
+          ...old,
+          landlord: [
+            ...old.landlord,
+            {
+              [e.target.name]: e.target.value,
+            },
+          ],
+        }));
+      }
+    }
+  }
+
+
+
+  // handle Change for common feilds
+  function handleCommonChange(e, i) {
+    // console.log(e.target.name);
+    // console.log(data.state);
+    var error = {state : false};
+    switch (e.target.name) {
+      case "location":
+        if (!e.target.value.match(/^[^@#$%^&*<>'\"/;`%]*$/))
+          error = { state: true, message: "Value must be Correct" };
+        break;
+      case "address":
+        // console.log('state',e.target.value.match(/^[a-zA-Z ]*$/))
+        if (!e.target.value.match(/^[^@#$%^&*<>'\"/;`%]*$/))
+          error = { state: true, message: "Value must be Correct" };
+        break;
+      case "pincode":
+        if (e.target.value.length > 6 )
           error = { state: true, message: "Value must be Correct" };
         break;
       case "lockInYear":
-        if (!e.target.value.match(/^[0-9]*$/))
+        if (!e.target.value.match(/^.{0,2}$/))
           error = { state: true, message: "Value must be Correct" };
         break;
       case "rental_amount":
@@ -361,7 +452,7 @@ console.log(data)
           error = { state: true, message: "Value must be Correct" };
         break;
       case "noticePeriod":
-        if (!e.target.value.match(/^[0-9]*$/))
+        if (!e.target.value.match(/^.{0,2}$/))
           error = { state: true, message: "Value must be Correct" };
         else e.target.value = e.target.value.toLocaleString("hi");
         break;
@@ -370,18 +461,14 @@ console.log(data)
           error = { state: true, message: "Value must be Correct" };
         break;
       case "deposit":
-        // if (!e.target.value.match(/^[0-9]+$/))
-          // error = { state: true};
-          // if(e.target.value.length > 0)
-          // {
-            // e.target.value = (Number(e.target.value).toLocaleString("en")).toString();
-          //   error = { state: false, message: "Value must be Correct" };}
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { state: true};
         break;
       default:
         break;
     }
-console.log(e.target.name,parseInt(e.target.value).toLocaleString("en"))
-    if (!error.status) setData((old) => ({ ...old, [e.target.name]: e.target.value}));
+    console.log(e.target.name,e.target.value)
+    if (!error.state) setData((old) => ({ ...old, [e.target.name]: e.target.value}));
 
   }
 
@@ -457,8 +544,15 @@ console.log(e.target.name,parseInt(e.target.value).toLocaleString("en"))
   function handleHold(id) {
     console.log(increment);
     // setData({ ...data, ...increment });
-    // console.log(data)
-    handleHoldApiCall(id, { ...data, ...increment });
+    console.log(validate(data), validateFields(data))
+    if(validate(data) && validateFields(data))
+
+    {
+        setIsSubmit(true);
+        setOpen(true);
+        handleHoldApiCall(id, { ...data, ...increment });
+
+    }
   }
 
   async function handleHoldApiCall(id, data) {
@@ -596,7 +690,7 @@ console.log(e.target.name,parseInt(e.target.value).toLocaleString("en"))
         ...old,
         landlord: old.landlord.map((row, index) => {
           if (index === i) {
-            return { ...row, bankName: "Not Found" };
+            return { ...row, bankName: undefined };
           } else return row;
         }),
       }));
@@ -613,6 +707,15 @@ console.log(e.target.name,parseInt(e.target.value).toLocaleString("en"))
   // form validation
   function validate(data) {
 
+    // , "addharNo"
+    // , "panNo"
+    // , "mobileNo"
+    // , "alternateMobile"
+    // , "email"
+    // , "addharNo"
+    // , "bankName"
+    // , "ifscCode"
+
     let field = [
     ,"draft_agreement"
     ,"electricity_bill"
@@ -621,7 +724,8 @@ console.log(e.target.name,parseInt(e.target.value).toLocaleString("en"))
     ,"cheque"
     ,"tax_receipt"
     ,"noc"
-  ]
+    
+  ] 
 
   if(landloard.length > 0)
   {
@@ -660,6 +764,79 @@ if(!finalCheck.includes(true)){
   return true
 }else return false
   }
+  function validateFields(data) {
+
+    // , "addharNo"
+    // , "panNo"
+    // , "mobileNo"
+    // , "alternateMobile"
+    // , "email"
+    // , "addharNo"
+    // , "bankName"
+    // , "ifscCode"
+
+    let field = [
+    ,"lockInYear"
+    ,"noticePeriod"
+    ,"deposit"
+    ,"monthlyRent"
+    ,"tenure"
+    ,"state"
+    ,"city"
+    ,"address"
+    ,"pincode"
+    ,"location"
+  ] 
+
+  let CommonFields = [
+    "aadharNo",
+    "panNo",
+    "mobileNo",
+    "alternateMobile",
+    "email",
+    "ifscCode",
+    "bankName",
+    "accountNo",
+    "benificiaryName"]
+
+  let dataError = "";
+  if(data.landlord.length > 0)
+  {
+    console.log(data.landlord)
+
+        dataError =   data.landlord.map((row,i)=>({
+        aadharNo : data.landlord[i].aadharNo  ? false : "Field is required."  ,
+        panNo : data.landlord[i].panNo  ? false : "Field is required."  ,
+        mobileNo : data.landlord[i].mobileNo  ? false : "Field is required."  ,
+        alternateMobile : data.landlord[i].alternateMobile  ? false : "Field is required."  ,
+        email : data.landlord[i].email  ? false : "Field is required."  ,
+        ifscCode : data.landlord[i].ifscCode  ? false : "Field is required."  ,
+        bankName : data.landlord[i].bankName  ? false : "Field is required."  ,
+        accountNo : data.landlord[i].accountNo  ? false : "Field is required."  ,
+        benificiaryName : data.landlord[i].benificiaryName  ? false : "Field is required."  ,
+       }))
+  }
+
+  formError.landlord.map((res)=>{
+
+  })
+   
+
+let finalCheck = field.map(row=>{
+  if(!data[row] || data[row] === "")
+  {
+    console.log(row)
+    setFormError(old=>({...old,[row] : "Field required.", landlord : dataError}))
+    return true
+  }
+})
+
+  console.log("Feild Check >>>>",finalCheck.includes(true))
+  console.log("Feild Check >>>>",formError)
+if(!finalCheck.includes(true)){
+  return true
+}else return false
+  }
 
   //confirmation alert
   const [open, setOpen] = useState(false);
@@ -667,12 +844,14 @@ if(!finalCheck.includes(true)){
   const handleSubmit = (e) => {
     e.preventDefault();
     // console.log(">>>",formError)
+    console.log(validate(data), validateFields(data))
+
     setData((old) => ({ ...old, ...increment }));
   //  console.log(validate(data))
-    if(validate(data))
+    if(validate(data) && validateFields(data))
     {
-      setIsSubmit(true);
-      setOpen(true);
+        setIsSubmit(true);
+        setOpen(true);
 
     }
   };
@@ -681,9 +860,9 @@ if(!finalCheck.includes(true)){
     setOpen(false);
   };
 
-  // funciton for fetching state list
+  // function for fetching state list
   async function handleStateSearch(e, i) {
-    if (e.target.value.length > 4) {
+    if (e.target.value.length > 5) {
       let response = await getLocation(e.target.value);
       if (response.data[0].PostOffice) {
         let address = response.data[0].PostOffice[0];
@@ -692,9 +871,7 @@ if(!finalCheck.includes(true)){
           state: address.State,
           city: address.District,
         }));
-      } else {
-        return setData((old) => ({ ...old, state: "", city: "" }));
-      }
+      } 
     }
   }
 
@@ -702,7 +879,7 @@ if(!finalCheck.includes(true)){
   //   handleCitySearch();
   // }, [data.state]);
 
-  // funciton for fetching state list
+  // function for fetching state list
   // async function handleCitySearch() {
   //   // console.log(i);
   //   console.log(data.state);
@@ -749,7 +926,7 @@ if(!finalCheck.includes(true)){
               {/* agreement form start here */}
               <Box
                 component="form"
-                onSubmit={handleSubmit}
+                // onSubmit={handleSubmit}
                 sx={{
                   py: 5,
                   backgroundColor: "white",
@@ -787,17 +964,26 @@ if(!finalCheck.includes(true)){
                         id="free-solo-2-demo"
                         disableClearable
                         onChange={(e, val) => {
-                          setData((old) => ({ ...old, pincode: val }));
+                          if (e.target.value.length <= 6 )
+                          {
+                            console.log(val)
+                            setData((old) => ({ ...old, pincode: val }));
+                          }
                         }}
+                        // onBlur = {(e)=>handleOnBlur(e,i)}
+                        helperText = {formError.pincode && ""  }
                         options={stateList.map((option) => option.name)}
                         renderInput={(params) => (
                           <TextField
                             fullWidth
                             required={true}
                             maxLength='6'
+                            required
                             name="pincode"
+                            helperText = {formError.pincode}
                             value={data.pincode}
                             {...params}
+                            error = {formError.pincode}
                             label="Pincode"
                             onChange={(e) => {
                               handleCommonChange(e);
@@ -822,30 +1008,23 @@ if(!finalCheck.includes(true)){
                     value={data.state || ""}
                     error={formError.state}
                   />
-                  <Grid
-                    item
-                    md={4}
-                    xs={6}
-                    sx={{
-                      mb: "0px !important",
-                      "@media(max-width:900px)": { my: 1 },
-                    }}
-                  >
-                    <FormControl fullWidth className="textFieldWrapper">
-                      <TextField
+                
+                      <TextFieldWrapper
                         label="City"
                         required={true}
                         disabled={true}
                         fullWidth
                         name="city"
                         value={data.city || ""}
+                        error = {formError.city}
                       />
-                    </FormControl>
-                  </Grid>
+                   
+        
                   <TextFieldWrapper
                     label="Location"
                     placeHolder="Enter Location"
                     name="location"
+                    error = {formError.location}
                     required={true}
                     value={data.location}
                     onChange={handleCommonChange}
@@ -858,6 +1037,7 @@ if(!finalCheck.includes(true)){
                     required={true}
                     name="address"
                     value={data.address}
+                    error = {formError.address}
                     onChange={handleCommonChange}
                     index={i}
                   />
@@ -867,8 +1047,10 @@ if(!finalCheck.includes(true)){
                     placeHolder="Enter Lock in Month"
                     required={true}
                     name="lockInYear"
+                    handleOnBlur = {(e)=>handleOnBlur(e,i)}
                     // textAlignRight={"textAlignRight"}
                     value={data.lockInYear}
+                    error = {formError.lockInYear}
                     onChange={handleCommonChange}
                   />
                   <TextFieldWrapper
@@ -876,6 +1058,7 @@ if(!finalCheck.includes(true)){
                     placeHolder="Enter Notice Period"
                     required={true}
                     name="noticePeriod"
+                    error = {formError.noticePeriod}
                     // textAlignRight={"textAlignRight"}
                     value={data.noticePeriod}
                     onChange={handleCommonChange}
@@ -885,14 +1068,16 @@ if(!finalCheck.includes(true)){
                     label="Deposit Amount"
                     placeHolder="Enter Deposit Amount"
                     name="deposit"
+                    error = {formError.deposit}
                     textAlignRight={"textAlignRight"}
-                    value={data.deposit}
+                    value={data.deposit || ''}
                     onChange={handleCommonChange}
                   />
                   <TextFieldWrapper
                     label="Monthly Rental"
                     placeHolder="Enter Rental"
                     required={true}
+                    error = {formError.monthlyRent}
                     textAlignRight={"textAlignRight"}
                     name="monthlyRent"
                     value={data.monthlyRent}
@@ -900,9 +1085,10 @@ if(!finalCheck.includes(true)){
                   />
 
                   <SelectComponent
-                    label={"Agreement Tenure *"}
+                    label={"Agreement Tenure*"}
                     required={true}
                     name="tenure"
+                    error = {formError.tenure}
                     options={[
                       "11 Month",
                       "2 Year",
@@ -997,8 +1183,8 @@ if(!finalCheck.includes(true)){
                         />
 
                         <TextFieldWrapper
-                          label="Aadhar Number"
-                          placeHolder="Enter Aadhar No."
+                          label="Aadhaar Number"
+                          placeHolder="Enter Aadhaar No."
                           required={true}
                           name="aadharNo"
                           maxLength={12}
@@ -1008,6 +1194,7 @@ if(!finalCheck.includes(true)){
                               : ""
                           }
                           onChange={(e) => handleChange(e, i)}
+                          onBlur = {(e) => handleOnBlur(e, i)}
                           index={i}
                           error={
                             formError.landlord[i] && formError.landlord[i].aadharNo
@@ -1019,6 +1206,7 @@ if(!finalCheck.includes(true)){
                           label="PAN Number"
                           placeHolder="Enter Pan No."
                           name="panNo"
+                          onBlur = {(e) => handleOnBlur(e, i)}
                           required={true}
                           maxLength={10}
                           value={
@@ -1041,6 +1229,7 @@ if(!finalCheck.includes(true)){
                           required={true}
                           name="mobileNo"
                           maxLength={10}
+                          onBlur = {(e) => handleOnBlur(e, i)}
                           value={
                             data.landlord[i] && data.landlord[i].mobileNo
                               ? data.landlord[i].mobileNo
@@ -1058,7 +1247,10 @@ if(!finalCheck.includes(true)){
                           label="Alternate Number"
                           placeHolder="Enter Alternate No."
                           name="alternateMobile"
+                          onBlur = {(e) => handleOnBlur(e, i)}
                           maxLength={10}
+                          required={true}
+
                           value={
                             data.landlord[i] && data.landlord[i].alternateMobile
                               ? data.landlord[i].alternateMobile
@@ -1078,6 +1270,7 @@ if(!finalCheck.includes(true)){
                           placeHolder="Enter Email"
                           required={true}
                           name="email"
+                          onBlur = {(e) => handleOnBlur(e, i)}
                           value={
                             data.landlord[i] && data.landlord[i].email
                               ? data.landlord[i].email
@@ -1098,6 +1291,7 @@ if(!finalCheck.includes(true)){
                           // required={true}
                           // error = }
                           name="gstNo"
+                          onBlur = {(e) => handleOnBlur(e, i)}
                           maxLength={15}
                           value={
                             data.landlord[i] && data.landlord[i].gstNo
@@ -1115,6 +1309,7 @@ if(!finalCheck.includes(true)){
                           label="Bank IFSC Code"
                           placeHolder="Enter IFSC Code"
                           name="ifscCode"
+                          onBlur = {(e) => handleOnBlur(e, i)}
                           required={true}
                           value={
                             data.landlord[i] && data.landlord[i].ifscCode
@@ -1133,22 +1328,32 @@ if(!finalCheck.includes(true)){
                           label="Bank Name"
                           placeHolder="Enter Bank Name"
                           name="bankName"
+                          error = {data.landlord[i] && data.landlord[i].bankName === undefined
+                            ? "Bank Name not found."
+                            : ""}
                           required={true}
+                          // onBlur = {(e) => handleOnBlur(e, i)}
                           disabled={true}
                           value={
                             data.landlord[i] && data.landlord[i].bankName
                               ? data.landlord[i].bankName
                               : ""
                           }
-                          // onChange={(e) => handleChange(e, i)}
+                          onChange={(e) => handleOnBlur(e, i)}
                         />
                         <TextFieldWrapper
                           label="Benificiary Name"
                           placeHolder="Enter Benificiary Name"
                           name="benificiaryName"
+                          onBlur = {(e) => handleOnBlur(e, i)}
                           value={
                             data.landlord[i] && data.landlord[i].benificiaryName
                               ? data.landlord[i].benificiaryName
+                              : ""
+                          }
+                          error={
+                            formError.landlord[i] && formError.landlord[i].ifscCode
+                              ? formError.landlord[i].ifscCode
                               : ""
                           }
                           required={true}
@@ -1158,7 +1363,9 @@ if(!finalCheck.includes(true)){
                           label="Bank A/C Number "
                           placeHolder="Enter Account No."
                           name="accountNo"
+                          maxLength = {17}
                           required={true}
+                          onBlur = {(e) => handleOnBlur(e, i)}
                           value={
                             data.landlord[i] && data.landlord[i].accountNo
                               ? data.landlord[i].accountNo
@@ -1429,7 +1636,7 @@ if(!finalCheck.includes(true)){
                       uploaded={data.noc && true}
                       label="Upload Noc(If Multiple Owners)"
                       placeHolder="NOC"
-                      fileName = {data.NOC_name}
+                      fileName = {data.noc_name}
                       handleChange={handleChangeFile}
                       name={"noc"}
                       error = {formError.noc}
@@ -1448,7 +1655,8 @@ if(!finalCheck.includes(true)){
                   <Grid item md={3} xs={6}>
                     <Button
                       variant="contained"
-                      type="submit"
+                      // type="submit"
+                      onClick = {handleSubmit}
                       color="primary"
                       sx={{
                         height: "60px",
