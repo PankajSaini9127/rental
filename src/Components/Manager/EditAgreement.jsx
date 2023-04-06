@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+
+
 // MUI Components
 import {
   Box,
@@ -235,7 +237,6 @@ function EditAgreement({ history }) {
     }
   }
 
-  // const [errorObj,setError] = useState({})
 
   //handle Change for uncommon feilds
   function handleChange(e, i) {
@@ -418,6 +419,8 @@ function EditAgreement({ history }) {
         year4,
         year5,
         landlord,
+        status:"Sent To Sr Manager",
+        remark:""
       },
       landlord
     );
@@ -513,8 +516,73 @@ function EditAgreement({ history }) {
     }
   }
 
-  const [remarkValue, setRemark] = useState(preData.remark);
-  // console.log(remarkValue)
+function handleHold (){
+  const {
+    id,
+    code,
+    lockInYear,
+    monthlyRent,
+    noticePeriod,
+    yearlyIncrement,
+    deposite,
+    gst_certificate,
+    draft_agreement,
+    electricity_bill,
+    poa,
+    maintaince_bill,
+    cheque,
+    tax_receipt,
+    noc,
+    tenure,
+    year1,
+    year2,
+    year3,
+    year4,
+    year5,
+    pincode,
+    state,
+    address,
+    location,
+    city,
+    landlord,
+  } = preData;
+
+  APICall(
+    {
+      pincode,
+    state,
+    address,
+    location,
+    city,
+      id,
+      code,
+      lockInYear,
+      monthlyRent,
+      noticePeriod,
+      yearlyIncrement,
+      deposite,
+      gst_certificate,
+      draft_agreement,
+      electricity_bill,
+      poa,
+      maintaince_bill,
+      cheque,
+      tax_receipt,
+      noc,
+      tenure,
+      year1,
+      year2,
+      year3,
+      year4,
+      year5,
+      landlord,
+      status:"Hold",
+      remark:""
+    },
+    landlord
+  );
+}
+
 
   return (
     <>
@@ -674,7 +742,9 @@ function EditAgreement({ history }) {
                         <MenuItem value={preData.city}>{preData.city}</MenuItem>
                       </TextField>
                     </FormControl>
+
                   </Grid> */}
+
                   <TextFieldWrapper
                     label="Location"
                     placeHolder="Enter Location"
@@ -776,6 +846,8 @@ function EditAgreement({ history }) {
                 >
                   Landlord Detail
                 </Typography>
+
+              
 
                 {preData.landlord.length > 0 &&
                   preData.landlord.map((_, i) => (
@@ -1056,29 +1128,7 @@ function EditAgreement({ history }) {
 
                 {/* Document upload section end here */}
 
-                {preData.remark.length > 0 && (
-                <Grid
-                  item
-                  container
-                  xs={12}
-                  sx={{ mt: 5, justifyContent: "space-around" }}
-                >
-                  <Grid item xs={8}>
-                    <TextField
-                      type="text"
-                      multiline
-                      rows={3}
-                      fullWidth
-                      variant="outlined"
-                      label="Remark *"
-                      placeholder="Remark *"
-                      onChange={(e)=>setRemark(e.target.value)}
-                      value={remarkValue}
-                    />
-                  </Grid>
-                </Grid>
-              )}
-
+               
                 {/* Button Start from here */}
                 <Grid
                   container
@@ -1105,7 +1155,7 @@ function EditAgreement({ history }) {
                         },
                       }}
                     >
-                      Update {preData.remark.length > 0 && "And Send To Sr Manager"}
+                       Send To Sr Manager
                     </Button>
                   </Grid>
 
@@ -1126,6 +1176,7 @@ function EditAgreement({ history }) {
                           height: "40px",
                         },
                       }}
+                      onClick={handleHold}
                     >
                       Hold
                     </Button>

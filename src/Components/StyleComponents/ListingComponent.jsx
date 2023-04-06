@@ -33,16 +33,14 @@ function ListingComponent({
   addUserBtn,
   dropDown,
   serachValue,
-  setsearchValue,
+  handleSerachChange,
   check,
   setCheck
 }) {
 
   const navigate = useNavigate()
 
-  function handleChange (e){
-    setsearchValue(e.target.value)
-  }
+ 
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -123,7 +121,7 @@ function ListingComponent({
               ),
             }}
           value={serachValue}
-          onChange={handleChange}
+          onChange={handleSerachChange}
             size="small"
           />
         </Grid>

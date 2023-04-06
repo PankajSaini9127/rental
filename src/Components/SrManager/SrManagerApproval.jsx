@@ -19,7 +19,6 @@ import {
   send_back_to_manager,
   send_to_bhu,
 } from "../../Services/Services";
-import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
 
 //download file
 import { saveAs } from "file-saver";
@@ -28,11 +27,12 @@ import { setAlert } from "../../store/action/action";
 
 const DocumentView = ({ title, img }) => {
   return (
-    <Grid item xs={6}>
+    <Grid item xs={4}>
       <Typography
         variant="body1"
         fontSize={"18px"}
         color={"primary"}
+        fontWeight={'600'}
         textTransform={"capitalize"}
         sx={{ "@media(max-width:900px)": { fontSize: "16px" } }}
       >
@@ -41,7 +41,7 @@ const DocumentView = ({ title, img }) => {
       </Typography>
       <Box
         sx={{
-          height: "150px",
+          height: "100px",
           border: "1px solid var(--main-color)",
           borderRadius: "20px",
           display: "flex",
@@ -103,8 +103,8 @@ const DocumentView = ({ title, img }) => {
 
 const Heading = ({ heading }) => {
   return (
-    <Grid item xs={11} sx={{ mt: 6, mb: 2 }}>
-      <Typography variant="body1" fontSize={"22px"} color={"primary"}>
+    <Grid item xs={12} sx={{ mt: 6, mb: 2 }}>
+      <Typography variant="body1" fontSize={"25px"} color={"primary"} fontWeight={'700'}>
         {heading}
       </Typography>
     </Grid>
@@ -138,7 +138,16 @@ const dispatch = useDispatch();
   }, []);
 
   const handleSubmit = async (e) => {
-    const response = await send_to_bhu({ status: "Sent To BHU", srm_id }, id);
+    if (sendBackMsg.length <= 0) {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Remark Required !.",
+        })
+      );
+    } else {
+    const response = await send_to_bhu({ status: "Sent To BHU", bhu_id:srm_id,remark:sendBackMsg }, id);
     if (response.data.success) {
       dispatch(
         setAlert({
@@ -147,7 +156,7 @@ const dispatch = useDispatch();
           message: "Agreement Sent To BHU",
         })
       );
-      navigate('/srManagerListing')
+      // navigate('/srManagerListing')
     } else {
       dispatch(
         setAlert({
@@ -157,6 +166,7 @@ const dispatch = useDispatch();
         })
       );
     }
+  }
   };
 
   //Send Back to manager
@@ -185,7 +195,7 @@ const dispatch = useDispatch();
             message: "Send back For Rectification",
           })
         );
-        // navigate('/srManagerListing')
+        navigate('/srManagerListing')
       } else {
         dispatch(
           setAlert({
@@ -295,30 +305,42 @@ const dispatch = useDispatch();
                     </>
                   )}
 
-                  {Array.from(
+{Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
                       <Grid container sx={{ mt: 3 }} spacing={2}>
                         <Grid item xs={12}>
-                          <Typography variant="body1">
+                          <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
                           </Typography>
                         </Grid>
                         <DataFieldStyle
-                          field={"name of leese"}
+                          field={"name of lessee"}
                           value={agreement[ids[0]].name[id]}
                         />
                         <DataFieldStyle
-                          field={"aadhar number"}
-                          value={agreement[ids[0]].aadharNo[0]}
+                          field={"aadhaar number"}
+                          value={agreement[ids[0]].aadharNo[id]}
+                          href={agreement[ids[0]].aadhar_card[id]}
+                          name={'AadharCard'}
+                          bold={true}
+                          cursor={true}
                         />
                         <DataFieldStyle
-                          field={"pan number"}
+                          field={"PAN number"}
                           value={agreement[ids[0]].panNo[id]}
+                          href={agreement[ids[0]].pan_card[id]}
+                          name={'pan_certicate'}
+                          bold={true}
+                          cursor={true}
                         />
                         <DataFieldStyle
-                          field={"gst number"}
+                          field={"GST number"}
                           value={agreement[ids[0]].gstNo[id]}
+                          href={agreement[ids[0]].gst_certificate}
+                          name={'gst_certificate'}
+                          bold={true}
+                          cursor={true}
                         />
                         <DataFieldStyle
                           field={"mobile number"}
@@ -334,81 +356,19 @@ const dispatch = useDispatch();
                         />
                         <DataFieldStyle
                           field={"Percentage Share"}
-                          value={agreement[ids[0]].percentage[id]}
+                          value={`${agreement[ids[0]].percentage[id]}%`}
                         />
                       </Grid>
                     )
                   )}
                 </Grid>
               </Grid>
-
-              {/* Bank Details start here */}
-              <Heading heading={"Bank Details"} />
-
-              <Grid item md={10}>
-                <Grid container spacing={2}>
-                  {Array.from(
-                    { length: agreement[ids[0]].leeseName.length },
-                    (row, id) => (
-                      <Grid container spacing={2}>
-                        <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
-                          <Typography variant="body1">
-                            Landlord {id + 1} Details
-                          </Typography>
-                        </Grid>
-                        <DataFieldStyle
-                          field={"bank name"}
-                          value={agreement[ids[0]].bankName[id]}
-                        />
-                        <DataFieldStyle
-                          field={"benicifiary name"}
-                          value={agreement[ids[0]].benificiaryName[id]}
-                        />
-                        <DataFieldStyle
-                          field={"bank A/C number"}
-                          value={agreement[ids[0]].accountNo[id]}
-                        />
-                        <DataFieldStyle
-                          field={"bank ifsc code"}
-                          value={agreement[ids[0]].ifscCode[id]}
-                        />
-                      </Grid>
-                    )
-                  )}
-                </Grid>
-              </Grid>
-
-              {/* Bank Details Ends here */}
 
               {/* Document Section start here */}
               <Heading heading={"Document View/Download"} />
 
-              <Grid item md={8}>
-                {Array.from(
-                  { length: agreement[ids[0]].leeseName.length },
-                  (row, id) => (
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
-                        <Typography variant="body1">
-                          Landlord {id + 1} Details
-                        </Typography>
-                      </Grid>
-                      <DocumentView
-                        title={"aadhar Card"}
-                        img={agreement[ids[0]].aadhar_card[id]}
-                      />
-                      <DocumentView
-                        title={"pan card"}
-                        img={agreement[ids[0]].pan_card[id]}
-                      />
-                    </Grid>
-                  )
-                )}
-                <Grid container spacing={2}>
-                  <DocumentView
-                    title={"GST Certificate"}
-                    img={agreement[ids[0]].gst_certificate}
-                  />
+              <Grid item md={10}>
+                <Grid container spacing={4}>
                   <DocumentView
                     title={"draft agreement"}
                     img={agreement[ids[0]].draft_agreement}
@@ -471,7 +431,7 @@ const dispatch = useDispatch();
                     xs={12}
                     sx={{ mt: 5, justifyContent: "space-around" }}
                   >
-                    <Grid item xs={8}>
+                    <Grid item xs={10} className="textFieldWrapper">
                       <TextField
                         type="text"
                         multiline
@@ -506,7 +466,7 @@ const dispatch = useDispatch();
                           }}
                           onClick={handleSubmit}
                         >
-                          Approved And Send To BHU
+                          Approve And Send To BUH
                         </Button>
                       </Grid>
                       <Grid item md={6} xs={11}>

@@ -976,8 +976,9 @@ if(!finalCheck.includes(true)){
                         renderInput={(params) => (
                           <TextField
                             fullWidth
+                            required={true}
+                            maxLength='6'
                             required
-                            type = 'number'
                             name="pincode"
                             helperText = {formError.pincode}
                             value={data.pincode}
