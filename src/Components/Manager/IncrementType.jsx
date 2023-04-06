@@ -73,9 +73,15 @@ function IncrementType({ Year, Percentage, Amount, label,increment ,onChange,nam
   return (
     <>
       <Grid item container spacing={2}>
-        <ValueWrapper value={Year} />
-        <TextFieldWrapper value={increment || ''} label={label} onChange={onChange} name={name} />
-        <TextFieldWrapper value={Amount || ''} label="Rental Amount" />
+        <ValueWrapper 
+        value={Year} />
+        <TextFieldWrapper 
+        
+        value={increment} label={label} onChange={onChange} name={name} />
+        <TextFieldWrapper
+                    textAlignRight={"textAlignRight"}
+        disabled = {true}
+        value={Amount} label="Rental Amount" />
       </Grid>
     </>
   );
@@ -101,11 +107,11 @@ if(value === "Percentage"){
   total4 = (total3/100*yearValue.year4+ total3);
   total5 = (total4/100*yearValue.year5+total4);
 
-  total1 = parseFloat(total1).toFixed(2)
-  total2 = parseFloat(total2).toFixed(2)
-  total3 = parseFloat(total3).toFixed(2)
-  total4 = parseFloat(total4).toFixed(2)
-  total5 = parseFloat(total5).toFixed(2)
+  total1 = parseFloat(total1).toLocaleString('hi')
+  total2 = parseFloat(total2).toLocaleString('hi')
+  total3 = parseFloat(total3).toLocaleString('hi')
+  total4 = parseFloat(total4).toLocaleString('hi')
+  total5 = parseFloat(total5).toLocaleString('hi')
 
 }else
  if(value === "Value"){
@@ -152,9 +158,10 @@ useEffect(()=>{
 },[yearValue,value,tenure])
 
 function handleChange (e){
+  console.log(e.target.value)
     setYearValue({
       ...yearValue,
-      [e.target.name]:Number(e.target.value)
+      [e.target.name]:e.target.value
     })
 }
 
@@ -326,13 +333,15 @@ const fieldStyle = {
   "@media(max-width:900px)": { height: "46px", p: 1 },
 };
 
-const TextFieldWrapper = ({ label, placeHolder, value, name, onChange }) => {
+const TextFieldWrapper = ({ textAlignRight,disabled, label, placeHolder, value, name, onChange }) => {
   return (
     <Grid item md={4} xs={4}>
       <FormControl fullWidth className="textFieldWrapper">
         <TextField
           variant="outlined"
           name={name}
+          disabled = {disabled}
+          className = {textAlignRight}
           label={label}
           placeholder={placeHolder}
           value={value}

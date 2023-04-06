@@ -17,3 +17,7 @@
     border: #C4C4C4 !important;
     border-color: red !important;
 }
+
+.textAlignRight input {
+    text-align: right !important;
+}

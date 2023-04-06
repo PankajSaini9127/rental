@@ -42,6 +42,7 @@ import {
   uploadDoc,
   getCityList,
   getBankName,
+  getLocation,
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
@@ -54,7 +55,6 @@ function Agreement() {
   const { landloard, auth } = useSelector((state) => state);
 
   const manager_id = auth.id;
-
   const codeGenerater = () => {
     var length = 6,
       charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
@@ -75,11 +75,11 @@ function Agreement() {
     code: "",
     lockInYear: "",
     noticePeriod: "",
-    deposite: "",
     monthlyRent: "",
     yearlyIncrement: "",
     tenure: "",
     state: "",
+    deposit : 0,
     pincode: "",
     location: "",
     city: "",
@@ -87,13 +87,25 @@ function Agreement() {
 
   useEffect(() => {
     setData((old) => ({ ...old, landlord: [...landloard] }));
+    setFormError((old) => ({ ...old, landlord: [...landloard] }));
   }, [landloard]);
 
   const [landblord, setLandblord] = useState([1]);
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
-  const [formError, setFormError] = useState({});
+  const [formError, setFormError] = useState({ landlord: [...landloard],
+    code: "",
+    lockInYear: "",
+    noticePeriod: "",
+    deposit: "",
+    monthlyRent: "",
+    yearlyIncrement: "",
+    tenure: "",
+    state: "",
+    pincode: "",
+    location: "",
+    city: "",});
   const [isSubmit, setIsSubmit] = useState(false);
 
   const [stateList, setStateList] = useState([]);
@@ -120,11 +132,12 @@ function Agreement() {
   // upload document
   async function handleChangeFile(e) {
     const FD = new FormData();
+    console.log(e.target.files[0])
     FD.append("photo", e.target.files[0]);
     let response = await uploadDoc(FD);
-
+console.log(data)
     if (response.status === 200) {
-      setData((old) => ({ ...old, [e.target.name]: response.data.link }));
+      setData((old) => ({ ...old, [e.target.name]: response.data.link, [e.target.name+"_name"] : e.target.files[0].name }));
       dispatch(
         setAlert({
           open: true,
@@ -143,42 +156,99 @@ function Agreement() {
     }
   }
 
+  function checksum(g){
+    let regTest = /\d{2}[A-Z]{5}\d{4}[A-Z]{1}[A-Z\d]{1}[Z]{1}[A-Z\d]{1}/.test(g)
+     if(regTest){
+        let a=65,b=55,c=36;
+        return Array['from'](g).reduce((i,j,k,p)=>{ 
+           p=(p=(j.charCodeAt(0)<a?parseInt(j):j.charCodeAt(0)-b)*(k%2+1))>c?1+(p-c):p;
+           return k<14?i+p:j==((c=(c-(i%c)))<10?c:String.fromCharCode(c+b));
+        },0); 
+    }
+    return regTest
+}
 
   //handle Change for uncommon feilds
   function handleChange(e, i) {
-    console.log(e.target.name, e.target.value);
-    var error = false;
+    let error = { state: false, message: null };
+    // console.log(e.target.name, e.target.value);
     switch (e.target.name) {
       case "leeseName":
-        if (!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
+        if (!e.target.value.match(/^[a-zA-Z ]*$/))
+          error = { state: true, message: "Value must be Correct" };
+        break;
+      case "pincode":
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { state: true, message: "Value must be Correct" };
+        if (e.target.value.length < 6 && e.target.value.length > 0)
+          error = { ...error, message: "Pincode number must be of 6 digit." };
+        else error = { ...error, message: null };
         break;
       case "aadharNo":
-        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { ...error, state: true };
+        if (e.target.value.length < 12 && e.target.value.length > 0)
+          error = { ...error, message: "Aadhar number must be of 12 digit." };
+        else error = { ...error, message: null };
         break;
       case "mobileNo":
-        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { ...error, state: true };
+        if (e.target.value.length < 10 && e.target.value.length > 0)
+          error = { ...error, message: "Phone number must be of 10 digit." };
+        else error = { ...error, message: null };
         break;
       case "alternateMobile":
-        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        if (!e.target.value.match(/^[0-9]*$/))
+        error = { ...error, state: true };
+      if (e.target.value.length < 10 && e.target.value.length > 0)
+        error = { ...error, message: "Phone number must be of 10 digit." };
+      else error = { ...error, message: null };
         break;
       case "bankName":
-        if (!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
+        if (!e.target.value.match(/^[a-zA-Z ]*$/))
+          error = { state: true, message: "Value must be Correct" };
         break;
       case "benificiaryName":
-        if (!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
+        if (!e.target.value.match(/^[a-zA-Z ]*$/))
+          error = { state: true, message: "Value must be Correct" };
         break;
       case "accountNo":
-        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        if (!e.target.value.match(/^.{0,17}$/))
+          error = { ...error, state: true };
+        if (e.target.value.length > 17 && e.target.value.length > 0)
+          error = { ...error, message: "Account can be of 17 digit only." };
+        else error = { ...error, message: null };
         break;
-      case "deposite":
-        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+
+      case "email":
+          // pattern match          
+        if (!e.target.value.match(  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) && e.target.value.length > 0)
+          error = { ...error, message: "Email address should be like example@gmail.com." };
+        else error = { ...error, message: null };
         break;
       case "panNo":
         e.target.value = e.target.value.toUpperCase();
-        if (!e.target.value.match(/^.{0,10}$/)) error = true;
+        if (!e.target.value.match(/^.{0,10}$/))
+          error = { state: true, message: null };
+          // pattern match
+        if (!e.target.value.match(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/) && e.target.value.length > 0)
+          error = { ...error, message: "PAN number should be like NOOPS8327k." };
+        else error = { ...error, message: null };
         break;
       case "gstNo":
-        if (!e.target.value.match(/^.{0,15}$/)) error = true;
+        e.target.value = e.target.value.toUpperCase();
+        if (!e.target.value.match(/^.{0,15}$/))
+          error = { state: true, message: null };
+          // pattern match
+        if (!checksum(e.target.value)&& e.target.value.length > 0)
+          error = { ...error, message: "GST number should be like 27AAPFU0939F1ZV." };
+        else error = { ...error, message: null };
+        break;
+      case "ifscCode":
+        // e.target.value = e.target.value.toUpperCase();
+        if (!e.target.value.match(/^.{0,11}$/))
+          error = { state: true, message: null };
         break;
       default:
         break;
@@ -187,8 +257,7 @@ function Agreement() {
       console.log(e.target.name);
       getBankDetails(e.target.value, i);
     }
-    console.log(error);
-    if (!error) {
+    if (!error.state) {
       if (data.landlord[i]) {
         setData((old) => ({
           ...old,
@@ -214,6 +283,58 @@ function Agreement() {
         }));
       }
     }
+
+    if (error.message) {
+      if (formError.landlord[i]) {
+        setFormError((old) => ({
+          ...old,
+          landlord: old.landlord.map((row, id) => {
+            if (i === id) {
+              return {
+                ...row,
+                [e.target.name]: error.message,
+              };
+            }
+            return row;
+          }),
+        }));
+      } else {
+        setFormError((old) => ({
+          ...old,
+          landlord: [
+            ...old.landlord,
+            {
+              [e.target.name]: error.message,
+            },
+          ],
+        }));
+      }
+    } else {
+      if (formError.landlord[i]) {
+        setFormError((old) => ({
+          ...old,
+          landlord: old.landlord.map((row, id) => {
+            if (i === id) {
+              return {
+                ...row,
+                [e.target.name]: "",
+              };
+            }
+            return row;
+          }),
+        }));
+      } else {
+        setFormError((old) => ({
+          ...old,
+          landlord: [
+            ...old.landlord,
+            {
+              [e.target.name]: "",
+            },
+          ],
+        }));
+      }
+    }
   }
 
   // handle Change for common feilds
@@ -224,31 +345,44 @@ function Agreement() {
     switch (e.target.name) {
       case "state":
         // console.log('state',e.target.value.match(/^[a-zA-Z ]*$/))
-        if (!e.target.value.match(/^[a-zA-Z ]*$/)) error = true;
+        if (!e.target.value.match(/^[a-zA-Z ]*$/))
+          error = { state: true, message: "Value must be Correct" };
         break;
       case "pincode":
-        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { state: true, message: "Value must be Correct" };
         break;
       case "lockInYear":
-        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { state: true, message: "Value must be Correct" };
         break;
       case "rental_amount":
-        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { state: true, message: "Value must be Correct" };
         break;
       case "noticePeriod":
-        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { state: true, message: "Value must be Correct" };
+        else e.target.value = e.target.value.toLocaleString("hi");
         break;
       case "monthlyRent":
-        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { state: true, message: "Value must be Correct" };
         break;
-      case "deposite":
-        if (!e.target.value.match(/^[0-9]*$/)) error = true;
+      case "deposit":
+        // if (!e.target.value.match(/^[0-9]+$/))
+          // error = { state: true};
+          // if(e.target.value.length > 0)
+          // {
+            // e.target.value = (Number(e.target.value).toLocaleString("en")).toString();
+          //   error = { state: false, message: "Value must be Correct" };}
         break;
       default:
         break;
     }
+console.log(e.target.name,parseInt(e.target.value).toLocaleString("en"))
+    if (!error.status) setData((old) => ({ ...old, [e.target.name]: e.target.value}));
 
-    if (!error) setData((old) => ({ ...old, [e.target.name]: e.target.value }));
   }
 
   // on form submit
@@ -262,7 +396,7 @@ function Agreement() {
       monthlyRent,
       noticePeriod,
       yearlyIncrement,
-      deposite,
+      deposit,
       gst_certificate,
       draft_agreement,
       electricity_bill,
@@ -284,7 +418,6 @@ function Agreement() {
       city,
     } = data;
 
-
     const { landlord } = data;
 
     APICall(
@@ -294,7 +427,7 @@ function Agreement() {
         monthlyRent,
         noticePeriod,
         yearlyIncrement,
-        deposite,
+        deposit,
         gst_certificate,
         draft_agreement,
         electricity_bill,
@@ -321,15 +454,14 @@ function Agreement() {
     );
   };
 
-    function handleHold(id) {
-
-      console.log(increment)
-      // setData({ ...data, ...increment });
-      // console.log(data)
-   handleHoldApiCall(id,{...data,...increment})
+  function handleHold(id) {
+    console.log(increment);
+    // setData({ ...data, ...increment });
+    // console.log(data)
+    handleHoldApiCall(id, { ...data, ...increment });
   }
 
-  async function handleHoldApiCall (id,data){
+  async function handleHoldApiCall(id, data) {
     // console.log(data)
     const {
       pincode,
@@ -342,7 +474,7 @@ function Agreement() {
       monthlyRent,
       noticePeriod,
       yearlyIncrement,
-      deposite,
+      deposit,
       gst_certificate,
       draft_agreement,
       electricity_bill,
@@ -358,11 +490,7 @@ function Agreement() {
       year4,
       year5,
     } = data;
-    console.log(year1,
-      year2,
-      year3,
-      year4,
-      year5)
+    console.log(year1, year2, year3, year4, year5);
     const { landlord } = data;
     APICall(
       {
@@ -371,7 +499,7 @@ function Agreement() {
         monthlyRent,
         noticePeriod,
         yearlyIncrement,
-        deposite,
+        deposit,
         gst_certificate,
         draft_agreement,
         electricity_bill,
@@ -398,13 +526,16 @@ function Agreement() {
     );
   }
 
- async function APICall  (values, landlordData){
-    // console.log(values)
+  async function APICall(values, landlordData) {
+    console.log(values,landlordData)
     const agreement = await add_agreement(values);
 
     // return 1
     if (agreement.data.success) {
       const agreement_id = agreement.data.agreement[0];
+
+      console.log(">>>",agreement_id)
+
 
       landlordData = landlordData.map((row, index) => {
         let aadhar_card = `${(row.leeseName + "@aadhar_card").replace(
@@ -426,6 +557,7 @@ function Agreement() {
         };
       });
 
+      console.log(landlordData)
       // return 1
 
       const result = await add_landlord(landlordData);
@@ -436,23 +568,35 @@ function Agreement() {
           setAlert({
             open: true,
             variant: "success",
-            message: "Agrement submited.",
+            message: "Agreement Submitted.",
           })
         );
       }
     }
-  };
+  }
 
-  async function getBankDetails(data,i) {
+  async function getBankDetails(data, i) {
+    try{
+    console.log(data)
     let res = await getBankName(data);
-  
-    if (res) {
+
+    if (res.status === 200) {
       setData((old) => ({
         ...old,
         landlord: old.landlord.map((row, index) => {
           if (index === i) {
-           
             return { ...row, bankName: res.data.BANK };
+          } else return row;
+        }),
+      }));
+    }
+    }
+    catch(err){
+      setData((old) => ({
+        ...old,
+        landlord: old.landlord.map((row, index) => {
+          if (index === i) {
+            return { ...row, bankName: "Not Found" };
           } else return row;
         }),
       }));
@@ -468,41 +612,53 @@ function Agreement() {
 
   // form validation
   function validate(data) {
-    const regexEmail = "^[a-zA-Z0-9]+@[a-zA-Z0-9.-]+$";
-    const error = {};
-    if (!data.pincode) {
-      error.pincode = "Please Enter Pincode";
-    } else if (data.pincode.length < 6 || data.pincode.length > 6) {
-      error.pincode = "Please Enter Valid Pincode";
-    }
-    if (!data.landlord[0].aadharNo) {
-      error.aadharNo = "Please Enter Aadhar Number !";
-    } else if (
-      data.landlord[0].aadharNo.length < 12 ||
-      data.landlord[0].aadharNo.length > 12
-    ) {
-      error.aadharNo = "Aadhar Number Must be 12 Digit";
-    }
-    if (!data.landlord[0].mobileNo.length) {
-      error.mobileNo = "Please Enter Mobile Number !";
-    } else if (
-      data.landlord[0].mobileNo.length < 10 ||
-      data.landlord[0].mobileNo.length > 12
-    ) {
-      error.mobileNo = "Please Enter Valid Mobile Number !";
-    }
-    if (
-      data.landlord[0].alternateMobile.length < 10 ||
-      data.landlord[0].alternateMobile.length > 12
-    ) {
-      error.alternateMobile = "Please Enter Valid Mobile Number !";
-    }
 
-    if (!data.landlord[0].email) {
-      error.email = "Please Enter Email Address !";
-    }
+    let field = [
+    ,"draft_agreement"
+    ,"electricity_bill"
+    ,"poa"
+    ,"maintaince_bill"
+    ,"cheque"
+    ,"tax_receipt"
+    ,"noc"
+  ]
 
-    setFormError(error);
+  if(landloard.length > 0)
+  {
+
+    data.landlord.map((row,i)=>{
+      if(row.gstNo)
+      {
+
+        field.push((`${landloard[i].leeseName + "@gst_name"}`).replace(
+                                " ",
+                                ""
+                              ))
+      }
+          field.push((`${landloard[i].leeseName + "@aadhar_card_name"}`).replace(
+                              " ",
+                              ""
+                            ))
+          field.push((`${landloard[i].leeseName + "@pan_card_name"}`).replace(
+                              " ",
+                              ""
+                              ))
+                            })
+                          }
+
+let finalCheck = field.map(row=>{
+  if(!data[row])
+  {
+    console.log(row)
+    setFormError(old=>({...old,[row] : "Document required."}))
+    return true
+  }
+})
+
+  console.log(finalCheck.includes(true))
+if(!finalCheck.includes(true)){
+  return true
+}else return false
   }
 
   //confirmation alert
@@ -510,10 +666,15 @@ function Agreement() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // console.log(">>>",formError)
     setData((old) => ({ ...old, ...increment }));
-    validate(data);
-    setIsSubmit(true);
-    setOpen(true);
+  //  console.log(validate(data))
+    if(validate(data))
+    {
+      setIsSubmit(true);
+      setOpen(true);
+
+    }
   };
 
   const handleCancel = () => {
@@ -522,31 +683,38 @@ function Agreement() {
 
   // funciton for fetching state list
   async function handleStateSearch(e, i) {
-    setIndex(i);
-    let response = await getStateList(e.target.value);
-
-    if (response.status === 200) {
-      setStateList(response.data);
-    } else setStateList([]);
+    if (e.target.value.length > 4) {
+      let response = await getLocation(e.target.value);
+      if (response.data[0].PostOffice) {
+        let address = response.data[0].PostOffice[0];
+        return setData((old) => ({
+          ...old,
+          state: address.State,
+          city: address.District,
+        }));
+      } else {
+        return setData((old) => ({ ...old, state: "", city: "" }));
+      }
+    }
   }
 
-  useEffect(() => {
-    handleCitySearch();
-  }, [data.state]);
+  // useEffect(() => {
+  //   handleCitySearch();
+  // }, [data.state]);
 
   // funciton for fetching state list
-  async function handleCitySearch() {
-    // console.log(i);
-    console.log(data.state);
-    let search = stateList.filter((row) => row.name === data.state && row.id);
+  // async function handleCitySearch() {
+  //   // console.log(i);
+  //   console.log(data.state);
+  //   let search = stateList.filter((row) => row.name === data.state && row.id);
 
-    // console.log(search);
-    let response = await getCityList(search[0].id);
+  //   // console.log(search);
+  //   let response = await getCityList(search[0].id);
 
-    if (response.status === 200) {
-      setCityList(response.data);
-    } else setCityList([]);
-  }
+  //   if (response.status === 200) {
+  //     setCityList(response.data);
+  //   } else setCityList([]);
+  // }
 
   return (
     <>
@@ -596,7 +764,8 @@ function Agreement() {
                 <Grid container sx={{ px: 3 }} spacing={isSmall ? 2 : 4}>
                   <TextFieldWrapper
                     label="Code"
-                    placeHolder=""
+                    disabled={true}
+                    placeHolder="code"
                     backgroundColor="rgba(3, 193, 243, 0.2);"
                     value={data.code}
                     name="code"
@@ -618,19 +787,20 @@ function Agreement() {
                         id="free-solo-2-demo"
                         disableClearable
                         onChange={(e, val) => {
-                          setData((old) => ({ ...old, state: val }));
+                          setData((old) => ({ ...old, pincode: val }));
                         }}
                         options={stateList.map((option) => option.name)}
                         renderInput={(params) => (
                           <TextField
                             fullWidth
-                            name="state"
-                            value={data.state}
+                            required={true}
+                            name="pincode"
+                            value={data.pincode}
                             {...params}
-                            label="State"
+                            label="Pincode"
                             onChange={(e) => {
                               handleCommonChange(e);
-                              handleStateSearch(e, i);
+                              handleStateSearch(e);
                             }}
                             InputProps={{
                               ...params.InputProps,
@@ -642,6 +812,15 @@ function Agreement() {
                     </FormControl>
                   </Grid>
 
+                  <TextFieldWrapper
+                    label="State"
+                    disabled={true}
+                    name="state"
+                    required={true}
+                    maxLength={6}
+                    value={data.state || ""}
+                    error={formError.state}
+                  />
                   <Grid
                     item
                     md={4}
@@ -654,42 +833,24 @@ function Agreement() {
                     <FormControl fullWidth className="textFieldWrapper">
                       <TextField
                         label="City"
-                        placeHolder="Enter City"
-                        select
+                        required={true}
+                        disabled={true}
                         fullWidth
                         name="city"
-                        // required={true}
                         value={data.city || ""}
-                        onChange={handleCommonChange}
-                      >
-                        {cityList &&
-                          cityList.map((item) => {
-                            return (
-                              <MenuItem value={item.city}>{item.city}</MenuItem>
-                            );
-                          })}
-                      </TextField>
+                      />
                     </FormControl>
                   </Grid>
                   <TextFieldWrapper
                     label="Location"
                     placeHolder="Enter Location"
                     name="location"
+                    required={true}
                     value={data.location}
                     onChange={handleCommonChange}
                     index={i}
                   />
-                  <TextFieldWrapper
-                    label="Pincode"
-                    placeHolder="Enter Pincode"
-                    name="pincode"
-                    required={true}
-                    maxLength={6}
-                    value={data.pincode}
-                    onChange={handleCommonChange}
-                    index={i}
-                    error={formError.pincode}
-                  />
+
                   <TextFieldWrapper
                     label="Address"
                     placeHolder="Enter Address"
@@ -703,35 +864,42 @@ function Agreement() {
                   <TextFieldWrapper
                     label="Lock In Month(If Applicable)"
                     placeHolder="Enter Lock in Month"
+                    required={true}
                     name="lockInYear"
+                    // textAlignRight={"textAlignRight"}
                     value={data.lockInYear}
                     onChange={handleCommonChange}
                   />
                   <TextFieldWrapper
                     label="Notice Period In Month"
                     placeHolder="Enter Notice Period"
+                    required={true}
                     name="noticePeriod"
+                    // textAlignRight={"textAlignRight"}
                     value={data.noticePeriod}
                     onChange={handleCommonChange}
                   />
                   <TextFieldWrapper
-                    label="Deposite Amount"
-                    placeHolder="Enter Deposite Amount"
-                    name="deposite"
-                    value={data.deposite}
+                    required={true}
+                    label="Deposit Amount"
+                    placeHolder="Enter Deposit Amount"
+                    name="deposit"
+                    textAlignRight={"textAlignRight"}
+                    value={data.deposit}
                     onChange={handleCommonChange}
                   />
                   <TextFieldWrapper
                     label="Monthly Rental"
                     placeHolder="Enter Rental"
                     required={true}
+                    textAlignRight={"textAlignRight"}
                     name="monthlyRent"
                     value={data.monthlyRent}
                     onChange={handleCommonChange}
                   />
 
                   <SelectComponent
-                    label={"Agreement Tenure"}
+                    label={"Agreement Tenure *"}
                     required={true}
                     name="tenure"
                     options={[
@@ -770,7 +938,7 @@ function Agreement() {
                   setIncrement={setIncrement}
                 />
 
-                {/* uncommone fields Details start here*/}
+                {/* uncommon fields Details start here*/}
                 <Typography
                   variant="body1"
                   color="var(--main-color)"
@@ -785,7 +953,7 @@ function Agreement() {
                 {landblord.map((_, i) => (
                   <>
                     {landloard.length > 0 && (
-                      <Grid container sx={{ justifyContent: "space-between" }}>
+                      <Box mb  = {2} size = 'small' fullWidth variant = 'outlined' component = {Button}  onClick={() => setExpand(expand === i ? -1 : i)} sx={{color : 'black', justifyContent: "space-between", backgroundColor : "#b0d6f773"  }}>
                         <Typography color={"var( --main-color)"}>
                           {" "}
                           {landloard.length > 0
@@ -802,7 +970,7 @@ function Agreement() {
                             <KeyboardArrowDownIcon />
                           )}
                         </IconButton>
-                      </Grid>
+                      </Box>
                     )}
                     <Collapse in={expand === i} timeout="auto" unmountOnExit>
                       <Grid
@@ -813,9 +981,10 @@ function Agreement() {
                         <Grid item xs={12}></Grid>
 
                         <TextFieldWrapper
-                          label="Name Of Lesse"
-                          placeHolder="Enter Name Of Lesse"
+                          label="Name Of Lessee"
+                          placeHolder="Enter Name Of Lesses"
                           name="leeseName"
+                          disabled={true}
                           required={true}
                           // error = {errorObj.leeseName}
                           value={
@@ -839,12 +1008,17 @@ function Agreement() {
                           }
                           onChange={(e) => handleChange(e, i)}
                           index={i}
-                          error={formError.aadharNo}
+                          error={
+                            formError.landlord[i] && formError.landlord[i].aadharNo
+                              ? formError.landlord[i].aadharNo
+                              : ""
+                            }
                         />
                         <TextFieldWrapper
-                          label="Pan Number"
+                          label="PAN Number"
                           placeHolder="Enter Pan No."
                           name="panNo"
+                          required={true}
                           maxLength={10}
                           value={
                             data.landlord[i] && data.landlord[i].panNo
@@ -853,6 +1027,11 @@ function Agreement() {
                           }
                           onChange={(e) => handleChange(e, i)}
                           index={i}
+                          error={
+                            formError.landlord[i] && formError.landlord[i].panNo
+                              ? formError.landlord[i].panNo
+                              : ""
+                          }
                         />
 
                         <TextFieldWrapper
@@ -861,10 +1040,14 @@ function Agreement() {
                           required={true}
                           name="mobileNo"
                           maxLength={10}
-                          error={formError.mobileNo}
                           value={
                             data.landlord[i] && data.landlord[i].mobileNo
                               ? data.landlord[i].mobileNo
+                              : ""
+                          }
+                          error={
+                            formError.landlord[i] && formError.landlord[i].mobileNo
+                              ? formError.landlord[i].mobileNo
                               : ""
                           }
                           onChange={(e) => handleChange(e, i)}
@@ -880,7 +1063,11 @@ function Agreement() {
                               ? data.landlord[i].alternateMobile
                               : ""
                           }
-                          error={formError.alternateMobile}
+                          error={
+                            formError.landlord[i] && formError.landlord[i].alternateMobile
+                              ? formError.landlord[i].alternateMobile
+                              : ""
+                          }
                           onChange={(e) => handleChange(e, i)}
                           index={i}
                         />
@@ -895,20 +1082,30 @@ function Agreement() {
                               ? data.landlord[i].email
                               : ""
                           }
+                          error={
+                            formError.landlord[i] && formError.landlord[i].email
+                              ? formError.landlord[i].email
+                              : ""
+                          }
                           onChange={(e) => handleChange(e, i)}
                           index={i}
-                          error={formError.email}
                         />
 
                         <TextFieldWrapper
                           label="GST Number"
                           placeHolder="Enter GST No."
-                          required={true}
+                          // required={true}
+                          // error = }
                           name="gstNo"
                           maxLength={15}
                           value={
                             data.landlord[i] && data.landlord[i].gstNo
                               ? data.landlord[i].gstNo
+                              : ""
+                          }
+                          error={
+                            formError.landlord[i] && formError.landlord[i].gstNo
+                              ? formError.landlord[i].gstNo
                               : ""
                           }
                           onChange={(e) => handleChange(e, i)}
@@ -923,6 +1120,11 @@ function Agreement() {
                               ? data.landlord[i].ifscCode
                               : ""
                           }
+                          error={
+                            formError.landlord[i] && formError.landlord[i].ifscCode
+                              ? formError.landlord[i].ifscCode
+                              : ""
+                          }
                           onChange={(e) => handleChange(e, i)}
                         />
 
@@ -931,7 +1133,7 @@ function Agreement() {
                           placeHolder="Enter Bank Name"
                           name="bankName"
                           required={true}
-                          // disabled={true}
+                          disabled={true}
                           value={
                             data.landlord[i] && data.landlord[i].bankName
                               ? data.landlord[i].bankName
@@ -961,6 +1163,11 @@ function Agreement() {
                               ? data.landlord[i].accountNo
                               : ""
                           }
+                          error={
+                            formError.landlord[i] && formError.landlord[i].accountNo
+                              ? formError.landlord[i].accountNo
+                              : ""
+                          }
                           onChange={(e) => handleChange(e, i)}
                         />
                       </Grid>
@@ -986,7 +1193,7 @@ function Agreement() {
                 {landblord.map((_, i) => (
                   <>
                     {landloard.length > 0 && (
-                      <Grid container sx={{ justifyContent: "space-between" }}>
+                      <Box mb  = {2} size = 'small' fullWidth variant = 'outlined' component = {Button}  onClick={() => setDocExpand(docExpand === i ? -1 : i)} sx={{color : 'black', justifyContent: "space-between", backgroundColor : "#b0d6f773"  }}>
                         <Typography color={"var( --main-color)"}>
                           {" "}
                           {landloard.length > 0
@@ -1003,7 +1210,7 @@ function Agreement() {
                             <KeyboardArrowDownIcon />
                           )}
                         </IconButton>
-                      </Grid>
+                      </Box>
                     )}
 
                     <Collapse in={docExpand === i} timeout="auto" unmountOnExit>
@@ -1025,7 +1232,7 @@ function Agreement() {
                                   : false
                                 : false
                             }
-                            label="Upload Aadhar Card"
+                            label="Upload Aadhaar Card"
                             placeHolder="Upload Aadhar Card"
                             handleChange={handleChangeFile}
                             name={
@@ -1035,8 +1242,18 @@ function Agreement() {
                                   ).replace(" ", "")}`
                                 : "adhar"
                             }
+                            fileName = {landloard[i] ? data[(`${landloard[i].leeseName + "@aadhar_card_name"}`).replace(
+                              " ",
+                              ""
+                            )] :""
+                            }
+                            error = {landloard[i] && formError[(`${landloard[i].leeseName + "@aadhar_card_name"}`).replace(
+                              " ",
+                              ""
+                            )]}
                           />
                         </Grid>
+                    
 
                         <Grid item xs={6}>
                           <DocumentUpload
@@ -1052,6 +1269,7 @@ function Agreement() {
                                   : false
                                 : false
                             }
+                            
                             placeHolder={"Upload Pan Card"}
                             handleChange={handleChangeFile}
                             name={
@@ -1061,10 +1279,19 @@ function Agreement() {
                                   ).replace(" ", "")}`
                                 : "pan"
                             }
+                            fileName = {landloard[i] ? data[(`${landloard[i].leeseName + "@pan_card_name"}`).replace(
+                              " ",
+                              ""
+                            )] :""
+                            }
+                            error = {landloard[i] &&  formError[(`${landloard[i].leeseName + "@pan_card_name"}`).replace(
+                              " ",
+                              ""
+                            )]}
                           />
                         </Grid>
 
-                        <Grid item xs={6}>
+                        { data.landlord[i] ? data.landlord[i].gstNo ? <Grid item xs={6}>
                           <DocumentUpload
                             label="Upload GST Certificate"
                             uploaded={
@@ -1078,7 +1305,16 @@ function Agreement() {
                                   : false
                                 : false
                             }
+                            fileName = { landloard[i] ? data[(`${landloard[i].leeseName + "@gst_name"}`).replace(
+                              " ",
+                              ""
+                            )] :""
+                            }
                             placeHolder="Upload GST Certificate"
+                            error = {landloard[i] &&  formError[(`${landloard[i].leeseName + "@gst_name"}`).replace(
+                              " ",
+                              ""
+                            )]}
                             handleChange={handleChangeFile}
                             name={
                               landloard[i]
@@ -1089,7 +1325,7 @@ function Agreement() {
                                 : "gst"
                             }
                           />
-                        </Grid>
+                        </Grid> : '' : ""}
                       </Grid>
                     </Collapse>
                   </>
@@ -1120,8 +1356,11 @@ function Agreement() {
                       label="Upload Draft Agreement"
                       uploaded={data.draft_agreement && true}
                       placeHolder="Upload Draft Agreement"
+                      fileName = {data.draft_agreement_name}
                       handleChange={handleChangeFile}
                       name={"draft_agreement"}
+                      error = {formError.draft_agreement}
+
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1129,8 +1368,11 @@ function Agreement() {
                       label="Upload Electricity Bill"
                       uploaded={data.electricity_bill && true}
                       placeHolder={"Upload Electricity Bill"}
+                      fileName = {data.electricity_bill_name}
                       handleChange={handleChangeFile}
                       name={"electricity_bill"}
+                      error = {formError.electricity_bill}
+
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1138,44 +1380,58 @@ function Agreement() {
                       label="Upload POA(If Applicable)"
                       placeHolder="Upload POA"
                       uploaded={data.poa && true}
+                      fileName = {data.poa_name}
                       handleChange={handleChangeFile}
                       name={"poa"}
+                      error = {formError.poa}
+
                     />
                   </Grid>
                   <Grid item xs={6}>
                     <DocumentUpload
-                      label="Upload Maintaince Bill"
+                      label="Upload Maintenance Bill"
                       uploaded={data.maintaince_bill && true}
-                      placeHolder={"Upload Maintaince Bill"}
+                      placeHolder={"Upload Maintenance Bill"}
+                      fileName = {data.maintaince_bill_name}
                       handleChange={handleChangeFile}
                       name={"maintaince_bill"}
+                      error = {formError.maintaince_bill}
+
                     />
                   </Grid>
                   <Grid item xs={6}>
                     <DocumentUpload
-                      label="Upload Cancle Bank Cheque"
-                      placeHolder="Upload Cancle Bank Cheque"
+                      label="Upload Cancel Bank Cheque"
+                      placeHolder="Upload Cancel Bank Cheque"
+                      fileName = {data.cheque_name}
                       uploaded={data.cheque && true}
                       handleChange={handleChangeFile}
                       name={"cheque"}
+                      error = {formError.cheque}
+
                     />
                   </Grid>
                   <Grid item xs={6}>
                     <DocumentUpload
                       label="Upload Property Tax Receipt"
                       uploaded={data.tax_receipt && true}
+                      fileName = {data.tax_receipt_name}
                       placeHolder={"Upload Property Tax Receipt"}
                       handleChange={handleChangeFile}
                       name={"tax_receipt"}
+                      error = {formError.tax_receipt}
+
                     />
                   </Grid>
                   <Grid item xs={6}>
                     <DocumentUpload
                       uploaded={data.noc && true}
-                      label="Upload Noc(If Mutiple Oweners)"
+                      label="Upload Noc(If Multiple Owners)"
                       placeHolder="NOC"
+                      fileName = {data.NOC_name}
                       handleChange={handleChangeFile}
                       name={"noc"}
+                      error = {formError.noc}
                     />
                   </Grid>
                 </Grid>
@@ -1216,7 +1472,7 @@ function Agreement() {
                     <Button
                       variant="outlined"
                       color="primary"
-                      onClick={()=>handleHold(manager_id)}
+                      onClick={() => handleHold(manager_id)}
                       sx={{
                         height: "60px",
                         width: "100%",

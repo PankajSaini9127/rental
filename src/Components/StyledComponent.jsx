@@ -11,14 +11,14 @@ import {
   styled,
   Button,
   InputLabel,
-  InputAdornment
+  InputAdornment,
 } from "@mui/material";
 
 //icons
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 // header
 const MyHeader = styled("h5")({
@@ -26,7 +26,7 @@ const MyHeader = styled("h5")({
   fontWeight: "600 !important",
   lineHeight: "48px",
   marginLeft: "25px",
-  color:'var(--main-color)',
+  color: "var(--main-color)",
   "@media(max-width:600px)": { fontSize: "20px", ml: "20px" },
 });
 
@@ -47,103 +47,142 @@ const fieldStyle = {
   // p: "8px",
   // pl:"13px",
   // input: { color: "#03C1F3",'&::placeholder':{color:"rgba(16, 99, 173, 0.47)"} },
-  "@media(max-width:900px)": { height: "35px",p:0 , px:'10px'},
+  "@media(max-width:900px)": { height: "35px", p: 0, px: "10px" },
 };
 
-
 // Text Field Style
-const TextFieldWrapper = ({disabled,type, label, placeHolder, value, name, onChange,error,required,maxLength,onBlur}) => {
+const TextFieldWrapper = ({
+  disabled,
+  type,
+  label,
+  placeHolder,
+  value,
+  name,
+  onChange,
+  error,
+  required,
+  maxLength,
+  onBlur,
+  textAlignRight
+}) => {
   return (
-    <Grid item md={4} xs={6} sx={{'@media(max-width:900px)':{my:1}}}>
-      <FormControl fullWidth sx={{p:'0px !important'}} className="textFieldWrapper">
-       
+    <Grid item md={4} xs={6} sx={{ "@media(max-width:900px)": { my: 1 } }}>
+      <FormControl
+        fullWidth
+        sx={{ p: "0px !important" }}
+        className="textFieldWrapper"
+      >
         <TextField
           variant="outlined"
+          className = {textAlignRight}
           name={name}
-          disabled = {disabled}
+          disabled={disabled}
           onChange={(e) => onChange(e)}
-          error={error ?true:false}
+          error={error ? true : false}
           label={label}
           onBlur={onBlur}
-type = {type}
           required={required?true:false}
+          type={type}
+          required={required ? true : false}
           InputProps={{
             style: {
               color: "rgba(16, 99, 173, 0.47) !important/",
-              '@media(max-width:900px)':{fontSize:'10px !important'}
+              "@media(max-width:900px)": { fontSize: "10px !important" },
             },
-            
           }}
-          inputProps = {{
-            maxLength:maxLength
+          inputProps={{
+            maxLength: maxLength,
           }}
           placeholder={placeHolder}
           value={value}
           fullWidth
           sx={fieldStyle}
         />
-        { error? <Typography variant="body1" color="red" ml={1} mt={3}>{error}</Typography>:null}
+        {error ? (
+          <Typography variant="caption" color="red" ml={1} mt={3}>
+            {error}
+          </Typography>
+        ) : null}
       </FormControl>
     </Grid>
   );
 };
 
-
-
-const PasswordField = ({label, placeHolder, value, name, onChange,errMsg,onBlur, touched})=>{
-  
+const PasswordField = ({
+  label,
+  placeHolder,
+  value,
+  name,
+  onChange,
+  errMsg,
+  onBlur,
+  touched,
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const passwordToggle = () => setShowPassword((show) => !show);
-  return(
-    <Grid item md={4} xs={6} sx={{'@media(max-width:900px)':{my:1}}}>
-    <FormControl fullWidth sx={{p:'0px !important'}}>
-     
-      <TextField
-        variant="outlined"
-        name={name}
-        // color='secodary'
-        type={showPassword?'text':'password'}
-        onChange={(e) => onChange(e)}
-        error={errMsg && touched ? true : false}
-        label={label}
-        onBlur={onBlur}
-        InputProps={{
-          style: {
-            color: "rgba(16, 99, 173, 0.47) !important/",
-            '@media(max-width:900px)':{fontSize:'10px !important'}
-          },
-          endAdornment: (
-            <InputAdornment position="end" onClick={passwordToggle}>
-             {showPassword? <VisibilityOff/>:<Visibility />} 
-            </InputAdornment>
-          ),
-        }}
-        placeholder={placeHolder}
-        value={value}
-        fullWidth
-        sx={fieldStyle}
-      />
-      { errMsg && touched? <Typography variant="body1" color="red" mt={1}>{errMsg}</Typography>:null}
-    </FormControl>
-  </Grid>
-  )
-}
+  return (
+    <Grid item md={4} xs={6} sx={{ "@media(max-width:900px)": { my: 1 } }}>
+      <FormControl fullWidth sx={{ p: "0px !important" }}>
+        <TextField
+          variant="outlined"
+          name={name}
+          // color='secodary'
+          type={showPassword ? "text" : "password"}
+          onChange={(e) => onChange(e)}
+          error={errMsg && touched ? true : false}
+          label={label}
+          onBlur={onBlur}
+          InputProps={{
+            style: {
+              color: "rgba(16, 99, 173, 0.47) !important/",
+              "@media(max-width:900px)": { fontSize: "10px !important" },
+            },
+            endAdornment: (
+              <InputAdornment position="end" onClick={passwordToggle}>
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </InputAdornment>
+            ),
+          }}
+          placeholder={placeHolder}
+          value={value}
+          fullWidth
+          sx={fieldStyle}
+        />
+        {errMsg && touched ? (
+          <Typography variant="body1" color="red" mt={1}>
+            {errMsg}
+          </Typography>
+        ) : null}
+      </FormControl>
+    </Grid>
+  );
+};
 
 // Document Upload
-const DocumentUpload = ({ label, placeHolder,handleChange, name, uploaded }) => {
+const DocumentUpload = ({
+  label,
+  placeHolder,
+  fileName,
+  handleChange,
+  name,
+  uploaded,
+  error
+}) => {
   return (
-    <Grid item  xs={12}>
+    <Grid item xs={12}>
       {/* <MyTextfield /> */}
       <FormControl fullWidth>
         <FormLabel>
-        {uploaded ? 
-          <Typography variant="body1" sx={labelStyle}>
-          Uploaded <CheckCircleIcon/>
-        </Typography>: <Typography variant="body1" sx={labelStyle}>
-            {label}
-          </Typography>
-          }
+          {uploaded ? (
+            <Typography variant="body1" sx={labelStyle}>
+              Uploaded <CheckCircleIcon />
+            </Typography>
+          ) : (
+            <Typography variant="body1" sx={labelStyle}>
+              {label}
+            </Typography>
+          )}
         </FormLabel>
 
         <Button
@@ -154,31 +193,64 @@ const DocumentUpload = ({ label, placeHolder,handleChange, name, uploaded }) => 
             height: "50px",
             // width: "100%",
             p: 2,
-            color:"rgba(16, 99, 173, 0.47)",
-            textTransform:"capitalize",
-            '@media(max-width:900px)':{height:'35px'}
+            color: "rgba(16, 99, 173, 0.47)",
+            textTransform: "capitalize",
+            "@media(max-width:900px)": { height: "35px" },
           }}
           component="label"
         >
-          <Typography sx={{fontSize:"16px", textAlign:"left",width:"100%",'@media(max-width:900px)':{fontSize:'10px'}}}> {placeHolder}</Typography>
-         
-          <input  hidden accept="image/*" name = {name} multiple type="file" onChange={handleChange}/>
-        </Button>
+          <Typography
+            sx={{
+              fontSize: "16px",
+              textAlign: "left",
+              width: "100%",
+              "@media(max-width:900px)": { fontSize: "10px" },
+            }}
+          >
+            {" "}
+            {placeHolder}
+          </Typography>
 
-        
+          <input
+            hidden
+            accept="image/*,.pdf"
+            name={name}
+            multiple
+            type="file"
+            onChange={handleChange}
+          />
+        </Button>
+        <Typography variant = 'caption' sx = {{color : 'red'}}>{error}</Typography>
+
+
       </FormControl>
+          <Typography variant = 'caption'>{fileName}</Typography>
     </Grid>
   );
 };
 
 // Select Field
 
-
-const SelectComponent = ({ label, value, name, onChange ,options,errMsg,onBlur,touched ,multiple}) => {
+const SelectComponent = ({
+  label,
+  value,
+  name,
+  onChange,
+  options,
+  errMsg,
+  onBlur,
+  touched,
+  multiple,
+}) => {
   return (
-    <Grid item md={4} xs={6} sx={{mb:'0px !important','@media(max-width:900px)':{my:1}}}>
+    <Grid
+      item
+      md={4}
+      xs={6}
+      sx={{ mb: "0px !important", "@media(max-width:900px)": { my: 1 } }}
+    >
       <FormControl fullWidth className="textFieldWrapper">
-      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+        <InputLabel id="demo-simple-select-label">{label}</InputLabel>
         <Select
           name={name}
           multiple={multiple}
@@ -193,31 +265,29 @@ const SelectComponent = ({ label, value, name, onChange ,options,errMsg,onBlur,t
             mt: "0px !important",
             color: "rgba(16, 99, 173, 0.47)",
             width: "100%",
-            height:'50px !important',
+            height: "50px !important",
             boxShadow: "none",
-            
           }}
         >
-          {
-            options.map((item,i)=>{
-              return <MenuItem value={item}>{item}</MenuItem>
-            })
-          }
+          {options.map((item, i) => {
+            return <MenuItem value={item}>{item}</MenuItem>;
+          })}
         </Select>
-        { errMsg && touched? <Typography variant="body1" color="red" mt={1}>{errMsg}</Typography>:null}
+        {errMsg && touched ? (
+          <Typography variant="body1" color="red" mt={1}>
+            {errMsg}
+          </Typography>
+        ) : null}
       </FormControl>
     </Grid>
-
-
   );
 };
 
-
-//dashboard 
+//dashboard
 
 const DashboardItem = ({ service, value }) => {
   return (
-    <Grid item md={4} xs={6} container sx={{justifyContent:"space-evenly"}}>
+    <Grid item md={4} xs={6} container sx={{ justifyContent: "space-evenly" }}>
       <Grid
         container
         sx={{
@@ -227,8 +297,8 @@ const DashboardItem = ({ service, value }) => {
           borderRadius: "20px",
           justifyContent: "center",
           alignItems: "center",
-          boxShadow:"0px 10px 10px rgba(0, 0, 0, 0.25);",
-          '@media(max-width:900px)':{height:'130px'}
+          boxShadow: "0px 10px 10px rgba(0, 0, 0, 0.25);",
+          "@media(max-width:900px)": { height: "130px" },
         }}
       >
         <Grid item>
@@ -239,7 +309,12 @@ const DashboardItem = ({ service, value }) => {
             textAlign="center"
             fontWeight="600"
             lineHeight="65px"
-            sx={{'@media(max-width:900px)':{fontSize:"35px",lineHeight:'50px'}}}
+            sx={{
+              "@media(max-width:900px)": {
+                fontSize: "35px",
+                lineHeight: "50px",
+              },
+            }}
           >
             {value}
           </Typography>
@@ -249,7 +324,7 @@ const DashboardItem = ({ service, value }) => {
             color="white"
             textAlign="center"
             mt="-10px"
-            sx={{'@media(max-width:900px)':{fontSize:"11px"}}}
+            sx={{ "@media(max-width:900px)": { fontSize: "11px" } }}
           >
             {service}
           </Typography>
@@ -259,7 +334,11 @@ const DashboardItem = ({ service, value }) => {
   );
 };
 
-
-
-
-export { MyHeader, TextFieldWrapper, DocumentUpload, SelectComponent,DashboardItem,PasswordField };
+export {
+  MyHeader,
+  TextFieldWrapper,
+  DocumentUpload,
+  SelectComponent,
+  DashboardItem,
+  PasswordField,
+};
