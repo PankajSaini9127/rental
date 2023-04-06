@@ -167,3 +167,10 @@ export async function get_Operations_agreements(data){
 export async function get_agreement_operation (id){
     axios.get(`${config.API_LIVE}/api/operations/getagreement/${id}`)
 }
+
+// search state and city based on  Pin code
+
+export async function getLocation (pincode){
+   return await axios.get(`https://api.postalpincode.in/pincode/${pincode}`)
+//    return await axios.get(`https://api.postalpincode.in/pincode/110001`)
+}

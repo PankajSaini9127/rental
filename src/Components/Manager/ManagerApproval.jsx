@@ -119,6 +119,7 @@ function ManagerApproval() {
   const getData = async (id) => {
     const agreement = await get_agreement_id(id);
     setAgreement(agreement.data.agreement);
+    console.log(agreement.data.ids)
     setIds(agreement.data.ids);
   };
 
@@ -155,7 +156,7 @@ function ManagerApproval() {
 
   return (
     <>
-      {ids.length > 0 && (
+      {(ids && ids.length > 0) && (
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
           <HamburgerMenu
             navigateHome={"dashboard"}
@@ -343,7 +344,6 @@ function ManagerApproval() {
 
               {/* Document Section start here */}
               <Heading heading={"Document View/Download"} />
-
               <Grid item md={8}>
                 {Array.from(
                   { length: agreement[ids[0]].leeseName.length },
