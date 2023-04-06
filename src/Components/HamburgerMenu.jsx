@@ -1,4 +1,4 @@
-import { Box, Grid, Stack} from "@mui/material";
+import { Box, Grid, Stack } from "@mui/material";
 import React, { useState } from "react";
 
 //icons hero section
@@ -12,22 +12,27 @@ import { NavExpand, NavItem } from "./StyleComponents/HamburgerStyled";
 import Dashboard from "../assest/pic/Dashboard/chart.png";
 import { useDispatch, useSelector } from "react-redux";
 
-function HamburgerMenu({handleListing,navigateHome,monthlyRent,renewal,monthlyBtn}) {
+function HamburgerMenu({
+  handleListing,
+  navigateHome,
+  monthlyRent,
+  renewal,
+  monthlyBtn,
+}) {
   const [expand, setExpand] = useState(false);
 
-const {auth} = useSelector(s=>s)
+  const { auth } = useSelector((s) => s);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-   const navigate = useNavigate()
+  const navigate = useNavigate();
 
-
-   // logout function
-function logout (){
-  localStorage.clear()
-  dispatch({type :"LOGOUT"})
-  navigate('/')
-} 
+  // logout function
+  function logout() {
+    localStorage.clear();
+    dispatch({ type: "LOGOUT" });
+    navigate("/");
+  }
 
   return (
     <>
@@ -41,53 +46,48 @@ function logout (){
         // }}
       >
         <Stack sx={{ flexDirection: "column" }} spacing={2}>
-
-        <Box
+          <Box
             sx={{
               background: `url(${Logo})`,
               height: "66px",
               width: "89px",
               backgroundSize: "cover",
             }}
-            onClick={() => navigate(`/${navigateHome}`)}
           />
 
-<Box sx={{display: "grid",placeItems: "center",width:'89px'}}>
-          <Box
-            sx={{
-              background: `url(${Dashboard})`,
-              backgroundSize: "cover",
-              height: "45px",
-              width: "45px",
-              cursor:'pointer'
-            }}
-            onClick={() => navigate(navigateHome)}
+          <Box sx={{ display: "grid", placeItems: "center", width: "89px" }}>
+            <Box
+              sx={{
+                background: `url(${Dashboard})`,
+                backgroundSize: "cover",
+                height: "45px",
+                width: "45px",
+                cursor: "pointer",
+              }}
+              onClick={() => navigate(`/${navigateHome}`)}
             />
           </Box>
 
-        
-          
-
           {!expand ? (
             <>
-            {
-              auth.role.includes("Admin") && <NavItem
-              Vector={VectorUser}
-              onClick={() => navigate('/userDashboard')}
-            />
-            }
-             
-              <NavItem Vector={Vector1} onClick={handleListing}/>
-             
-              {
-                monthlyBtn &&
+              {auth.role.includes("Admin") && (
+                <NavItem
+                  Vector={VectorUser}
+                  onClick={() => navigate("/userManagement")}
+                />
+              )}
+              {(auth.role.includes("Manager") || auth.role.includes("BUH") || auth.role.includes("Senior_Manager") ||
+                auth.role.includes("Operations"))&& (
+                  <NavItem Vector={Vector1} onClick={handleListing} />
+                )}
+
+              {monthlyBtn && (
                 <>
-                <NavItem Vector={Vector2} onClick={monthlyRent}/>
-               <NavItem Vector={Vector3} onClick={renewal}/>
-               </>
-              }
-              
-              <NavItem Vector={VectorLogout} onClick={logout}/>
+                  <NavItem Vector={Vector2} onClick={monthlyRent} />
+                  <NavItem Vector={Vector3} onClick={renewal} />
+                </>
+              )}
+              <NavItem Vector={VectorLogout} onClick={logout} />
             </>
           ) : (
             <Stack container spacing={2}>
@@ -104,18 +104,18 @@ function logout (){
                 onClick={handleListing}
                 Vector={Vector1}
               />
-              {
-                monthlyBtn && <>
-                <NavExpand
-                msg="Monthly Payments"
-                onClick={monthlyRent}
-                Vector={Vector2}
-              />
-              <NavExpand msg="Renewal" Vector={Vector3}  onClick={renewal}/>
+              {monthlyBtn && (
+                <>
+                  <NavExpand
+                    msg="Monthly Payments"
+                    onClick={monthlyRent}
+                    Vector={Vector2}
+                  />
+                  <NavExpand msg="Renewal" Vector={Vector3} onClick={renewal} />
                 </>
-              }
-              
-              <NavExpand msg="Logout" Vector={VectorLogout}  onClick={logout}/>
+              )}
+
+              <NavExpand msg="Logout" Vector={VectorLogout} onClick={logout} />
             </Stack>
           )}
         </Stack>

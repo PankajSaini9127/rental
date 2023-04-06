@@ -1,4 +1,17 @@
-import { Alert, Autocomplete, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Stack, TextField } from "@mui/material";
+import {
+  Alert,
+  Autocomplete,
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Snackbar,
+  Stack,
+  TextField,
+} from "@mui/material";
 
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -9,10 +22,18 @@ import {
 } from "../StyledComponent";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import AdminCheckBox from "../StyleComponents/AdminCheckBox";
-import { EditUserInfo, GetSupervisor, GetSupervisorSRM, getCityList, getStateList, get_user } from "../../Services/Services";
+import {
+  EditUserInfo,
+  GetSupervisor,
+  GetSupervisorSRM,
+  getCityList,
+  getStateList,
+  get_user,
+} from "../../Services/Services";
 
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/action/action";
+import HamburgerMenu from "../HamburgerMenu";
 const initialState = {
   code: "123456",
   name: "",
@@ -20,8 +41,8 @@ const initialState = {
   role: [],
   mobile: "",
   supervisor: "",
-  state:"",
-  city:""
+  state: "",
+  city: "",
 };
 
 function EditUser() {
@@ -30,9 +51,8 @@ function EditUser() {
   const [formVal, setFormVal] = useState(initialState);
   const dispatch = useDispatch();
 
-  
   const [stateList, setStateList] = useState([]);
-  const [cityList, setCityList] = useState([])
+  const [cityList, setCityList] = useState([]);
 
   const [disable, setDisable] = useState({
     manager: false,
@@ -62,6 +82,7 @@ function EditUser() {
   const [formError, setformError] = useState({});
 
   function validate(e) {
+    const rejexEmail =  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     const error = {};
     console.log(e.target.name, e.target.value);
     if (
@@ -76,6 +97,11 @@ function EditUser() {
       e.target.name === "mobile"
     ) {
       error.mobile = "Mobile Number Not Valid.";
+    }else if( e.target.value.length !== 0 && 
+      e.target.name === "email" &&
+      (e.target.value.match(rejexEmail))?false :true
+      ){
+      error.email = "Please Enter Valid Email !!"
     }
 
     setformError((old) => ({ ...old, [e.target.name]: error[e.target.name] }));
@@ -107,22 +133,28 @@ function EditUser() {
       return finalQuerry.includes(row);
     });
 
-    console.log(role)
-    if(role.includes("Manager")){
-      const supervisor = await GetSupervisor({role:superVisor1,state,city});
+    console.log(role);
+    if (role.includes("Manager")) {
+      const supervisor = await GetSupervisor({
+        role: superVisor1,
+        state,
+        city,
+      });
       setsupervisorArray(supervisor.data);
-    }else if(role.includes("Senior_Manager")||role.includes("Operations")){
+    } else if (role.includes("Senior_Manager") || role.includes("Operations")) {
       const supervisor = await GetSupervisorSRM(superVisor1);
       setsupervisorArray(supervisor.data);
     }
-    
   }
 
   // Role Check Box Disable Manage
   function manageRole(role) {
     console.log(role);
     let setVal = {};
-    if (role.includes("Manager") || role.includes("Operations") && role.length > 0) {
+    if (
+      role.includes("Manager") ||
+      (role.includes("Operations") && role.length > 0)
+    ) {
       superVisor.map(
         (row) =>
           (setVal = {
@@ -133,51 +165,51 @@ function EditUser() {
           })
       );
       setDisable(setVal);
-    }else if(role.includes('Admin') && role.length === 1){
-      superVisor.map((row)=>(
-        setVal={
-          ...setVal,
-          [row]:true,
-          Operations:false,
-          Manager:false
-        }
-      ));
+    } else if (role.includes("Admin") && role.length === 1) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            Operations: false,
+            Manager: false,
+          })
+      );
       setDisable(setVal);
-    }else if(role.includes("Senior_Manager")){
-      superVisor.map((row)=>(
-        setVal={
-          ...setVal,
-          [row]:true,
-          Senior_Manager:false
-        }
-      ));
+    } else if (role.includes("Senior_Manager")) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            Senior_Manager: false,
+          })
+      );
       setDisable(setVal);
-    }
-    else if(role.includes("Finance")){
-      superVisor.map((row)=>(
-        setVal={
-          ...setVal,
-          [row]:true,
-          Finance:false
-        }
-      ));
+    } else if (role.includes("Finance")) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            Finance: false,
+          })
+      );
       setDisable(setVal);
-    }
-    else if(role.includes("BUH")){
-      superVisor.map((row)=>(
-        setVal={
-          ...setVal,
-          [row]:true,
-          BUH:false
-        }
-      ));
+    } else if (role.includes("BUH")) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            BUH: false,
+          })
+      );
       setDisable(setVal);
-    }
-     else if (role.length < 2) {
+    } else if (role.length < 2) {
       superVisor.map((row) => (setVal = { ...setVal, [row]: false }));
       setDisable(setVal);
-    }
-     else if (role.includes("Admin") && role.length === 2) {
+    } else if (role.includes("Admin") && role.length === 2) {
       superVisor.map(
         (row) =>
           (setVal = {
@@ -191,7 +223,7 @@ function EditUser() {
     }
   }
 
-  const { name, email, role, mobile, code, supervisor,state,city } = formVal;
+  const { name, email, role, mobile, code, supervisor, state, city } = formVal;
 
   useEffect(() => {
     manageRole(role);
@@ -203,18 +235,27 @@ function EditUser() {
   const getData = async (id) => {
     const data = await get_user(id);
 
-    const { name, code, password, email, role, supervisor, mobile,state,city } =
-      data.data[0];
+    const {
+      name,
+      code,
+      email,
+      role,
+      supervisor,
+      mobile,
+      state,
+      city,
+    } = data.data[0];
 
     setFormVal({
       ...formVal,
       name,
       code,
-      password,
       email,
       role: JSON.parse(role),
       supervisor,
-      mobile,state,city
+      mobile,
+      state,
+      city,
     });
   };
 
@@ -228,8 +269,7 @@ function EditUser() {
       message: "",
     });
   };
-console.log(new Date().toISOString().slice(0, 10)
-)
+  console.log(new Date().toISOString().slice(0, 10));
   async function handleSubmit(e) {
     try {
       e.preventDefault();
@@ -240,28 +280,30 @@ console.log(new Date().toISOString().slice(0, 10)
           message: "Please Select Role",
         });
       } else {
-      const response = await EditUserInfo(id, {...formVal,modify:new Date().toISOString().slice(0, 10)});
+        const response = await EditUserInfo(id, {
+          ...formVal,
+          modify: new Date().toISOString().slice(0, 10),
+        });
 
-      if (response.status === 200) {
-        dispatch(
-          setAlert({
-            open: true,
-            variant: "success",
-            message: response.data.message,
-          })
-        );
-        navigate('/userManagement')
-      } else {
-        dispatch(
-          setAlert({
-            open: true,
-            variant: "error",
-            message: response.data.message,
-          })
-        );
+        if (response.status === 200) {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: response.data.message,
+            })
+          );
+          navigate('/userManagement')
+        } else {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: response.data.message,
+            })
+          );
+        }
       }
-  }
-
     } catch (error) {
       console.log(error);
     }
@@ -294,44 +336,49 @@ console.log(new Date().toISOString().slice(0, 10)
     getData(id);
   }, []);
 
+  // funciton for fetching state list
+  async function handleStateSearch(e, i) {
+    let response = await getStateList(e.target.value);
 
-     // funciton for fetching state list
-     async function handleStateSearch(e, i) {
-      let response = await getStateList(e.target.value);
-  
-      if (response.status === 200) {
-        setStateList(response.data);
-      } else setStateList([]);
-    }
-  
-    useEffect(() => {
-      handleCitySearch();
-    }, [state]);
-  
-    // funciton for fetching state list
-    async function handleCitySearch() {
-      // console.log(i);
-      console.log(state);
-      let search = stateList.filter((row) => row.name === state && row.id);
-  
-      // console.log(search);
-      let response = await getCityList(search[0].id);
-      // console.log(response)
-  
-      if (response.status === 200) {
-        // console.log(city)
-        setCityList(response.data);
-      } else setCityList([]);
-    }
+    if (response.status === 200) {
+      setStateList(response.data);
+    } else setStateList([]);
+  }
+
+  useEffect(() => {
+    handleCitySearch();
+  }, [state]);
+
+  // funciton for fetching state list
+  async function handleCitySearch() {
+    // console.log(i);
+    console.log(state);
+    let search = stateList.filter((row) => row.name === state && row.id);
+
+    // console.log(search);
+    let response = await getCityList(search[0].id);
+    // console.log(response)
+
+    if (response.status === 200) {
+      // console.log(city)
+      setCityList(response.data);
+    } else setCityList([]);
+  }
 
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-      <AdminHamburgerMenu
+        {/* <AdminHamburgerMenu
         navigateListing={'/userManagement'}
         navigateHome={'/userDashboard'}
+        /> */}
+        <HamburgerMenu
+          navigateHome={"dashboard"}
+          handleListing={() => navigate("/listing")}
+          monthlyRent={() => navigate("/monthly-payment")}
+          renewal={() => navigate(`/renewal`)}
+          // monthlyBtn="true"
         />
-
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Update User</MyHeader>
 
@@ -375,8 +422,6 @@ console.log(new Date().toISOString().slice(0, 10)
                     onChange={handleChange}
                     required={true}
                   />
-                </Grid>
-                <Grid container sx={{ px: 3 }} spacing={4}>
                   <TextFieldWrapper
                     label="Full Name"
                     placeHolder="Full Name"
@@ -395,7 +440,11 @@ console.log(new Date().toISOString().slice(0, 10)
                     value={email}
                     name="email"
                     required={true}
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      validate(e);
+                      handleChange(e);
+                    }}
+                    error={formError.email}
                   />
                   <TextFieldWrapper
                     label="Mobile Number"
@@ -410,7 +459,7 @@ console.log(new Date().toISOString().slice(0, 10)
                       handleChange(e);
                     }}
                   />
- <Grid
+                  <Grid
                     item
                     md={4}
                     xs={6}
@@ -479,7 +528,7 @@ console.log(new Date().toISOString().slice(0, 10)
                               <MenuItem value={item.city}>{item.city}</MenuItem>
                             );
                           })}
-                           <MenuItem value={formVal.city}>{formVal.city}</MenuItem>
+                        <MenuItem value={formVal.city}>{formVal.city}</MenuItem>
                       </TextField>
                     </FormControl>
                   </Grid>
@@ -487,7 +536,6 @@ console.log(new Date().toISOString().slice(0, 10)
                     handleChange={handleChange}
                     disable={disable}
                     value={role}
-              
                   />
 
                   {/* <SelectComponent
@@ -498,33 +546,44 @@ console.log(new Date().toISOString().slice(0, 10)
                     onChange={handleChange}
                   /> */}
 
-<Grid item md={4} xs={6} sx={{mb:'0px !important','@media(max-width:900px)':{my:1}}}>
-      <FormControl fullWidth className="textFieldWrapper">
-      <InputLabel id="demo-simple-select-label">{"Supervisor"}</InputLabel>
-        <Select
-          name={"supervisor"}
-          onChange={(e) => handleChange(e)}
-          variant="outlined"
-          labelId="demo-simple-select-label"
-          value={supervisor}
-          label={"Supervisor"}
-          sx={{
-            mt: "0px !important",
-            color: "rgba(16, 99, 173, 0.47)",
-            width: "100%",
-            height:'50px !important',
-            boxShadow: "none",
-            
-          }}
-        >
-          {
-            supervisorArray.map((item,i)=>{
-              return <MenuItem value={item.id} key={item.id} >{item.name}</MenuItem>
-            })
-          }
-        </Select>
-      </FormControl>
-    </Grid>
+                  <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth className="textFieldWrapper">
+                      <InputLabel id="demo-simple-select-label">
+                        {"Supervisor"}
+                      </InputLabel>
+                      <Select
+                        name={"supervisor"}
+                        onChange={(e) => handleChange(e)}
+                        variant="outlined"
+                        labelId="demo-simple-select-label"
+                        value={supervisor}
+                        label={"Supervisor"}
+                        sx={{
+                          mt: "0px !important",
+                          color: "rgba(16, 99, 173, 0.47)",
+                          width: "100%",
+                          height: "50px !important",
+                          boxShadow: "none",
+                        }}
+                      >
+                        {supervisorArray.map((item, i) => {
+                          return (
+                            <MenuItem value={item.id} key={item.id}>
+                              {item.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+                  </Grid>
                 </Grid>
                 <Grid container sx={{ justifyContent: "space-evenly", mt: 3 }}>
                   <Grid item sm={3.0}>
@@ -532,15 +591,15 @@ console.log(new Date().toISOString().slice(0, 10)
                       variant="contained"
                       color="primary"
                       sx={{
-                        height: "40px",
+                        height: "65px",
                         width: "100%",
-                        borderRadius: "20px",
+                        borderRadius: "9px",
                         fontSize: "16px",
                         color: "#FFFFFF",
                         lineHeight: "32px",
                         textTransform: "capitalize",
                       }}
-                      type={"submit"}
+                      type="submit"
                     >
                       Update
                     </Button>

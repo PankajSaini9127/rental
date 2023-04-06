@@ -101,13 +101,6 @@ function SuperAdminTable({ rows }) {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
-    // {
-    //   field: "supervisor",
-    //   headerName: "Supervisor",
-    //   width: 140,
-    //   headerClassName: "dataGridHeader",
-    //   headerAlign: "center",
-    // },
     {
       field: "email",
       headerName: "Email",
@@ -136,6 +129,20 @@ function SuperAdminTable({ rows }) {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: ActiveBtn,
+    },
+    {
+      field: "created",
+      headerName: "Created",
+      width: 120,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
+      field: "modify",
+      headerName: "Last Modificarion",
+      width: 120,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
     },
     {
       field: "actions",

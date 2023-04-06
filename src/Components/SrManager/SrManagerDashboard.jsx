@@ -2,7 +2,6 @@ import { Grid } from '@mui/material'
 import { Stack } from '@mui/system'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AuthContext } from '../../App'
 import HamburgerMenu from '../HamburgerMenu'
 import { DashboardItem, MyHeader } from '../StyledComponent'
 
@@ -28,27 +27,25 @@ function SrManagerDashboard() {
           handleListing={()=>navigate('/srManagerListing')}
           navigateHome={"srManagerDashboard"}
           />
-          <Grid Container>
-          <MyHeader>Dashboard</MyHeader>
-  {/* dashboard content */}
-  <Grid container sx={{ justifyContent: "center" }}>
-    <Grid item xs={10} sx={{mt:4}}>
-         
-      <Grid
-        container
-        spacing={4}
-      >
-      {
-        data.map((item,index)=>{
-          return(
-            <DashboardItem service={item.service} value={item.value} key={index}/>
-          )
-        })
-      }
-      </Grid>
-    </Grid>
-  </Grid>
-  </Grid>
+          <Grid container sx={{ justifyContent: "center" }}>
+          <Grid item xs={12}>
+
+        <MyHeader>Dashboard</MyHeader>
+          </Grid>
+          <Grid item xs={10} sx={{mt:4}}>
+            <Grid container spacing={4}>
+              {data.map((item, index) => {
+                return (
+                  <DashboardItem
+                    service={item.service}
+                    value={item.value}
+                    key={index}
+                  />
+                );
+              })}
+            </Grid>
+          </Grid>
+        </Grid>
 </Stack>
     </>
   )

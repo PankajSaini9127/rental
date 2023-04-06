@@ -71,8 +71,7 @@ export default function Login() {
            
           if (login_user.is_auth === 1 || role === "Admin") {
             login_user.role = JSON.parse(login_user.role)
-            console.log(login_user.role)
-            if (role === "Senior_Manager") {
+            if (login_user.role.includes("Senior_Manager")) {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
@@ -83,7 +82,7 @@ export default function Login() {
               );
               navigate(`/srManagerDashboard`);
             }else
-            if (role === "Manager") {
+            if (login_user.role.includes("Manager")) {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
@@ -93,7 +92,19 @@ export default function Login() {
                 })
               );
               navigate(`/dashboard`);
-            }  else if (role === "BHU") {
+            }else
+            if (login_user.role.includes("Super Admin")) {
+              dispatch(setAlert({ open: false, variant: "", message: ''}));
+              dispatch(
+                setAuth({
+                  name: login_user.name,
+                  role: login_user.role,
+                  id: login_user.id,
+                })
+              );
+              navigate(`/super-admin-dashboard`);
+            }  
+             else if (login_user.role.includes("BUH")) {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
@@ -103,19 +114,7 @@ export default function Login() {
                 })
               );
               navigate(`/BHUDashboard`);
-            } else if (role === "Admin") {
-              dispatch(setAlert({ open: false, variant: "", message: ''}));
-              dispatch(
-                setAuth({
-                  name: login_user.name,
-                  role: login_user.role,
-                  id: login_user.id,
-                  state:login_user.state,
-                  city:login_user.city
-                })
-              );
-              navigate(`/userDashboard`);
-            } else if (role === "Operations") {
+            }  else if (login_user.role.includes("Operations")) {
               dispatch(setAlert({ open: false, variant: "", message: ''}));
               dispatch(
                 setAuth({
@@ -127,6 +126,18 @@ export default function Login() {
               // navigate(`/operationsListing`)
               navigate(`/operationsDashboard`);
             }
+          } else if (login_user.role.includes("Admin")) {
+            dispatch(setAlert({ open: false, variant: "", message: ''}));
+            dispatch(
+              setAuth({
+                name: login_user.name,
+                role: login_user.role,
+                id: login_user.id,
+                state:login_user.state,
+                city:login_user.city
+              })
+            );
+            navigate(`/userDashboard`);
           } else {
             navigate(`/newPassword/${data.result[0].email}`);
           }

@@ -454,16 +454,6 @@ const dispatch = useDispatch();
                     field={'Remark !'}
                     value={agreement[ids[0]].remark}
                     />
-                      {/* <TextField
-                        type="text"
-                        multiline
-                        rows={3}
-                        fullWidth
-                        variant="outlined"
-                        label="Remark *"
-                        placeholder="Remark *"
-                        value={agreement[ids[0]].remark}
-                      /> */}
                     </Grid>
                   </Grid>
               }

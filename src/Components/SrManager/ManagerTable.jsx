@@ -80,6 +80,7 @@ function ManagerTable({ rows }) {
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "name",
@@ -87,6 +88,7 @@ function ManagerTable({ rows }) {
       width: 180,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "location",
@@ -94,6 +96,7 @@ function ManagerTable({ rows }) {
       width: 160,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "manager",
@@ -101,6 +104,7 @@ function ManagerTable({ rows }) {
       width: 160,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+       flex:1
     },
     {
       field: "rentalAmount",
@@ -108,6 +112,7 @@ function ManagerTable({ rows }) {
       width: 150,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "status",
@@ -115,6 +120,7 @@ function ManagerTable({ rows }) {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "view",
@@ -123,6 +129,7 @@ function ManagerTable({ rows }) {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: renderDetailsButton,
+      flex:1
     },
   ];
 

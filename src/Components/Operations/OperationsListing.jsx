@@ -23,10 +23,9 @@ function SrManagerListing() {
 
   const getData = async (id) => {
     const response = await get_Operations_agreements(id);
-    setData(response.data);
+    setData((response.data.length > 0 ? response.data :{ids:[]}));
   };
 
-  data.ids = data.ids.reverse();
 
   const rows = data.ids.map((item) => {
     return {
@@ -66,7 +65,7 @@ function SrManagerListing() {
 
   return (
     <>
-      {data.success && (
+      {/* {data.success && ( */}
         <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
           <HamburgerMenu
             navigateHome={"operationsDashboard"}
@@ -84,7 +83,7 @@ function SrManagerListing() {
             setsearchValue={setsearchValue}
           />
         </Stack>
-      )}
+      {/* )} */}
     </>
   );
 }

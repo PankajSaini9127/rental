@@ -58,7 +58,8 @@ function SuperAdminListing() {
       role: JSON.parse(item.role),
       email: item.email,
       contactno: item.mobile,
-      supervisor: item.supervisor,
+      created:item.time?item.time.slice(0,10):"",
+      modify:item.modify
     };
   });
 
