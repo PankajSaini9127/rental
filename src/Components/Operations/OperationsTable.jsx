@@ -82,6 +82,7 @@ function OperationsTable({ rows }) {
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "name",
@@ -89,6 +90,7 @@ function OperationsTable({ rows }) {
       width: 160,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "location",
@@ -96,6 +98,7 @@ function OperationsTable({ rows }) {
       width: 130,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "manager",
@@ -103,6 +106,7 @@ function OperationsTable({ rows }) {
       width: 130,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "sr_manager",
@@ -110,6 +114,7 @@ function OperationsTable({ rows }) {
       width: 130,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "rentalAmount",
@@ -117,6 +122,7 @@ function OperationsTable({ rows }) {
       width: 120,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "status",
@@ -124,6 +130,7 @@ function OperationsTable({ rows }) {
       width: 190,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "view",
@@ -132,6 +139,7 @@ function OperationsTable({ rows }) {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: renderDetailsButton,
+      flex:1
     },
   ];
 

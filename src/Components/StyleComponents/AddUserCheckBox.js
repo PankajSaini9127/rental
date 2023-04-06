@@ -13,7 +13,7 @@ function AddUserCheckBox({ handleChange,disable, value }) {
     <>
       <Grid
         item
-        md={8}
+        md={4}
         xs={6}
         sx={{ mb: "0px !important", "@media(max-width:900px)": { my: 1 } }}
       >

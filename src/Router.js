@@ -99,21 +99,21 @@ function MyRouter() {
         exact
         path="/srManagerDashboard"
         element={
-          isAuth && role.includes("Sr Manager") ? <SrManagerDashboard /> : <Login />
+          isAuth && role.includes("Senior_Manager") ? <SrManagerDashboard /> : <Login />
         }
       />
       <Route
         exact
         path="/srManagerListing"
         element={
-          isAuth && role.includes("Sr Manager") ? <SrManagerListing /> : <Login />
+          isAuth && role.includes("Senior_Manager") ? <SrManagerListing /> : <Login />
         }
       />
       <Route
         exact
         path="/srManagerApproval/:id"
         element={
-          isAuth && role.includes("Sr Manager") ? <SrManagerApproval /> : <Login />
+          isAuth && role.includes("Senior_Manager") ? <SrManagerApproval /> : <Login />
         }
       />
 
@@ -145,17 +145,17 @@ function MyRouter() {
       <Route
         exact
         path="/BHUListing"
-        element={isAuth && role.includes("BHU") ? <BHUListing /> : <Login />}
+        element={isAuth && role.includes("BUH") ? <BHUListing /> : <Login />}
       />
       <Route
         exact
         path="/BHUDashboard"
-        element={isAuth && role.includes("BHU") ? <BHUDashBoard /> : <Login />}
+        element={isAuth && role.includes("BUH") ? <BHUDashBoard /> : <Login />}
       />
       <Route
         exact
         path="/BHUapproval/:id"
-        element={isAuth && role.includes("BHU") ? <BHUapproval /> : <Login />}
+        element={isAuth && role.includes("BUH") ? <BHUapproval /> : <Login />}
       />
 
       {/* Admin Section */}

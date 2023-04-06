@@ -180,7 +180,7 @@ const VectorUser = ()=>{
     <Box
     sx={vectorStyle}
     >
-       <svg width="26" height="30" viewBox="0 0 26 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+       <svg width="36" height="40" viewBox="0 0 26 30" fill="none" xmlns="http://www.w3.org/2000/svg">
  <path d="M24.4535 28.3327C24.4535 23.1727 19.3202 18.9993 13.0002 18.9993C6.68021 18.9993 1.54688 23.1727 1.54688 28.3327M13.0002 14.9993C14.7683 14.9993 16.464 14.297 17.7143 13.0467C18.9645 11.7965 19.6669 10.1008 19.6669 8.33268C19.6669 6.56457 18.9645 4.86888 17.7143 3.61864C16.464 2.36839 14.7683 1.66602 13.0002 1.66602C11.2321 1.66602 9.53641 2.36839 8.28616 3.61864C7.03592 4.86888 6.33354 6.56457 6.33354 8.33268C6.33354 10.1008 7.03592 11.7965 8.28616 13.0467C9.53641 14.297 11.2321 14.9993 13.0002 14.9993Z" stroke="var(--main-color)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
  </svg>
 
@@ -194,11 +194,11 @@ const VectorLogout =()=>{
     sx={{display:"grid",placeItems:"center"}}
     >
       <Box sx={vectorStyle}>
-      <svg  className={"logout1"} width="16" height="10" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg  className={"logout1"} width="25" height="18" viewBox="0 0 16 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M11.574 8.49268L14.9873 5.07935L11.574 1.66602M1.33398 5.07935H14.894" stroke="var(--main-color)" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 
-      <svg className={"logout2"} width="13" height="24" viewBox="0 0 13 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg className={"logout2"} width="20" height="35" viewBox="0 0 13 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M1 1.33398C6.89333 1.33398 11.6667 5.33398 11.6667 12.0007C11.6667 18.6673 6.89333 22.6673 1 22.6673" stroke="var(--main-color)" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 </Box>

@@ -22,7 +22,7 @@ function SrManagerDashboard() {
 
   return (
     <>
-    <MyHeader>Dashboard</MyHeader>
+    
 
 <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
 <HamburgerMenu
@@ -32,7 +32,10 @@ function SrManagerDashboard() {
 
   {/* dashboard content */}
   <Grid container sx={{ justifyContent: "center" }}>
-    <Grid item xs={10}>
+    <Grid item xs={12}>
+    <MyHeader>Dashboard</MyHeader>
+    </Grid>
+    <Grid item xs={10} sx={{mt:2}}>
       <Grid
         container
         spacing={4}

@@ -14,7 +14,7 @@ function AdminCheckBox({ handleChange,disable, value,error }) {
     <>
       <Grid
         item
-        md={8}
+        md={4}
         xs={6}
       >
         <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap" }}>

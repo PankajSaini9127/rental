@@ -22,8 +22,8 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 // header
 const MyHeader = styled("h5")({
-  fontSize: "28px",
-  fontWeight: "600",
+  fontSize: "30px",
+  fontWeight: "600 !important",
   lineHeight: "48px",
   marginLeft: "25px",
   color: "var(--main-color)",
@@ -81,6 +81,7 @@ const TextFieldWrapper = ({
           error={error ? true : false}
           label={label}
           onBlur={onBlur}
+          required={required?true:false}
           type={type}
           required={required ? true : false}
           InputProps={{
@@ -291,7 +292,7 @@ const DashboardItem = ({ service, value }) => {
         container
         sx={{
           height: "181px",
-          // maxWidth:"356px",
+          width:'100%',
           backgroundColor: "var(--main-color)",
           borderRadius: "20px",
           justifyContent: "center",

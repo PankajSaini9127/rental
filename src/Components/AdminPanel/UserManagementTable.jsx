@@ -86,6 +86,7 @@ function UserManagementTable({ rows }) {
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+       flex:1
     },
     {
       field: "name",
@@ -93,6 +94,7 @@ function UserManagementTable({ rows }) {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "role",
@@ -100,20 +102,15 @@ function UserManagementTable({ rows }) {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
-    // {
-    //   field: "supervisor",
-    //   headerName: "Supervisor",
-    //   width: 140,
-    //   headerClassName: "dataGridHeader",
-    //   headerAlign: "center",
-    // },
     {
       field: "email",
       headerName: "Email",
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "contactno",
@@ -121,6 +118,7 @@ function UserManagementTable({ rows }) {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "status",
@@ -128,6 +126,7 @@ function UserManagementTable({ rows }) {
       width: 120,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "active",
@@ -136,6 +135,7 @@ function UserManagementTable({ rows }) {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: ActiveBtn,
+      flex:1
     },
     {
       field: "created",
@@ -143,13 +143,15 @@ function UserManagementTable({ rows }) {
       width: 120,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
-      field: "modification",
+      field: "modify",
       headerName: "Last Modificarion",
       width: 120,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "actions",
@@ -158,6 +160,7 @@ function UserManagementTable({ rows }) {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: renderDetailsButton,
+      flex:1
     },
   ];
 

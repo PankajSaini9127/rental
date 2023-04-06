@@ -11,6 +11,7 @@ import {
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import { AddUser, GetSupervisor, GetSupervisorSRM, getCityList, getStateList, get_emp_code } from "../../Services/Services";
 import AddUserCheckBox from "../StyleComponents/AddUserCheckBox";
+import HamburgerMenu from "../HamburgerMenu";
 
 const initialState = {
   code: "",
@@ -51,6 +52,7 @@ function NewUser() {
   const [formError, setformError] = useState({});
 
   function validate(e) {
+    const rejexEmail =  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     const error = {};
     console.log(e.target.name, e.target.value);
     if (
@@ -65,8 +67,12 @@ function NewUser() {
       e.target.name === "mobile"
     ) {
       error.mobile = "Mobile Number Not Valid.";
+    }else if( e.target.value.length !== 0 && 
+      e.target.name === "email" &&
+      (e.target.value.match(rejexEmail))?false :true
+      ){
+      error.email = "Please Enter Valid Email !!"
     }
-
     setformError(error);
   }
 
@@ -336,11 +342,17 @@ function NewUser() {
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        <AdminHamburgerMenu
+        {/* <AdminHamburgerMenu
         navigateListing={'/userManagement'}
         navigateHome={'/userDashboard'}
+        /> */}
+<HamburgerMenu
+          navigateHome={"dashboard"}
+          handleListing={() => navigate("/listing")}
+          monthlyRent={() => navigate("/monthly-payment")}
+          renewal={() => navigate(`/renewal`)}
+          // monthlyBtn="true"
         />
-
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>New User</MyHeader>
 
@@ -385,9 +397,6 @@ function NewUser() {
                     value={formError.code}
                     onChange={handleChange}
                   />
-                </Grid>
-
-                <Grid container sx={{ px: 3 }} spacing={4}>
                   <TextFieldWrapper
                     label="Full Name"
                     placeHolder="Full Name"
@@ -406,7 +415,10 @@ function NewUser() {
                     placeHolder="Email"
                     value={email}
                     name="email"
-                    onChange={handleChange}
+                    onChange={(e) => {
+                      validate(e);
+                      handleChange(e);
+                    }}
                     required={true}
                     type={"email"}
                     error={formError.email}
@@ -539,9 +551,9 @@ function NewUser() {
                       variant="contained"
                       color="primary"
                       sx={{
-                        height: "40px",
+                        height: "65px",
                         width: "100%",
-                        borderRadius: "20px",
+                        borderRadius: "9px",
                         fontSize: "16px",
                         color: "#FFFFFF",
                         lineHeight: "32px",

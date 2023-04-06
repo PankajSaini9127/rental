@@ -3,6 +3,8 @@ import React,{useEffect,useState} from 'react'
 import { meta } from '../../Services/Services'
 import { DashboardItem, MyHeader } from '../StyledComponent'
 import AdminHamburgerMenu from './AdminHamburgerMenu'
+import HamburgerMenu from '../HamburgerMenu'
+import { useNavigate } from 'react-router-dom'
  
 
 function UserDashboard() {
@@ -23,13 +25,22 @@ function UserDashboard() {
 
   }
   
+const navigate = useNavigate()
 
   return (<>
        
     <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-    <AdminHamburgerMenu
+    {/* <AdminHamburgerMenu
         navigateListing={'/userManagement'}
         navigateHome={'/userDashboard'}
+        /> */}
+
+<HamburgerMenu
+          navigateHome={"dashboard"}
+          handleListing={() => navigate("/listing")}
+          monthlyRent={() => navigate("/monthly-payment")}
+          renewal={() => navigate(`/renewal`)}
+          // monthlyBtn="true"
         />
 
         <Box sx={{flexGrow:1}}>

@@ -75,6 +75,7 @@ function SuperAdminUserEdit() {
   const [formError, setformError] = useState({});
 
   function validate(e) {
+    const rejexEmail =  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
     const error = {};
     console.log(e.target.name, e.target.value);
     if (
@@ -89,6 +90,11 @@ function SuperAdminUserEdit() {
       e.target.name === "mobile"
     ) {
       error.mobile = "Mobile Number Not Valid.";
+    }else if( e.target.value.length !== 0 && 
+      e.target.name === "email" &&
+      (e.target.value.match(rejexEmail))?false :true
+      ){
+      error.email = "Please Enter Valid Email !!"
     }
 
     setformError((old) => ({ ...old, [e.target.name]: error[e.target.name] }));
@@ -241,7 +247,7 @@ function SuperAdminUserEdit() {
           message: "Please Select Role",
         });
       } else {
-      const response = await EditUserInfo(id, formVal);
+      const response = await EditUserInfo(id, {...formVal,modify:new Date().toISOString().slice(0, 10)});
 
       if (response.status === 200) {
         dispatch(
@@ -374,8 +380,6 @@ async function handleCitySearch() {
                     onChange={handleChange}
                     required={true}
                   />
-                </Grid>
-                <Grid container sx={{ px: 3 }} spacing={4}>
                   <TextFieldWrapper
                     label="Full Name"
                     required={true}
@@ -395,6 +399,11 @@ async function handleCitySearch() {
                     name="email"
                     onChange={handleChange}
                     required={true}
+                    onChange={(e) => {
+                      validate(e);
+                      handleChange(e);
+                    }}
+                    error={formError.email}
                   />
                   <TextFieldWrapper
                     label="Mobile Number"
@@ -531,21 +540,21 @@ async function handleCitySearch() {
                 </Grid>
                 <Grid container sx={{ justifyContent: "space-evenly", mt: 3 }}>
                   <Grid item sm={3.0}>
-                    <Button
+                   <Button
                       variant="contained"
                       color="primary"
                       sx={{
-                        height: "40px",
+                        height: "65px",
                         width: "100%",
-                        borderRadius: "20px",
+                        borderRadius: "9px",
                         fontSize: "16px",
                         color: "#FFFFFF",
                         lineHeight: "32px",
                         textTransform: "capitalize",
                       }}
-                      type={"submit"}
+                      type="submit"
                     >
-                      Update
+                     Update
                     </Button>
                   </Grid>
                 </Grid>

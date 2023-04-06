@@ -8,13 +8,14 @@ import UserManagementTable from "./UserManagementTable";
 import { AuthContext } from "../../App";
 import { GetUser, get_search } from "../../Services/Services";
 import { useSelector } from "react-redux";
+import HamburgerMenu from "../HamburgerMenu";
 
 function UserManagement() {
   const navigate = useNavigate();
 
   const {auth} = useSelector(s=>s);
 
-  const {city,state} = auth;
+  const {city,state,role} = auth;
 
   const {
     state: { adminReCall },
@@ -64,9 +65,8 @@ function UserManagement() {
       role: JSON.parse(item.role),
       email: item.email,
       contactno: item.mobile,
-      supervisor: item.supervisor,
-      created:item.time.slice(0, 10),
-      modification:item.modify
+      created:item.time?item.time.slice(0,10):"",
+      modify:item.modify
     };
   });
 
@@ -81,11 +81,13 @@ function UserManagement() {
   return (
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-        <AdminHamburgerMenu
-          navigateListing={"/userManagement"}
-          navigateHome={"/userDashboard"}
+<HamburgerMenu
+          navigateHome={role.includes("Manager")?"dashboard":role.includes("Operations")?"operationsDashboard":role.includes("BUH")?"BHUdashboard":''}
+          handleListing={() => navigate((role.includes("Manager")?"/listing":role.includes("Operations")? "/operationsListing":role.includes("BUH")?"/BHUListing":""))}
+          monthlyRent={() => navigate("/monthly-payment")}
+          renewal={() => navigate(`/renewal`)}
+          // monthlyBtn="true"
         />
-
         <ListingComponent
           title="User Management"
           title1={"Rental Management System"}

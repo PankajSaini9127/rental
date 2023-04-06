@@ -97,23 +97,12 @@ function LoginComponent({
         <Grid item md={7} xs={11} sx={{ "@media(max-width:900px)": { mb: 2 } }}>
           <Typography
             variant="body1"
-            fontSize="55px"
-            lineHeight="80px"
+            fontSize="50px"
+            lineHeight="70px"
             color="var(--main-color)"
-            textAlign={"center"}
-            sx={{ "@media(max-width:900px)": { textAlign: "center" } }}
+            fontWeight="700 !important"
           >
             {title}
-          </Typography>
-          <Typography
-            variant="body1"
-            fontSize="25px"
-            lineHeight="30px"
-            color="var(--main-color)"
-            textAlign={"center"}
-            sx={{ "@media(max-width:900px)": { textAlign: "center" } }}
-          >
-            {subTitle}
           </Typography>
           <Typography
             variant="body1"
@@ -165,31 +154,6 @@ function LoginComponent({
                       ),
                     }}
                   />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl fullWidth className="textFieldWrapper">
-                  <InputLabel id="demo-simple-select-label">Role</InputLabel>
-                  <Select
-                    name={"role"}
-                    onChange={handleChange}
-                    variant="outlined"
-                    labelId="demo-simple-select-label"
-                    value={role}
-                    required
-                    label={"Role"}
-                    sx={{
-                      mt: "0px !important",
-                      color: "rgba(16, 99, 173, 0.47)",
-                      width: "100%",
-                      height: "50px !important",
-                      boxShadow: "none",
-                    }}
-                  >
-                    {options.map((item, i) => {
-                      return <MenuItem value={item.value}>{item.name}</MenuItem>;
-                    })}
-                  </Select>
                 </FormControl>
               </Grid>
 

@@ -140,9 +140,13 @@ function SrManagerApproval() {
           />
 
           <Box sx={{ flexGrow: 1 }}>
-            <MyHeader>New Agreement Approval</MyHeader>
+            
 
             <Grid container sx={{ justifyContent: "center", mt: 2 }}>
+              <Grid item xs={12}>
+              <MyHeader>New Agreement Approval</MyHeader>
+              </Grid>
+
             
               {/* Basic Details */}
               <Grid item md={10}>
