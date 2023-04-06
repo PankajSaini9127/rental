@@ -60,37 +60,36 @@ function SuperAdminNewUser() {
   const [cityList, setCityList] = useState([]);
 
   function validate(e) {
-    const rejexEmail =  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    const rejexEmail =  (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
     const error = {};
-    console.log(e.target.name, e.target.value);
+    if( 
+      e.target.name === "email" &&
+     e.target.value.length !== 0 &&
+     rejexEmail.test(e.target.value)?false :true
+      )
+      {
+      error.email = "Please Enter Valid Email !!"
+    }else
     if (
       e.target.value.length !== 0 &&
       e.target.value.length < 4 &&
       e.target.name === "name"
     ) {
       error.name = "Name must be of 4 character.";
-    } else if (
+    }
+     else if (
       e.target.value.length !== 0 &&
       e.target.value.length < 10 &&
       e.target.name === "mobile"
     ) {
       error.mobile = "Mobile Number Not Valid.";
-    }else if( e.target.value.length !== 0 && 
-      e.target.name === "email" &&
-      (e.target.value.match(rejexEmail))?false :true
-      ){
-      error.email = "Please Enter Valid Email !!"
     }
 
     setformError(error);
   }
 
   function handleChange(e) {
-    //     if(validate()){
-    // console.log("aa")
-    //     }else{
-    //       console.log("bb")
-    //     }
+    console.log(e.target.name)
     if (e.target.name === "role") {
       setFormData((old) => ({
         ...old,
@@ -103,7 +102,7 @@ function SuperAdminNewUser() {
         ...formData,
         [e.target.name]: e.target.value,
       });
-    } else if (e.target.name == "mobile") {
+    } else if (e.target.name === "mobile") {
       const re = /^[0-9\b]+$/;
       if (e.target.value === "" || re.test(e.target.value)) {
         setFormData({
@@ -112,6 +111,7 @@ function SuperAdminNewUser() {
         });
       }
     } else {
+      console.log("Email")
       setFormData({
         ...formData,
         [e.target.name]: e.target.value,
@@ -175,7 +175,7 @@ function SuperAdminNewUser() {
     if(role.includes("Manager")){
       const supervisor = await GetSupervisor({role:superVisor1,state,city});
       setsupervisorArray(supervisor.data);
-    }else if(role.includes("Senior_Manager")||role.includes("Operations")){
+    }else if(role.includes("Senior_Manager") || role.includes("Operations")|| role.includes("BUH")){
       const supervisor = await GetSupervisorSRM(superVisor1);
       setsupervisorArray(supervisor.data);
     }

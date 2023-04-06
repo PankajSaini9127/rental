@@ -6,7 +6,7 @@ import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
 import { Stack } from "@mui/material";
 import { get_agreements, get_search_manager } from "../../Services/Services";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AuthContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { getRowIdFromRowModel } from "@mui/x-data-grid/hooks/features/rows/gridRowsUtils";
@@ -18,7 +18,7 @@ function Listing() {
 
  
   
-  const {state:{adminReCall}} = useContext(AuthContext)
+ const {refresh} = useSelector(s=>s)
 
   const handleChange = (e) => {
     setSelect(e.target.value);
@@ -57,11 +57,6 @@ function Listing() {
  } 
 
 
-useEffect(()=>{
-    // if(searchValue.length >= 1){
-      SearchAPi(searchValue)
-    // }
-},[searchValue])
 
  
 
@@ -80,9 +75,14 @@ const row = data.map((item) => {
 
   useEffect(() => {
     APICALL();
-  }, [adminReCall]); 
+  }, [refresh]); 
 
 const navigate =useNavigate()
+
+function handleSerachChange (e){
+  SearchAPi(searchValue)
+  setsearchValue(e.target.value)
+}
 
  return (
     <>
@@ -106,7 +106,8 @@ const navigate =useNavigate()
           loading={loading}
           rows={row}
         searchValue={searchValue}
-        setsearchValue={setsearchValue}
+        // setsearchValue={setsearchValue}
+        handleSerachChange={handleSerachChange}
         check={check}
         setCheck={setCheck}
         />

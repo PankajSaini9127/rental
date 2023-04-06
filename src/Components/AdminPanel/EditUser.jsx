@@ -141,7 +141,7 @@ function EditUser() {
         city,
       });
       setsupervisorArray(supervisor.data);
-    } else if (role.includes("Senior_Manager") || role.includes("Operations")) {
+    } else if (role.includes("Senior_Manager") || role.includes("Operations")|| role.includes("BUH")) {
       const supervisor = await GetSupervisorSRM(superVisor1);
       setsupervisorArray(supervisor.data);
     }

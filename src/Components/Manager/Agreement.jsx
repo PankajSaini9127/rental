@@ -794,6 +794,7 @@ if(!finalCheck.includes(true)){
                           <TextField
                             fullWidth
                             required={true}
+                            maxLength='6'
                             name="pincode"
                             value={data.pincode}
                             {...params}

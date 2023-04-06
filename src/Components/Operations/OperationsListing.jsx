@@ -23,9 +23,11 @@ function SrManagerListing() {
 
   const getData = async (id) => {
     const response = await get_Operations_agreements(id);
-    setData((response.data.length > 0 ? response.data :{ids:[]}));
+    console.log(response.data)
+    setData(response.data );
   };
 
+  console.log(data)
 
   const rows = data.ids.map((item) => {
     return {
@@ -53,7 +55,7 @@ function SrManagerListing() {
 
   useEffect(() => {
     // if(searchValue.length >= 1){
-    SearchAPi(login_operations_id, searchValue);
+    // SearchAPi(login_operations_id, searchValue);
     // }
   }, [searchValue]);
 

@@ -61,17 +61,18 @@ function NewUser() {
       e.target.name === "name"
     ) {
       error.name = "Name must be of 4 character.";
+    }else if( e.target.value.length !== 0 && 
+      e.target.name === "email" &&
+      (e.target.value.match(rejexEmail))?false :true
+      ){
+      
+      error.email = "Please Enter Valid Email !!"
     } else if (
       e.target.value.length !== 0 &&
       e.target.value.length < 10 &&
       e.target.name === "mobile"
     ) {
       error.mobile = "Mobile Number Not Valid.";
-    }else if( e.target.value.length !== 0 && 
-      e.target.name === "email" &&
-      (e.target.value.match(rejexEmail))?false :true
-      ){
-      error.email = "Please Enter Valid Email !!"
     }
     setformError(error);
   }
@@ -165,7 +166,9 @@ function NewUser() {
     if(role.includes("Manager")){
       const supervisor = await GetSupervisor({role:superVisor1,state,city});
       setsupervisorArray(supervisor.data);
-    }else if(role.includes("Senior_Manager")||role.includes("Operations")){
+    }else if(role.includes("Senior_Manager") ||  role.includes("Operations")
+    || role.includes("BUH") ){
+      console.log("first")
       const supervisor = await GetSupervisorSRM(superVisor1);
       setsupervisorArray(supervisor.data);
     }

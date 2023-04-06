@@ -57,8 +57,11 @@ function SrManagerApproval() {
     const agreement = await get_agreement_id(id);
     setAgreement(agreement.data.agreement);
     setIds(agreement.data.ids);
+    setSendBackMsg(agreement.data.agreement[ids[0]].remark)
+    console.log(agreement)
   };
 
+  console.log(sendBackMsg)
   
 
   useEffect(() => {
@@ -68,7 +71,7 @@ function SrManagerApproval() {
   const handleSubmit = async (e) => {
 
     const response = await send_to_operations(
-      { status: "Sent To Operations", srm_id },
+      { status: "Sent To Operations", bhu_id:srm_id,remark:sendBackMsg },
       id
     );
     if (response.data.success) {
@@ -271,7 +274,7 @@ function SrManagerApproval() {
                         />
                         <DataFieldStyle
                           field={"Percentage Share"}
-                          value={agreement[ids[0]].percentage[id]}
+                          value={`${agreement[ids[0]].percentage[id]}%`}
                         />
                       </Grid>
                     )
@@ -328,7 +331,7 @@ function SrManagerApproval() {
                    xs={12}
                    sx={{ mt: 5, justifyContent: "space-around" }}
                  >
-                   <Grid item xs={10}>
+                   <Grid item xs={10} className="textFieldWrapper">
                      <TextField
                        type="text"
                        multiline
@@ -362,7 +365,7 @@ function SrManagerApproval() {
                         }}
                         onClick={handleSubmit}
                       >
-                        Approved And Send To Operations
+                        Approve And Send To Operations
                       </Button>
                     </Grid>
                     <Grid item md={6} xs={11}>

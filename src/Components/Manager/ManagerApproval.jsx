@@ -21,11 +21,12 @@ import { useDispatch, useSelector } from "react-redux";
 
 const DocumentView = ({ title, img }) => {
   return (
-    <Grid item xs={6}>
+    <Grid item xs={4}>
       <Typography
         variant="body1"
         fontSize={"18px"}
         color={"primary"}
+        fontWeight={'600'}
         textTransform={"capitalize"}
         sx={{ "@media(max-width:900px)": { fontSize: "16px" } }}
       >
@@ -34,7 +35,7 @@ const DocumentView = ({ title, img }) => {
       </Typography>
       <Box
         sx={{
-          height: "150px",
+          height: "100px",
           border: "1px solid var(--main-color)",
           borderRadius: "20px",
           display: "flex",
@@ -97,7 +98,7 @@ const DocumentView = ({ title, img }) => {
 const Heading = ({ heading }) => {
   return (
     <Grid item xs={12} sx={{ mt: 6, mb: 2 }}>
-      <Typography variant="body1" fontSize={"25px"} color={"primary"}>
+      <Typography variant="body1" fontSize={"25px"} color={"primary"} fontWeight={'700'}>
         {heading}
       </Typography>
     </Grid>
@@ -196,7 +197,7 @@ function ManagerApproval() {
                   />
 
                   <DataFieldStyle
-                    field={"lock in year"}
+                    field={"lock in Month"}
                     value={agreement[ids[0]].lockInYear}
                   />
                   <DataFieldStyle
@@ -260,25 +261,37 @@ function ManagerApproval() {
                     (row, id) => (
                       <Grid container sx={{ mt: 3 }} spacing={2}>
                         <Grid item xs={12}>
-                          <Typography variant="body1">
+                          <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
                           </Typography>
                         </Grid>
                         <DataFieldStyle
-                          field={"name of leese"}
+                          field={"name of lessee"}
                           value={agreement[ids[0]].name[id]}
                         />
                         <DataFieldStyle
-                          field={"aadhar number"}
+                          field={"aadhaar number"}
                           value={agreement[ids[0]].aadharNo[id]}
+                          href={agreement[ids[0]].aadhar_card[id]}
+                          name={'AadharCard'}
+                          bold={true}
+                          cursor={true}
                         />
                         <DataFieldStyle
-                          field={"pan number"}
+                          field={"PAN number"}
                           value={agreement[ids[0]].panNo[id]}
+                          href={agreement[ids[0]].pan_card[id]}
+                          name={'pan_certicate'}
+                          bold={true}
+                          cursor={true}
                         />
                         <DataFieldStyle
-                          field={"gst number"}
+                          field={"GST number"}
                           value={agreement[ids[0]].gstNo[id]}
+                          href={agreement[ids[0]].gst_certificate}
+                          name={'gst_certificate'}
+                          bold={true}
+                          cursor={true}
                         />
                         <DataFieldStyle
                           field={"mobile number"}
@@ -294,7 +307,7 @@ function ManagerApproval() {
                         />
                         <DataFieldStyle
                           field={"Percentage Share"}
-                          value={agreement[ids[0]].percentage[id]}
+                          value={`${agreement[ids[0]].percentage[id]}%`}
                         />
                       </Grid>
                     )
@@ -312,7 +325,7 @@ function ManagerApproval() {
                     (row, id) => (
                       <Grid container>
                         <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
-                          <Typography variant="body1">
+                          <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
                           </Typography>
                         </Grid>
@@ -321,7 +334,7 @@ function ManagerApproval() {
                           value={agreement[ids[0]].bankName[id]}
                         />
                         <DataFieldStyle
-                          field={"benicifiary name"}
+                          field={"beneficiary name"}
                           value={agreement[ids[0]].benificiaryName[id]}
                         />
                         <DataFieldStyle
@@ -329,7 +342,7 @@ function ManagerApproval() {
                           value={agreement[ids[0]].accountNo[id]}
                         />
                         <DataFieldStyle
-                          field={"bank ifsc code"}
+                          field={"bank IFSC code"}
                           value={agreement[ids[0]].ifscCode[id]}
                         />
                       </Grid>
@@ -344,32 +357,9 @@ function ManagerApproval() {
 
               {/* Document Section start here */}
               <Heading heading={"Document View/Download"} />
-              <Grid item md={8}>
-                {Array.from(
-                  { length: agreement[ids[0]].leeseName.length },
-                  (row, id) => (
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
-                        <Typography variant="body1">
-                          Landlord {id + 1} Details
-                        </Typography>
-                      </Grid>
-                      <DocumentView
-                        title={"aadhar Card"}
-                        img={agreement[ids[0]].aadhar_card[id]}
-                      />
-                      <DocumentView
-                        title={"pan card"}
-                        img={agreement[ids[0]].pan_card[id]}
-                      />
-                    </Grid>
-                  )
-                )}
-                <Grid container spacing={2} sx={{ mt: 2 }}>
-                  <DocumentView
-                    title={"GST Certificate"}
-                    img={agreement[ids[0]].gst_certificate}
-                  />
+              <Grid item md={10}>
+                
+                <Grid container spacing={4} sx={{ mt: 1 }}>
                   <DocumentView
                     title={"draft agreement"}
                     img={agreement[ids[0]].draft_agreement}

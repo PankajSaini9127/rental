@@ -16,13 +16,13 @@ import {
   send_to_bhu,
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
-import { AuthContext } from "../../App";
+import { setAlert, setRefreshBox } from "../../store/action/action";
 
 function DataTable({ rows, loading, check, setCheck }) {
-  const { dispatch } = useContext(AuthContext);
+  const dispatch = useDispatch()
   const [ids, setIds] = useState([]);
 
-  const { auth } = useSelector((s) => s);
+  const { auth} = useSelector((s) => s);
 
   const manager_id = auth.id;
 
@@ -45,7 +45,7 @@ function DataTable({ rows, loading, check, setCheck }) {
   const deleteAPI = async (id) => {
     const deleteItem = await delete_agreement(id);
     if (deleteItem.data.success) {
-      dispatch({ type: "ADMIN_RECALL" });
+      dispatch(setRefreshBox());
       setErr({
         open: true,
         type: "warning",
@@ -211,7 +211,7 @@ function DataTable({ rows, loading, check, setCheck }) {
     {
       field: "name",
       headerName: "Name",
-      width: 180,
+      width: 160,
       flex : 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -219,7 +219,7 @@ function DataTable({ rows, loading, check, setCheck }) {
     {
       field: "location",
       headerName: "Location",
-      width: 170,
+      width: 160,
       flex : 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -227,7 +227,7 @@ function DataTable({ rows, loading, check, setCheck }) {
     {
       field: "rentalAmount",
       headerName: "Rental Amount",
-      width: 170,
+      width: 160,
       flex : 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -235,7 +235,7 @@ function DataTable({ rows, loading, check, setCheck }) {
     {
       field: "status",
       headerName: "Status",
-      width: 220,
+      width: 200,
       flex : 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -260,18 +260,22 @@ function DataTable({ rows, loading, check, setCheck }) {
     },
   ];
 
-  const handleSelect = (ids) => {
-    setIds(ids);
-  };
 
   const handleSelectSend = (e) => {
     console.log(ids);
     ids.map(async (id) => {
       const response = await send_to_bhu(
-        { status: "Sent Sr Manager", manager_id },
+        { status: "Sent To Sr Manager", manager_id },
         id
       );
-      console.log(response);
+      
+      if(response.data.success){
+        setIds([])
+        dispatch(setAlert({variant:"success",open:true,message:"Agreement Sent To Senior Manager"}));
+        dispatch(setRefreshBox())
+      }else{
+        dispatch(setAlert({variant:"error",open:true,message:"Something Went Wrong ! Please Try Again."}))
+      };
     });
   };
 
