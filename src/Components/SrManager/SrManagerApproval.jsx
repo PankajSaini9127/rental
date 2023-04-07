@@ -218,7 +218,7 @@ const dispatch = useDispatch();
           />
 
           <Box sx={{ flexGrow: 1 }}>
-            <MyHeader>New Agreement Approval</MyHeader>
+            <MyHeader>Rental Management System</MyHeader>
 
             <Grid container sx={{ justifyContent: "center", mt: 2 }}>
               {/* Basic Details */}
@@ -363,7 +363,43 @@ const dispatch = useDispatch();
                   )}
                 </Grid>
               </Grid>
+{/* Bank Details start here */}
+<Heading heading={"Bank Details"} />
 
+<Grid item md={10}>
+  <Grid container spacing={2}>
+    {Array.from(
+      { length: agreement[ids[0]].leeseName.length },
+      (row, id) => (
+        <Grid container>
+          <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
+            <Typography variant="body1" fontWeight="600">
+              Landlord {id + 1} Details
+            </Typography>
+          </Grid>
+          <DataFieldStyle
+            field={"bank name"}
+            value={agreement[ids[0]].bankName[id]}
+          />
+          <DataFieldStyle
+            field={"beneficiary name"}
+            value={agreement[ids[0]].benificiaryName[id]}
+          />
+          <DataFieldStyle
+            field={"bank A/C number"}
+            value={agreement[ids[0]].accountNo[id]}
+          />
+          <DataFieldStyle
+            field={"bank IFSC code"}
+            value={agreement[ids[0]].ifscCode[id]}
+          />
+        </Grid>
+      )
+    )}
+  </Grid>
+</Grid>
+
+{/* Bank Details Ends here */}
               {/* Document Section start here */}
               <Heading heading={"Document View/Download"} />
 
@@ -391,7 +427,7 @@ const dispatch = useDispatch();
                     img={agreement[ids[0]].tax_receipt}
                   />
                   <DocumentView
-                    title={"noc (if multiple owner)"}
+                    title={"NOC (if multiple owner)"}
                     img={agreement[ids[0]].noc}
                   />
                 </Grid>

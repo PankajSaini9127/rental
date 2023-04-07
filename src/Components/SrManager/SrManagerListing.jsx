@@ -74,7 +74,7 @@ function SrManagerListing() {
           navigateHome={"srManagerDashboard"}
         />
         <ListingComponent
-          title="Rental Agreement"
+          title="Rental Management System"
           buttonText="Upload"
           options={options}
           value={"New Agreement"}

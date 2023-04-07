@@ -57,7 +57,7 @@ function Dashboard() {
         <Grid container sx={{ justifyContent: "center" }}>
           <Grid item xs={12}>
 
-        <MyHeader>Dashboard</MyHeader>
+        <MyHeader>Rental Management System</MyHeader>
           </Grid>
           <Grid item xs={10} sx={{mt:4}}>
             <Grid container spacing={4}>

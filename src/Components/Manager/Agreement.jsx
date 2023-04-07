@@ -615,6 +615,7 @@ console.log(data)
         city,
         manager_id: id,
         status: "Hold",
+        remark:""
       },
       landlord
     );
@@ -875,24 +876,6 @@ if(!finalCheck.includes(true)){
     }
   }
 
-  // useEffect(() => {
-  //   handleCitySearch();
-  // }, [data.state]);
-
-  // function for fetching state list
-  // async function handleCitySearch() {
-  //   // console.log(i);
-  //   console.log(data.state);
-  //   let search = stateList.filter((row) => row.name === data.state && row.id);
-
-  //   // console.log(search);
-  //   let response = await getCityList(search[0].id);
-
-  //   if (response.status === 200) {
-  //     setCityList(response.data);
-  //   } else setCityList([]);
-  // }
-
   return (
     <>
       {/* alert for submit form */}
@@ -919,7 +902,7 @@ if(!finalCheck.includes(true)){
         />
 
         <Box sx={{ flexGrow: 1 }}>
-          <MyHeader>New Agreement</MyHeader>
+          <MyHeader>Rental Management System</MyHeader>
 
           <Grid container sx={{ justifyContent: "center" }}>
             <Grid item xs={12} md={10}>

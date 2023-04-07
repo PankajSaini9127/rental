@@ -5,11 +5,12 @@ import React, { useContext, useEffect, useState } from "react";
 //icons
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../App";
 import { UpdateStatusAPI } from "../../Services/Services";
+import { useDispatch } from "react-redux";
+import { setAlert, setRefreshBox } from "../../store/action/action";
 
 function UserManagementTable({ rows }) {
-  const { dispatch } = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -23,10 +24,37 @@ function UserManagementTable({ rows }) {
     };
 
     const UpdateStatus = async (id) => {
-      const data = !checked ? "Active" : "Inactive";
-      const update = await UpdateStatusAPI(id, data);
-
-      dispatch({ type: "ADMIN_RECALL" });
+      try {
+        const data = !checked ? "Active" : "Inactive";
+        const update = await UpdateStatusAPI(id, data);
+        if (update.data.success) {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: "User Status Updated !",
+            })
+          );
+          dispatch(setRefreshBox());
+        } else {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: "Something Went Wrong !",
+            })
+          );
+        }
+      } catch (error) {
+        console.log(error);
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong !",
+          })
+        );
+      }
     };
 
     const [checked, setChecked] = useState(checkActive());
@@ -86,7 +114,7 @@ function UserManagementTable({ rows }) {
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-       flex:1
+      flex: 1,
     },
     {
       field: "name",
@@ -94,7 +122,7 @@ function UserManagementTable({ rows }) {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+      flex: 1,
     },
     {
       field: "role",
@@ -102,7 +130,7 @@ function UserManagementTable({ rows }) {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+      flex: 1,
     },
     {
       field: "email",
@@ -110,7 +138,7 @@ function UserManagementTable({ rows }) {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+      flex: 1,
     },
     {
       field: "contactno",
@@ -118,7 +146,7 @@ function UserManagementTable({ rows }) {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+      flex: 1,
     },
     {
       field: "status",
@@ -126,7 +154,7 @@ function UserManagementTable({ rows }) {
       width: 120,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+      flex: 1,
     },
     {
       field: "active",
@@ -135,7 +163,7 @@ function UserManagementTable({ rows }) {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: ActiveBtn,
-      flex:1
+      flex: 1,
     },
     {
       field: "created",
@@ -143,7 +171,7 @@ function UserManagementTable({ rows }) {
       width: 120,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+      flex: 1,
     },
     {
       field: "modify",
@@ -151,7 +179,7 @@ function UserManagementTable({ rows }) {
       width: 120,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+      flex: 1,
     },
     {
       field: "actions",
@@ -160,7 +188,7 @@ function UserManagementTable({ rows }) {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: renderDetailsButton,
-      flex:1
+      flex: 1,
     },
   ];
 
@@ -206,7 +234,7 @@ function UserManagementTable({ rows }) {
           columns={columns}
           pageSize={6}
           rowsPerPageOptions={[6]}
-  disableMultipleSelection
+          disableMultipleSelection
           sx={{ color: "black !important", minWidth: "50px" }}
           getCellClassName={(parms) => {
             let cellClass = [];

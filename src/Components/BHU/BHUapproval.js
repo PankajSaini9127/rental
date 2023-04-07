@@ -108,7 +108,7 @@ function SrManagerApproval() {
   const response = await send_back_to_manager(
     {
       status: "Sent Back For Rectification",
-      rectification_msg: sendBackMsg,
+      remark: sendBackMsg,
     },
     id
   );
@@ -147,7 +147,7 @@ function SrManagerApproval() {
 
             <Grid container sx={{ justifyContent: "center", mt: 2 }}>
               <Grid item xs={12}>
-              <MyHeader>New Agreement Approval</MyHeader>
+              <MyHeader>Rental Management System</MyHeader>
               </Grid>
 
             

@@ -77,6 +77,7 @@ function SrManagerListing() {
           />
           <ListingComponent
             title="Rental Agreement"
+            title1={"Rental Management System"}
             buttonText="Upload"
             options={options}
             value={"New Agreement"}

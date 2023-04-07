@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
-import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import UserManagementTable from "./UserManagementTable";
 import { AuthContext } from "../../App";
 import { GetUser, get_search } from "../../Services/Services";
@@ -13,7 +12,7 @@ import HamburgerMenu from "../HamburgerMenu";
 function UserManagement() {
   const navigate = useNavigate();
 
-  const {auth} = useSelector(s=>s);
+  const {auth,refresh} = useSelector(s=>s);
 
   const {city,state,role} = auth;
 
@@ -31,12 +30,6 @@ function UserManagement() {
     setData(search.data);
   }
 
-  useEffect(() => {
-    // if(searchValue.length >= 3){
-    SearchAPi(searchValue);
-    // }
-  }, [searchValue]);
-
   //api Call
   const getUsers = async () => {
     try {
@@ -44,7 +37,6 @@ function UserManagement() {
       const users = await GetUser({city,state});
       if (users.data.length > 0) {
         setData(users.data);
-        console.log(users)
       }
     } catch (error) {
       console.log(error);
@@ -53,16 +45,18 @@ function UserManagement() {
 
   useEffect(() => {
     getUsers();
-  }, [adminReCall]);
+  }, [refresh]);
 
   const row = data.map((item, i) => {
+
+    const frole = JSON.parse(item.role).includes('Senior_Manager')? "Senior Manager" :JSON.parse(item.role)
     
     return {
       id: item.id,
       status: item.status,
       code: item.code,
       name: item.name,
-      role: JSON.parse(item.role),
+      role:frole ,
       email: item.email,
       contactno: item.mobile,
       created:item.time?item.time.slice(0,10):"",
@@ -78,12 +72,35 @@ function UserManagement() {
     navigate("/newUser");
   };
 
+  function handleSerachChange (e){
+    SearchAPi(searchValue)
+    setsearchValue(e.target.value)
+  }
+
   return (
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-<HamburgerMenu
-          navigateHome={role.includes("Manager")?"dashboard":role.includes("Operations")?"operationsDashboard":role.includes("BUH")?"BHUdashboard":''}
-          handleListing={() => navigate((role.includes("Manager")?"/listing":role.includes("Operations")? "/operationsListing":role.includes("BUH")?"/BHUListing":""))}
+      <HamburgerMenu
+          navigateHome={
+            role.includes("Manager")
+              ? "dashboard"
+              : role.includes("Operations")
+              ? "operationsDashboard"
+              : role.includes("BUH")
+              ? "BHUdashboard"
+              : role.includes("Admin") && "userDashboard"
+          }
+          handleListing={() =>
+            navigate(
+              role.includes("Manager")
+                ? "/listing"
+                : role.includes("Operations")
+                ? "/operationsListing"
+                : role.includes("BUH")
+                ? "/BHUListing"
+                : ""
+            )
+          }
           monthlyRent={() => navigate("/monthly-payment")}
           renewal={() => navigate(`/renewal`)}
           // monthlyBtn="true"
@@ -100,7 +117,7 @@ function UserManagement() {
           onButtonClick={handleAddUser}
           dropDown={false}
           searchValue={searchValue}
-          setsearchValue={setsearchValue}
+          handleSerachChange={handleSerachChange}
         />
       </Stack>
     </>

@@ -66,11 +66,6 @@ function SuperAdminUserEdit() {
 
   const [supervisorArray, setsupervisorArray] = useState([]);
 
-  const [msg, setMsg] = useState({
-    open: false,
-    type: "",
-    message: "",
-  });
 
   const [formError, setformError] = useState({});
 
@@ -90,10 +85,8 @@ function SuperAdminUserEdit() {
       e.target.name === "mobile"
     ) {
       error.mobile = "Mobile Number Not Valid.";
-    }else if( e.target.value.length !== 0 && 
-      e.target.name === "email" &&
-      (e.target.value.match(rejexEmail))?false :true
-      ){
+    }else if(!e.target.value.match(  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) && e.target.value.length > 0 && e.target.name === "email")
+    {
       error.email = "Please Enter Valid Email !!"
     }
 
@@ -118,7 +111,7 @@ function SuperAdminUserEdit() {
     } else if (role.includes("BUH")) {
       finalQuerry = ["Operations"];
     } else if (role.includes("Operations")) {
-      finalQuerry = ["BUH"];
+      finalQuerry = ["Finance"];
     } else if (role.includes("Finance")) {
       finalQuerry = ["Role"];
     }
@@ -218,7 +211,6 @@ function SuperAdminUserEdit() {
     getSupervisor(role);
   }, [role]);
 
-  const { open, type, message } = msg;
 
   const getData = async (id) => {
     const data = await get_user(id);
@@ -226,26 +218,16 @@ function SuperAdminUserEdit() {
     setFormVal(data.data[0]);
   };
 
-  const handleClose = () => {
-    if (msg.type === "success") {
-      navigate(-1);
-    }
-    setMsg({
-      open: false,
-      type: "",
-      message: "",
-    });
-  };
 
   async function handleSubmit(e) {
     try {
       e.preventDefault();
       if (role.length < 1) {
-        setMsg({
+        dispatch(setAlert({
           open: true,
-          type: "error",
+          variant: "error",
           message: "Please Select Role",
-        });
+        }));
       } else {
       const response = await EditUserInfo(id, {...formVal,modify:new Date().toISOString().slice(0, 10)});
 
@@ -338,29 +320,10 @@ async function handleCitySearch() {
         />
 
         <Box sx={{ flexGrow: 1 }}>
-          <MyHeader>Update User</MyHeader>
+          <MyHeader>Rental Management System</MyHeader>
 
           <Grid container sx={{ justifyContent: "center" }}>
             <Grid item>
-              {open ? (
-                <Snackbar
-                  open={open}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                  autoHideDuration={6000}
-                  onClose={handleClose}
-                >
-                  <Alert
-                    onClose={handleClose}
-                    severity={type}
-                    sx={{ width: "100%" }}
-                  >
-                    {message}
-                  </Alert>
-                </Snackbar>
-              ) : (
-                ""
-              )}
-
               <Box
                 component="form"
                 sx={{
@@ -378,7 +341,9 @@ async function handleCitySearch() {
                     placeHolder=""
                     value={code}
                     onChange={handleChange}
-                    required={true}
+                    required={true}                    
+                    error={formError.code}
+                    onBlur={(e)=>validate(e)}
                   />
                   <TextFieldWrapper
                     label="Full Name"
@@ -387,8 +352,8 @@ async function handleCitySearch() {
                     value={name}
                     name="name"
                     error={formError.name}
+                    onBlur={(e)=>validate(e)}
                     onChange={(e) => {
-                      validate(e);
                       handleChange(e);
                     }}
                   />
@@ -397,10 +362,9 @@ async function handleCitySearch() {
                     placeHolder="Email"
                     value={email}
                     name="email"
-                    onChange={handleChange}
+                    onBlur={(e)=>validate(e)}
                     required={true}
                     onChange={(e) => {
-                      validate(e);
                       handleChange(e);
                     }}
                     error={formError.email}
@@ -413,8 +377,8 @@ async function handleCitySearch() {
                     maxLength={10}
                     error={formError.mobile}
                     required={true}
+                    onBlur={(e)=>validate(e)}
                     onChange={(e) => {
-                      validate(e);
                       handleChange(e);
                     }}
                   />

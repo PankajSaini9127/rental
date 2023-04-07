@@ -1,53 +1,215 @@
-import { Grid, Typography } from "@mui/material";
+import { Button, Grid, Link, Modal, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/system";
 
 import { saveAs } from "file-saver";
 
-const DataFieldStyle = ({ field, value ,href,name ,bold, cursor}) => {
-    const typographyStyle = {
-      textTransform: "capitalize",
-      color:"var(--main-color)",
-      fontWeight: "600",
-      // "@media(max-width:900px)": { fontSize: "14px" },
-    };
+import { Document, Page } from "react-pdf";
 
-    function handleClick(){
-      saveAs(href, name)
-    }
-    return (
-      <Grid item md={3} xs={6} sx={{p:0,overflow:"auto"}}>
-        <Typography variant="h6" sx={typographyStyle}>
-          {" "}
-          {field}
-        </Typography>
-        <Typography variant="body2" sx={{color : 'black', cursor:(cursor && "pointer")}} onClick={handleClick} fontWeight={bold?"600":''}>
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DownloadIcon from "@mui/icons-material/Download";
+import { useState } from "react";
+
+const DataFieldStyle = ({ field, value, href, name, bold, cursor }) => {
+  const [open, setOpen] = useState(false);
+  const typographyStyle = {
+    textTransform: "capitalize",
+    color: "var(--main-color)",
+    fontWeight: "600",
+    // "@media(max-width:900px)": { fontSize: "14px" },
+  };
+
+  function handleClick() {
+    saveAs(href, name);
+  }
+
+  function handleView() {
+    console.log(href.split(".").slice(-1));
+    setOpen(true);
+  }
+
+  //modal box
+  function handleClose() {
+    setOpen(false);
+  }
+
+  return (
+    <Grid item md={3} xs={6} sx={{ p: 0, overflow: "auto" }}>
+      <ImageView
+        open={open}
+        handleClose={handleClose}
+        href={href}
+        name={name}
+      />
+      <Typography variant="h6" sx={typographyStyle}>
+        {" "}
+        {field}
+      </Typography>
+      <Stack direction="row" alignItems="center" gap={1}>
+        <Typography
+          variant="body2"
+          sx={{ color: "black", cursor: cursor && "pointer" }}
+          fontWeight={bold ? "600" : ""}
+          flex={1}
+        >
           {" "}
           {value}
         </Typography>
-      </Grid>
-    );
-  };
-  
-  const YearField = ({ year, amount}) => {
-  
-    const fieldStyle ={fontSize:'17px',color:"var(--main-color)",
+        {href && (
+          <>
+            <VisibilityIcon color={"primary"} onClick={handleView} />
+            <DownloadIcon color={"primary"} onClick={handleClick} />
+          </>
+        )}
+      </Stack>
+    </Grid>
+  );
+};
+
+const YearField = ({ year, amount }) => {
+  const fieldStyle = {
+    fontSize: "17px",
+    color: "var(--main-color)",
     fontWeight: "600",
-  
+  };
+
+  return (
+    <Grid item md={2} xs={4}>
+      <Typography variant="body1" sx={fieldStyle}>
+        {year}
+      </Typography>
+      <Typography variant="body1" sx={{ colot: "black" }}>
+        {amount}
+      </Typography>
+    </Grid>
+  );
+};
+
+const DocumentView = ({ title, img }) => {
+   const [open, setOpen] = useState(false);
+   function handleView() {
+    console.log(img.split(".").slice(-1));
+    setOpen(true);
   }
 
- 
-    return (
-      <Grid item md={2} xs={4}>
-        <Typography variant="body1" 
-         sx={fieldStyle}
+  //modal box
+  function handleClose() {
+    setOpen(false);
+  }
+  return (
+    <Grid item xs={4}>
+       <ImageView
+        open={open}
+        handleClose={handleClose}
+        href={img}
+        name={title}
+      />
+      <Typography
+        variant="body1"
+        fontSize={"18px"}
+        color={"primary"}
+        fontWeight={"600"}
+        textTransform={"capitalize"}
+        sx={{ "@media(max-width:900px)": { fontSize: "16px" } }}
+      >
+        {" "}
+        {title}
+      </Typography>
+      <Box
+        sx={{
+          height: "100px",
+          border: "1px solid var(--main-color)",
+          borderRadius: "20px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Button
+          variant="text"
+          sx={{
+            textTransform: "capitalize",
+            color: "rgba(16, 99, 173, 0.47)",
+            height: "100%",
+            width: "50%",
+          }}
         >
-          {year}
-        </Typography>
-        <Typography variant="body1" sx={{colot:'black' }}  >
-          {amount}
-        </Typography>
-      </Grid>
-    );
-  };
+          <Link
+            sx={{
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              textDecoration: "none",
+            }}
+            // href={img}
+            // target="_blank"`
+            onClick={handleView}
+          >
+            View
+          </Link>
+        </Button>
+        <Button
+          variant="text"
+          sx={{
+            textTransform: "capitalize",
+            color: "rgba(16, 99, 173, 0.47)",
+            height: "100%",
+            width: "50%",
+          }}
+        >
+          <Link
+            sx={{
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              textDecoration: "none",
+            }}
+            onClick={() => saveAs(img, title)}
+          >
+            Download
+          </Link>
+        </Button>
+      </Box>
+    </Grid>
+  );
+};
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+};
 
-  export {DataFieldStyle, YearField}
+function ImageView({ open, handleClose, href, name }) {
+  const fileType = href ? href.split(".").slice(-1)[0] : "";
+  console.log(fileType);
+
+  return (
+    <Modal
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      {fileType === "pdf" ? (
+        <Box sx={style}>
+          {" "}
+          <iframe src={href} title={name} height={500}></iframe>
+        </Box>
+      ) : (
+        <Box sx={style}>
+          <Box component={"img"} src={href} alt={name} />
+        </Box>
+      )}
+    </Modal>
+  );
+}
+
+export { DataFieldStyle, YearField, DocumentView };
