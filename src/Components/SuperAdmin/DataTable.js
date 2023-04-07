@@ -5,11 +5,12 @@ import React, { useContext, useEffect, useState } from "react";
 //icons
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../App";
 import { UpdateStatusAPI } from "../../Services/Services";
+import { useDispatch } from "react-redux";
+import { setAlert, setRefreshBox } from "../../store/action/action";
 
-function SuperAdminTable({ rows }) {
-  const { dispatch } = useContext(AuthContext);
+function UserManagementTable({ rows }) {
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
@@ -23,10 +24,37 @@ function SuperAdminTable({ rows }) {
     };
 
     const UpdateStatus = async (id) => {
-      const data = !checked ? "Active" : "Inactive";
-      const update = await UpdateStatusAPI(id, data);
-
-      dispatch({ type: "ADMIN_RECALL" });
+      try {
+        const data = !checked ? "Active" : "Inactive";
+        const update = await UpdateStatusAPI(id, data);
+        if (update.data.success) {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: "User Status Updated !",
+            })
+          );
+          dispatch(setRefreshBox());
+        } else {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: "Something Went Wrong !",
+            })
+          );
+        }
+      } catch (error) {
+        console.log(error);
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong !",
+          })
+        );
+      }
     };
 
     const [checked, setChecked] = useState(checkActive());
@@ -68,7 +96,7 @@ function SuperAdminTable({ rows }) {
             startIcon={<EditIcon />}
             onClick={(e) => {
               // e.stopPropagation(); // don't select this row after clicking
-              id && navigate(`/super-admin-edit/${id}`, { id });
+              id && navigate(`/editUser/${id}`, { id });
             }}
           >
             Edit
@@ -86,6 +114,7 @@ function SuperAdminTable({ rows }) {
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex: 1,
     },
     {
       field: "name",
@@ -93,6 +122,7 @@ function SuperAdminTable({ rows }) {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex: 1,
     },
     {
       field: "role",
@@ -100,6 +130,7 @@ function SuperAdminTable({ rows }) {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex: 1,
     },
     {
       field: "email",
@@ -107,6 +138,7 @@ function SuperAdminTable({ rows }) {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex: 1,
     },
     {
       field: "contactno",
@@ -114,6 +146,7 @@ function SuperAdminTable({ rows }) {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex: 1,
     },
     {
       field: "status",
@@ -121,6 +154,7 @@ function SuperAdminTable({ rows }) {
       width: 120,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex: 1,
     },
     {
       field: "active",
@@ -129,6 +163,7 @@ function SuperAdminTable({ rows }) {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: ActiveBtn,
+      flex: 1,
     },
     {
       field: "created",
@@ -136,6 +171,7 @@ function SuperAdminTable({ rows }) {
       width: 120,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex: 1,
     },
     {
       field: "modify",
@@ -143,6 +179,7 @@ function SuperAdminTable({ rows }) {
       width: 120,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex: 1,
     },
     {
       field: "actions",
@@ -151,6 +188,7 @@ function SuperAdminTable({ rows }) {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: renderDetailsButton,
+      flex: 1,
     },
   ];
 
@@ -196,7 +234,7 @@ function SuperAdminTable({ rows }) {
           columns={columns}
           pageSize={6}
           rowsPerPageOptions={[6]}
-  disableMultipleSelection
+          disableMultipleSelection
           sx={{ color: "black !important", minWidth: "50px" }}
           getCellClassName={(parms) => {
             let cellClass = [];
@@ -223,4 +261,4 @@ function SuperAdminTable({ rows }) {
   );
 }
 
-export default SuperAdminTable;
+export default UserManagementTable;

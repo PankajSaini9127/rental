@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
-import { DataFieldStyle, YearField } from "../StyleComponents/Rental";
+import { DataFieldStyle, DocumentView, YearField } from "../StyleComponents/Rental";
 import { MyHeader } from "../StyledComponent";
 import { useEffect, useState } from "react";
 import {
@@ -25,92 +25,21 @@ import { saveAs } from "file-saver";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 
-const DocumentView = ({ title, img }) => {
-  return (
-    <Grid item xs={4}>
-      <Typography
-        variant="body1"
-        fontSize={"18px"}
-        color={"primary"}
-        fontWeight={'600'}
-        textTransform={"capitalize"}
-        sx={{ "@media(max-width:900px)": { fontSize: "16px" } }}
-      >
-        {" "}
-        {title}
-      </Typography>
-      <Box
-        sx={{
-          height: "100px",
-          border: "1px solid var(--main-color)",
-          borderRadius: "20px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Button
-          variant="text"
-          sx={{
-            textTransform: "capitalize",
-            color: "rgba(16, 99, 173, 0.47)",
-            height: "100%",
-            width: "50%",
-          }}
-        >
-          <Link
-            sx={{
-              height: "100%",
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              textDecoration: "none",
-            }}
-            href={img}
-            target="_blank"
-          >
-            View
-          </Link>
-        </Button>
-        <Button
-          variant="text"
-          sx={{
-            textTransform: "capitalize",
-            color: "rgba(16, 99, 173, 0.47)",
-            height: "100%",
-            width: "50%",
-          }}
-        >
-          <Link
-            sx={{
-              height: "100%",
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              textDecoration: "none",
-            }}
-            onClick={() => saveAs(img, title)}
-          >
-            Download
-          </Link>
-        </Button>
-      </Box>
-    </Grid>
-  );
-};
 
 const Heading = ({ heading }) => {
   return (
-    <Grid item xs={12} sx={{ mt: 6, mb: 2 }}>
-      <Typography variant="body1" fontSize={"25px"} color={"primary"} fontWeight={'700'}>
+    <Grid item xs={11} sx={{ mt: 6, mb: 2 }}>
+      <Typography
+        variant="body1"
+        fontSize={"20px"}
+        color={"primary"}
+        fontWeight={"600"}
+      >
         {heading}
       </Typography>
     </Grid>
   );
 };
-
 function SrManagerApproval() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -156,7 +85,7 @@ const dispatch = useDispatch();
           message: "Agreement Sent To BHU",
         })
       );
-      // navigate('/srManagerListing')
+      navigate('/srManagerListing')
     } else {
       dispatch(
         setAlert({
@@ -218,7 +147,9 @@ const dispatch = useDispatch();
           />
 
           <Box sx={{ flexGrow: 1 }}>
-            <MyHeader>New Agreement Approval</MyHeader>
+            <MyHeader>Rental Management System</MyHeader>
+
+            
 
             <Grid container sx={{ justifyContent: "center", mt: 2 }}>
               {/* Basic Details */}
@@ -337,7 +268,7 @@ const dispatch = useDispatch();
                         <DataFieldStyle
                           field={"GST number"}
                           value={agreement[ids[0]].gstNo[id]}
-                          href={agreement[ids[0]].gst_certificate}
+                          href={agreement[ids[0]].gst[id]}
                           name={'gst_certificate'}
                           bold={true}
                           cursor={true}
@@ -363,7 +294,43 @@ const dispatch = useDispatch();
                   )}
                 </Grid>
               </Grid>
+{/* Bank Details start here */}
+<Heading heading={"Bank Details"} />
 
+<Grid item md={10}>
+  <Grid container spacing={2}>
+    {Array.from(
+      { length: agreement[ids[0]].leeseName.length },
+      (row, id) => (
+        <Grid container>
+          <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
+            <Typography variant="body1" fontWeight="600">
+              Landlord {id + 1} Details
+            </Typography>
+          </Grid>
+          <DataFieldStyle
+            field={"bank name"}
+            value={agreement[ids[0]].bankName[id]}
+          />
+          <DataFieldStyle
+            field={"beneficiary name"}
+            value={agreement[ids[0]].benificiaryName[id]}
+          />
+          <DataFieldStyle
+            field={"bank A/C number"}
+            value={agreement[ids[0]].accountNo[id]}
+          />
+          <DataFieldStyle
+            field={"bank IFSC code"}
+            value={agreement[ids[0]].ifscCode[id]}
+          />
+        </Grid>
+      )
+    )}
+  </Grid>
+</Grid>
+
+{/* Bank Details Ends here */}
               {/* Document Section start here */}
               <Heading heading={"Document View/Download"} />
 
@@ -391,7 +358,7 @@ const dispatch = useDispatch();
                     img={agreement[ids[0]].tax_receipt}
                   />
                   <DocumentView
-                    title={"noc (if multiple owner)"}
+                    title={"NOC (if multiple owner)"}
                     img={agreement[ids[0]].noc}
                   />
                 </Grid>

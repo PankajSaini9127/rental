@@ -30,7 +30,7 @@ const navigate = useNavigate();
         />
 
       <ListingComponent
-        title1={'Rental Agreement'}
+        title1={'Rental Management System'}
         title={'Monthly Payment'}
         options={options}
         value={Select}

@@ -91,6 +91,7 @@ function DataTable() {
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "name",
@@ -98,6 +99,7 @@ function DataTable() {
       width: 230,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "location",
@@ -105,6 +107,7 @@ function DataTable() {
       width: 230,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
     {
       field: "rentalAmount",
@@ -112,14 +115,8 @@ function DataTable() {
       width: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
+      flex:1
     },
-    // {
-    //     field: "status",
-    //     headerName: "Status",
-    //     width: 160,
-    //     headerClassName: "dataGridHeader",
-    //     headerAlign: "center",
-    //   }
   ];
   
 

@@ -31,7 +31,7 @@ import {
   get_user,
 } from "../../Services/Services";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 import HamburgerMenu from "../HamburgerMenu";
 const initialState = {
@@ -72,19 +72,15 @@ function EditUser() {
   ];
 
   const [supervisorArray, setsupervisorArray] = useState([]);
-
-  const [msg, setMsg] = useState({
-    open: false,
-    type: "",
-    message: "",
-  });
+;
 
   const [formError, setformError] = useState({});
 
   function validate(e) {
-    const rejexEmail =  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    const error = {};
-    console.log(e.target.name, e.target.value);
+   const error = {};
+   if(e.target.value < 1 && e.target.name === "code"){
+    error.code = "Emp.code Required!"
+  }else
     if (
       e.target.value.length !== 0 &&
       e.target.value.length < 4 &&
@@ -97,10 +93,8 @@ function EditUser() {
       e.target.name === "mobile"
     ) {
       error.mobile = "Mobile Number Not Valid.";
-    }else if( e.target.value.length !== 0 && 
-      e.target.name === "email" &&
-      (e.target.value.match(rejexEmail))?false :true
-      ){
+    }else if(!e.target.value.match(  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) && e.target.value.length > 0 && e.target.name === "email")
+    {
       error.email = "Please Enter Valid Email !!"
     }
 
@@ -125,7 +119,7 @@ function EditUser() {
     } else if (role.includes("BUH")) {
       finalQuerry = ["Operations"];
     } else if (role.includes("Operations")) {
-      finalQuerry = ["BUH"];
+      finalQuerry = ["Finance"];
     } else if (role.includes("Finance")) {
       finalQuerry = ["Role"];
     }
@@ -230,7 +224,6 @@ function EditUser() {
     getSupervisor(role);
   }, [role]);
 
-  const { open, type, message } = msg;
 
   const getData = async (id) => {
     const data = await get_user(id);
@@ -259,26 +252,17 @@ function EditUser() {
     });
   };
 
-  const handleClose = () => {
-    if (msg.type === "success") {
-      navigate(-1);
-    }
-    setMsg({
-      open: false,
-      type: "",
-      message: "",
-    });
-  };
-  console.log(new Date().toISOString().slice(0, 10));
+
+
   async function handleSubmit(e) {
     try {
       e.preventDefault();
       if (role.length < 1) {
-        setMsg({
+        dispatch(setAlert({
           open: true,
           type: "error",
           message: "Please Select Role",
-        });
+        }));
       } else {
         const response = await EditUserInfo(id, {
           ...formVal,
@@ -305,7 +289,13 @@ function EditUser() {
         }
       }
     } catch (error) {
-      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong ! Please Try Again Later.",
+        })
+      );
     }
   }
 
@@ -365,6 +355,8 @@ function EditUser() {
     } else setCityList([]);
   }
 
+  const {auth} = useSelector(s=>s)
+
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
@@ -373,35 +365,35 @@ function EditUser() {
         navigateHome={'/userDashboard'}
         /> */}
         <HamburgerMenu
-          navigateHome={"dashboard"}
-          handleListing={() => navigate("/listing")}
+          navigateHome={
+            auth.role.includes("Manager")
+              ? "dashboard"
+              : auth.role.includes("Operations")
+              ? "operationsDashboard"
+              : auth.role.includes("BUH")
+              ? "BHUdashboard"
+              : auth.role.includes("Admin") && "userDashboard"
+          }
+          handleListing={() =>
+            navigate(
+              auth.role.includes("Manager")
+                ? "/listing"
+                : auth.role.includes("Operations")
+                ? "/operationsListing"
+                : auth.role.includes("BUH")
+                ? "/BHUListing"
+                : ""
+            )
+          }
           monthlyRent={() => navigate("/monthly-payment")}
           renewal={() => navigate(`/renewal`)}
           // monthlyBtn="true"
         />
         <Box sx={{ flexGrow: 1 }}>
-          <MyHeader>Update User</MyHeader>
+          <MyHeader>Rental Management System</MyHeader>
 
           <Grid container sx={{ justifyContent: "center" }}>
             <Grid item>
-              {open ? (
-                <Snackbar
-                  open={open}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                  autoHideDuration={6000}
-                  onClose={handleClose}
-                >
-                  <Alert
-                    onClose={handleClose}
-                    severity={type}
-                    sx={{ width: "100%" }}
-                  >
-                    {message}
-                  </Alert>
-                </Snackbar>
-              ) : (
-                ""
-              )}
 
               <Box
                 component="form"
@@ -421,6 +413,8 @@ function EditUser() {
                     value={code}
                     onChange={handleChange}
                     required={true}
+                    error={formError.code}
+                    onBlur={(e)=>validate(e)}
                   />
                   <TextFieldWrapper
                     label="Full Name"
@@ -429,8 +423,8 @@ function EditUser() {
                     name="name"
                     required={true}
                     error={formError.name}
+                    onBlur={(e)=>validate(e)}
                     onChange={(e) => {
-                      validate(e);
                       handleChange(e);
                     }}
                   />
@@ -440,8 +434,8 @@ function EditUser() {
                     value={email}
                     name="email"
                     required={true}
+                    onBlur={(e)=>validate(e)}
                     onChange={(e) => {
-                      validate(e);
                       handleChange(e);
                     }}
                     error={formError.email}
@@ -454,8 +448,8 @@ function EditUser() {
                     maxLength={10}
                     required={true}
                     error={formError.mobile}
+                    onBlur={(e)=>validate(e)}
                     onChange={(e) => {
-                      validate(e);
                       handleChange(e);
                     }}
                   />
@@ -537,14 +531,6 @@ function EditUser() {
                     disable={disable}
                     value={role}
                   />
-
-                  {/* <SelectComponent
-                    value={supervisor}
-                    name="supervisor"
-                    label={"Supervisor"}
-                    options={supervisorArray}
-                    onChange={handleChange}
-                  /> */}
 
                   <Grid
                     item

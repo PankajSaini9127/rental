@@ -12,6 +12,8 @@ import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import { AddUser, GetSupervisor, GetSupervisorSRM, getCityList, getStateList, get_emp_code } from "../../Services/Services";
 import AddUserCheckBox from "../StyleComponents/AddUserCheckBox";
 import HamburgerMenu from "../HamburgerMenu";
+import { useDispatch, useSelector } from "react-redux";
+import { setAlert } from "../../store/action/action";
 
 const initialState = {
   code: "",
@@ -32,7 +34,7 @@ function NewUser() {
   const [cityList, setCityList] = useState([])
 
 
-
+const dispatch = useDispatch()
 
 
 
@@ -52,19 +54,18 @@ function NewUser() {
   const [formError, setformError] = useState({});
 
   function validate(e) {
-    const rejexEmail =  /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    const error = {};
-    console.log(e.target.name, e.target.value);
+   const error = {};
+   if(e.target.value < 1 && e.target.name === "code"){
+    error.code = "Emp.code Required!"
+  }else
     if (
       e.target.value.length !== 0 &&
       e.target.value.length < 4 &&
       e.target.name === "name"
     ) {
       error.name = "Name must be of 4 character.";
-    }else if( e.target.value.length !== 0 && 
-      e.target.name === "email" &&
-      (e.target.value.match(rejexEmail))?false :true
-      ){
+    }else if(!e.target.value.match(  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) && e.target.value.length > 0 && e.target.name === "email")
+    {
       
       error.email = "Please Enter Valid Email !!"
     } else if (
@@ -78,11 +79,6 @@ function NewUser() {
   }
 
   function handleChange(e) {
-    //     if(validate()){
-    // console.log("aa")
-    //     }else{
-    //       console.log("bb")
-    //     }
     if (e.target.name === "role") {
       setFormData((old) => ({
         ...old,
@@ -118,11 +114,11 @@ function NewUser() {
    
     if (Object.keys(formError).length < 1) {
       if (role.length < 1) {
-        setMsg({
+        dispatch(setAlert({
           open: true,
-          type: "error",
+          variant: "error",
           message: "Please Select Role",
-        });
+        }))
       } else {
         apiCall(formData, randomPassword);
       }
@@ -130,7 +126,7 @@ function NewUser() {
   };
 
   //distructring elements from values
-  const { name, email, role, mobile, supervisor,state,city } = formData;
+  const {code, name, email, role, mobile, supervisor,state,city } = formData;
 
   // state for set supervisor value
   const [supervisorArray, setsupervisorArray] = useState([]);
@@ -154,7 +150,7 @@ function NewUser() {
     } else if (role.includes("BUH")) {
       finalQuerry = ["Operations"];
     } else if (role.includes("Operations")) {
-      finalQuerry = ["BUH"];
+      finalQuerry = ["Finance"];
     } else if (role.includes("Finance")) {
       finalQuerry = ["Role"];
     }
@@ -269,13 +265,6 @@ function NewUser() {
     // auth_flag(role)
   }, [role]);
 
-  const [msg, setMsg] = useState({
-    open: false,
-    type: "",
-    message: "",
-  });
-
-  const { open, type, message } = msg;
 
   // For save data in DB
   const apiCall = async (values, randomPassword) => {
@@ -284,34 +273,23 @@ function NewUser() {
     const result = await AddUser(values);
     // console.log(result)
     if (result.status === 201) {
-      setMsg({
+      dispatch(setAlert({
         open: true,
-        type: "success",
+        variant: "success",
         message: result.data.message,
-      });
-      navigate('/userManagement')
-    }
-    if (result.status === 208) {
-      setMsg({
+      }))
+     navigate('/userManagement')
+    }else {
+      dispatch(setAlert({
         open: true,
-        type: "error",
-        message: result.data.message,
-      });
+        variant: "error",
+        message: "Something Went Wrong ! Please Try Again Later.",
+      }))
     }
     setLoading(false);
   };
 
-  // on Alert close
-  const handleClose = () => {
-    if (msg.type === "success") {
-      navigate("/userManagement");
-    }
-    setMsg({
-      open: false,
-      type: "",
-      message: "",
-    });
-  };
+
 
    // funciton for fetching state list
    async function handleStateSearch(e, i) {
@@ -342,44 +320,37 @@ function NewUser() {
     } else setCityList([]);
   }
 
+  const {auth} = useSelector(s=>s)
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        {/* <AdminHamburgerMenu
-        navigateListing={'/userManagement'}
-        navigateHome={'/userDashboard'}
-        /> */}
-<HamburgerMenu
-          navigateHome={"dashboard"}
-          handleListing={() => navigate("/listing")}
-          monthlyRent={() => navigate("/monthly-payment")}
-          renewal={() => navigate(`/renewal`)}
-          // monthlyBtn="true"
+      <HamburgerMenu
+          navigateHome={
+            auth.role.includes("Manager")
+              ? "dashboard"
+              : auth.role.includes("Operations")
+              ? "operationsDashboard"
+              : auth.role.includes("BUH")
+              ? "BHUdashboard"
+              : auth.role.includes("Admin") ? "userDashboard":""
+          }
+          handleListing={() =>
+            navigate(
+              auth.role.includes("Manager")
+                ? "/listing"
+                : auth.role.includes("Operations")
+                ? "/operationsListing"
+                : auth.role.includes("BUH")
+                ? "/BHUListing"
+                : ""
+            )
+          }
         />
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>New User</MyHeader>
 
           <Grid container sx={{ justifyContent: "center" }}>
             <Grid item>
-              {open ? (
-                <Snackbar
-                  open={open}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                  autoHideDuration={6000}
-                  onClose={handleClose}
-                >
-                  <Alert
-                    onClose={handleClose}
-                    severity={type}
-                    sx={{ width: "100%" }}
-                  >
-                    {message}
-                  </Alert>
-                </Snackbar>
-              ) : (
-                ""
-              )}
-
               <Box
                 component="form"
                 sx={{
@@ -397,16 +368,18 @@ function NewUser() {
                     placeHolder="Employee Code"
                     name="code"
                     required={true}
-                    value={formError.code}
+                    value={code}
                     onChange={handleChange}
+                    error={formError.code}
+                    onBlur={(e)=>validate(e)}
                   />
                   <TextFieldWrapper
                     label="Full Name"
                     placeHolder="Full Name"
                     value={name}
                     name="name"
+                    onBlur={(e)=>validate(e)}
                     onChange={(e) => {
-                      validate(e);
                       handleChange(e);
                     }}
                     required={true}
@@ -419,9 +392,9 @@ function NewUser() {
                     value={email}
                     name="email"
                     onChange={(e) => {
-                      validate(e);
                       handleChange(e);
                     }}
+                    onBlur={(e)=>validate(e)}
                     required={true}
                     type={"email"}
                     error={formError.email}
@@ -434,8 +407,8 @@ function NewUser() {
                     required={true}
                     error={formError.mobile}
                     maxLength={10}
+                    onBlur={(e)=>validate(e)}
                     onChange={(e) => {
-                      validate(e);
                       handleChange(e);
                     }}
                   />
@@ -466,8 +439,8 @@ function NewUser() {
                             {...params}
                             label="State"
                             required
+                            onBlur={(e)=>validate(e)}
                             onChange={(e) => {
-                              handleChange(e);
                               handleStateSearch(e);
                             }}
                             InputProps={{

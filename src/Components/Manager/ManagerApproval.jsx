@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Grid,
+  IconButton,
   Link,
   Stack,
   TextField,
@@ -9,9 +10,15 @@ import {
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
-import { DataFieldStyle, YearField } from "../StyleComponents/Rental";
+import {
+  DataFieldStyle,
+  DocumentView,
+  YearField,
+} from "../StyleComponents/Rental";
 import { MyHeader } from "../StyledComponent";
 import { useEffect, useState } from "react";
+
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
 //download file
 import { saveAs } from "file-saver";
@@ -19,86 +26,15 @@ import { get_agreement_id, send_to_bhu } from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
 
-const DocumentView = ({ title, img }) => {
-  return (
-    <Grid item xs={4}>
-      <Typography
-        variant="body1"
-        fontSize={"18px"}
-        color={"primary"}
-        fontWeight={'600'}
-        textTransform={"capitalize"}
-        sx={{ "@media(max-width:900px)": { fontSize: "16px" } }}
-      >
-        {" "}
-        {title}
-      </Typography>
-      <Box
-        sx={{
-          height: "100px",
-          border: "1px solid var(--main-color)",
-          borderRadius: "20px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Button
-          variant="text"
-          sx={{
-            textTransform: "capitalize",
-            color: "rgba(16, 99, 173, 0.47)",
-            height: "100%",
-            width: "50%",
-          }}
-        >
-          <Link
-            sx={{
-              height: "100%",
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              textDecoration: "none",
-            }}
-            href={img}
-            target="_blank"
-          >
-            View
-          </Link>
-        </Button>
-        <Button
-          variant="text"
-          sx={{
-            textTransform: "capitalize",
-            color: "rgba(16, 99, 173, 0.47)",
-            height: "100%",
-            width: "50%",
-          }}
-        >
-          <Link
-            sx={{
-              height: "100%",
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              textDecoration: "none",
-            }}
-            onClick={() => saveAs(img, title)}
-          >
-            Download
-          </Link>
-        </Button>
-      </Box>
-    </Grid>
-  );
-};
-
 const Heading = ({ heading }) => {
   return (
-    <Grid item xs={12} sx={{ mt: 6, mb: 2 }}>
-      <Typography variant="body1" fontSize={"25px"} color={"primary"} fontWeight={'700'}>
+    <Grid item xs={11} sx={{ mt: 6, mb: 2 }}>
+      <Typography
+        variant="body1"
+        fontSize={"20px"}
+        color={"primary"}
+        fontWeight={"600"}
+      >
         {heading}
       </Typography>
     </Grid>
@@ -120,7 +56,7 @@ function ManagerApproval() {
   const getData = async (id) => {
     const agreement = await get_agreement_id(id);
     setAgreement(agreement.data.agreement);
-    console.log(agreement.data.ids)
+    console.log(agreement.data.ids);
     setIds(agreement.data.ids);
   };
 
@@ -157,8 +93,10 @@ function ManagerApproval() {
 
   return (
     <>
-      {(ids && ids.length > 0) && (
+      {ids && ids.length > 0 && (
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
+          {/* <a id="button"></a> */}
+
           <HamburgerMenu
             navigateHome={"dashboard"}
             handleListing={() => navigate("/listing")}
@@ -168,9 +106,24 @@ function ManagerApproval() {
           />
 
           <Box sx={{ flexGrow: 1 }}>
-            <MyHeader>New Agreement Approval</MyHeader>
+            <MyHeader>Rental Management System</MyHeader>
+            <Box className="backButton">
+              <IconButton
+                variant="contained"
+                color='primary'
+                onClick={()=>navigate(-1)}
+                size={'large'}
+              >
+                <ArrowCircleLeftIcon sx={{fontSize:'3rem'}} color="#FFFFF !important" />
+              </IconButton>
+            </Box>
 
             <Grid container sx={{ justifyContent: "center", mt: 3 }}>
+              <Grid
+                item
+                xs={12}
+                sx={{ justifyContent: "flex-end", display: "flex" }}
+              ></Grid>
               {/* Basic Details */}
               <Grid item md={10}>
                 <Grid container spacing={2}>
@@ -273,7 +226,7 @@ function ManagerApproval() {
                           field={"aadhaar number"}
                           value={agreement[ids[0]].aadharNo[id]}
                           href={agreement[ids[0]].aadhar_card[id]}
-                          name={'AadharCard'}
+                          name={"AadharCard"}
                           bold={true}
                           cursor={true}
                         />
@@ -281,15 +234,15 @@ function ManagerApproval() {
                           field={"PAN number"}
                           value={agreement[ids[0]].panNo[id]}
                           href={agreement[ids[0]].pan_card[id]}
-                          name={'pan_certicate'}
+                          name={"pan_certicate"}
                           bold={true}
                           cursor={true}
                         />
                         <DataFieldStyle
                           field={"GST number"}
                           value={agreement[ids[0]].gstNo[id]}
-                          href={agreement[ids[0]].gst_certificate}
-                          name={'gst_certificate'}
+                          href={agreement[ids[0]].gst[id]}
+                          name={"gst_certificate"}
                           bold={true}
                           cursor={true}
                         />
@@ -358,7 +311,6 @@ function ManagerApproval() {
               {/* Document Section start here */}
               <Heading heading={"Document View/Download"} />
               <Grid item md={10}>
-                
                 <Grid container spacing={4} sx={{ mt: 1 }}>
                   <DocumentView
                     title={"draft agreement"}
@@ -382,7 +334,7 @@ function ManagerApproval() {
                     img={agreement[ids[0]].tax_receipt}
                   />
                   <DocumentView
-                    title={"noc (if multiple owner)"}
+                    title={"NOC (if multiple owner)"}
                     img={agreement[ids[0]].noc}
                   />
                 </Grid>
@@ -399,8 +351,8 @@ function ManagerApproval() {
                 >
                   <Grid item xs={8}>
                     <DataFieldStyle
-                    field={'Remark !'}
-                    value={agreement[ids[0]].remark}
+                      field={"Remark !"}
+                      value={agreement[ids[0]].remark}
                     />
                     {/* <TextField
                       type="text"

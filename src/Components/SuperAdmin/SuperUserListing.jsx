@@ -3,17 +3,15 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
-import { AuthContext } from "../../App";
 import { GetUser, get_search } from "../../Services/Services";
 import SuperAdminTable from "./DataTable";
 import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
+import { useSelector } from "react-redux";
 
 function SuperAdminListing() {
   const navigate = useNavigate();
 
-  const {
-    state: { adminReCall },
-  } = useContext(AuthContext);
+const{refresh} = useSelector(s=>s)
 
   const [data, setData] = useState([]);
   const [SelectValue, setSelectValue] = useState("Senior Manager");
@@ -25,11 +23,10 @@ function SuperAdminListing() {
     setData(search.data);
   }
 
-  useEffect(() => {
-    // if(searchValue.length >= 3){
-    SearchAPi(searchValue);
-    // }
-  }, [searchValue]);
+  function handleSerachChange (e){
+    SearchAPi(searchValue)
+    setsearchValue(e.target.value)
+  }
 
   //api Call
   const getUsers = async () => {
@@ -47,7 +44,7 @@ function SuperAdminListing() {
 
   useEffect(() => {
     getUsers();
-  }, [adminReCall]);
+  }, [refresh]);
 
   const row = data.map((item, i) => {
     return {
@@ -90,7 +87,7 @@ function SuperAdminListing() {
           onButtonClick={handleAddUser}
           dropDown={false}
           searchValue={searchValue}
-          setsearchValue={setsearchValue}
+          handleSerachChange={handleSerachChange}
         />
       </Stack>
     </>

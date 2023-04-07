@@ -29,7 +29,7 @@ function SuperAdminDashboard() {
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid container sx={{ justifyContent: "center" }}>
-          <Grid xs={12}> <MyHeader>User Dashboard</MyHeader></Grid>
+          <Grid xs={12}> <MyHeader>Rental Management System</MyHeader></Grid>
             <Grid item md={10} sx={{mt:4}}>
               <Grid container spacing={4}>
                 <DashboardItem

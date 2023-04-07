@@ -26,6 +26,8 @@ import {
 } from "../../Services/Services";
 import AddUserCheckBox from "../StyleComponents/AddUserCheckBox";
 import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
+import { useDispatch } from "react-redux";
+import { setAlert } from "../../store/action/action";
 
 const initialState = {
   code: "",
@@ -39,6 +41,7 @@ const initialState = {
 };
 
 function SuperAdminNewUser() {
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const [randomPassword, setRandomPassword] = useState("");
   const superVisor = [
@@ -60,36 +63,32 @@ function SuperAdminNewUser() {
   const [cityList, setCityList] = useState([]);
 
   function validate(e) {
-    const rejexEmail =  (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
     const error = {};
-    if( 
-      e.target.name === "email" &&
-     e.target.value.length !== 0 &&
-     rejexEmail.test(e.target.value)?false :true
-      )
-      {
-      error.email = "Please Enter Valid Email !!"
+    if(e.target.value < 1 && e.target.name === "code"){
+      error.code = "Emp.code Required!"
     }else
-    if (
+    if (!e.target.value.match(  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) && e.target.value.length > 0 && e.target.name === "email")
+    {
+      error.email = "Please Enter Valid Email !!";
+    } else if (
       e.target.value.length !== 0 &&
       e.target.value.length < 4 &&
       e.target.name === "name"
     ) {
       error.name = "Name must be of 4 character.";
-    }
-     else if (
+    } else if (
       e.target.value.length !== 0 &&
       e.target.value.length < 10 &&
       e.target.name === "mobile"
     ) {
       error.mobile = "Mobile Number Not Valid.";
-    }
+    } 
 
     setformError(error);
   }
 
   function handleChange(e) {
-    console.log(e.target.name)
+    console.log(e.target.name);
     if (e.target.name === "role") {
       setFormData((old) => ({
         ...old,
@@ -111,7 +110,7 @@ function SuperAdminNewUser() {
         });
       }
     } else {
-      console.log("Email")
+      console.log("Email");
       setFormData({
         ...formData,
         [e.target.name]: e.target.value,
@@ -126,11 +125,11 @@ function SuperAdminNewUser() {
 
     if (Object.keys(formError).length < 1) {
       if (role.length < 1) {
-        setMsg({
+        dispatch(setAlert({
           open: true,
-          type: "error",
+          variant: "error",
           message: "Please Select Role",
-        });
+        }));
       } else {
         apiCall(formData, randomPassword);
       }
@@ -138,8 +137,7 @@ function SuperAdminNewUser() {
   };
 
   //distructring elements from values
-  const { name, email, role, mobile, code, supervisor, city, state } =
-    formData;
+  const { name, email, role, mobile, code, supervisor, city, state } = formData;
 
   // state for set supervisor value
   const [supervisorArray, setsupervisorArray] = useState([]);
@@ -163,7 +161,7 @@ function SuperAdminNewUser() {
     } else if (role.includes("BUH")) {
       finalQuerry = ["Operations"];
     } else if (role.includes("Operations")) {
-      finalQuerry = ["BUH"];
+      finalQuerry = ["Finance"];
     } else if (role.includes("Finance")) {
       finalQuerry = ["Role"];
     }
@@ -171,22 +169,32 @@ function SuperAdminNewUser() {
       return finalQuerry.includes(row);
     });
 
-    console.log(role)
-    if(role.includes("Manager")){
-      const supervisor = await GetSupervisor({role:superVisor1,state,city});
+    console.log(role);
+    if (role.includes("Manager")) {
+      const supervisor = await GetSupervisor({
+        role: superVisor1,
+        state,
+        city,
+      });
       setsupervisorArray(supervisor.data);
-    }else if(role.includes("Senior_Manager") || role.includes("Operations")|| role.includes("BUH")){
+    } else if (
+      role.includes("Senior_Manager") ||
+      role.includes("Operations") ||
+      role.includes("BUH")
+    ) {
       const supervisor = await GetSupervisorSRM(superVisor1);
       setsupervisorArray(supervisor.data);
     }
-    
   }
 
   // Role Check Box Disable Manage
   function manageRole(role) {
     console.log(role);
     let setVal = {};
-    if (role.includes("Manager") || role.includes("Operations") && role.length > 0) {
+    if (
+      role.includes("Manager") ||
+      (role.includes("Operations") && role.length > 0)
+    ) {
       superVisor.map(
         (row) =>
           (setVal = {
@@ -197,51 +205,51 @@ function SuperAdminNewUser() {
           })
       );
       setDisable(setVal);
-    }else if(role.includes('Admin') && role.length === 1){
-      superVisor.map((row)=>(
-        setVal={
-          ...setVal,
-          [row]:true,
-          Operations:false,
-          Manager:false
-        }
-      ));
+    } else if (role.includes("Admin") && role.length === 1) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            Operations: false,
+            Manager: false,
+          })
+      );
       setDisable(setVal);
-    }else if(role.includes("Senior_Manager")){
-      superVisor.map((row)=>(
-        setVal={
-          ...setVal,
-          [row]:true,
-          Senior_Manager:false
-        }
-      ));
+    } else if (role.includes("Senior_Manager")) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            Senior_Manager: false,
+          })
+      );
       setDisable(setVal);
-    }
-    else if(role.includes("Finance")){
-      superVisor.map((row)=>(
-        setVal={
-          ...setVal,
-          [row]:true,
-          Finance:false
-        }
-      ));
+    } else if (role.includes("Finance")) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            Finance: false,
+          })
+      );
       setDisable(setVal);
-    }
-    else if(role.includes("BUH")){
-      superVisor.map((row)=>(
-        setVal={
-          ...setVal,
-          [row]:true,
-          BUH:false
-        }
-      ));
+    } else if (role.includes("BUH")) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            BUH: false,
+          })
+      );
       setDisable(setVal);
-    }
-     else if (role.length < 2) {
+    } else if (role.length < 2) {
       superVisor.map((row) => (setVal = { ...setVal, [row]: false }));
       setDisable(setVal);
-    }
-     else if (role.includes("Admin") && role.length === 2) {
+    } else if (role.includes("Admin") && role.length === 2) {
       superVisor.map(
         (row) =>
           (setVal = {
@@ -276,13 +284,8 @@ function SuperAdminNewUser() {
     // auth_flag(role)
   }, [role]);
 
-  const [msg, setMsg] = useState({
-    open: false,
-    type: "",
-    message: "",
-  });
 
-  const { open, type, message } = msg;
+
 
   // For save data in DB
   const apiCall = async (values, randomPassword) => {
@@ -290,35 +293,24 @@ function SuperAdminNewUser() {
     setLoading(true);
     const result = await AddUser(values);
     // console.log(result)
-    if (result.status === 201) {
-      setMsg({
+    if (result.data.success) {
+      
+      dispatch(dispatch({
         open: true,
-        type: "success",
+        variant: "success",
         message: result.data.message,
-      });
-      navigate('/super-admin-listing')
-    }
-    if (result.status === 208) {
-      setMsg({
+      }));
+      navigate("/super-admin-listing");
+    }else {
+      dispatch(setAlert({
         open: true,
-        type: "error",
+        variant: "error",
         message: result.data.message,
-      });
+      }));
     }
     setLoading(false);
   };
 
-  // on Alert close
-  const handleClose = () => {
-    if (msg.type === "success") {
-      navigate("/super-admin-listing");
-    }
-    setMsg({
-      open: false,
-      type: "",
-      message: "",
-    });
-  };
 
   // funciton for fetching state list
   async function handleStateSearch(e, i) {
@@ -335,16 +327,11 @@ function SuperAdminNewUser() {
 
   // funciton for fetching state list
   async function handleCitySearch() {
-    // console.log(i);
-    console.log(state);
     let search = stateList.filter((row) => row.name === state && row.id);
 
-    // console.log(search);
     let response = await getCityList(search[0].id);
-    // console.log(response)
-
+   
     if (response.status === 200) {
-      // console.log(city)
       setCityList(response.data);
     } else setCityList([]);
   }
@@ -358,30 +345,11 @@ function SuperAdminNewUser() {
         />
 
         <Box sx={{ flexGrow: 1 }}>
-          <MyHeader>New User</MyHeader>
+          <MyHeader>Rental Management System</MyHeader>
 
           <Grid container sx={{ justifyContent: "center" }}>
             <Grid item>
-              {open ? (
-                <Snackbar
-                  open={open}
-                  anchorOrigin={{ vertical: "top", horizontal: "center" }}
-                  autoHideDuration={6000}
-                  onClose={handleClose}
-                >
-                  <Alert
-                    onClose={handleClose}
-                    severity={type}
-                    sx={{ width: "100%" }}
-                  >
-                    {message}
-                  </Alert>
-                </Snackbar>
-              ) : (
-                ""
-              )}
-
-              <Box
+            <Box
                 component="form"
                 sx={{
                   py: 5,
@@ -398,30 +366,31 @@ function SuperAdminNewUser() {
                     placeHolder="Employee Code"
                     name="code"
                     required={true}
-                    value={formError.code}
+                    value={code}
                     onChange={handleChange}
+                    error={formError.code}
+                    onBlur={(e)=>validate(e)}
                   />
-                
+
                   <TextFieldWrapper
                     label="Full Name"
                     placeHolder="Full Name"
                     value={name}
                     name="name"
                     onChange={(e) => {
-                      validate(e);
                       handleChange(e);
                     }}
                     required={true}
                     error={formError.name}
-                    //onBlur={validate}
+                    onBlur={(e)=>validate(e)}
                   />
                   <TextFieldWrapper
                     label="Email"
                     placeHolder="Email"
                     value={email}
                     name="email"
+                    onBlur={(e)=>validate(e)}
                     onChange={(e) => {
-                      validate(e);
                       handleChange(e);
                     }}
                     error={formError.email}
@@ -436,8 +405,8 @@ function SuperAdminNewUser() {
                     required={true}
                     error={formError.mobile}
                     maxLength={10}
+                    onBlur={(e)=>validate(e)}
                     onChange={(e) => {
-                      validate(e);
                       handleChange(e);
                     }}
                   />
@@ -561,7 +530,7 @@ function SuperAdminNewUser() {
                 </Grid>
                 <Grid container sx={{ justifyContent: "space-evenly", mt: 3 }}>
                   <Grid item sm={3.0}>
-                  <Button
+                    <Button
                       variant="contained"
                       color="primary"
                       sx={{
