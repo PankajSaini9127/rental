@@ -192,6 +192,9 @@ background: rgba(1, 100, 174, 0.78);
 .textFieldWrapper label{
   color : #0164AE !important;
 }
+.textFieldWrapper textarea{
+  padding: 6px;
+}
 
 .LoginInput * {
   border-color: #0164AE !important;
