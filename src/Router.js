@@ -64,6 +64,7 @@ function MyRouter() {
       <Route
         exact
         path="/newAgreement"
+        history = {history}
         element={isAuth && role.includes("Manager") ? <Agreement /> : <Login />}
       />
       <Route

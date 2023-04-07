@@ -115,11 +115,11 @@ if(value === "Percentage"){
 
 }else
  if(value === "Value"){
-   total1 = rent + yearValue.year1;
-   total2 = total1 + yearValue.year2;
-   total3 = total2 + yearValue.year3;
-   total4 = total3 + yearValue.year4;
-   total5 = total4 + yearValue.year5;
+   total1 = rent +  parseInt(yearValue.year1);
+   total2 = total1 + parseInt(yearValue.year2);
+   total3 = total2 + parseInt(yearValue.year3);
+   total4 = total3 + parseInt(yearValue.year4);
+   total5 = total4 + parseInt(yearValue.year5);
 }
 useEffect(()=>{
   if(tenure === "11 month")

@@ -63,7 +63,8 @@ const TextFieldWrapper = ({
   required,
   maxLength,
   onBlur,
-  textAlignRight
+  textAlignRight,
+  partLabel
 }) => {
   return (
     <Grid item md={4} xs={6} sx={{ "@media(max-width:900px)": { my: 1 } }}>
@@ -83,7 +84,6 @@ const TextFieldWrapper = ({
           onBlur={onBlur}
           required={required?true:false}
           type={type}
-          required={required ? true : false}
           InputProps={{
             style: {
               color: "rgba(16, 99, 173, 0.47) !important/",
@@ -99,11 +99,14 @@ const TextFieldWrapper = ({
             <span style = {{color:"red"}}>
               {error}
             </span>
-          ) : null}
+          ) : 
+          <span style = {{color:"#0164AE"}}>
+          {partLabel}
+        </span>
+        }
           fullWidth
           sx={fieldStyle}
         />
-        
       </FormControl>
     </Grid>
   );

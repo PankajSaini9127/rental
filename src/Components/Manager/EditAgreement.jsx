@@ -610,7 +610,7 @@ function handleHold (){
         />
 
         <Box sx={{ flexGrow: 1 }}>
-          <MyHeader>Edit Agreement</MyHeader>
+          <MyHeader>Rental Management System</MyHeader>
 
           <Grid container sx={{ justifyContent: "center" }}>
             <Grid item xs={12} md={10}>
@@ -742,7 +742,6 @@ function handleHold (){
                         <MenuItem value={preData.city}>{preData.city}</MenuItem>
                       </TextField>
                     </FormControl>
-
                   </Grid> */}
 
                   <TextFieldWrapper
