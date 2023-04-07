@@ -18,12 +18,14 @@ const DataFieldStyle = ({ field, value, href, name, bold, cursor }) => {
     // "@media(max-width:900px)": { fontSize: "14px" },
   };
 
+  console.log(href)
   function handleClick() {
+
     saveAs(href, name);
   }
 
   function handleView() {
-    console.log(href.split(".").slice(-1));
+    // console.log(href.split(".").slice(-1));
     setOpen(true);
   }
 
@@ -34,12 +36,12 @@ const DataFieldStyle = ({ field, value, href, name, bold, cursor }) => {
 
   return (
     <Grid item md={3} xs={6} sx={{ p: 0, overflow: "auto" }}>
-      <ImageView
+      {href !== undefined && <ImageView
         open={open}
         handleClose={handleClose}
-        href={href}
+        href={href !== undefined ? href : ""}
         name={name}
-      />
+      />}
       <Typography variant="h6" sx={typographyStyle}>
         {" "}
         {field}
@@ -54,7 +56,7 @@ const DataFieldStyle = ({ field, value, href, name, bold, cursor }) => {
           {" "}
           {value}
         </Typography>
-        {href && (
+        {href !== undefined && (
           <>
             <VisibilityIcon color={"primary"} onClick={handleView} />
             <DownloadIcon color={"primary"} onClick={handleClick} />
@@ -97,12 +99,12 @@ const DocumentView = ({ title, img }) => {
   }
   return (
     <Grid item xs={4}>
-       <ImageView
+    { img !== undefined &&   <ImageView
         open={open}
         handleClose={handleClose}
         href={img}
         name={title}
-      />
+      />}
       <Typography
         variant="body1"
         fontSize={"18px"}
@@ -188,8 +190,8 @@ const style = {
 };
 
 function ImageView({ open, handleClose, href, name }) {
-  const fileType = href ? href.split(".").slice(-1)[0] : "";
-  console.log(fileType);
+  console.log(href);
+  const fileType = href ?  href.includes("pdf") : false;
 
   return (
     <Modal
@@ -198,7 +200,7 @@ function ImageView({ open, handleClose, href, name }) {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      {fileType === "pdf" ? (
+      {fileType ? (
         <Box sx={style}>
           {" "}
           <iframe src={href} title={name} height={500}></iframe>

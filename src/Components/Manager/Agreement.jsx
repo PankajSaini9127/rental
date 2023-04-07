@@ -618,8 +618,7 @@ function Agreement({history}) {
     // setData({ ...data, ...increment });
     console.log(validate(data), validateFields(data));
     if (validate(data) && validateFields(data)) {
-      setIsSubmit(true);
-      setOpen(true);
+   
       handleHoldApiCall(id, { ...data, ...increment });
     }
   }
