@@ -128,7 +128,7 @@ function ApprovalRequest() {
             message: "Send back For Rectification",
           })
         );
-        navigate("/BHUListing");
+        navigate("/operationsListing");
       } else {
         dispatch(
           setAlert({

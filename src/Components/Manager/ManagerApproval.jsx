@@ -359,25 +359,13 @@ function ManagerApproval() {
                 <Grid
                   item
                   container
-                  xs={12}
-                  sx={{ mt: 5, justifyContent: "space-around" }}
+                  xs={10}
+                  sx={{ mt: 5 }}
                 >
-                  <Grid item xs={8}>
                     <DataFieldStyle
                       field={"Remark !"}
                       value={agreement[ids[0]].remark}
                     />
-                    {/* <TextField
-                      type="text"
-                      multiline
-                      rows={3}
-                      fullWidth
-                      variant="outlined"
-                      label="Remark *"
-                      placeholder="Remark *"
-                      value={agreement[ids[0]].remark}
-                    /> */}
-                  </Grid>
                 </Grid>
               )}
 
