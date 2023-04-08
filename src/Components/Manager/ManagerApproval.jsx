@@ -141,6 +141,10 @@ function ManagerApproval() {
                     value={agreement[ids[0]].location}
                   />
                   <DataFieldStyle
+                    field={"area"}
+                    value={agreement[ids[0]].area + " sq. ft"}
+                  />
+                  <DataFieldStyle
                     field={"pincode"}
                     value={agreement[ids[0]].pincode}
                   />
