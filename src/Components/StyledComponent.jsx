@@ -64,7 +64,8 @@ const TextFieldWrapper = ({
   maxLength,
   onBlur,
   textAlignRight,
-  partLabel
+  partLabel,
+  notationVal
 }) => {
   return (
     <Grid item md={4} xs={6} sx={{ "@media(max-width:900px)": { my: 1 } }}>
@@ -82,9 +83,12 @@ const TextFieldWrapper = ({
           error={error ? true : false}
           label={label}
           onBlur={onBlur}
+          input
+  
           required={required?true:false}
           type={type}
           InputProps={{
+            endAdornment: notationVal && <InputAdornment position="start">{ "\xa0 "+ notationVal}</InputAdornment>,
             style: {
               color: "rgba(16, 99, 173, 0.47) !important/",
               "@media(max-width:900px)": { fontSize: "10px !important" },

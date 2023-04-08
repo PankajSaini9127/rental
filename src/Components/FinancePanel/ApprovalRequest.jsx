@@ -423,6 +423,7 @@ function FinanceApproval() {
               {/* document section ends here */}
 
               {agreement[ids[0]].remark.length > 0 && (
+
                 <>
                   <Grid item container xs={10} sx={{ mt: 5 }} spacing={3}>
                     <Grid item xs={8}>
@@ -432,6 +433,25 @@ function FinanceApproval() {
                       />
                     </Grid>
                   </Grid>
+
+                <>              
+              
+                <Grid
+                  item
+                  container
+                  xs={10}
+                  sx={{ mt: 5 }}
+                  spacing={3}
+                >
+                  <Grid item xs={8}>
+                  <DataFieldStyle
+                      field={"Remark !"}
+                      value={agreement[ids[0]].remark}
+                    />
+                  </Grid>
+                
+                </Grid>
+
                 </>
               )}
 

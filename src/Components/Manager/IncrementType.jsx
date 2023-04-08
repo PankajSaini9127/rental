@@ -107,11 +107,11 @@ if(value === "Percentage"){
   total4 = (total3/100*yearValue.year4+ total3);
   total5 = (total4/100*yearValue.year5+total4);
 
-  total1 = parseFloat(total1).toLocaleString('hi')
-  total2 = parseFloat(total2).toLocaleString('hi')
-  total3 = parseFloat(total3).toLocaleString('hi')
-  total4 = parseFloat(total4).toLocaleString('hi')
-  total5 = parseFloat(total5).toLocaleString('hi')
+  total1 = parseFloat(total1)
+  total2 = parseFloat(total2)
+  total3 = parseFloat(total3)
+  total4 = parseFloat(total4)
+  total5 = parseFloat(total5)
 
 }else
  if(value === "Value"){
