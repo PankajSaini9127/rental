@@ -97,7 +97,7 @@ function SrManagerApproval() {
             message: "Send back For Rectification",
           })
         );
-        navigate("/BHUListing");
+        navigate("/srManagerListing");
       } else {
         dispatch(
           setAlert({
@@ -419,7 +419,7 @@ function SrManagerApproval() {
                   item
                   container
                   xs={10}
-                  sx={{ mt: 5, justifyContent: "space-around" }}
+                  sx={{ mt: 5}}
                 >
                     <DataFieldStyle
                       field={"Remark !"}

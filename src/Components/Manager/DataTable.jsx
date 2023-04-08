@@ -17,6 +17,7 @@ import {
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setRefreshBox } from "../../store/action/action";
+import FinalAgreement from "./FinalAgreement";
 
 function DataTable({ rows, loading, check, setCheck }) {
   const dispatch = useDispatch()
@@ -24,6 +25,12 @@ function DataTable({ rows, loading, check, setCheck }) {
 
   const { auth} = useSelector((s) => s);
 
+  const [open,setopen] = useState(false);
+
+  const [final_agreement,setFinalAgreement] = useState({agreement_date:"",final_agreement:""})
+
+  const [selectID,setSelectID] = useState('')
+ 
   const manager_id = auth.id;
 
   const [err, setErr] = useState({
@@ -65,8 +72,10 @@ function DataTable({ rows, loading, check, setCheck }) {
   const renderDetailsButton = (e) => {
     const id = e.id;
 
+
     return (
       <>
+      
       {e.row.status === "Sent Back For Rectification" && (
         <Grid container>
            <Grid item md={6} sx={{ color: "white !important" }}>
@@ -136,6 +145,31 @@ function DataTable({ rows, loading, check, setCheck }) {
             </Grid>
           </Grid>
         )}
+        {e.row.status === "Approved" && (
+        <Grid container>
+           <Grid item md={6} sx={{ color: "white !important" }}>
+           <Button
+             variant="contained"
+             color="primary"
+             size="small"
+             style={{
+               backgroundColor: "#62CDFF",
+               color: "white",
+               fontSize: "12px",
+               textTransform: "capitalize",
+             }}
+            //  startIcon={<EditIcon />}
+             onClick={(e) => {
+               e.stopPropagation(); // don't select this row after clicking
+               setSelectID(id)
+             setopen(true)
+             }}
+           >
+             Final Agreement
+           </Button>
+         </Grid>
+         </Grid>
+      )}
       </>
     );
   };
@@ -290,6 +324,49 @@ function DataTable({ rows, loading, check, setCheck }) {
   const handleCancel = () => {
     setDeleteAlert({ open: false, id: "" });
   };
+
+
+
+
+ async function AgreementFinal (){
+         try{
+
+           const response = await send_to_bhu({final_agreement:final_agreement.final_agreement,
+            final_agreement_date:final_agreement.agreement_date,status:"Deposited"},selectID)  
+        console.log(response)
+
+            if (response.data.success) {
+              dispatch(
+                setAlert({
+                  variant: "success",
+                  open: true,
+                  message: "Final Agreement Submitted Successfully.",
+                })
+              );
+              setopen(false)
+              dispatch(setRefreshBox())
+            } else {
+              dispatch(
+                setAlert({
+                  variant: "error",
+                  open: true,
+                  message: "Something went wrong! Please again later.",
+                })
+              );
+
+         }
+        }
+         catch(error){
+          dispatch(
+            setAlert({
+              variant: "error",
+              open: true,
+              message: "Something went wrong! Please again later.",
+            }))
+         }
+  }
+
+
   return (
     <>
       {ids.length > 0 && (
@@ -303,6 +380,14 @@ function DataTable({ rows, loading, check, setCheck }) {
           </Button>
         </Box>
       )}
+
+      <FinalAgreement 
+      open={open} 
+      setOpen={setopen} 
+      handleConfirm1={AgreementFinal}
+      value={final_agreement}
+      setValue={setFinalAgreement}
+      />
 
       <Snackbar
         open={err.open}
@@ -371,7 +456,7 @@ function DataTable({ rows, loading, check, setCheck }) {
             let cellClass = [];
             if (
               parms.field === "status" &&
-              parms.row.status === "Approved"
+              (parms.row.status === "Approved" || parms.row.status === "Deposited")
             ) {
               cellClass.push("green statusCell");
             } else if (

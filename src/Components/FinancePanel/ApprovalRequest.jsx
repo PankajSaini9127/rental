@@ -18,11 +18,16 @@ import {
 import { MyHeader } from "../StyledComponent";
 import { useEffect, useState } from "react";
 
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 //download file
 import { saveAs } from "file-saver";
-import { ApprovedByFinance, get_agreement_id, send_back_to_manager, send_to_bhu } from "../../Services/Services";
+import {
+  ApprovedByFinance,
+  get_agreement_id,
+  send_back_to_manager,
+  send_to_bhu,
+} from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
 import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
@@ -56,7 +61,7 @@ function FinanceApproval() {
 
   const [open, setopen] = useState(false);
 
-  const [utr, setUtr ] = useState({utr:"",paymentDate:""})
+  const [utr, setUtr] = useState({ utr: "", paymentDate: "" });
 
   const dispatch = useDispatch();
 
@@ -98,7 +103,7 @@ function FinanceApproval() {
             message: "Send back For Rectification",
           })
         );
-        navigate("/BHUListing");
+        navigate("/finance-listing");
       } else {
         dispatch(
           setAlert({
@@ -112,9 +117,14 @@ function FinanceApproval() {
   }
 
   const handleConfirm = async (e) => {
-    console.log(utr)
+    console.log(utr);
     const response = await ApprovedByFinance(
-      { status: "Approved", finance_id:login_manager_id , utr_number: utr.utr, payment_date: utr.paymentDate },
+      {
+        status: "Approved",
+        finance_id: login_manager_id,
+        utr_number: utr.utr,
+        payment_date: utr.paymentDate,
+      },
       id
     );
     if (response.data.success) {
@@ -137,8 +147,8 @@ function FinanceApproval() {
     }
   };
 
-  function handleSubmit (){
-    setopen(true)
+  function handleSubmit() {
+    setopen(true);
   }
 
   return (
@@ -146,14 +156,17 @@ function FinanceApproval() {
       {ids && ids.length > 0 && (
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
           {/* <a id="button"></a> */}
-          <DialogBoxSBM open={open} handleClose={()=>setopen(false)} handleConfirm={handleConfirm} value={utr} setValue={setUtr} />
+          <DialogBoxSBM
+            open={open}
+            handleClose={() => setopen(false)}
+            handleConfirm={handleConfirm}
+            value={utr}
+            setValue={setUtr}
+          />
 
           <HamburgerMenu
-            navigateHome={"dashboard"}
-            handleListing={() => navigate("/listing")}
-            monthlyRent={() => navigate("/monthly-payment")}
-            renewal={() => navigate(`/renewal`)}
-            monthlyBtn="true"
+            navigateHome={"finance-dashboard"}
+            handleListing={() => navigate("/finance-listing")}
           />
 
           <Box sx={{ flexGrow: 1 }}>
@@ -161,11 +174,14 @@ function FinanceApproval() {
             <Box className="backButton">
               <IconButton
                 variant="contained"
-                color='primary'
-                onClick={()=>navigate(-1)}
-                size={'large'}
+                color="primary"
+                onClick={() => navigate(-1)}
+                size={"large"}
               >
-                <ArrowCircleLeftIcon sx={{fontSize:'3rem'}} color="#FFFFF !important" />
+                <ArrowCircleLeftIcon
+                  sx={{ fontSize: "3rem" }}
+                  color="#FFFFF !important"
+                />
               </IconButton>
             </Box>
 
@@ -305,7 +321,7 @@ function FinanceApproval() {
                           bold={true}
                           cursor={true}
                         /> */}
-                
+
                         <DataFieldStyle
                           field={"mobile number"}
                           value={agreement[ids[0]].mobileNo[id]}
@@ -407,6 +423,17 @@ function FinanceApproval() {
               {/* document section ends here */}
 
               {agreement[ids[0]].remark.length > 0 && (
+
+                <>
+                  <Grid item container xs={10} sx={{ mt: 5 }} spacing={3}>
+                    <Grid item xs={8}>
+                      <DataFieldStyle
+                        field={"Remark !"}
+                        value={agreement[ids[0]].remark}
+                      />
+                    </Grid>
+                  </Grid>
+
                 <>              
               
                 <Grid
@@ -422,21 +449,9 @@ function FinanceApproval() {
                       value={agreement[ids[0]].remark}
                     />
                   </Grid>
-                  
-                  {/* <Grid item xs={8} className={'textFieldWrapper'}>
-                    
-                    <TextField
-                      type="text"
-                      multiline
-                      rows={3}
-                      fullWidth
-                      variant="outlined"
-                      label="Remark *"
-                      placeholder="Remark *"
-                      value={agreement[ids[0]].remark}
-                    />
-                  </Grid> */}
+                
                 </Grid>
+
                 </>
               )}
 
@@ -445,62 +460,66 @@ function FinanceApproval() {
               {agreement[ids[0]].status === "Sent To Finance Team" && (
                 <>
                   <Grid
-                item
-                xs={10}
-                sx={{ mt: 5}}
-                className={'textFieldWrapper'}
-              >
-                <Grid item xs={8}>
-                  <TextField
-                    type="text"
-                    multiline
-                    rows={3}
-                    fullWidth
-                    variant="outlined"
-                    label="Remark *"
-                    placeholder="Remark *"
-                    value={remark}
-                    onChange={(e) => setRemark(e.target.value)}
-                  />
-                </Grid>
-              </Grid>
-                
-                <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
-                  <Grid container spacing={2} sx={{ justifyContent: "center" }}>
-                    <Grid item md={6} xs={11}>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          height: "65px",
-                          borderRadius: "12px",
-                          backgroundColor: "primary",
-                          width: "100%",
-                          color: "#FFFFFF",
-                          textTransform: "capitalize",
-                          fontSize: "18px",
-                        }}
-                        onClick={handleSubmit}
-                      >
-                        Approve
-                      </Button>
-                    </Grid>
-                    <Grid item md={6} xs={11}>
-                      <Button
+                    item
+                    xs={10}
+                    sx={{ mt: 5 }}
+                    className={"textFieldWrapper"}
+                  >
+                    <Grid item xs={8}>
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
                         variant="outlined"
-                        sx={{
-                          height: "65px",
-                          borderRadius: "12px",
-                          width: "100%",
-                          textTransform: "capitalize",
-                          fontSize: "18px",
-                        }}
-                        onClick={handleSendBack}
-                      >
-                        Send Back To Manager
-                      </Button>
+                        label="Remark *"
+                        placeholder="Remark *"
+                        value={remark}
+                        onChange={(e) => setRemark(e.target.value)}
+                      />
                     </Grid>
                   </Grid>
-                </Grid>
+
+                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                    <Grid
+                      container
+                      spacing={2}
+                      sx={{ justifyContent: "center" }}
+                    >
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            height: "65px",
+                            borderRadius: "12px",
+                            backgroundColor: "primary",
+                            width: "100%",
+                            color: "#FFFFFF",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                          }}
+                          onClick={handleSubmit}
+                        >
+                          Approve
+                        </Button>
+                      </Grid>
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            height: "65px",
+                            borderRadius: "12px",
+                            width: "100%",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                          }}
+                          onClick={handleSendBack}
+                        >
+                          Send Back To Manager
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </>
               )}
 

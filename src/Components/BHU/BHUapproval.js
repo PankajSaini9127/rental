@@ -328,9 +328,16 @@ function SrManagerApproval() {
               </Grid> */}
 
               {/* Bank Details Ends here */}
-
+     
+               {agreement[ids[0]].remark.length > 0 &&
+               <Grid item xs={10} sx={{ mt: 5 }}>
+                 <DataFieldStyle
+                 field={"Remark"}
+                 value={agreement[ids[0]].remark}
+               />
+               </Grid>
+               }
              
-
               
                 {agreement[ids[0]].status === "Sent To BUH" && (
                   <>

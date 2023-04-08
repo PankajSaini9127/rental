@@ -242,7 +242,7 @@ function OperationsTable({ rows }) {
             let cellClass = [];
             if (
               parms.field === "status" &&
-              parms.row.status === "Approved"
+              (parms.row.status === "Approved" || parms.row.status === "Deposited")
             ) {
               cellClass.push("green statusCell");
             } else if (
