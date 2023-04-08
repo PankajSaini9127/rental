@@ -62,6 +62,7 @@ function EditAgreement({ history }) {
   // modified by yashwant
   const [preData, setPreData] = useState({
     landlord: [],
+    area :"",
     code: "",
     lockInYear: "",
     address: "",
@@ -121,6 +122,7 @@ function EditAgreement({ history }) {
           year3,
           year4,
           year5,
+          area,
           landlord,
           remark
         } = response.data;
@@ -143,6 +145,7 @@ function EditAgreement({ history }) {
         })
         setPreData({
           id,
+          area,
           code,
           pincode,
           state,
@@ -190,7 +193,8 @@ function EditAgreement({ history }) {
           noc : undefined,
           tenure : undefined,
           landlord : landlord.map(row=>({})),
-          remark : undefined
+          remark : undefined,
+          area: undefined
         });
       }
     } catch (error) {
@@ -512,6 +516,11 @@ function EditAgreement({ history }) {
           error = { state: true, message: "Value must be Correct" };
         else e.target.value = e.target.value.toLocaleString("hi");
         break;
+      case "area":
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { state: true, message: "Value must be Correct" };
+        else e.target.value = e.target.value.toLocaleString("hi");
+        break;
       case "monthlyRent":
         if (!e.target.value.match(/^[0-9]*$/))
           error = { state: true, message: "Value must be Correct" };
@@ -568,6 +577,7 @@ function EditAgreement({ history }) {
     const {
       id,
       code,
+      area,
       lockInYear,
       monthlyRent,
       noticePeriod,
@@ -596,6 +606,7 @@ function EditAgreement({ history }) {
       address,
       location,
       city,
+      area,
         id,
         code,
         lockInYear,
@@ -665,6 +676,7 @@ function EditAgreement({ history }) {
       "maintaince_bill",
       "tax_receipt",
       "noc",
+      "cheque"
     ];
 
     // if (preData.landlord.length > 0) {
@@ -719,6 +731,7 @@ function EditAgreement({ history }) {
       "address",
       "pincode",
       "location",
+      "area"
     ];
 
     let dataError = [];
@@ -1003,6 +1016,7 @@ function EditAgreement({ history }) {
 function handleHold (){
   const {
     id,
+    area,
     code,
     lockInYear,
     monthlyRent,
@@ -1034,6 +1048,7 @@ function handleHold (){
       pincode,
     state,
     address,
+    area,
     location,
     city,
       id,
@@ -1170,11 +1185,24 @@ function handleHold (){
                     placeHolder="Enter Location"
                     name="location"
                       error={formError.location}
-                      // disabled = {true}
                     value={preData.location || ''}
                     onChange={handleCommonChange}
                     index={i}
                   />
+
+<TextFieldWrapper
+                    label="Area"
+                    placeHolder="Area in sq. ft"
+                    name="area"
+                    notationVal = "sq. ft"
+                    textAlignRight={"textAlignRight"}
+                    error={formError.area}
+                    required={true}
+                    value={preData.area}
+                    onChange={handleCommonChange}
+                    index={i}
+                  />
+
               
                   <TextFieldWrapper
                     label="Address"
@@ -1665,7 +1693,7 @@ function handleHold (){
                   </Grid>
                   <Grid item xs={6}>
                     <DocumentUpload
-                      label="Upload POA(If Applicable)"
+                      label="Upload POA (If Applicable)"
                       placeHolder="Upload POA"
                       error={formError.poa}
                       uploaded={preData.poa && true}
@@ -1699,7 +1727,7 @@ function handleHold (){
                   <Grid item xs={6}>
                     <DocumentUpload
                       uploaded={preData.noc && true}
-                      label="Upload Noc(If Mutiple Oweners)"
+                      label="Upload NOC (If Mutiple Oweners)"
                       error={formError.noc}
                       placeHolder="NOC"
                       fileName={preData.noc_name}

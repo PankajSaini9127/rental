@@ -83,6 +83,7 @@ function Agreement({history}) {
     pincode: "",
     location: "",
     city: "",
+    area : ""
   });
 
   useEffect(() => {
@@ -107,6 +108,7 @@ function Agreement({history}) {
     pincode: "",
     location: "",
     city: "",
+    area: ""
   });
   const [isSubmit, setIsSubmit] = useState(false);
 
@@ -524,6 +526,11 @@ function Agreement({history}) {
           error = { state: true, message: "Value must be Correct" };
         else e.target.value = e.target.value.toLocaleString("hi");
         break;
+      case "area":
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { state: true, message: "Value must be Correct" };
+        else e.target.value = e.target.value.toLocaleString("hi");
+        break;
       case "monthlyRent":
         if (!e.target.value.match(/^[0-9]*$/))
           error = { state: true, message: "Value must be Correct" };
@@ -575,12 +582,13 @@ function Agreement({history}) {
       address,
       location,
       city,
+      area
     } = data;
 
     const { landlord } = data;
 
     APICall(
-      {
+      {area,
         code,
         lockInYear,
         monthlyRent,
@@ -627,6 +635,7 @@ function Agreement({history}) {
   async function handleHoldApiCall(id, data) {
     // console.log(data)
     const {
+      area,
       pincode,
       state,
       address,
@@ -656,7 +665,7 @@ function Agreement({history}) {
     console.log(year1, year2, year3, year4, year5);
     const { landlord } = data;
     APICall(
-      {
+      {area,
         code,
         lockInYear,
         monthlyRent,
@@ -744,7 +753,6 @@ function Agreement({history}) {
     try {
       console.log(data);
       let res = await getBankName(data);
-
       if (res.status === 200) {
         setData((old) => ({
           ...old,
@@ -839,6 +847,7 @@ function Agreement({history}) {
       "address",
       "pincode",
       "location",
+      "area"
     ];
 
     let dataError = [];
@@ -1024,6 +1033,19 @@ function Agreement({history}) {
                     error={formError.location}
                     required={true}
                     value={data.location}
+                    onChange={handleCommonChange}
+                    index={i}
+                  />
+
+                  <TextFieldWrapper
+                    label="Area"
+                    placeHolder="Area in sq. ft"
+                    name="area"
+                    notationVal = "sq. ft"
+                    textAlignRight={"textAlignRight"}
+                    error={formError.area}
+                    required={true}
+                    value={data.area}
                     onChange={handleCommonChange}
                     index={i}
                   />
@@ -1696,7 +1718,7 @@ function Agreement({history}) {
                   </Grid>
                   <Grid item xs={6}>
                     <DocumentUpload
-                      label="Upload POA(If Applicable)"
+                      label="Upload POA (If Applicable)"
                       placeHolder="Upload POA"
                       uploaded={data.poa && true}
                       fileName={data.poa_name}
@@ -1731,7 +1753,7 @@ function Agreement({history}) {
                   <Grid item xs={6}>
                     <DocumentUpload
                       uploaded={data.noc && true}
-                      label="Upload Noc(If Multiple Owners)"
+                      label="Upload NOC (If Multiple Owners)"
                       placeHolder="NOC"
                       fileName={data.noc_name}
                       handleChange={handleChangeFile}

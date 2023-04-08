@@ -423,7 +423,7 @@ function FinanceApproval() {
                     />
                   </Grid>
                   
-                  <Grid item xs={8} className={'textFieldWrapper'}>
+                  {/* <Grid item xs={8} className={'textFieldWrapper'}>
                     
                     <TextField
                       type="text"
@@ -435,7 +435,7 @@ function FinanceApproval() {
                       placeholder="Remark *"
                       value={agreement[ids[0]].remark}
                     />
-                  </Grid>
+                  </Grid> */}
                 </Grid>
                 </>
               )}
