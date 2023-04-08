@@ -1287,7 +1287,7 @@ function handleHold (){
                           placeHolder="Enter Name Of Lesse"
                           required={true}
                           disabled = {true}
-                          handleOnBlur={(e) => handleOnBlur(e, i)}
+                           onBlur={(e) => handleOnBlur(e, i)}
                           // error = {errorObj.leeseName}
                           name="name"
                           value={preData.landlord[i].name}
@@ -1297,7 +1297,7 @@ function handleHold (){
                           label="Aadhar Number"
                           placeHolder="Enter Aadhar No."
                          required={true}
-                          handleOnBlur={(e) => handleOnBlur(e, i)}
+                           onBlur={(e) => handleOnBlur(e, i)}
                           name="aadharNo"
                           maxLength={12}
                           value={preData.landlord[i].aadharNo}
@@ -1311,7 +1311,7 @@ function handleHold (){
                         <TextFieldWrapper
                           label="Pan Number"
                           placeHolder="Enter Pan No."
-                    handleOnBlur={(e) => handleOnBlur(e, i)}
+                     onBlur={(e) => handleOnBlur(e, i)}
                     error={formError.landlord[i] &&
                       formError.landlord[i].panNo
                         ? formError.landlord[i].panNo
@@ -1327,7 +1327,7 @@ function handleHold (){
                           label="Mobile Number"
                           placeHolder="Enter Mobile No."
                           required={true}
-                    handleOnBlur={(e) => handleOnBlur(e, i)}
+                     onBlur={(e) => handleOnBlur(e, i)}
                        name="mobileNo"
 
                           maxLength={10}
@@ -1343,7 +1343,7 @@ function handleHold (){
                       // error={formError.alternteMo}
                       placeHolder="Enter Alternate No."
                           name="alternateMobile"
-                    handleOnBlur={(e) => handleOnBlur(e, i)}
+                     onBlur={(e) => handleOnBlur(e, i)}
 
                     maxLength={10}
                           value={preData.landlord[i].alternateMobile}
@@ -1355,7 +1355,7 @@ function handleHold (){
                         <TextFieldWrapper
                           label="Email"
                           placeHolder="Enter Email"
-                    handleOnBlur={(e) => handleOnBlur(e, i)}
+                     onBlur={(e) => handleOnBlur(e, i)}
                           required={true}
                       error={formError.landlord[i] &&
                         formError.landlord[i].email

@@ -46,7 +46,7 @@ const DataFieldStyle = ({ field, value, href, name, bold, cursor }) => {
         {" "}
         {field}
       </Typography>
-      <Stack direction="row" alignItems="center" gap={1}>
+      <Stack direction="column"  gap={1}>
         <Typography
           variant="body2"
           sx={{ color: "black", cursor: cursor && "pointer" }}
@@ -57,10 +57,10 @@ const DataFieldStyle = ({ field, value, href, name, bold, cursor }) => {
           {value}
         </Typography>
         {href !== undefined && (
-          <>
+          <Box sx = {{display : 'flex', gap : 1}}>
             <VisibilityIcon color={"primary"} onClick={handleView} />
             <DownloadIcon color={"primary"} onClick={handleClick} />
-          </>
+          </Box >
         )}
       </Stack>
     </Grid>

@@ -242,10 +242,19 @@ function ManagerApproval() {
                           field={"GST number"}
                           value={agreement[ids[0]].gstNo[id]}
                           href={agreement[ids[0]].gst[id]}
-                          name={"gst_certificate"}
+                          name={"gst"}
                           bold={true}
                           cursor={true}
                         />
+                        <DataFieldStyle
+                          field={"Cancel Cheque"}
+                          value={agreement[ids[0]].accountNo[id]}
+                          href={agreement[ids[0]].cheque[id]}
+                          name={"cheque"}
+                          bold={true}
+                          cursor={true}
+                        />
+                
                         <DataFieldStyle
                           field={"mobile number"}
                           value={agreement[ids[0]].mobileNo[id]}
@@ -320,10 +329,10 @@ function ManagerApproval() {
                     title={"electricity bill"}
                     img={agreement[ids[0]].electricity_bill}
                   />
-                  <DocumentView
+                  {/* <DocumentView
                     title={"Cancel bank cheque"}
                     img={agreement[ids[0]].cheque}
-                  />
+                  /> */}
                   <DocumentView
                     title={"maintaince bill"}
                     img={agreement[ids[0]].maintaince_bill}
