@@ -190,7 +190,6 @@ const style = {
 };
 
 function ImageView({ open, handleClose, href, name }) {
-  console.log(href);
   const fileType = href ?  href.includes("pdf") : false;
 
   return (

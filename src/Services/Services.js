@@ -174,3 +174,14 @@ export async function getLocation (pincode){
    return await axios.get(`https://api.postalpincode.in/pincode/${pincode}`)
 //    return await axios.get(`https://api.postalpincode.in/pincode/110001`)
 }
+
+
+//finance
+
+export async function get_finance_agreements(data){
+    return await axios.get(`${API_LIVE}/api/finance/get-agreement/${data}`)
+}
+
+export async function ApprovedByFinance (data,id){
+    return await axios.put(`${API_LIVE}/api/finance/updateAgreement/finance/${id}`,data)
+}

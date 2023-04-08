@@ -2,10 +2,11 @@ import { DataGrid } from "@mui/x-data-grid";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Checkbox } from "@mui/material";
-import { useSelector } from "react-redux";
-import { send_to_bhu } from "../../Services/Services";
+import { useDispatch, useSelector } from "react-redux";
+import { send_to_operations } from "../../Services/Services";
+import { setAlert } from "../../store/action/action";
 
-function ManagerTable({ rows }) {
+function FinanceTable({ rows }) {
   const navigate = useNavigate();
 
   const [ids, setIds] = useState([]);
@@ -13,6 +14,8 @@ function ManagerTable({ rows }) {
   const { auth } = useSelector((s) => s);
 
   const srm_id = auth.id;
+
+  const dispatch = useDispatch();
 
   const renderDetailsButton = (e) => {
     const id = e.id;
@@ -31,7 +34,7 @@ function ManagerTable({ rows }) {
         }}
         onClick={(e) => {
           e.stopPropagation(); // don't select this row after clicking
-          navigate(`/srManagerApproval/${id}`);
+          navigate(`/finance-approval/${id}`);
         }}
       >
         View
@@ -59,9 +62,8 @@ function ManagerTable({ rows }) {
       headerAlign: "center",
       renderCell: (params) => (
         <>
-          {/* {console.log(params)} */}
-          {params.formattedValue === "Sent Sr Manager" ||
-          params.formattedValue === "Sent To Sr Manager" ? (
+          {console.log(params)}
+          {params.formattedValue === "Sent To BHU" ? (
             <Checkbox
               onChange={handleSwitch}
               name={params.id}
@@ -76,7 +78,7 @@ function ManagerTable({ rows }) {
     {
       field: "code",
       headerName: "Code",
-      width: 120,
+      width: 100,
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -85,7 +87,7 @@ function ManagerTable({ rows }) {
     {
       field: "name",
       headerName: "Name",
-      width: 180,
+      width: 160,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex:1
@@ -93,23 +95,40 @@ function ManagerTable({ rows }) {
     {
       field: "location",
       headerName: "Location",
-      width: 160,
+      width: 130,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex:1
     },
+    // {
+    //   field: "manager",
+    //   headerName: "Manager",
+    //   width: 130,
+    //   headerClassName: "dataGridHeader",
+    //   headerAlign: "center",
+    //   flex:1
+    // },
+    // {
+    //   field: "sr_manager",
+    //   headerName: "Sr Manager",
+    //   width: 130,
+    //   headerClassName: "dataGridHeader",
+    //   headerAlign: "center",
+    //   flex:1
+    // },
     {
-      field: "manager",
-      headerName: "Manager",
-      width: 160,
+      field: "address",
+      headerName: "Address",
+      width: 180,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-       flex:1
+      flex:1
     },
+
     {
       field: "rentalAmount",
       headerName: "Rental Amount",
-      width: 150,
+      width: 120,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex:1
@@ -117,7 +136,7 @@ function ManagerTable({ rows }) {
     {
       field: "status",
       headerName: "Status",
-      width: 200,
+      width: 190,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex:1
@@ -125,7 +144,7 @@ function ManagerTable({ rows }) {
     {
       field: "view",
       headerName: "View",
-      width: 150,
+      width: 130,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: renderDetailsButton,
@@ -133,14 +152,33 @@ function ManagerTable({ rows }) {
     },
   ];
 
-  const onRowsSelectionHandler = (ids) => {
-    setIds(ids);
-  };
+  // const onRowsSelectionHandler = (ids) => {
+  //     setIds(ids)
+  //   };
 
   function handleSelect() {
     ids.map(async (id) => {
-      const response = await send_to_bhu({ status: "Sent To BUH", srm_id }, id);
-      console.log(response);
+      const response = await send_to_operations(
+        { status: "Sent To Operations", srm_id },
+        id
+      );
+      if (response.data.success) {
+        dispatch(
+          setAlert({
+            vatiant: "success",
+            open: true,
+            message: "Approved And Sent To Operations",
+          })
+        );
+      } else {
+        dispatch(
+          setAlert({
+            vatiant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          })
+        );
+      }
     });
   }
 
@@ -153,7 +191,7 @@ function ManagerTable({ rows }) {
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
             onClick={handleSelect}
           >
-            Send To BUH
+            Send To Operations
           </Button>
         </Box>
       )}
@@ -184,7 +222,7 @@ function ManagerTable({ rows }) {
             maxHeight: "30px !important",
             minHeight: "25px !important",
             alignSelf: "center",
-            mx: "1",
+            mx: 1,
             textAlign: "center !important",
             borderRadius: "10px !important",
           },
@@ -233,4 +271,4 @@ function ManagerTable({ rows }) {
   );
 }
 
-export default ManagerTable;
+export default FinanceTable;

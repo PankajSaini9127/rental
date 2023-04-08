@@ -2,7 +2,6 @@ import { Grid } from '@mui/material'
 import { Stack } from '@mui/system'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { AuthContext } from '../../App'
 import HamburgerMenu from '../HamburgerMenu'
 import { DashboardItem, MyHeader } from '../StyledComponent'
 
@@ -16,7 +15,7 @@ const data = [
     {service:"Renewal Agreements", value:4}
   ]
 
-function SrManagerDashboard() {
+function FinanceDashboard() {
 
   const navigate = useNavigate();
 
@@ -26,8 +25,8 @@ function SrManagerDashboard() {
 
 <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
 <HamburgerMenu
-      navigateHome={'operationsDashboard'}
-          handleListing={()=>navigate('/operationsListing')}
+      navigateHome={'finance-dashboard'}
+          handleListing={()=>navigate('/finance-listing')}
         />
 
   {/* dashboard content */}
@@ -55,4 +54,4 @@ function SrManagerDashboard() {
   )
 }
 
-export default SrManagerDashboard
+export default FinanceDashboard

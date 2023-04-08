@@ -100,22 +100,31 @@ function OperationsTable({ rows }) {
       headerAlign: "center",
       flex:1
     },
+    // {
+    //   field: "manager",
+    //   headerName: "Manager",
+    //   width: 130,
+    //   headerClassName: "dataGridHeader",
+    //   headerAlign: "center",
+    //   flex:1
+    // },
+    // {
+    //   field: "sr_manager",
+    //   headerName: "Sr Manager",
+    //   width: 130,
+    //   headerClassName: "dataGridHeader",
+    //   headerAlign: "center",
+    //   flex:1
+    // },
     {
-      field: "manager",
-      headerName: "Manager",
-      width: 130,
+      field: "address",
+      headerName: "Address",
+      width: 180,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex:1
     },
-    {
-      field: "sr_manager",
-      headerName: "Sr Manager",
-      width: 130,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      flex:1
-    },
+
     {
       field: "rentalAmount",
       headerName: "Rental Amount",
@@ -233,13 +242,13 @@ function OperationsTable({ rows }) {
             let cellClass = [];
             if (
               parms.field === "status" &&
-              parms.row.status === "Sent To Finance"
+              parms.row.status === "Approved"
             ) {
               cellClass.push("green statusCell");
             } else if (
               parms.field === "status" &&
               (parms.row.status === "Sent To Sr Manager" ||
-                parms.row.status === "Sent To BHU" ||
+                parms.row.status === "Sent To BUH" ||
                 parms.row.status === "Sent To Operations" ||
                 parms.row.status === "Sent To Finance Team"
                 )

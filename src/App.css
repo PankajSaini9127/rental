@@ -206,3 +206,15 @@ background: rgba(1, 100, 174, 0.78);
   
 }
 
+
+
+.DatePicker{
+  font-size: 17px;
+    line-height: 35px;
+    color: var(--main-color);
+    font-weight: 600;
+    border-radius: 20px;
+    height: 47px;
+    padding: 0 10px;
+    border-color: var(--main-color);
+}

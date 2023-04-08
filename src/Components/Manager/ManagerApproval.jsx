@@ -68,7 +68,7 @@ function ManagerApproval() {
 
   const handleSubmit = async (e) => {
     const response = await send_to_bhu(
-      { status: "Sent To Sr Manager", login_manager_id },
+      { status: "Sent To Sr Manager", manager_id:login_manager_id },
       id
     );
     if (response.data.success) {
@@ -246,6 +246,15 @@ function ManagerApproval() {
                           bold={true}
                           cursor={true}
                         />
+                        {/* <DataFieldStyle
+                          field={"Cancel Cheque"}
+                          value={agreement[ids[0]].accountNo[id]}
+                          href={agreement[ids[0]].cheque[id]}
+                          name={"cheque"}
+                          bold={true}
+                          cursor={true}
+                        /> */}
+                
                         <DataFieldStyle
                           field={"Cancel Cheque"}
                           value={agreement[ids[0]].accountNo[id]}
@@ -302,6 +311,10 @@ function ManagerApproval() {
                         <DataFieldStyle
                           field={"bank A/C number"}
                           value={agreement[ids[0]].accountNo[id]}
+                          href={agreement[ids[0]].cheque[id]}
+                          name={"cheque"}
+                          bold={true}
+                          cursor={true}
                         />
                         <DataFieldStyle
                           field={"bank IFSC code"}
@@ -396,7 +409,7 @@ function ManagerApproval() {
                         }}
                         onClick={handleSubmit}
                       >
-                        Approved And Send to Sr Manager
+                        Approve And Send to Sr Manager
                       </Button>
                     </Grid>
                   </Grid>

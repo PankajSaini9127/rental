@@ -234,13 +234,13 @@ function ManagerTable({ rows }) {
             let cellClass = [];
             if (
               parms.field === "status" &&
-              parms.row.status === "Sent To Finance"
+              parms.row.status === "Approved"
             ) {
               cellClass.push("green statusCell");
             } else if (
               parms.field === "status" &&
               (parms.row.status === "Sent To Sr Manager" ||
-                parms.row.status === "Sent To BHU" ||
+                parms.row.status === "Sent To BUH" ||
                 parms.row.status === "Sent To Operations" ||
                 parms.row.status === "Sent To Finance Team"
                 )

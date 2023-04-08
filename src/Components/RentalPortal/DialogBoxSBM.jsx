@@ -9,7 +9,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+
 
 const labelStyle = {
   fontSize: "20px",
@@ -25,7 +29,7 @@ const fieldStyle = {
   //   height: "50px",
   p: 1,
   px: 2,
-  width: "450px",
+  // width: "450px",
 
   color: "rgba(16, 99, 173, 0.47)",
   "@media(max-width:900px)": { height: "46px", p: 1 },
@@ -34,14 +38,27 @@ const fieldStyle = {
 function DialogBoxSBM({
   open,
   handleClose,
-  sendBack,
   handleConfirm,
   value,
   setValue,
 }) {
+
   function onChange(e) {
-    setValue(e.target.value);
+    setValue({
+      ...value,
+      [e.target.name]:e.target.value
+    });
   }
+
+
+  const disablePastDate = () => {
+    const today = new Date();
+    const dd = String(today.getDate() + 1).padStart(2, "0");
+    const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const yyyy = today.getFullYear();
+    return yyyy + "-" + mm + "-" + dd;
+};
+
 
   return (
     <>
@@ -52,19 +69,17 @@ function DialogBoxSBM({
           style: { borderRadius: 18 },
         }}
       >
-        <Box sx={{ pt: 5, px: 4, pb: 2 }}>
-          <Grid>
-            {/* <MyTextfield /> */}
-            <FormControl>
+        <Box sx={{ pt: 5, px: 2, pb: 2 }}>
+          <Grid container>
+            <Grid item xs={12}>
+            <FormControl fullWidth>
               <FormLabel>
                 <Typography variant="body1" sx={labelStyle}>
-                  Remark
+                  UTR Number
                 </Typography>
               </FormLabel>
               <TextField
                 variant="standard"
-                multiline
-                rows={7}
                 onChange={(e) => onChange(e)}
                 InputProps={{
                   disableUnderline: true,
@@ -73,15 +88,35 @@ function DialogBoxSBM({
                     fontSize: "15px",
                   },
                 }}
-                value={value}
+                value={value.utr}
                 fullWidth
+                name="utr"
                 sx={fieldStyle}
+                placeholder="UTR Number"
               />
             </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+            <FormControl fullWidth>
+              <FormLabel>
+                <Typography variant="body1" sx={labelStyle}>
+                  Payment Date
+                </Typography>
+              </FormLabel>
+              <input type="date" name="paymentDate" value={value.paymentDate}  min={disablePastDate()} className="DatePicker"   onChange={(e) => onChange(e)} />
+              
+            </FormControl>
+            </Grid>
+            {/* <MyTextfield /> */}
+            
+           
           </Grid>
 
           <DialogActions sx={{ mt: 2 }}>
-            <Button
+            <Grid container spacing={3}>
+              <Grid item xs={6}>
+              <Button
+              fullWidth
               variant="contained"
               sx={{
                 height: 45,
@@ -91,9 +126,12 @@ function DialogBoxSBM({
               }}
                onClick={handleConfirm}
             >
-              {sendBack}
+            Submit
             </Button>
-            <Button
+              </Grid>
+              <Grid item xs={6}>
+              <Button
+              fullWidth
               variant="outlined"
               sx={{
                 height: 45,
@@ -102,8 +140,12 @@ function DialogBoxSBM({
               }}
               onClick={handleClose}
             >
-              Cancel
+              Close
             </Button>
+              </Grid>
+            </Grid>
+           
+            
           </DialogActions>
         </Box>
       </Dialog>
