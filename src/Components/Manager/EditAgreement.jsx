@@ -125,12 +125,21 @@ function EditAgreement({ history }) {
           remark
         } = response.data;
 
+        console.log(
+          year1,
+          year2,
+          year3,
+          year4,
+          year5, monthlyRent)
+
+          let rent = monthlyRent
+
         setYearValue({ 
-          year1 : year1 && Math.floor(((year1-monthlyRent)/monthlyRent) * 100),
-          year2 : year2 && Math.floor(((year2-monthlyRent)/year1) * 100),
-          year3 : year3 && Math.floor(((year3-monthlyRent)/year2) * 100),
-          year4 : year4 && Math.floor(((year4-monthlyRent)/year3) * 100),
-          year5 : year5 && Math.floor(((year5-monthlyRent)/year4) * 100),
+          year1 : year1 && Math.ceil(((year1-rent)/rent) * 100),
+          year2 : year2 && parseInt(((year2-year1)/year1) * 100),
+          year3 : year3 && parseInt(((year3-year2)/year2) * 100),
+          year4 : year4 && parseInt(((year4-year3)/year3) * 100),
+          year5 : year5 && parseInt(((year5-year4)/year4) * 100),
         })
         setPreData({
           id,
@@ -154,11 +163,6 @@ function EditAgreement({ history }) {
           tax_receipt,
           noc,
           tenure,
-          year1,
-          year2,
-          year3,
-          year4,
-          year5,
           landlord,
           remark
         });
@@ -185,11 +189,6 @@ function EditAgreement({ history }) {
           tax_receipt : undefined,
           noc : undefined,
           tenure : undefined,
-          year1 : undefined,
-          year2 : undefined,
-          year3 : undefined,
-          year4 : undefined,
-          year5 : undefined,
           landlord : landlord.map(row=>({})),
           remark : undefined
         });
@@ -582,11 +581,6 @@ function EditAgreement({ history }) {
       tax_receipt,
       noc,
       tenure,
-      year1,
-      year2,
-      year3,
-      year4,
-      year5,
       pincode,
       state,
       address,
@@ -617,11 +611,7 @@ function EditAgreement({ history }) {
         tax_receipt,
         noc,
         tenure,
-        year1,
-        year2,
-        year3,
-        year4,
-        year5,
+        ...increment,
         landlord,
         status:"Sent To Sr Manager",
         remark:""
@@ -639,12 +629,13 @@ function EditAgreement({ history }) {
     //   delete row["landlord_id"]
     //   return row
     // })
+    console.log(values)
     const agreement = await editAgreement(values);
     // const result = await add_landlord(landlordData);
 
     if (agreement.status === 200 ) {
       // console.log(history);
-      window.location.href = "/listing";
+      // window.location.href = "/listing";
       dispatch(
         setAlert({
           open: true,
@@ -1026,11 +1017,6 @@ function handleHold (){
     tax_receipt,
     noc,
     tenure,
-    year1,
-    year2,
-    year3,
-    year4,
-    year5,
     pincode,
     state,
     address,
@@ -1065,11 +1051,7 @@ function handleHold (){
       tax_receipt,
       noc,
       tenure,
-      year1,
-      year2,
-      year3,
-      year4,
-      year5,
+      ...increment,
       landlord,
       status:"Hold",
       remark:""
