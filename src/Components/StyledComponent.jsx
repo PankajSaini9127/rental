@@ -251,6 +251,7 @@ const SelectComponent = ({
   onBlur,
   touched,
   multiple,
+  disabled
 }) => {
   return (
     <Grid
@@ -271,6 +272,7 @@ const SelectComponent = ({
           label={label}
           onBlur={onBlur}
           required = {required}
+          disabled={disabled}
           // helperText = {}
           error={errMsg && touched ? true : false}
           sx={{

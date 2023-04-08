@@ -69,7 +69,7 @@ const ValueWrapper = ({ label, value }) => {
   );
 };
 
-function IncrementType({ Year, Percentage, Amount, label,increment ,onChange,name}) {
+function IncrementType({disabled, Year, Percentage, Amount, label,increment ,onChange,name}) {
   return (
     <>
       <Grid item container spacing={2}>
@@ -77,7 +77,7 @@ function IncrementType({ Year, Percentage, Amount, label,increment ,onChange,nam
         value={Year} />
         <TextFieldWrapper 
         
-        value={increment} label={label} onChange={onChange} name={name} />
+        value={increment} label={label} onChange={onChange} name={name} disabled={disabled}/>
         <TextFieldWrapper
                     textAlignRight={"textAlignRight"}
         disabled = {true}
@@ -89,7 +89,7 @@ function IncrementType({ Year, Percentage, Amount, label,increment ,onChange,nam
 
 
 
-const YearlyIncrement = ({ value,rent,increment,setIncrement,tenure,yearValue,setYearValue }) => {
+const YearlyIncrement = ({ value,rent,increment,setIncrement,tenure,yearValue,setYearValue,disabled }) => {
 
 
 
@@ -189,6 +189,7 @@ function handleChange (e){
           name="year1"
           increment={yearValue.year1 || ''}
           onChange={handleChange}
+          disabled={disabled}
         />
         <IncrementType
           Year="Year 2"
@@ -198,6 +199,7 @@ function handleChange (e){
           name="year2"
           increment={yearValue.year2 || ''}
           onChange={handleChange}
+          disabled={disabled}
 
         />
       {
@@ -211,6 +213,7 @@ function handleChange (e){
           increment={yearValue.year3 || ''}
           onChange={handleChange}
           name="year3"
+          disabled={disabled}
         />
         </>
         :null
@@ -226,6 +229,7 @@ function handleChange (e){
           increment={yearValue.year4 || ''}
           onChange={handleChange}
           name="year4"
+          disabled={disabled}
         />
         </>
         :null
@@ -241,6 +245,7 @@ function handleChange (e){
           increment={yearValue.year5 || ''}
           onChange={handleChange}
           name="year5"
+          disabled={disabled}
         />
         </>
         :null
@@ -260,6 +265,7 @@ function handleChange (e){
           increment={yearValue.year1 || ''}
           onChange={handleChange}
           name="year1"
+          disabled={disabled}
         />
         <IncrementType
           Year="Year 2"
@@ -269,6 +275,7 @@ function handleChange (e){
           increment={yearValue.year2 || ''}
           onChange={handleChange}
           name="year2"
+          disabled={disabled}
         />
 
          {
@@ -282,6 +289,7 @@ function handleChange (e){
           increment={yearValue.year3 || ''}
           onChange={handleChange}
           name="year3"
+          disabled={disabled}
         />
         </>
         :null
@@ -297,6 +305,7 @@ function handleChange (e){
           increment={yearValue.year4 || ''}
           onChange={handleChange}
           name="year4"
+          disabled={disabled}
         />
         </>
         :null
@@ -312,6 +321,7 @@ function handleChange (e){
           increment={yearValue.year5 || ''}
           onChange={handleChange}
           name="year5"
+          disabled={disabled}
         />
         </>
         :null
