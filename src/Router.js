@@ -44,6 +44,9 @@ import SuperAdminDashboard from "./Components/SuperAdmin/Super-admin-dashboard";
 import SuperAdminNewUser from "./Components/SuperAdmin/NewUser";
 import SuperAdminListing from "./Components/SuperAdmin/SuperUserListing";
 import SuperAdminUserEdit from "./Components/SuperAdmin/EditUser";
+import FinanceDashboard from "./Components/FinancePanel/FinanceDashboard";
+import FinanceListing from "./Components/FinancePanel/FinanceListing";
+import FinanceApproval from "./Components/FinancePanel/ApprovalRequest";
 
 function MyRouter() {
   const history = useNavigate();
@@ -213,6 +216,25 @@ function MyRouter() {
           isAuth && role.includes("Super Admin") ? <SuperAdminUserEdit /> : <Login />
         }
       />
+
+      {/*Super Admin Ends Here */}
+
+      {/* Finance team start here */}
+
+     <Route 
+     path="/finance-dashboard"
+     element={<FinanceDashboard/>}
+     />
+     <Route 
+     path="/finance-listing"
+     element={<FinanceListing/>}
+     />
+     <Route 
+     path="/finance-approval/:id"
+     element={<FinanceApproval/>}
+     />
+
+      {/* Finance team end here */}
 
       {/* passowrd section Reset */}
 

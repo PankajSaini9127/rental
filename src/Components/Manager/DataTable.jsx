@@ -371,15 +371,16 @@ function DataTable({ rows, loading, check, setCheck }) {
             let cellClass = [];
             if (
               parms.field === "status" &&
-              parms.row.status === "Sent To Finance"
+              parms.row.status === "Approved"
             ) {
               cellClass.push("green statusCell");
             } else if (
               parms.field === "status" &&
               (parms.row.status === "Sent To Sr Manager" ||
-                parms.row.status === "Sent To BHU" ||
+                parms.row.status === "Sent To BUH" ||
                 parms.row.status === "Sent To Operations" ||
-                parms.row.status === "Sent To Finance Team")
+                parms.row.status === "Sent To Finance Team"
+                )
             ) {
               cellClass.push("yellow statusCell");
             } else if (
@@ -387,11 +388,6 @@ function DataTable({ rows, loading, check, setCheck }) {
               parms.row.status === "Sent Back For Rectification"
             ) {
               cellClass.push("red statusCell");
-            } else if (
-              parms.field === "status" &&
-              parms.row.status === "Hold"
-            ) {
-              cellClass.push("statusCell hold");
             }
             cellClass.push("allCell");
 

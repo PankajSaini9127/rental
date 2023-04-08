@@ -22,9 +22,10 @@ import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
 
 //download file
 import { saveAs } from "file-saver";
-import { get_agreement_id, send_to_bhu } from "../../Services/Services";
+import { ApprovedByFinance, get_agreement_id, send_back_to_manager, send_to_bhu } from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
+import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
 
 const Heading = ({ heading }) => {
   return (
@@ -41,15 +42,21 @@ const Heading = ({ heading }) => {
   );
 };
 
-function ManagerApproval() {
+function FinanceApproval() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const { auth } = useSelector((s) => s);
   const login_manager_id = auth.id;
 
+  const [remark, setRemark] = useState("");
+
   const [agreement, setAgreement] = useState({});
   const [ids, setIds] = useState([]);
+
+  const [open, setopen] = useState(false);
+
+  const [utr, setUtr ] = useState({utr:"",paymentDate:""})
 
   const dispatch = useDispatch();
 
@@ -66,9 +73,48 @@ function ManagerApproval() {
     getData(id);
   }, []);
 
-  const handleSubmit = async (e) => {
-    const response = await send_to_bhu(
-      { status: "Sent To Sr Manager", manager_id:login_manager_id },
+  async function handleSendBack() {
+    if (remark.length <= 0) {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Remark Required !.",
+        })
+      );
+    } else {
+      const response = await send_back_to_manager(
+        {
+          status: "Sent Back For Rectification",
+          remark: remark,
+        },
+        id
+      );
+      if (response.data.success) {
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Send back For Rectification",
+          })
+        );
+        navigate("/BHUListing");
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          })
+        );
+      }
+    }
+  }
+
+  const handleConfirm = async (e) => {
+    console.log(utr)
+    const response = await ApprovedByFinance(
+      { status: "Approved", finance_id:login_manager_id , utr_number: utr.utr, payment_date: utr.paymentDate },
       id
     );
     if (response.data.success) {
@@ -76,10 +122,10 @@ function ManagerApproval() {
         setAlert({
           variant: "success",
           open: true,
-          message: "Agreement Sent To Sr Manager",
+          message: "Agreement Approved.",
         })
       );
-      navigate("/listing");
+      navigate("/finance-listing");
     } else {
       dispatch(
         setAlert({
@@ -91,11 +137,16 @@ function ManagerApproval() {
     }
   };
 
+  function handleSubmit (){
+    setopen(true)
+  }
+
   return (
     <>
       {ids && ids.length > 0 && (
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
           {/* <a id="button"></a> */}
+          <DialogBoxSBM open={open} handleClose={()=>setopen(false)} handleConfirm={handleConfirm} value={utr} setValue={setUtr} />
 
           <HamburgerMenu
             navigateHome={"dashboard"}
@@ -356,18 +407,25 @@ function ManagerApproval() {
               {/* document section ends here */}
 
               {agreement[ids[0]].remark.length > 0 && (
+                <>              
+              
                 <Grid
                   item
                   container
-                  xs={12}
-                  sx={{ mt: 5, justifyContent: "space-around" }}
+                  xs={10}
+                  sx={{ mt: 5 }}
+                  spacing={3}
                 >
                   <Grid item xs={8}>
-                    <DataFieldStyle
+                  <DataFieldStyle
                       field={"Remark !"}
                       value={agreement[ids[0]].remark}
                     />
-                    {/* <TextField
+                  </Grid>
+                  
+                  <Grid item xs={8} className={'textFieldWrapper'}>
+                    
+                    <TextField
                       type="text"
                       multiline
                       rows={3}
@@ -376,14 +434,37 @@ function ManagerApproval() {
                       label="Remark *"
                       placeholder="Remark *"
                       value={agreement[ids[0]].remark}
-                    /> */}
+                    />
                   </Grid>
                 </Grid>
+                </>
               )}
 
               {/* Buttons start here*/}
 
-              {agreement[ids[0]].status === "Hold" && (
+              {agreement[ids[0]].status === "Sent To Finance Team" && (
+                <>
+                  <Grid
+                item
+                xs={10}
+                sx={{ mt: 5}}
+                className={'textFieldWrapper'}
+              >
+                <Grid item xs={8}>
+                  <TextField
+                    type="text"
+                    multiline
+                    rows={3}
+                    fullWidth
+                    variant="outlined"
+                    label="Remark *"
+                    placeholder="Remark *"
+                    value={remark}
+                    onChange={(e) => setRemark(e.target.value)}
+                  />
+                </Grid>
+              </Grid>
+                
                 <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                   <Grid container spacing={2} sx={{ justifyContent: "center" }}>
                     <Grid item md={6} xs={11}>
@@ -400,11 +481,27 @@ function ManagerApproval() {
                         }}
                         onClick={handleSubmit}
                       >
-                        Approve And Send to Sr Manager
+                        Approve
+                      </Button>
+                    </Grid>
+                    <Grid item md={6} xs={11}>
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          height: "65px",
+                          borderRadius: "12px",
+                          width: "100%",
+                          textTransform: "capitalize",
+                          fontSize: "18px",
+                        }}
+                        onClick={handleSendBack}
+                      >
+                        Send Back To Manager
                       </Button>
                     </Grid>
                   </Grid>
                 </Grid>
+                </>
               )}
 
               {/* buttons end here */}
@@ -416,4 +513,4 @@ function ManagerApproval() {
   );
 }
 
-export default ManagerApproval;
+export default FinanceApproval;

@@ -126,7 +126,7 @@ export default function Login() {
               // navigate(`/operationsListing`)
               navigate(`/operationsDashboard`);
             }
-          } else if (login_user.role.includes("Admin")) {
+           else if (login_user.role.includes("Admin")) {
             dispatch(setAlert({ open: false, variant: "", message: ''}));
             dispatch(
               setAuth({
@@ -138,6 +138,19 @@ export default function Login() {
               })
             );
             navigate(`/userDashboard`);
+          }else if(login_user.role.includes("Finance")){
+            dispatch(setAlert({ open: false, variant: "", message: ''}));
+            dispatch(
+              setAuth({
+                name: login_user.name,
+                role: login_user.role,
+                id: login_user.id,
+                state:login_user.state,
+                city:login_user.city
+              })
+            );
+            navigate(`/finance-dashboard`);
+          }
           } else {
             navigate(`/newPassword/${data.result[0].email}`);
           }

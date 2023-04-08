@@ -77,7 +77,7 @@ function HamburgerMenu({
                 />
               )}
               {(auth.role.includes("Manager") || auth.role.includes("BUH") || auth.role.includes("Senior_Manager") ||
-                auth.role.includes("Operations"))&& (
+                auth.role.includes("Operations") || auth.role.includes("Finance"))&& (
                   <NavItem Vector={Vector1} onClick={handleListing} />
                 )}
 

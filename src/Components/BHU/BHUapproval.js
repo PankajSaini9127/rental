@@ -61,7 +61,6 @@ function SrManagerApproval() {
     console.log(agreement)
   };
 
-  console.log(sendBackMsg)
   
 
   useEffect(() => {
@@ -69,6 +68,15 @@ function SrManagerApproval() {
   }, []);
 
   const handleSubmit = async (e) => {
+    if(sendBackMsg.length <= 0){
+      dispatch(
+        setAlert({
+          variant:'error',
+          open: true,
+          message: "Remark Required !.",
+        })
+      )
+    }else{
 
     const response = await send_to_operations(
       { status: "Sent To Operations", bhu_id:srm_id,remark:sendBackMsg },
@@ -92,6 +100,7 @@ function SrManagerApproval() {
         })
       );
     }
+  }
   };
 
  //Send Back to manager
@@ -152,7 +161,7 @@ function SrManagerApproval() {
 
             
               {/* Basic Details */}
-              <Grid item md={10}>
+              <Grid item md={10} sx={{mt:2}}>
                 <Grid container spacing={2}>
                   <DataFieldStyle
                     field={"code"}
@@ -176,7 +185,7 @@ function SrManagerApproval() {
                     value={agreement[ids[0]].address}
                   />
                   <DataFieldStyle
-                    field={"lock in year"}
+                    field={"lock in month"}
                     value={agreement[ids[0]].lockInYear}
                   />
                   <DataFieldStyle
@@ -185,7 +194,7 @@ function SrManagerApproval() {
                   />
                   <DataFieldStyle
                     field={"deposit"}
-                    value={agreement[ids[0]].deposite}
+                    value={agreement[ids[0]].deposit}
                   />
                   <DataFieldStyle
                     field={"monthly rental"}
@@ -235,7 +244,7 @@ function SrManagerApproval() {
                     </>
                   )}
 
-                  {Array.from(
+                  {/* {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
                       <Grid container sx={{ mt: 3 }} spacing={2}>
@@ -278,12 +287,12 @@ function SrManagerApproval() {
                         />
                       </Grid>
                     )
-                  )}
+                  )} */}
                 </Grid>
               </Grid>
 
               {/* Bank Details start here */}
-              <Heading heading={"Bank Details"} />
+              {/* <Heading heading={"Bank Details"} />
 
               <Grid item md={10}>
                 <Grid container spacing={2}>
@@ -316,22 +325,22 @@ function SrManagerApproval() {
                     )
                   )}
                 </Grid>
-              </Grid>
+              </Grid> */}
 
               {/* Bank Details Ends here */}
 
              
 
               
-                {agreement[ids[0]].status === "Sent To BHU" && (
+                {agreement[ids[0]].status === "Sent To BUH" && (
                   <>
                    <Grid
                    item
                    container
-                   xs={12}
-                   sx={{ mt: 5, justifyContent: "space-around" }}
+                   xs={10}
+                   sx={{ mt: 5 }}
                  >
-                   <Grid item xs={10} className="textFieldWrapper">
+                   <Grid item xs={8} className="textFieldWrapper">
                      <TextField
                        type="text"
                        multiline
@@ -382,7 +391,7 @@ function SrManagerApproval() {
                         }}
                         onClick={handleSendBack}
                       >
-                        Send Back To Senior Manager
+                        Send Back To Manager
                       </Button>
                     </Grid>
                   </Grid>

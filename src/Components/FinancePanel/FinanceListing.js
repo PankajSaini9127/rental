@@ -1,20 +1,20 @@
 import { Stack } from "@mui/material";
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
 import {
   get_search_srmanager,
   get_Operations_agreements,
+  get_finance_agreements,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
-import OperationsTable from "./OperationsTable";
+import FinanceTable from "./FinanceDataTable";
 
 const options = ["New Agreement", "Monthly Payment", "Rental"];
 
-function SrManagerListing() {
+function FinanceListing() {
   const { auth } = useSelector((state) => state);
 
   const login_operations_id = auth.id;
@@ -22,7 +22,7 @@ function SrManagerListing() {
   const [data, setData] = useState({ ids: [] });
 
   const getData = async (id) => {
-    const response = await get_Operations_agreements(id);
+    const response = await get_finance_agreements(id);
     console.log(response.data)
     setData(response.data );
   };
@@ -69,16 +69,16 @@ function SrManagerListing() {
       {/* {data.success && ( */}
         <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
           <HamburgerMenu
-            navigateHome={"operationsDashboard"}
-            handleListing={() => navigate("/operationsListing")}
+            navigateHome={"finance-dashboard"}
+            handleListing={() => navigate("/finance-listing")}
           />
           <ListingComponent
-            title1={'Rental Management System'}
+            title1={"Rental Management System"}
             title="Rental Agreement"
             buttonText="Upload"
             options={options}
             value={"New Agreement"}
-            Table={OperationsTable}
+            Table={FinanceTable}
             rows={rows}
             dropDown={false}
             searchValue={searchValue}
@@ -90,4 +90,4 @@ function SrManagerListing() {
   );
 }
 
-export default SrManagerListing;
+export default FinanceListing;

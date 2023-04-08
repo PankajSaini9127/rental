@@ -96,7 +96,8 @@ function handleSerachChange (e){
         />
 
         <ListingComponent
-          title={'Rental Management System'}
+          title1={'Rental Management System'}
+          title={'Rental Agreement'}
           buttonText="Upload"
           buttonText1="Add Agreement"
           addbtn={true}
