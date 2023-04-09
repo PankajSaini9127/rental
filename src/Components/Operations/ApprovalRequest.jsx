@@ -410,19 +410,13 @@ function ApprovalRequest() {
               {/* document section ends here */}
 
               {agreement[ids[0]].remark.length > 0 && (
-                <Grid
-                  item
-                  container
-                  xs={12}
-                  sx={{ mt: 5, justifyContent: "space-around" }}
-                >
-                  <Grid item xs={8}>
+                
+                  <Grid item xs={10}>
                     <DataFieldStyle
                       field={"Remark !"}
                       value={agreement[ids[0]].remark}
                     />
                   </Grid>
-                </Grid>
               )}
 
               {/* Buttons start here*/}

@@ -61,9 +61,8 @@ function EditAgreement({ history }) {
 
   const [buh_id, setBuh_ID] = useState(null);
 
-  console.log(">>>>>", buh_id);
+  const [finance_id, setFinance_ID] = useState(null);
 
-  // const history = props.history
 
   // modified by yashwant
   const [preData, setPreData] = useState({
@@ -91,9 +90,6 @@ function EditAgreement({ history }) {
     noc: "",
     remark: "",
   });
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   async function fetchData() {
     try {
@@ -133,10 +129,12 @@ function EditAgreement({ history }) {
         } = response.data;
 
         setBuh_ID(response.data.bhu_id);
-        let rent = monthlyRent;
+        setFinance_ID(response.data.op_id);
 
+        let rent = monthlyRent;
         setYearValue({
           year1: 0,
+
           year2: year2 && parseInt(((year2 - year1) / year1) * 100),
           year3: year3 && parseInt(((year3 - year2) / year2) * 100),
           year4: year4 && parseInt(((year4 - year3) / year3) * 100),
@@ -200,6 +198,10 @@ function EditAgreement({ history }) {
       //console.log('err>>',error)
     }
   }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   const [docExpand, setDocExpand] = useState(0);
 
@@ -559,7 +561,7 @@ function EditAgreement({ history }) {
 
   // on form submit
 
-  const handleConfirm = () => {
+  const handleConfirm = ( ) => {
     setOpen(false);
     // //console.log(data)
     const {
@@ -612,12 +614,15 @@ function EditAgreement({ history }) {
         tenure,
         ...increment,
         landlord,
-        status: "Sent To Sr Manager",
+        status: (finance_id === 0 && buh_id !== 0 )?"Sent To Operations" :  "Sent To Sr Manager",
+
         remark: "",
       },
       landlord
     );
   };
+  const [expand, setExpand] = useState(0);
+
   const [expand, setExpand] = useState(0);
 
   const APICall = async (values, landlordData) => {
@@ -638,7 +643,7 @@ function EditAgreement({ history }) {
         setAlert({
           open: true,
           variant: "success",
-          message: "Agrement Edited Successfully.",
+          message: (finance_id === 0 && buh_id !== 0 )? "Agrement Edited Successfully & Sent To Operations.": "Agrement Edited Successfully & Sent To Sr Manager.",
         })
       );
       navigate('/listing')
@@ -663,6 +668,7 @@ function EditAgreement({ history }) {
       "cheque",
     ];
      preData.landlord.length > 1 && field.push("noc")
+
 
     // if (preData.landlord.length > 0) {
     //   preData.landlord.map((row, i) => {
@@ -1020,7 +1026,6 @@ function EditAgreement({ history }) {
       city,
       landlord,
     } = preData;
-
     console.log(preData);
     console.log(validate(preData), validateFields(preData));
     if (validate(preData) && validateFields(preData)) {
@@ -1462,6 +1467,7 @@ function EditAgreement({ history }) {
                             onChange={(e) => handleChange(e, i)}
                           />
 
+
                           <TextFieldWrapper
                             label="Bank Name"
                             placeHolder="Enter Bank Name"
@@ -1786,7 +1792,12 @@ function EditAgreement({ history }) {
                         },
                       }}
                     >
-                      Send To Sr Manager
+      
+                    {(finance_id === 0 &&
+                       buh_id !== 0 ) ?
+                        "Send To Operations" :  "Send To Sr Manager"
+                        }
+
                     </Button>
                   </Grid>
 
