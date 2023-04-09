@@ -69,19 +69,18 @@ const ValueWrapper = ({ label, value }) => {
   );
 };
 
-function IncrementType({ Year, Percentage, Amount, label,increment ,onChange,name}) {
+function IncrementType({disabled, Year, Percentage, Amount, label,increment ,onChange,name}) {
   return (
     <>
       <Grid item container spacing={2}>
         <ValueWrapper 
         value={Year} />
         <TextFieldWrapper 
-        
-        value={increment} label={label} onChange={onChange} name={name} />
+        value={increment} label={label} onChange={onChange} name={name} disabled={disabled}/>
         <TextFieldWrapper
                     textAlignRight={"textAlignRight"}
         disabled = {true}
-        value={Amount} label="Rental Amount" />
+        value={Math.ceil(Amount)} label="Rental Amount" />
       </Grid>
     </>
   );
@@ -89,7 +88,7 @@ function IncrementType({ Year, Percentage, Amount, label,increment ,onChange,nam
 
 
 
-const YearlyIncrement = ({ value,rent,increment,setIncrement,tenure,yearValue,setYearValue }) => {
+const YearlyIncrement = ({ value,rent,increment,setIncrement,tenure,yearValue,setYearValue,disabled }) => {
 
 
 
@@ -107,11 +106,11 @@ if(value === "Percentage"){
   total4 = (total3/100*yearValue.year4+ total3);
   total5 = (total4/100*yearValue.year5+total4);
 
-  total1 = parseFloat(total1).toLocaleString('hi')
-  total2 = parseFloat(total2).toLocaleString('hi')
-  total3 = parseFloat(total3).toLocaleString('hi')
-  total4 = parseFloat(total4).toLocaleString('hi')
-  total5 = parseFloat(total5).toLocaleString('hi')
+  total1 = parseFloat(total1)
+  total2 = parseFloat(total2)
+  total3 = parseFloat(total3)
+  total4 = parseFloat(total4)
+  total5 = parseFloat(total5)
 
 }else
  if(value === "Value"){
@@ -187,8 +186,9 @@ function handleChange (e){
           Amount={increment.year1}
           label="Percentage"
           name="year1"
-          increment={yearValue.year1 || ''}
+          increment={0}
           onChange={handleChange}
+          disabled={true}
         />
         <IncrementType
           Year="Year 2"
@@ -198,6 +198,7 @@ function handleChange (e){
           name="year2"
           increment={yearValue.year2 || ''}
           onChange={handleChange}
+          disabled={disabled}
 
         />
       {
@@ -211,6 +212,7 @@ function handleChange (e){
           increment={yearValue.year3 || ''}
           onChange={handleChange}
           name="year3"
+          disabled={disabled}
         />
         </>
         :null
@@ -226,6 +228,7 @@ function handleChange (e){
           increment={yearValue.year4 || ''}
           onChange={handleChange}
           name="year4"
+          disabled={disabled}
         />
         </>
         :null
@@ -241,6 +244,7 @@ function handleChange (e){
           increment={yearValue.year5 || ''}
           onChange={handleChange}
           name="year5"
+          disabled={disabled}
         />
         </>
         :null
@@ -257,9 +261,10 @@ function handleChange (e){
           Percentage="0"
           Amount={increment.year1 || ''}
           label="Value"
-          increment={yearValue.year1 || ''}
+          increment={0}
           onChange={handleChange}
           name="year1"
+          disabled={disabled}
         />
         <IncrementType
           Year="Year 2"
@@ -269,6 +274,7 @@ function handleChange (e){
           increment={yearValue.year2 || ''}
           onChange={handleChange}
           name="year2"
+          disabled={disabled}
         />
 
          {
@@ -282,6 +288,7 @@ function handleChange (e){
           increment={yearValue.year3 || ''}
           onChange={handleChange}
           name="year3"
+          disabled={disabled}
         />
         </>
         :null
@@ -297,6 +304,7 @@ function handleChange (e){
           increment={yearValue.year4 || ''}
           onChange={handleChange}
           name="year4"
+          disabled={disabled}
         />
         </>
         :null
@@ -312,6 +320,7 @@ function handleChange (e){
           increment={yearValue.year5 || ''}
           onChange={handleChange}
           name="year5"
+          disabled={disabled}
         />
         </>
         :null

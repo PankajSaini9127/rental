@@ -60,12 +60,9 @@ function EditAgreement({ history }) {
   const { id } = useParams();
 
   const [buh_id, setBuh_ID] = useState(null);
+
   const [finance_id, setFinance_ID] = useState(null);
 
-  console.log(">>>>>", buh_id);
-  console.log("finance" , finance_id)
-
-  // const history = props.history
 
   // modified by yashwant
   const [preData, setPreData] = useState({
@@ -93,7 +90,6 @@ function EditAgreement({ history }) {
     noc: "",
     remark: "",
   });
-
 
   async function fetchData() {
     try {
@@ -135,20 +131,10 @@ function EditAgreement({ history }) {
         setBuh_ID(response.data.bhu_id);
         setFinance_ID(response.data.op_id);
 
-
-        
-
-        // console.log(
-        //   year1,
-        //   year2,
-        //   year3,
-        //   year4,
-        //   year5, monthlyRent)
-
         let rent = monthlyRent;
-
         setYearValue({
-          year1: year1 && Math.ceil(((year1 - rent) / rent) * 100),
+          year1: 0,
+
           year2: year2 && parseInt(((year2 - year1) / year1) * 100),
           year3: year3 && parseInt(((year3 - year2) / year2) * 100),
           year4: year4 && parseInt(((year4 - year3) / year3) * 100),
@@ -629,11 +615,13 @@ function EditAgreement({ history }) {
         ...increment,
         landlord,
         status: (finance_id === 0 && buh_id !== 0 )?"Sent To Operations" :  "Sent To Sr Manager",
+
         remark: "",
       },
       landlord
     );
   };
+  const [expand, setExpand] = useState(0);
 
   const [expand, setExpand] = useState(0);
 
@@ -672,15 +660,15 @@ function EditAgreement({ history }) {
   // form validation
   function validate(data) {
     let field = [
-      ,
       "draft_agreement",
       "electricity_bill",
       "poa",
       "maintaince_bill",
       "tax_receipt",
-      "noc",
       "cheque",
     ];
+     preData.landlord.length > 1 && field.push("noc")
+
 
     // if (preData.landlord.length > 0) {
     //   preData.landlord.map((row, i) => {
@@ -1038,7 +1026,6 @@ function EditAgreement({ history }) {
       city,
       landlord,
     } = preData;
-
     console.log(preData);
     console.log(validate(preData), validateFields(preData));
     if (validate(preData) && validateFields(preData)) {
@@ -1074,8 +1061,6 @@ function EditAgreement({ history }) {
       );
     }
   }
-
-  // console.log((finance_id === 0 || finance_id === null && buh_id !== 0 || buh_id === null))
 
   return (
     <>
@@ -1482,6 +1467,7 @@ function EditAgreement({ history }) {
                             onChange={(e) => handleChange(e, i)}
                           />
 
+
                           <TextFieldWrapper
                             label="Bank Name"
                             placeHolder="Enter Bank Name"
@@ -1749,7 +1735,8 @@ function EditAgreement({ history }) {
                       name={"tax_receipt"}
                     />
                   </Grid>
-                  <Grid item xs={6}>
+                  { preData.landlord.length > 1 &&
+                    <Grid item xs={6}>
                     <DocumentUpload
                       uploaded={preData.noc && true}
                       label="Upload NOC (If Mutiple Oweners)"
@@ -1758,8 +1745,9 @@ function EditAgreement({ history }) {
                       fileName={preData.noc_name}
                       handleChange={handleChangeFile}
                       name={"noc"}
-                    />
+                      />
                   </Grid>
+                    }
                 </Grid>
 
                 {/* Document upload section end here */}
@@ -1804,11 +1792,12 @@ function EditAgreement({ history }) {
                         },
                       }}
                     >
-                      
+      
                     {(finance_id === 0 &&
                        buh_id !== 0 ) ?
                         "Send To Operations" :  "Send To Sr Manager"
                         }
+
                     </Button>
                   </Grid>
 

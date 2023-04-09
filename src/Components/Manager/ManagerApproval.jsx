@@ -141,6 +141,10 @@ function ManagerApproval() {
                     value={agreement[ids[0]].location}
                   />
                   <DataFieldStyle
+                    field={"area"}
+                    value={agreement[ids[0]].area + " sq. ft"}
+                  />
+                  <DataFieldStyle
                     field={"pincode"}
                     value={agreement[ids[0]].pincode}
                   />
@@ -256,6 +260,15 @@ function ManagerApproval() {
                         /> */}
                 
                         <DataFieldStyle
+                          field={"Cancel Cheque"}
+                          value={agreement[ids[0]].accountNo[id]}
+                          href={agreement[ids[0]].cheque[id]}
+                          name={"cheque"}
+                          bold={true}
+                          cursor={true}
+                        />
+                
+                        <DataFieldStyle
                           field={"mobile number"}
                           value={agreement[ids[0]].mobileNo[id]}
                         />
@@ -346,10 +359,10 @@ function ManagerApproval() {
                     title={"Property tax receipt"}
                     img={agreement[ids[0]].tax_receipt}
                   />
-                  <DocumentView
+                  {agreement[ids[0]].leeseName.length > 1 && <DocumentView
                     title={"NOC (if multiple owner)"}
                     img={agreement[ids[0]].noc}
-                  />
+                  />}
                 </Grid>
               </Grid>
 

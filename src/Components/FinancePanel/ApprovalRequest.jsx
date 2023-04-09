@@ -147,8 +147,34 @@ function FinanceApproval() {
     }
   };
 
-  function handleSubmit() {
-    setopen(true);
+  async function handleSubmit() {
+    const response = await ApprovedByFinance(
+      {
+        status: "Approved",
+        finance_id: "",
+        utr_number: "",
+        payment_date: "",
+      },
+      id
+    );
+    if (response.data.success) {
+      dispatch(
+        setAlert({
+          variant: "success",
+          open: true,
+          message: "Agreement Approved.",
+        })
+      );
+      navigate("/finance-listing");
+    } else {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Something went wrong! Please again later.",
+        })
+      );
+    }
   }
 
   return (
@@ -206,6 +232,10 @@ function FinanceApproval() {
                   <DataFieldStyle
                     field={"location"}
                     value={agreement[ids[0]].location}
+                  />
+                   <DataFieldStyle
+                    field={"area"}
+                    value={agreement[ids[0]].area + " sq. ft"}
                   />
                   <DataFieldStyle
                     field={"pincode"}
@@ -413,25 +443,44 @@ function FinanceApproval() {
                     title={"Property tax receipt"}
                     img={agreement[ids[0]].tax_receipt}
                   />
-                  <DocumentView
+         {agreement[ids[0]].leeseName.length > 1 && <DocumentView
                     title={"NOC (if multiple owner)"}
                     img={agreement[ids[0]].noc}
-                  />
+                  />}
                 </Grid>
               </Grid>
 
               {/* document section ends here */}
 
               {agreement[ids[0]].remark.length > 0 && (
+
                 <>
-                  <Grid item container xs={10} sx={{ mt: 5 }} spacing={3}>
+                  {/* <Grid item container xs={10} sx={{ mt: 5 }} spacing={3}>
                     <Grid item xs={8}>
                       <DataFieldStyle
                         field={"Remark !"}
                         value={agreement[ids[0]].remark}
                       />
                     </Grid>
+                  </Grid> */}
+             
+              
+                <Grid
+                  item
+                  container
+                  xs={10}
+                  sx={{ mt: 5 }}
+                  spacing={3}
+                >
+                  <Grid item xs={8}>
+                  <DataFieldStyle
+                      field={"Remark !"}
+                      value={agreement[ids[0]].remark}
+                    />
                   </Grid>
+                
+                </Grid>
+
                 </>
               )}
 

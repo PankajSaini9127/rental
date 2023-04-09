@@ -18,29 +18,31 @@ function FinanceListing() {
   const { auth } = useSelector((state) => state);
 
   const login_operations_id = auth.id;
+  const [rows,setRows] = useState([])
 
   const [data, setData] = useState({ ids: [] });
 
   const getData = async (id) => {
     const response = await get_finance_agreements(id);
-    console.log(response.data)
-    setData(response.data );
+    if(response.status === 200)
+    {
+      setData(response.data );
+      setRows(response.data.ids.map((item) => {
+        return {
+          i: response.data.agreement[item].id,
+          id: response.data.agreement[item].agreement_id,
+          status: response.data.agreement[item].status,
+          code: response.data.agreement[item].code,
+          name: response.data.agreement[item].name,
+          location: response.data.agreement[item].location,
+          address: response.data.agreement[item].address,
+          rentalAmount: response.data.agreement[item].monthlyRent,
+          utr_number : response.data.agreement[item].utr_number
+        };
+      }))
+    }
   };
 
-  console.log(data)
-
-  const rows = data.ids.map((item) => {
-    return {
-      i: data.agreement[item].id,
-      id: data.agreement[item].agreement_id,
-      status: data.agreement[item].status,
-      code: data.agreement[item].code,
-      name: data.agreement[item].name,
-      location: data.agreement[item].location,
-      address: data.agreement[item].address,
-      rentalAmount: data.agreement[item].monthlyRent,
-    };
-  });
 
   const [searchValue, setsearchValue] = useState("");
 
@@ -78,6 +80,7 @@ function FinanceListing() {
             buttonText="Upload"
             options={options}
             value={"New Agreement"}
+            setRows = {setRows}
             Table={FinanceTable}
             rows={rows}
             dropDown={false}
