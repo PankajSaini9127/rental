@@ -250,7 +250,8 @@ function FinanceTable({ rows }) {
               (parms.row.status === "Sent To Sr Manager" ||
                 parms.row.status === "Sent To BUH" ||
                 parms.row.status === "Sent To Operations" ||
-                parms.row.status === "Sent To Finance Team"
+                parms.row.status === "Sent To Finance Team" || 
+                parms.row.status === "Hold"
                 )
             ) {
               cellClass.push("yellow statusCell");

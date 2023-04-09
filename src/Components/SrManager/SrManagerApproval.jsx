@@ -66,7 +66,7 @@ function SrManagerApproval() {
     setIds(agreement.data.ids);
   };
 
-  console.log(agreement);
+ 
 
   useEffect(() => {
     getData(id);
@@ -123,7 +123,7 @@ function SrManagerApproval() {
       );
     } else {
     const response = await send_to_bhu(
-      { status: "Sent To BUH", srm_id: login_manager_id },
+      { status: (agreement[ids[0]].op_id === 0 )? "Sent To BUH" : "Sent To Operations" , srm_id: login_manager_id },
       id
     );
     if (response.data.success) {
@@ -131,7 +131,7 @@ function SrManagerApproval() {
         setAlert({
           variant: "success",
           open: true,
-          message: "Agreement To Sent BUH",
+          message: (agreement[ids[0]].op_id === 0 )? "Agreement Sent To BUH" : "Agreement Sent To Operations ",
         })
       );
       navigate("/srManagerListing");
@@ -147,11 +147,14 @@ function SrManagerApproval() {
   }
   };
 
+ 
   return (
     <>
       {ids && ids.length > 0 && (
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
           {/* <a id="button"></a> */}
+
+          { console.log(agreement[ids[0]].op_id)};
 
           <HamburgerMenu
             navigateHome={"dashboard"}
@@ -471,7 +474,7 @@ function SrManagerApproval() {
                         }}
                         onClick={handleSubmit}
                       >
-                        Approve And Send to BUH
+                         {(agreement[ids[0]].op_id === 0 )? "Approve And Send to BUH" : "Approve And Send To Operations"}
                       </Button>
                     </Grid>
                     <Grid item md={6} xs={11}>
