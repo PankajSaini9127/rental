@@ -76,12 +76,11 @@ function IncrementType({disabled, Year, Percentage, Amount, label,increment ,onC
         <ValueWrapper 
         value={Year} />
         <TextFieldWrapper 
-        
         value={increment} label={label} onChange={onChange} name={name} disabled={disabled}/>
         <TextFieldWrapper
                     textAlignRight={"textAlignRight"}
         disabled = {true}
-        value={Amount} label="Rental Amount" />
+        value={Math.ceil(Amount)} label="Rental Amount" />
       </Grid>
     </>
   );
@@ -187,9 +186,9 @@ function handleChange (e){
           Amount={increment.year1}
           label="Percentage"
           name="year1"
-          increment={yearValue.year1 || ''}
+          increment={0}
           onChange={handleChange}
-          disabled={disabled}
+          disabled={true}
         />
         <IncrementType
           Year="Year 2"
@@ -262,7 +261,7 @@ function handleChange (e){
           Percentage="0"
           Amount={increment.year1 || ''}
           label="Value"
-          increment={yearValue.year1 || ''}
+          increment={0}
           onChange={handleChange}
           name="year1"
           disabled={disabled}

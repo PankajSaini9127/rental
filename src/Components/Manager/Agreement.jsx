@@ -792,8 +792,9 @@ function Agreement({history}) {
       "poa",
       "maintaince_bill",
       "tax_receipt",
-      "noc",
     ];
+
+    data.landlord.length > 1 && field.push("noc")
 
     if (landloard.length > 0) {
       data.landlord.map((row, i) => {
@@ -1750,6 +1751,7 @@ function Agreement({history}) {
                       error={formError.tax_receipt}
                     />
                   </Grid>
+                  { data.landlord.length > 1 &&
                   <Grid item xs={6}>
                     <DocumentUpload
                       uploaded={data.noc && true}
@@ -1761,6 +1763,7 @@ function Agreement({history}) {
                       error={formError.noc}
                     />
                   </Grid>
+}
                 </Grid>
 
                 {/* Document upload section end here */}

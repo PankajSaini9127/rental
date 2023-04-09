@@ -5,14 +5,22 @@ import { Box, Button, Checkbox } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { send_to_operations } from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
-
-function FinanceTable({ rows }) {
+import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
+import {
+  ApprovedByFinance,
+} from "../../Services/Services";
+function FinanceTable({ rows, setRows }) {
   const navigate = useNavigate();
 
   const [ids, setIds] = useState([]);
 
-  const { auth } = useSelector((s) => s);
 
+  const [open, setopen] = useState(false);
+
+  const [utr, setUtr] = useState({ utr: "", paymentDate: "" });
+
+
+  const { auth } = useSelector((s) => s);
   const srm_id = auth.id;
 
   const dispatch = useDispatch();
@@ -21,6 +29,7 @@ function FinanceTable({ rows }) {
     const id = e.id;
 
     return (
+      <Box sx = {{display : "flex", gap : '1rem', width : "100%"}}>
       <Button
         variant="contained"
         color="primary"
@@ -39,6 +48,25 @@ function FinanceTable({ rows }) {
       >
         View
       </Button>
+      {(e.row.status === 'Approved' &&  e.row.utr_number === '') &&
+      <Button
+             variant="contained"
+             color="primary"
+             size="small"
+             style={{
+               backgroundColor: "#62CDFF",
+               color: "white",
+               fontSize: "12px",
+               textTransform: "capitalize",
+             }}
+            //  startIcon={<EditIcon />}
+             onClick={(e) => {
+             setopen({open : true, id : id})
+             }}
+           >
+             URT Number
+           </Button>}
+      </Box>
     );
   };
   const handleSwitch = (e) => {
@@ -122,7 +150,7 @@ function FinanceTable({ rows }) {
       width: 180,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+      // flex:1
     },
 
     {
@@ -131,7 +159,7 @@ function FinanceTable({ rows }) {
       width: 120,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+      // flex:1
     },
     {
       field: "status",
@@ -139,16 +167,25 @@ function FinanceTable({ rows }) {
       width: 190,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+      // flex:1
     },
+    // {
+    //   field: "view",
+    //   headerName: "View",
+    //   width: 130,
+    //   headerClassName: "dataGridHeader",
+    //   headerAlign: "center",
+    //   renderCell: renderDetailsButton,
+    //   flex:1
+    // },
     {
-      field: "view",
-      headerName: "View",
-      width: 130,
+      field: "action",
+      headerName: "Action",
+      width: 250,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: renderDetailsButton,
-      flex:1
+      // flex:1
     },
   ];
 
@@ -182,8 +219,62 @@ function FinanceTable({ rows }) {
     });
   }
 
+
+  const handleConfirm = async (e) => {
+    // console.log(setRows);
+   
+    const response = await ApprovedByFinance(
+      {
+        status: "Approved",
+        finance_id: srm_id,
+        utr_number: utr.utr,
+        payment_date: utr.paymentDate,
+      },
+      open.id
+    );
+    if (response.data.success) {
+      setRows(old=>rows.map((data)=>{
+        // console.log(data.id,open.id)
+        if(data.id === open.id)
+        {
+          data.utr_number = utr.utr
+          return data
+        }
+        else return data
+        
+      }))
+      setUtr({utr : "", paymentDate : ''})
+      setopen({open : false})
+    
+      dispatch(
+        setAlert({
+          variant: "success",
+          open: true,
+          message: "Agreement Approved.",
+        })
+      );
+      navigate("/finance-listing");
+    } else {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Something went wrong! Please again later.",
+        })
+      );
+    }
+  };
+
   return (
     <>
+        <DialogBoxSBM
+            open={open.open}
+            handleClose={() => setopen({...open,open : false})}
+            handleConfirm={handleConfirm}
+            value={utr}
+            setValue={setUtr}
+          />
+
       {ids.length > 0 && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button

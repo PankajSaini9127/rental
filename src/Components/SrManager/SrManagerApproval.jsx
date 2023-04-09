@@ -199,6 +199,10 @@ function SrManagerApproval() {
                     field={"location"}
                     value={agreement[ids[0]].location}
                   />
+                   <DataFieldStyle
+                    field={"area"}
+                    value={agreement[ids[0]].area + " sq. ft"}
+                  />
                   <DataFieldStyle
                     field={"pincode"}
                     value={agreement[ids[0]].pincode}
@@ -405,10 +409,10 @@ function SrManagerApproval() {
                     title={"Property tax receipt"}
                     img={agreement[ids[0]].tax_receipt}
                   />
-                  <DocumentView
+              {agreement[ids[0]].leeseName.length > 1 && <DocumentView
                     title={"NOC (if multiple owner)"}
                     img={agreement[ids[0]].noc}
-                  />
+                  />}
                 </Grid>
               </Grid>
 

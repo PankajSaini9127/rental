@@ -133,18 +133,10 @@ function EditAgreement({ history }) {
         } = response.data;
 
         setBuh_ID(response.data.bhu_id);
-
-        // console.log(
-        //   year1,
-        //   year2,
-        //   year3,
-        //   year4,
-        //   year5, monthlyRent)
-
         let rent = monthlyRent;
 
         setYearValue({
-          year1: year1 && Math.ceil(((year1 - rent) / rent) * 100),
+          year1: 0,
           year2: year2 && parseInt(((year2 - year1) / year1) * 100),
           year3: year3 && parseInt(((year3 - year2) / year2) * 100),
           year4: year4 && parseInt(((year4 - year3) / year3) * 100),
@@ -663,15 +655,14 @@ function EditAgreement({ history }) {
   // form validation
   function validate(data) {
     let field = [
-      ,
       "draft_agreement",
       "electricity_bill",
       "poa",
       "maintaince_bill",
       "tax_receipt",
-      "noc",
       "cheque",
     ];
+     preData.landlord.length > 1 && field.push("noc")
 
     // if (preData.landlord.length > 0) {
     //   preData.landlord.map((row, i) => {
@@ -1738,7 +1729,8 @@ function EditAgreement({ history }) {
                       name={"tax_receipt"}
                     />
                   </Grid>
-                  <Grid item xs={6}>
+                  { preData.landlord.length > 1 &&
+                    <Grid item xs={6}>
                     <DocumentUpload
                       uploaded={preData.noc && true}
                       label="Upload NOC (If Mutiple Oweners)"
@@ -1747,8 +1739,9 @@ function EditAgreement({ history }) {
                       fileName={preData.noc_name}
                       handleChange={handleChangeFile}
                       name={"noc"}
-                    />
+                      />
                   </Grid>
+                    }
                 </Grid>
 
                 {/* Document upload section end here */}

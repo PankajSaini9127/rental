@@ -117,6 +117,21 @@ function DialogBoxSBM({
               <Grid item xs={6}>
               <Button
               fullWidth
+              variant="outlined"
+              sx={{
+                height: 45,
+                borderRadius: "15px",
+                textTransform: "capitalize",
+              }}
+              onClick={handleClose}
+            >
+              Close
+            </Button>
+              </Grid>
+
+              <Grid item xs={6}>
+              <Button
+              fullWidth
               variant="contained"
               sx={{
                 height: 45,
@@ -127,20 +142,6 @@ function DialogBoxSBM({
                onClick={handleConfirm}
             >
             Submit
-            </Button>
-              </Grid>
-              <Grid item xs={6}>
-              <Button
-              fullWidth
-              variant="outlined"
-              sx={{
-                height: 45,
-                borderRadius: "15px",
-                textTransform: "capitalize",
-              }}
-              onClick={handleClose}
-            >
-              Close
             </Button>
               </Grid>
             </Grid>

@@ -84,7 +84,6 @@ const TextFieldWrapper = ({
           label={label}
           onBlur={onBlur}
           input
-  
           required={required?true:false}
           type={type}
           InputProps={{
@@ -98,7 +97,7 @@ const TextFieldWrapper = ({
             maxLength: maxLength,
           }}
           placeholder={placeHolder}
-          value={value}
+          value={value || ''}
           helperText = {error ? (
             <span style = {{color:"red"}}>
               {error}

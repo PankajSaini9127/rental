@@ -359,10 +359,10 @@ function ManagerApproval() {
                     title={"Property tax receipt"}
                     img={agreement[ids[0]].tax_receipt}
                   />
-                  <DocumentView
+                  {agreement[ids[0]].leeseName.length > 1 && <DocumentView
                     title={"NOC (if multiple owner)"}
                     img={agreement[ids[0]].noc}
-                  />
+                  />}
                 </Grid>
               </Grid>
 

@@ -27,6 +27,7 @@ function ListingComponent({
   options,
   Table,
   value,
+  setRows,
   onChange,
   rows,
   onButtonClick,
@@ -172,7 +173,7 @@ function ListingComponent({
 
       </Grid>
 
-      <Table rows={rows} setCheck={setCheck} check={check}/>
+      <Table rows={rows} setRows = {setRows} setCheck={setCheck} check={check}/>
     </Box>
   );
 }
