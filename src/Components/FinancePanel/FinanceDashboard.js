@@ -1,9 +1,10 @@
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 import { DashboardItem, MyHeader } from "../StyledComponent";
+import { useSelector } from "react-redux";
 
 const data = [
   { service: "Total Approval Pending", value: 10 },
@@ -15,6 +16,7 @@ const data = [
 
 function FinanceDashboard() {
   const navigate = useNavigate();
+  const { auth } = useSelector((s) => s);
 
   return (
     <>
@@ -26,8 +28,15 @@ function FinanceDashboard() {
 
         {/* dashboard content */}
         <Grid container sx={{ justifyContent: "center" }}>
-          <Grid item xs={12}>
+          <Grid
+            item
+            xs={12}
+            sx={{ justifyContent: "space-between", display: "flex" }}
+          >
             <MyHeader>Rental Management System</MyHeader>
+            <Typography mt="15px" mr="15px" fontWeight="600">
+              Welcome {auth.name}
+            </Typography>
           </Grid>
           <Grid item xs={10} sx={{ mt: 2 }}>
             <Grid container spacing={4}>

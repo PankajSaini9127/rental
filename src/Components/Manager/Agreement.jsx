@@ -21,6 +21,8 @@ import {
   Collapse,
 } from "@mui/material";
 
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+
 // Custom Style Component
 
 import {
@@ -957,6 +959,16 @@ function Agreement({history}) {
           renewal={() => navigate(`/renewal`)}
           monthlyBtn="true"
         />
+        <Box className="backButton">
+              <IconButton
+                variant="contained"
+                color='primary'
+                onClick={()=>navigate(-1)}
+                size={'large'}
+              >
+                <ArrowCircleLeftIcon sx={{fontSize:'3rem'}} color="#FFFFF !important" />
+              </IconButton>
+            </Box>
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Rental Management System</MyHeader>
@@ -1144,6 +1156,7 @@ function Agreement({history}) {
                   value={data.yearlyIncrement}
                   rent={data.monthlyRent}
                   increment={increment}
+                  monthlyRent={data.monthlyRent}
                   setIncrement={setIncrement}
                 />
 
@@ -1548,7 +1561,7 @@ function Agreement({history}) {
                                   : false
                                 : false
                             }
-                            placeHolder={"Upload Pan Card"}
+                            placeHolder={"Upload PAN Card"}
                             handleChange={handleChangeFile}
                             name={
                               landloard[i]

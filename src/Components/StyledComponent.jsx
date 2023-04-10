@@ -12,6 +12,7 @@ import {
   Button,
   InputLabel,
   InputAdornment,
+  Box,
 } from "@mui/material";
 
 //icons
@@ -19,6 +20,13 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useState } from "react";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { ImageView } from "./StyleComponents/Rental";
+
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import DownloadIcon from "@mui/icons-material/Download";
+
+import { saveAs } from "file-saver";
+
 
 // header
 const MyHeader = styled("h5")({
@@ -174,11 +182,20 @@ const DocumentUpload = ({
   handleChange,
   name,
   uploaded,
-  error
+  error,
+  href,
 }) => {
+  const [imgView,setImgView] =useState(false)
+
+  function handleClick() {
+
+    saveAs(href, name);
+  }
+
   return (
     <Grid item xs={12}>
       {/* <MyTextfield /> */}
+      <ImageView open={imgView} handleClose={()=>setImgView(false)} href={href} name={name} />
       <FormControl fullWidth>
         <FormLabel>
           {uploaded ? (
@@ -231,6 +248,12 @@ const DocumentUpload = ({
 
 
       </FormControl>
+      {href && <Box sx={{mt:1}}> 
+              <VisibilityIcon color={"primary"} onClick={()=>setImgView(true)} sx={{mr:1}} /> 
+             <DownloadIcon color={"primary"} onClick={handleClick} />
+             </Box>
+      }
+     
           <Typography variant = 'caption'>{fileName}</Typography>
     </Grid>
   );
