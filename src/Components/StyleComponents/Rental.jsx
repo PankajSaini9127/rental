@@ -83,7 +83,7 @@ const YearField = ({ year, amount,Increment,incrementType }) => {
        <strong>{incrementType}</strong> : {Increment}
       </Typography>
       <Typography variant="body1" sx={{ color: "black" }}>
-      <strong>Value</strong>: {amount}
+      <strong>Monthly Rent</strong>: {amount}
       </Typography>
     </Grid>
   );
