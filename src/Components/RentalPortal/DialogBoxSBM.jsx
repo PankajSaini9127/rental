@@ -58,18 +58,25 @@ function DialogBoxSBM({ open, handleClose, handleConfirm, value, setValue }) {
   };
 
   function validate(e) {
+    console.log(e)
     let error = {};
-    if ((e.target.name === "utr" && value.utr === "")) {
+    console.log(e.target.name)
+    if ((value.utr === "")) {
       error.utr = "Please Enter UTR Number.";
       setFormError(error);
       return false;
-    } else if ((e.target.name === "paymentDate" && value.paymentDate === "")) {
+    } else if ((value.paymentDate === "")) {
       error.paymentDate = "Please Select Payment Date.";
       setFormError(error);
       return false;
     }
+    
+  }
 
-    handleConfirm();
+  function handleSubmit(e){
+    e.preventDefault()
+    validate(e)
+    handleConfirm()
   }
 
   return (
@@ -162,7 +169,7 @@ function DialogBoxSBM({ open, handleClose, handleConfirm, value, setValue }) {
                     borderRadius: "15px",
                     textTransform: "capitalize",
                   }}
-                  onClick={validate}
+                  onClick={handleSubmit}
                 >
                   Submit
                 </Button>
