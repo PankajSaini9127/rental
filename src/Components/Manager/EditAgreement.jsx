@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
+import VisibilityIcon from "@mui/icons-material/Visibility";
+
 // MUI Components
 import {
   Box,
@@ -50,7 +52,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 import PermissionAlert from "./Alert";
 import { useParams, useNavigate } from "react-router-dom";
-import { DataFieldStyle } from "../StyleComponents/Rental";
+import { DataFieldStyle, ImageView } from "../StyleComponents/Rental";
 
 function EditAgreement({ history }) {
   const navigate = useNavigate();
@@ -95,6 +97,7 @@ function EditAgreement({ history }) {
     try {
       let response = await getDetails(id);
 
+       console.log(response)
       if (response.status === 200) {
         let {
           id,
@@ -132,14 +135,24 @@ function EditAgreement({ history }) {
         setFinance_ID(response.data.op_id);
 
         let rent = monthlyRent;
-        setYearValue({
-          year1: 0,
-
-          year2: year2 && parseInt(((year2 - year1) / year1) * 100),
-          year3: year3 && parseInt(((year3 - year2) / year2) * 100),
-          year4: year4 && parseInt(((year4 - year3) / year3) * 100),
-          year5: year5 && parseInt(((year5 - year4) / year4) * 100),
-        });
+        if(yearlyIncrement === "Percentage"){
+          setYearValue({
+            year1: 0,
+            year2: year2 && parseInt(((year2 - year1) / year1) * 100),
+            year3: year3 && parseInt(((year3 - year2) / year2) * 100),
+            year4: year4 && parseInt(((year4 - year3) / year3) * 100),
+            year5: year5 && parseInt(((year5 - year4) / year4) * 100),
+          });
+        }else{
+          setYearValue({
+            year1: 0,
+            year2: year2 && year2 - year1,
+            year3: year3 && year3 - year2,
+            year4: year4 && year4 - year3,
+            year5: year5 && year5 - year4,
+          })
+        }
+        
         setPreData({
           id,
           area,
@@ -623,8 +636,6 @@ function EditAgreement({ history }) {
   };
   const [expand, setExpand] = useState(0);
 
-  const [expand, setExpand] = useState(0);
-
   const APICall = async (values, landlordData) => {
     // for renaming the landlord ID to ID
     // landlordData = landlordData.map((row)=>{
@@ -1062,6 +1073,11 @@ function EditAgreement({ history }) {
     }
   }
 
+  function Docview ( href, name ){
+    console.log("docview")
+       return <ImageView open={true} handleClose={()=>{}} href={href} name={name} />
+  }
+
   return (
     <>
       {/* alert for submit form */}
@@ -1372,8 +1388,8 @@ function EditAgreement({ history }) {
                             }
                           />
                           <TextFieldWrapper
-                            label="Pan Number"
-                            placeHolder="Enter Pan No."
+                            label="PAN Number"
+                            placeHolder="Enter PAN No."
                             onBlur={(e) => handleOnBlur(e, i)}
                             error={
                               formError.landlord[i] &&
@@ -1604,16 +1620,18 @@ function EditAgreement({ history }) {
                                   ? true
                                   : false
                               }
-                              label="Upload Aadhar Card"
-                              placeHolder="Upload Aadhar Card"
+                              label="Upload Aadhaar Card"
+                              placeHolder="Upload Aadhaar Card"
                               handleChange={(e) => handleChangeCommonFile(e, i)}
                               name={"aadhar_card"}
                               fileName={preData[`aadhar_card${i}`]}
+                              href={ preData.landlord[i].aadhar_card}
                             />
+                            
                           </Grid>
                           <Grid item xs={6}>
                             <DocumentUpload
-                              label="Upload Pan Card"
+                              label="Upload PAN Card"
                               uploaded={
                                 preData[`pan_card${i}`] ||
                                 preData.landlord[i]["pan_card"]
@@ -1622,8 +1640,9 @@ function EditAgreement({ history }) {
                               }
                               name={"pan_card"}
                               fileName={preData[`pan_card${i}`]}
-                              placeHolder={"Upload Pan Card"}
+                              placeHolder={"Upload PAN Card"}
                               handleChange={(e) => handleChangeCommonFile(e, i)}
+                              href={ preData.landlord[i].pan_card}
                             />
                           </Grid>
                           <Grid item xs={6}>
@@ -1638,6 +1657,7 @@ function EditAgreement({ history }) {
                               handleChange={(e) => handleChangeCommonFile(e, i)}
                               name={"gst"}
                               fileName={preData[`gst${i}`]}
+                              href={ preData.landlord[i].gst}
                             />
                           </Grid>
                           <Grid item xs={6}>
@@ -1653,6 +1673,7 @@ function EditAgreement({ history }) {
                               fileName={preData[`cheque${i}`]}
                               placeHolder="Upload Cancel Bank Cheque"
                               handleChange={(e) => handleChangeCommonFile(e, i)}
+                              href={ preData.landlord[i].cheque}
                             />
                           </Grid>
                         </Grid>
@@ -1689,6 +1710,7 @@ function EditAgreement({ history }) {
                       fileName={preData.draft_agreement_name}
                       handleChange={handleChangeFile}
                       name={"draft_agreement"}
+                      href={ preData.draft_agreement}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1700,6 +1722,7 @@ function EditAgreement({ history }) {
                       handleChange={handleChangeFile}
                       fileName={preData.electricity_bill_name}
                       name={"electricity_bill"}
+                      href={ preData.electricity_bill}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1711,6 +1734,7 @@ function EditAgreement({ history }) {
                       fileName={preData.poa_name}
                       handleChange={handleChangeFile}
                       name={"poa"}
+                      href={ preData.poa}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1722,6 +1746,7 @@ function EditAgreement({ history }) {
                       handleChange={handleChangeFile}
                       fileName={preData.maintaince_bill_name}
                       name={"maintaince_bill"}
+                      href={ preData.maintaince_bill}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1733,6 +1758,7 @@ function EditAgreement({ history }) {
                       fileName={preData.tax_receipt_name}
                       error={formError.tax_receipt}
                       name={"tax_receipt"}
+                      href={ preData.tax_receipt}
                     />
                   </Grid>
                   { preData.landlord.length > 1 &&
@@ -1745,6 +1771,7 @@ function EditAgreement({ history }) {
                       fileName={preData.noc_name}
                       handleChange={handleChangeFile}
                       name={"noc"}
+                      href={ preData.noc}
                       />
                   </Grid>
                     }

@@ -116,6 +116,9 @@ function validate(){
       }else if(value.agreement_date.length < 1){
         setError({...formError,agreement_date:"Please Select Final Agreemenet Date !!"})
         return false
+      }else if(value.rent_start_date.length < 1){
+        setError({...formError,rent_start_date:"Please Select Rent Start Date !!"})
+        return false
       }
      handleConfirm1() 
 
@@ -164,6 +167,25 @@ function validate(){
                 // error={formError.date && true}
                  />
                 <Typography variant = 'caption' sx = {{color : 'red'}}>{formError.agreement_date}</Typography>
+              </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+
+              <FormControl fullWidth>
+                <FormLabel>
+                  <Typography variant="body1" sx={labelStyle}>
+                    Agreement Date
+                  </Typography>
+                </FormLabel>
+                <input type="date" 
+                name="rent_start_date" 
+                value={value.ent_start_date}  
+                min={disablePastDate()} 
+                className="DatePicker"   
+                onChange={(e) => onChange(e)}
+                // error={formError.date && true}
+                 />
+                <Typography variant = 'caption' sx = {{color : 'red'}}>{formError.rent_start_date}</Typography>
               </FormControl>
               </Grid>
               {/* <MyTextfield /> */}

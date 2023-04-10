@@ -88,7 +88,7 @@ function IncrementType({disabled, Year, Percentage, Amount, label,increment ,onC
 
 
 
-const YearlyIncrement = ({ value,rent,increment,setIncrement,tenure,yearValue,setYearValue,disabled }) => {
+const YearlyIncrement = ({monthlyRent, value,rent,increment,setIncrement,tenure,yearValue,setYearValue,disabled }) => {
 
 
 
@@ -154,7 +154,7 @@ useEffect(()=>{
 
 
   }
-},[yearValue,value,tenure])
+},[yearValue,value,tenure,monthlyRent])
 
 function handleChange (e){
   console.log(e.target.value)
@@ -264,7 +264,7 @@ function handleChange (e){
           increment={0}
           onChange={handleChange}
           name="year1"
-          disabled={disabled}
+          disabled={true}
         />
         <IncrementType
           Year="Year 2"

@@ -67,7 +67,7 @@ const DataFieldStyle = ({ field, value, href, name, bold, cursor }) => {
   );
 };
 
-const YearField = ({ year, amount }) => {
+const YearField = ({ year, amount,Increment,incrementType }) => {
   const fieldStyle = {
     fontSize: "17px",
     color: "var(--main-color)",
@@ -79,8 +79,11 @@ const YearField = ({ year, amount }) => {
       <Typography variant="body1" sx={fieldStyle}>
         {year}
       </Typography>
-      <Typography variant="body1" sx={{ colot: "black" }}>
-        {amount}
+      <Typography variant="body1" sx={{ color: "black" }}>
+       <strong>{incrementType}</strong> : {Increment}
+      </Typography>
+      <Typography variant="body1" sx={{ color: "black" }}>
+      <strong>Value</strong>: {amount}
       </Typography>
     </Grid>
   );
@@ -189,7 +192,7 @@ const style = {
   boxShadow: 24,
 };
 
-function ImageView({ open, handleClose, href, name }) {
+export function ImageView({ open, handleClose, href, name }) {
   const fileType = href ?  href.includes("pdf") : false;
 
   return (

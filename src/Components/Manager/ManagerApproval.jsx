@@ -18,7 +18,7 @@ import {
 import { MyHeader } from "../StyledComponent";
 import { useEffect, useState } from "react";
 
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 //download file
 import { saveAs } from "file-saver";
@@ -68,7 +68,7 @@ function ManagerApproval() {
 
   const handleSubmit = async (e) => {
     const response = await send_to_bhu(
-      { status: "Sent To Sr Manager", manager_id:login_manager_id },
+      { status: "Sent To Sr Manager", manager_id: login_manager_id },
       id
     );
     if (response.data.success) {
@@ -91,6 +91,18 @@ function ManagerApproval() {
     }
   };
 
+  function getIncrement(rent, value, type) {
+    let incrementType;
+    rent = Number(rent);
+    value = Number(value);
+    if (type === "Percentage") {
+      incrementType = parseInt(((value - rent) / rent) * 100);
+    } else if (type === "Value") {
+      incrementType = value - rent;
+    }
+    return incrementType.toFixed(1);
+  }
+
   return (
     <>
       {ids && ids.length > 0 && (
@@ -110,11 +122,14 @@ function ManagerApproval() {
             <Box className="backButton">
               <IconButton
                 variant="contained"
-                color='primary'
-                onClick={()=>navigate(-1)}
-                size={'large'}
+                color="primary"
+                onClick={() => navigate(-1)}
+                size={"large"}
               >
-                <ArrowCircleLeftIcon sx={{fontSize:'3rem'}} color="#FFFFF !important" />
+                <ArrowCircleLeftIcon
+                  sx={{ fontSize: "3rem" }}
+                  color="#FFFFF !important"
+                />
               </IconButton>
             </Box>
 
@@ -126,7 +141,27 @@ function ManagerApproval() {
               ></Grid>
               {/* Basic Details */}
               <Grid item md={10}>
-                <Grid container spacing={2}>
+                {agreement[ids[0]].status === "Deposited" && (
+                  <Grid container spacing={2}>
+                    <DataFieldStyle
+                      field={"UTR Number"}
+                      value={agreement[ids[0]].utr_number}
+                      href={agreement[ids[0]].final_agreement}
+                      name={"Final Agreement"}
+                      bold={true}
+                      cursor={true}
+                    />
+                    <DataFieldStyle
+                      field={"Final Agreement Date"}
+                      value={agreement[ids[0]].final_agreement_date}
+                    />
+                    <DataFieldStyle
+                      field={"Monthly Rent Date"}
+                      value={agreement[ids[0]].rent_start_date}
+                    />
+                  </Grid>
+                )}
+                <Grid container spacing={2} sx={{ mt: 1 }}>
                   <DataFieldStyle
                     field={"code"}
                     value={agreement[ids[0]].code}
@@ -141,8 +176,8 @@ function ManagerApproval() {
                     value={agreement[ids[0]].location}
                   />
                   <DataFieldStyle
-                    field={"area"}
-                    value={agreement[ids[0]].area + " sq. ft"}
+                    field={"city"}
+                    value={agreement[ids[0]].city}
                   />
                   <DataFieldStyle
                     field={"pincode"}
@@ -152,7 +187,10 @@ function ManagerApproval() {
                     field={"address"}
                     value={agreement[ids[0]].address}
                   />
-
+                  <DataFieldStyle
+                    field={"area"}
+                    value={agreement[ids[0]].area + " sq. ft"}
+                  />
                   <DataFieldStyle
                     field={"lock in Month"}
                     value={agreement[ids[0]].lockInYear}
@@ -182,31 +220,57 @@ function ManagerApproval() {
                       <Grid container spacing={1} sx={{ mt: 6 }}>
                         <YearField
                           year={"Year 1"}
+                          incrementType={agreement[ids[0]].yearlyIncrement}
+                          Increment={0}
                           amount={agreement[ids[0]].year1}
                         />
                         <YearField
                           year={"Year 2"}
+                          incrementType={agreement[ids[0]].yearlyIncrement}
                           amount={agreement[ids[0]].year2}
+                          Increment={getIncrement(
+                            agreement[ids[0]].monthlyRent,
+                            agreement[ids[0]].year2,
+                            agreement[ids[0]].yearlyIncrement
+                          )}
                         />
                         {(agreement[ids[0]].tenure === "3 Year" ||
                           agreement[ids[0]].tenure === "4 Year" ||
                           agreement[ids[0]].tenure === "5 Year") && (
                           <YearField
                             year={"Year 3"}
+                            incrementType={agreement[ids[0]].yearlyIncrement}
                             amount={agreement[ids[0]].year3}
+                            Increment={getIncrement(
+                              agreement[ids[0]].monthlyRent,
+                              agreement[ids[0]].year3,
+                              agreement[ids[0]].yearlyIncrement
+                            )}
                           />
                         )}
                         {(agreement[ids[0]].tenure === "4 Year" ||
                           agreement[ids[0]].tenure === "5 Year") && (
                           <YearField
                             year={"Year 4"}
+                            incrementType={agreement[ids[0]].yearlyIncrement}
                             amount={agreement[ids[0]].year4}
+                            Increment={getIncrement(
+                              agreement[ids[0]].monthlyRent,
+                              agreement[ids[0]].year4,
+                              agreement[ids[0]].yearlyIncrement
+                            )}
                           />
                         )}
                         {agreement[ids[0]].tenure === "5 Year" && (
                           <YearField
                             year={"Year 5"}
+                            incrementType={agreement[ids[0]].yearlyIncrement}
                             amount={agreement[ids[0]].year5}
+                            Increment={getIncrement(
+                              agreement[ids[0]].monthlyRent,
+                              agreement[ids[0]].year5,
+                              agreement[ids[0]].yearlyIncrement
+                            )}
                           />
                         )}
                       </Grid>
@@ -250,24 +314,6 @@ function ManagerApproval() {
                           bold={true}
                           cursor={true}
                         />
-                        {/* <DataFieldStyle
-                          field={"Cancel Cheque"}
-                          value={agreement[ids[0]].accountNo[id]}
-                          href={agreement[ids[0]].cheque[id]}
-                          name={"cheque"}
-                          bold={true}
-                          cursor={true}
-                        /> */}
-                
-                        <DataFieldStyle
-                          field={"Cancel Cheque"}
-                          value={agreement[ids[0]].accountNo[id]}
-                          href={agreement[ids[0]].cheque[id]}
-                          name={"cheque"}
-                          bold={true}
-                          cursor={true}
-                        />
-                
                         <DataFieldStyle
                           field={"mobile number"}
                           value={agreement[ids[0]].mobileNo[id]}
@@ -359,26 +405,23 @@ function ManagerApproval() {
                     title={"Property tax receipt"}
                     img={agreement[ids[0]].tax_receipt}
                   />
-                  {agreement[ids[0]].leeseName.length > 1 && <DocumentView
-                    title={"NOC (if multiple owner)"}
-                    img={agreement[ids[0]].noc}
-                  />}
+                  {agreement[ids[0]].leeseName.length > 1 && (
+                    <DocumentView
+                      title={"NOC (if multiple owner)"}
+                      img={agreement[ids[0]].noc}
+                    />
+                  )}
                 </Grid>
               </Grid>
 
               {/* document section ends here */}
 
               {agreement[ids[0]].remark.length > 0 && (
-                <Grid
-                  item
-                  container
-                  xs={10}
-                  sx={{ mt: 5 }}
-                >
-                    <DataFieldStyle
-                      field={"Remark !"}
-                      value={agreement[ids[0]].remark}
-                    />
+                <Grid item container xs={10} sx={{ mt: 5 }}>
+                  <DataFieldStyle
+                    field={"Remark !"}
+                    value={agreement[ids[0]].remark}
+                  />
                 </Grid>
               )}
 

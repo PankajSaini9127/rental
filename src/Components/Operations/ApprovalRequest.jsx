@@ -18,11 +18,15 @@ import {
 import { MyHeader } from "../StyledComponent";
 import { useEffect, useState } from "react";
 
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 //download file
 import { saveAs } from "file-saver";
-import { get_agreement_id, send_back_to_manager, send_to_bhu } from "../../Services/Services";
+import {
+  get_agreement_id,
+  send_back_to_manager,
+  send_to_bhu,
+} from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -76,29 +80,29 @@ function ApprovalRequest() {
         })
       );
     } else {
-    const response = await send_to_bhu(
-      { status: "Sent To Finance Team", op_id: login_manager_id },
-      id
-    );
-    if (response.data.success) {
-      dispatch(
-        setAlert({
-          variant: "success",
-          open: true,
-          message: "Agreement Sent To Finance Team.",
-        })
+      const response = await send_to_bhu(
+        { status: "Sent To Finance Team", op_id: login_manager_id },
+        id
       );
-      navigate("/operationsListing");
-    } else {
-      dispatch(
-        setAlert({
-          variant: "error",
-          open: true,
-          message: "Something went wrong! Please again later.",
-        })
-      );
+      if (response.data.success) {
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Agreement Sent To Finance Team.",
+          })
+        );
+        navigate("/operationsListing");
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          })
+        );
+      }
     }
-  }
   };
 
   const [remark, setRemark] = useState("");
@@ -115,7 +119,7 @@ function ApprovalRequest() {
     } else {
       const response = await send_back_to_manager(
         {
-          status: "Sent Back For Rectification",
+          status: "Sent Back Form Operations",
           remark: remark,
         },
         id
@@ -141,6 +145,21 @@ function ApprovalRequest() {
     }
   }
 
+  function getIncrement(rent,value,type){
+    let incrementType ;
+    rent = Number(rent)
+    value= Number(value)
+    if(type === "Percentage"){
+      incrementType = parseInt(((value - rent) / rent) * 100)
+      
+      
+    }else if(type === "Value"){
+      incrementType = value-rent
+      
+    }
+   return incrementType.toFixed(1)
+  }
+
   return (
     <>
       {ids && ids.length > 0 && (
@@ -148,23 +167,23 @@ function ApprovalRequest() {
           {/* <a id="button"></a> */}
 
           <HamburgerMenu
-            navigateHome={"dashboard"}
-            handleListing={() => navigate("/listing")}
-            monthlyRent={() => navigate("/monthly-payment")}
-            renewal={() => navigate(`/renewal`)}
-            monthlyBtn="true"
-          />
+          navigateHome={"operationsDashboard"}
+          handleListing={() => navigate("/operationsListing")}
+        />
 
           <Box sx={{ flexGrow: 1 }}>
             <MyHeader>Rental Management System</MyHeader>
             <Box className="backButton">
               <IconButton
                 variant="contained"
-                color='primary'
-                onClick={()=>navigate(-1)}
-                size={'large'}
+                color="primary"
+                onClick={() => navigate(-1)}
+                size={"large"}
               >
-                <ArrowCircleLeftIcon sx={{fontSize:'3rem'}} color="#FFFFF !important" />
+                <ArrowCircleLeftIcon
+                  sx={{ fontSize: "3rem" }}
+                  color="#FFFFF !important"
+                />
               </IconButton>
             </Box>
 
@@ -176,6 +195,27 @@ function ApprovalRequest() {
               ></Grid>
               {/* Basic Details */}
               <Grid item md={10}>
+              {
+                agreement[ids[0]].status === "Deposited" &&
+                <Grid container spacing={2}>
+                        <DataFieldStyle
+                          field={"UTR Number"}
+                          value={agreement[ids[0]].utr_number}
+                          href={agreement[ids[0]].final_agreement}
+                          name={"Final Agreement"}
+                          bold={true}
+                          cursor={true}
+                        />
+                        <DataFieldStyle
+                          field={"Final Agreement Date"}
+                          value={agreement[ids[0]].final_agreement_date}
+                        />
+                        <DataFieldStyle
+                          field={"Monthly Rent Date"}
+                          value={agreement[ids[0]].rent_start_date}
+                        />
+                </Grid>
+}
                 <Grid container spacing={2}>
                   <DataFieldStyle
                     field={"code"}
@@ -190,9 +230,9 @@ function ApprovalRequest() {
                     field={"location"}
                     value={agreement[ids[0]].location}
                   />
-                   <DataFieldStyle
-                    field={"area"}
-                    value={agreement[ids[0]].area + " sq. ft"}
+                  <DataFieldStyle
+                    field={"city"}
+                    value={agreement[ids[0]].city}
                   />
                   <DataFieldStyle
                     field={"pincode"}
@@ -202,7 +242,10 @@ function ApprovalRequest() {
                     field={"address"}
                     value={agreement[ids[0]].address}
                   />
-
+                  <DataFieldStyle
+                    field={"area"}
+                    value={agreement[ids[0]].area + " sq. ft"}
+                  />
                   <DataFieldStyle
                     field={"lock in Month"}
                     value={agreement[ids[0]].lockInYear}
@@ -232,31 +275,42 @@ function ApprovalRequest() {
                       <Grid container spacing={1} sx={{ mt: 6 }}>
                         <YearField
                           year={"Year 1"}
+                          incrementType={agreement[ids[0]].yearlyIncrement}
+                          Increment={0}
                           amount={agreement[ids[0]].year1}
                         />
                         <YearField
                           year={"Year 2"}
+                          incrementType={agreement[ids[0]].yearlyIncrement}
                           amount={agreement[ids[0]].year2}
+                          Increment={ getIncrement(agreement[ids[0]].monthlyRent,agreement[ids[0]].year2,agreement[ids[0]].yearlyIncrement)}
                         />
                         {(agreement[ids[0]].tenure === "3 Year" ||
                           agreement[ids[0]].tenure === "4 Year" ||
                           agreement[ids[0]].tenure === "5 Year") && (
                           <YearField
                             year={"Year 3"}
+                            incrementType={agreement[ids[0]].yearlyIncrement}
                             amount={agreement[ids[0]].year3}
+                            Increment={ getIncrement(agreement[ids[0]].monthlyRent,agreement[ids[0]].year3,agreement[ids[0]].yearlyIncrement)}
+
                           />
                         )}
                         {(agreement[ids[0]].tenure === "4 Year" ||
                           agreement[ids[0]].tenure === "5 Year") && (
                           <YearField
                             year={"Year 4"}
+                            incrementType={agreement[ids[0]].yearlyIncrement}
                             amount={agreement[ids[0]].year4}
+                            Increment={ getIncrement(agreement[ids[0]].monthlyRent,agreement[ids[0]].year4,agreement[ids[0]].yearlyIncrement)}
                           />
                         )}
                         {agreement[ids[0]].tenure === "5 Year" && (
                           <YearField
                             year={"Year 5"}
+                            incrementType={agreement[ids[0]].yearlyIncrement}
                             amount={agreement[ids[0]].year5}
+                            Increment={ getIncrement(agreement[ids[0]].monthlyRent,agreement[ids[0]].year5,agreement[ids[0]].yearlyIncrement)}
                           />
                         )}
                       </Grid>
@@ -308,7 +362,7 @@ function ApprovalRequest() {
                           bold={true}
                           cursor={true}
                         /> */}
-                
+
                         <DataFieldStyle
                           field={"mobile number"}
                           value={agreement[ids[0]].mobileNo[id]}
@@ -400,86 +454,90 @@ function ApprovalRequest() {
                     title={"Property tax receipt"}
                     img={agreement[ids[0]].tax_receipt}
                   />
-               {agreement[ids[0]].leeseName.length > 1 && <DocumentView
-                    title={"NOC (if multiple owner)"}
-                    img={agreement[ids[0]].noc}
-                  />}
+                  {agreement[ids[0]].leeseName.length > 1 && (
+                    <DocumentView
+                      title={"NOC (if multiple owner)"}
+                      img={agreement[ids[0]].noc}
+                    />
+                  )}
                 </Grid>
               </Grid>
 
               {/* document section ends here */}
 
               {agreement[ids[0]].remark.length > 0 && (
-                
-                  <Grid item xs={10}>
-                    <DataFieldStyle
-                      field={"Remark !"}
-                      value={agreement[ids[0]].remark}
-                    />
-                  </Grid>
+                <Grid item xs={10}>
+                  <DataFieldStyle
+                    field={"Remark !"}
+                    value={agreement[ids[0]].remark}
+                  />
+                </Grid>
               )}
 
               {/* Buttons start here*/}
 
               {agreement[ids[0]].status === "Sent To Operations" && (
                 <>
-                 <Grid
-                item
-                xs={10}
-                sx={{ mt: 5}}
-                className={'textFieldWrapper'}
-              >
-                <Grid item xs={8}>
-                  <TextField
-                    type="text"
-                    multiline
-                    rows={3}
-                    fullWidth
-                    variant="outlined"
-                    label="Remark *"
-                    placeholder="Remark *"
-                    value={remark}
-                    onChange={(e) => setRemark(e.target.value)}
-                  />
-                </Grid>
-              </Grid>
-                <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
-                  <Grid container spacing={2} sx={{ justifyContent: "center" }}>
-                    <Grid item md={6} xs={11}>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          height: "65px",
-                          borderRadius: "12px",
-                          backgroundColor: "primary",
-                          width: "100%",
-                          color: "#FFFFFF",
-                          textTransform: "capitalize",
-                          fontSize: "18px",
-                        }}
-                        onClick={handleSubmit}
-                      >
-                        Approve And Send To Finance
-                      </Button>
-                    </Grid>
-                    <Grid item md={6} xs={11}>
-                      <Button
+                  <Grid
+                    item
+                    xs={10}
+                    sx={{ mt: 5 }}
+                    className={"textFieldWrapper"}
+                  >
+                    <Grid item xs={8}>
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
                         variant="outlined"
-                        sx={{
-                          height: "65px",
-                          borderRadius: "12px",
-                          width: "100%",
-                          textTransform: "capitalize",
-                          fontSize: "18px",
-                        }}
-                        onClick={handleSendBack}
-                      >
-                        Send Back To Manager
-                      </Button>
+                        label="Remark *"
+                        placeholder="Remark *"
+                        value={remark}
+                        onChange={(e) => setRemark(e.target.value)}
+                      />
                     </Grid>
                   </Grid>
-                </Grid>
-                
+                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                    <Grid
+                      container
+                      spacing={2}
+                      sx={{ justifyContent: "center" }}
+                    >
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            height: "65px",
+                            borderRadius: "12px",
+                            backgroundColor: "primary",
+                            width: "100%",
+                            color: "#FFFFFF",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                          }}
+                          onClick={handleSubmit}
+                        >
+                          Approve And Send To Finance
+                        </Button>
+                      </Grid>
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            height: "65px",
+                            borderRadius: "12px",
+                            width: "100%",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                          }}
+                          onClick={handleSendBack}
+                        >
+                          Send Back To Manager
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </>
               )}
 

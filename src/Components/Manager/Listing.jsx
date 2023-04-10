@@ -25,7 +25,7 @@ function Listing() {
   };
 
   const [agreement, setAgreement] = useState({});
-
+ 
 
   const [loading, setLoading] = useState(false);
   const [check,setCheck] = useState([])
@@ -40,7 +40,7 @@ function Listing() {
       const data = result.data.ids;
       setAgreement(result.data.agreement);
       setData(data);
-      
+     
       setLoading(false);
     }
   };
@@ -69,7 +69,8 @@ const row = data.map((item) => {
       name: agreement[item].name,
       location: agreement[item].location,
       rentalAmount: agreement[item].monthlyRent,
-      checkbox: agreement[item].status
+      checkbox: agreement[item].status,
+      utr_number: agreement[item].utr_number
     };
   });
 

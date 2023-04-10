@@ -27,7 +27,7 @@ function DataTable({ rows, loading, check, setCheck }) {
 
   const [open,setopen] = useState(false);
 
-  const [final_agreement,setFinalAgreement] = useState({agreement_date:"",final_agreement:""})
+  const [final_agreement,setFinalAgreement] = useState({agreement_date:"",final_agreement:"",rent_start_date:""})
 
   const [selectID,setSelectID] = useState('')
  
@@ -72,11 +72,12 @@ function DataTable({ rows, loading, check, setCheck }) {
   const renderDetailsButton = (e) => {
     const id = e.id;
 
+    console.log(e.row)
 
     return (
       <>
       
-      {e.row.status === "Sent Back For Rectification" && (
+      {(e.row.status === "Sent Back Form Sr Manager" ||e.row.status === "Sent Back Form BUH"||e.row.status === "Sent Back Form Finance"||e.row.status === "Sent Back Form Operations") && (
         <Grid container>
            <Grid item md={6} sx={{ color: "white !important" }}>
            <Button
@@ -145,7 +146,7 @@ function DataTable({ rows, loading, check, setCheck }) {
             </Grid>
           </Grid>
         )}
-        {e.row.status === "Approved" && (
+        {(e.row.status === "Approved" && e.row.utr_number !== "") && (
         <Grid container>
            <Grid item md={6} sx={{ color: "white !important" }}>
            <Button
@@ -332,7 +333,7 @@ function DataTable({ rows, loading, check, setCheck }) {
          try{
 
            const response = await send_to_bhu({final_agreement:final_agreement.final_agreement,
-            final_agreement_date:final_agreement.agreement_date,status:"Deposited"},selectID)  
+            final_agreement_date:final_agreement.agreement_date,rent_start_date:final_agreement.rent_start_date,status:"Deposited"},selectID)  
         console.log(response)
 
             if (response.data.success) {
@@ -471,7 +472,9 @@ function DataTable({ rows, loading, check, setCheck }) {
               cellClass.push("yellow statusCell");
             } else if (
               parms.field === "status" &&
-              parms.row.status === "Sent Back For Rectification"
+              (parms.row.status === "Sent Back Form Sr Manager"  || parms.row.status === "Sent Back Form BUH" ||
+              parms.row.status === "Sent Back Form Operations" || parms.row.status === "Sent Back Form Finance"
+              )
             ) {
               cellClass.push("red statusCell");
             }

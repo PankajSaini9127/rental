@@ -9,11 +9,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
 
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
-
 
 const labelStyle = {
   fontSize: "20px",
@@ -35,21 +35,19 @@ const fieldStyle = {
   "@media(max-width:900px)": { height: "46px", p: 1 },
 };
 
-function DialogBoxSBM({
-  open,
-  handleClose,
-  handleConfirm,
-  value,
-  setValue,
-}) {
+function DialogBoxSBM({ open, handleClose, handleConfirm, value, setValue }) {
+  const [formError, setFormError] = useState({ ute: "", paymentDate: "" });
 
   function onChange(e) {
+    setFormError({
+      ...formError,
+     [e.target.name]:""
+    })
     setValue({
       ...value,
-      [e.target.name]:e.target.value
+      [e.target.name]: e.target.value,
     });
   }
-
 
   const disablePastDate = () => {
     const today = new Date();
@@ -57,8 +55,22 @@ function DialogBoxSBM({
     const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
     const yyyy = today.getFullYear();
     return yyyy + "-" + mm + "-" + dd;
-};
+  };
 
+  function validate(e) {
+    let error = {};
+    if ((e.target.name === "utr" && value.utr === "")) {
+      error.utr = "Please Enter UTR Number.";
+      setFormError(error);
+      return false;
+    } else if ((e.target.name === "paymentDate" && value.paymentDate === "")) {
+      error.paymentDate = "Please Select Payment Date.";
+      setFormError(error);
+      return false;
+    }
+
+    handleConfirm();
+  }
 
   return (
     <>
@@ -72,81 +84,90 @@ function DialogBoxSBM({
         <Box sx={{ pt: 5, px: 2, pb: 2 }}>
           <Grid container>
             <Grid item xs={12}>
-            <FormControl fullWidth>
-              <FormLabel>
-                <Typography variant="body1" sx={labelStyle}>
-                  UTR Number
+              <FormControl fullWidth>
+                <FormLabel>
+                  <Typography variant="body1" sx={labelStyle}>
+                    UTR Number
+                  </Typography>
+                </FormLabel>
+                <TextField
+                  variant="standard"
+                  onChange={(e) => onChange(e)}
+                  InputProps={{
+                    disableUnderline: true,
+                    style: {
+                      color: "rgba(16, 99, 173, 0.47)",
+                      fontSize: "15px",
+                    }
+                  }}
+                 inputProps={{maxLength: 22}}
+                  value={value.utr}
+                  fullWidth
+                  name="utr"
+                  sx={fieldStyle}
+                  placeholder="UTR Number"
+                />
+                <Typography variant="body1" color="red" mt={1}>
+                  {formError.utr}
                 </Typography>
-              </FormLabel>
-              <TextField
-                variant="standard"
-                onChange={(e) => onChange(e)}
-                InputProps={{
-                  disableUnderline: true,
-                  style: {
-                    color: "rgba(16, 99, 173, 0.47)",
-                    fontSize: "15px",
-                  },
-                }}
-                value={value.utr}
-                fullWidth
-                name="utr"
-                sx={fieldStyle}
-                placeholder="UTR Number"
-              />
-            </FormControl>
+              </FormControl>
             </Grid>
             <Grid item xs={12}>
-            <FormControl fullWidth>
-              <FormLabel>
-                <Typography variant="body1" sx={labelStyle}>
-                  Payment Date
+              <FormControl fullWidth>
+                <FormLabel>
+                  <Typography variant="body1" sx={labelStyle}>
+                    Payment Date
+                  </Typography>
+                </FormLabel>
+                <input
+                  type="date"
+                  name="paymentDate"
+                  value={value.paymentDate}
+                  min={disablePastDate()}
+                  className="DatePicker"
+                  onChange={(e) => onChange(e)}
+                />
+                <Typography variant="body1" color="red" mt={1}>
+                  {formError.paymentDate}
                 </Typography>
-              </FormLabel>
-              <input type="date" name="paymentDate" value={value.paymentDate}  min={disablePastDate()} className="DatePicker"   onChange={(e) => onChange(e)} />
-              
-            </FormControl>
+              </FormControl>
             </Grid>
             {/* <MyTextfield /> */}
-            
-           
           </Grid>
 
           <DialogActions sx={{ mt: 2 }}>
             <Grid container spacing={3}>
               <Grid item xs={6}>
-              <Button
-              fullWidth
-              variant="outlined"
-              sx={{
-                height: 45,
-                borderRadius: "15px",
-                textTransform: "capitalize",
-              }}
-              onClick={handleClose}
-            >
-              Close
-            </Button>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  sx={{
+                    height: 45,
+                    borderRadius: "15px",
+                    textTransform: "capitalize",
+                  }}
+                  onClick={handleClose}
+                >
+                  Close
+                </Button>
               </Grid>
 
               <Grid item xs={6}>
-              <Button
-              fullWidth
-              variant="contained"
-              sx={{
-                height: 45,
-                color: "#FFFFFF",
-                borderRadius: "15px",
-                textTransform: "capitalize",
-              }}
-               onClick={handleConfirm}
-            >
-            Submit
-            </Button>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    height: 45,
+                    color: "#FFFFFF",
+                    borderRadius: "15px",
+                    textTransform: "capitalize",
+                  }}
+                  onClick={validate}
+                >
+                  Submit
+                </Button>
               </Grid>
             </Grid>
-           
-            
           </DialogActions>
         </Box>
       </Dialog>

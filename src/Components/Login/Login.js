@@ -28,39 +28,6 @@ export default function Login() {
   const { role } = formValue;
 
   const Get_DATA = async (dispatch) => {
-    if (role === "Super Admin") {
-      try {
-        const superAdmin = await super_admin_Login(formValue);
-        // console.log(superAdmin)
-        if (superAdmin.data.success) {
-          const super_admin_auth = superAdmin.data.response[0];
-          dispatch(
-            setAuth({
-              name: super_admin_auth.name,
-              role: "Super Admin",
-              id: super_admin_auth.id,
-            })
-          );
-          navigate("/super-admin-dashboard");
-        } else {
-          dispatch(
-            setAlert({
-              variant: "error",
-              open: true,
-              message: superAdmin.data.msg,
-            })
-          );
-        }
-      } catch (error) {
-        dispatch(
-          setAlert({
-            variant: "error",
-            open: true,
-            message: "Something Went Wrong, Please Try Again !",
-          })
-        );
-      }
-    } else {
       try {
         const user = await LoginAPI(formValue);
         const data = user.data;
@@ -167,7 +134,6 @@ export default function Login() {
             message: "Something Went Wrong, Please Try Again !",
           })
         );
-      }
     }
   };
 

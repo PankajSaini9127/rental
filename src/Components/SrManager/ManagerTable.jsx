@@ -219,7 +219,9 @@ function ManagerTable({ rows }) {
               cellClass.push("yellow statusCell");
             } else if (
               parms.field === "status" &&
-              parms.row.status === "Sent Back For Rectification"
+              (parms.row.status === "Sent Back Form Sr Manager"  || parms.row.status === "Sent Back Form BUH" ||
+              parms.row.status === "Sent Back Form Operations" || parms.row.status === "Sent Back Form Finance"
+              )
             ) {
               cellClass.push("red statusCell");
             }
