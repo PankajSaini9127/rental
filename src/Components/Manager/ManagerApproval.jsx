@@ -34,6 +34,7 @@ const Heading = ({ heading }) => {
         fontSize={"20px"}
         color={"primary"}
         fontWeight={"600"}
+        sx={{textDecoration:"underline"}}
       >
         {heading}
       </Typography>
@@ -100,7 +101,7 @@ function ManagerApproval() {
     } else if (type === "Value") {
       incrementType = value - rent;
     }
-    return incrementType.toFixed(1);
+    return incrementType;
   }
 
   return (
@@ -134,34 +135,42 @@ function ManagerApproval() {
             </Box>
 
             <Grid container sx={{ justifyContent: "center", mt: 3 }}>
-              <Grid
-                item
-                xs={12}
-                sx={{ justifyContent: "flex-end", display: "flex" }}
-              ></Grid>
               {/* Basic Details */}
               <Grid item md={10}>
+                <Grid container>
                 {agreement[ids[0]].status === "Deposited" && (
-                  <Grid container spacing={2}>
-                    <DataFieldStyle
-                      field={"UTR Number"}
-                      value={agreement[ids[0]].utr_number}
-                      href={agreement[ids[0]].final_agreement}
-                      name={"Final Agreement"}
-                      bold={true}
-                      cursor={true}
-                    />
-                    <DataFieldStyle
-                      field={"Final Agreement Date"}
-                      value={agreement[ids[0]].final_agreement_date}
-                    />
-                    <DataFieldStyle
-                      field={"Monthly Rent Date"}
-                      value={agreement[ids[0]].rent_start_date}
-                    />
-                  </Grid>
+                  <>
+                    <Grid container >
+                      <DataFieldStyle
+                        field={"Final Agreement"}
+                        href={agreement[ids[0]].final_agreement}
+                        name={"Final Agreement"}
+                        bold={true}
+                        cursor={true}
+                      />
+                      <DataFieldStyle
+                        field={"Final Agreement Date"}
+                        value={agreement[ids[0]].final_agreement_date}
+                      />
+                      <DataFieldStyle
+                        field={"Monthly Rent Start Date"}
+                        value={agreement[ids[0]].rent_start_date}
+                      />
+                    </Grid>
+                    <Grid container sx={{ mt: 1 }}>
+                      <DataFieldStyle
+                        field={"Deposit UTR Number"}
+                        value={agreement[ids[0]].utr_number}
+                      />
+                      <DataFieldStyle
+                        field={"Deposit Payment Date"}
+                        value={agreement[ids[0]].rent_start_date}
+                      />
+                    </Grid>
+                  </>
                 )}
-                <Grid container spacing={2} sx={{ mt: 1 }}>
+                </Grid>
+                <Grid container sx={{ mt: 2 }}>
                   <DataFieldStyle
                     field={"code"}
                     value={agreement[ids[0]].code}
@@ -172,12 +181,12 @@ function ManagerApproval() {
                     value={agreement[ids[0]].state}
                   />
                   <DataFieldStyle
-                    field={"location"}
-                    value={agreement[ids[0]].location}
-                  />
-                  <DataFieldStyle
                     field={"city"}
                     value={agreement[ids[0]].city}
+                  />
+                  <DataFieldStyle
+                    field={"location"}
+                    value={agreement[ids[0]].location}
                   />
                   <DataFieldStyle
                     field={"pincode"}
@@ -213,11 +222,13 @@ function ManagerApproval() {
                   />
                   {agreement[ids[0]].tenure !== "11 Month" && (
                     <>
-                      <DataFieldStyle
-                        field={"yearly Increment"}
-                        value={agreement[ids[0]].yearlyIncrement}
-                      />
-                      <Grid container spacing={1} sx={{ mt: 6 }}>
+                      <Grid container spacing={2} sx={{ mt: 4 }}>
+                        <Grid item xs={12} container>
+                          <DataFieldStyle
+                            field={"yearly Increment"}
+                            value={agreement[ids[0]].yearlyIncrement}
+                          />
+                        </Grid>
                         <YearField
                           year={"Year 1"}
                           incrementType={agreement[ids[0]].yearlyIncrement}
@@ -229,7 +240,7 @@ function ManagerApproval() {
                           incrementType={agreement[ids[0]].yearlyIncrement}
                           amount={agreement[ids[0]].year2}
                           Increment={getIncrement(
-                            agreement[ids[0]].monthlyRent,
+                            agreement[ids[0]].year1,
                             agreement[ids[0]].year2,
                             agreement[ids[0]].yearlyIncrement
                           )}
@@ -242,7 +253,7 @@ function ManagerApproval() {
                             incrementType={agreement[ids[0]].yearlyIncrement}
                             amount={agreement[ids[0]].year3}
                             Increment={getIncrement(
-                              agreement[ids[0]].monthlyRent,
+                              agreement[ids[0]].year2,
                               agreement[ids[0]].year3,
                               agreement[ids[0]].yearlyIncrement
                             )}
@@ -255,7 +266,7 @@ function ManagerApproval() {
                             incrementType={agreement[ids[0]].yearlyIncrement}
                             amount={agreement[ids[0]].year4}
                             Increment={getIncrement(
-                              agreement[ids[0]].monthlyRent,
+                              agreement[ids[0]].year3,
                               agreement[ids[0]].year4,
                               agreement[ids[0]].yearlyIncrement
                             )}
@@ -267,7 +278,7 @@ function ManagerApproval() {
                             incrementType={agreement[ids[0]].yearlyIncrement}
                             amount={agreement[ids[0]].year5}
                             Increment={getIncrement(
-                              agreement[ids[0]].monthlyRent,
+                              agreement[ids[0]].year4,
                               agreement[ids[0]].year5,
                               agreement[ids[0]].yearlyIncrement
                             )}
@@ -280,12 +291,13 @@ function ManagerApproval() {
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
-                      <Grid container sx={{ mt: 3 }} spacing={2}>
-                        <Grid item xs={12}>
+                      <Grid container sx={{ mt: 3 }}>
+                        {/* <Grid item xs={12}>
                           <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
                           </Typography>
-                        </Grid>
+                        </Grid> */}
+                         <Heading heading={`Landlord ${id + 1} Personal Details`} />
                         <DataFieldStyle
                           field={"name of lessee"}
                           value={agreement[ids[0]].name[id]}
@@ -337,19 +349,20 @@ function ManagerApproval() {
               </Grid>
 
               {/* Bank Details start here */}
-              <Heading heading={"Bank Details"} />
+              {/* <Heading heading={"Bank Details"} /> */}
 
               <Grid item md={10}>
-                <Grid container spacing={2}>
+                <Grid container>
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
                       <Grid container>
-                        <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
+                        {/* <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
                           <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
                           </Typography>
-                        </Grid>
+                        </Grid> */}
+                        <Heading heading={`Landlord ${id + 1} Bank Details`} />
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement[ids[0]].bankName[id]}
@@ -381,9 +394,12 @@ function ManagerApproval() {
               {/* Bank Details Ends here */}
 
               {/* Document Section start here */}
-              <Heading heading={"Document View/Download"} />
+              
               <Grid item md={10}>
                 <Grid container spacing={4} sx={{ mt: 1 }}>
+                  <Grid item xs={12}>
+                  <Heading heading={"Document View/Download"} />
+                  </Grid>
                   <DocumentView
                     title={"draft agreement"}
                     img={agreement[ids[0]].draft_agreement}

@@ -174,7 +174,7 @@ function validate(){
               <FormControl fullWidth>
                 <FormLabel>
                   <Typography variant="body1" sx={labelStyle}>
-                    Agreement Date
+                    Monthly Rent Start Date
                   </Typography>
                 </FormLabel>
                 <input type="date" 

@@ -38,13 +38,13 @@ const Heading = ({ heading }) => {
         fontSize={"20px"}
         color={"primary"}
         fontWeight={"600"}
+        sx={{textDecoration:"underline"}}
       >
         {heading}
       </Typography>
     </Grid>
   );
 };
-
 function ApprovalRequest() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -145,19 +145,16 @@ function ApprovalRequest() {
     }
   }
 
-  function getIncrement(rent,value,type){
-    let incrementType ;
-    rent = Number(rent)
-    value= Number(value)
-    if(type === "Percentage"){
-      incrementType = parseInt(((value - rent) / rent) * 100)
-      
-      
-    }else if(type === "Value"){
-      incrementType = value-rent
-      
+  function getIncrement(rent, value, type) {
+    let incrementType;
+    rent = Number(rent);
+    value = Number(value);
+    if (type === "Percentage") {
+      incrementType = parseInt(((value - rent) / rent) * 100);
+    } else if (type === "Value") {
+      incrementType = value - rent;
     }
-   return incrementType.toFixed(1)
+    return incrementType;
   }
 
   return (
@@ -167,9 +164,9 @@ function ApprovalRequest() {
           {/* <a id="button"></a> */}
 
           <HamburgerMenu
-          navigateHome={"operationsDashboard"}
-          handleListing={() => navigate("/operationsListing")}
-        />
+            navigateHome={"operationsDashboard"}
+            handleListing={() => navigate("/operationsListing")}
+          />
 
           <Box sx={{ flexGrow: 1 }}>
             <MyHeader>Rental Management System</MyHeader>
@@ -195,28 +192,38 @@ function ApprovalRequest() {
               ></Grid>
               {/* Basic Details */}
               <Grid item md={10}>
-              {
-                agreement[ids[0]].status === "Deposited" &&
-                <Grid container spacing={2}>
-                        <DataFieldStyle
-                          field={"UTR Number"}
-                          value={agreement[ids[0]].utr_number}
-                          href={agreement[ids[0]].final_agreement}
-                          name={"Final Agreement"}
-                          bold={true}
-                          cursor={true}
-                        />
-                        <DataFieldStyle
-                          field={"Final Agreement Date"}
-                          value={agreement[ids[0]].final_agreement_date}
-                        />
-                        <DataFieldStyle
-                          field={"Monthly Rent Date"}
-                          value={agreement[ids[0]].rent_start_date}
-                        />
-                </Grid>
-}
-                <Grid container spacing={2}>
+              {agreement[ids[0]].status === "Deposited" && (
+                  <>
+                    <Grid container >
+                      <DataFieldStyle
+                        field={"Final Agreement"}
+                        href={agreement[ids[0]].final_agreement}
+                        name={"Final Agreement"}
+                        bold={true}
+                        cursor={true}
+                      />
+                      <DataFieldStyle
+                        field={"Final Agreement Date"}
+                        value={agreement[ids[0]].final_agreement_date}
+                      />
+                      <DataFieldStyle
+                        field={"Monthly Rent Start Date"}
+                        value={agreement[ids[0]].rent_start_date}
+                      />
+                    </Grid>
+                    <Grid container sx={{ mt: 1 }}>
+                      <DataFieldStyle
+                        field={"Deposit UTR Number"}
+                        value={agreement[ids[0]].utr_number}
+                      />
+                      <DataFieldStyle
+                        field={"Deposit Payment Date"}
+                        value={agreement[ids[0]].rent_start_date}
+                      />
+                    </Grid>
+                  </>
+                )}
+                <Grid container sx={{ mt: 1 }}>
                   <DataFieldStyle
                     field={"code"}
                     value={agreement[ids[0]].code}
@@ -226,14 +233,16 @@ function ApprovalRequest() {
                     field={"state"}
                     value={agreement[ids[0]].state}
                   />
-                  <DataFieldStyle
-                    field={"location"}
-                    value={agreement[ids[0]].location}
-                  />
+                  
                   <DataFieldStyle
                     field={"city"}
                     value={agreement[ids[0]].city}
                   />
+                  <DataFieldStyle
+                    field={"location"}
+                    value={agreement[ids[0]].location}
+                  />
+                  
                   <DataFieldStyle
                     field={"pincode"}
                     value={agreement[ids[0]].pincode}
@@ -283,7 +292,11 @@ function ApprovalRequest() {
                           year={"Year 2"}
                           incrementType={agreement[ids[0]].yearlyIncrement}
                           amount={agreement[ids[0]].year2}
-                          Increment={ getIncrement(agreement[ids[0]].monthlyRent,agreement[ids[0]].year2,agreement[ids[0]].yearlyIncrement)}
+                          Increment={getIncrement(
+                            agreement[ids[0]].year1,
+                            agreement[ids[0]].year2,
+                            agreement[ids[0]].yearlyIncrement
+                          )}
                         />
                         {(agreement[ids[0]].tenure === "3 Year" ||
                           agreement[ids[0]].tenure === "4 Year" ||
@@ -292,8 +305,11 @@ function ApprovalRequest() {
                             year={"Year 3"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
                             amount={agreement[ids[0]].year3}
-                            Increment={ getIncrement(agreement[ids[0]].monthlyRent,agreement[ids[0]].year3,agreement[ids[0]].yearlyIncrement)}
-
+                            Increment={getIncrement(
+                              agreement[ids[0]].year2,
+                              agreement[ids[0]].year3,
+                              agreement[ids[0]].yearlyIncrement
+                            )}
                           />
                         )}
                         {(agreement[ids[0]].tenure === "4 Year" ||
@@ -302,7 +318,11 @@ function ApprovalRequest() {
                             year={"Year 4"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
                             amount={agreement[ids[0]].year4}
-                            Increment={ getIncrement(agreement[ids[0]].monthlyRent,agreement[ids[0]].year4,agreement[ids[0]].yearlyIncrement)}
+                            Increment={getIncrement(
+                              agreement[ids[0]].year3,
+                              agreement[ids[0]].year4,
+                              agreement[ids[0]].yearlyIncrement
+                            )}
                           />
                         )}
                         {agreement[ids[0]].tenure === "5 Year" && (
@@ -310,7 +330,11 @@ function ApprovalRequest() {
                             year={"Year 5"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
                             amount={agreement[ids[0]].year5}
-                            Increment={ getIncrement(agreement[ids[0]].monthlyRent,agreement[ids[0]].year5,agreement[ids[0]].yearlyIncrement)}
+                            Increment={getIncrement(
+                              agreement[ids[0]].year4,
+                              agreement[ids[0]].year5,
+                              agreement[ids[0]].yearlyIncrement
+                            )}
                           />
                         )}
                       </Grid>
@@ -320,12 +344,13 @@ function ApprovalRequest() {
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
-                      <Grid container sx={{ mt: 3 }} spacing={2}>
-                        <Grid item xs={12}>
+                      <Grid container sx={{ mt: 3 }}>
+                        {/* <Grid item xs={12}>
                           <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
                           </Typography>
-                        </Grid>
+                        </Grid> */}
+                        <Heading heading={`Landlord ${id + 1} Personal Details`} />
                         <DataFieldStyle
                           field={"name of lessee"}
                           value={agreement[ids[0]].name[id]}
@@ -386,19 +411,21 @@ function ApprovalRequest() {
               </Grid>
 
               {/* Bank Details start here */}
-              <Heading heading={"Bank Details"} />
+              {/* */}
 
               <Grid item md={10}>
-                <Grid container spacing={2}>
+                <Grid container>
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
                       <Grid container>
-                        <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
+                        {/* <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
                           <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
                           </Typography>
-                        </Grid>
+                        </Grid> */}
+                        <Heading heading={`Landlord ${id + 1} Bank Details`} /> 
+                        
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement[ids[0]].bankName[id]}
@@ -430,9 +457,12 @@ function ApprovalRequest() {
               {/* Bank Details Ends here */}
 
               {/* Document Section start here */}
-              <Heading heading={"Document View/Download"} />
+             
               <Grid item md={10}>
                 <Grid container spacing={4} sx={{ mt: 1 }}>
+                  <Grid item xs={12}>
+                  <Heading heading={"Document View/Download"} />
+                  </Grid>
                   <DocumentView
                     title={"draft agreement"}
                     img={agreement[ids[0]].draft_agreement}
@@ -501,7 +531,7 @@ function ApprovalRequest() {
                   <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                     <Grid
                       container
-                      spacing={2}
+                    
                       sx={{ justifyContent: "center" }}
                     >
                       <Grid item md={6} xs={11}>
