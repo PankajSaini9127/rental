@@ -654,7 +654,7 @@ function EditAgreement({ history }) {
         setAlert({
           open: true,
           variant: "success",
-          message: (finance_id === 0 && buh_id !== 0 )? "Agrement Edited Successfully & Sent To Operations.": "Agrement Edited Successfully & Sent To Sr Manager.",
+          message:  "Agrement Edited & Submited Successfully",
         })
       );
       navigate('/listing')
@@ -1293,6 +1293,7 @@ function EditAgreement({ history }) {
                   rent={preData.monthlyRent || ""}
                   increment={increment}
                   setIncrement={setIncrement}
+                  monthlyRent={preData.monthlyRent || ""}
                   disabled={buh_id !== 0 || buh_id === null ? true : false}
                 />
 
@@ -1668,10 +1669,10 @@ function EditAgreement({ history }) {
                                   ? true
                                   : false
                               }
-                              label="Upload Cancel Bank Cheque"
+                              label="Upload Cancel Cheque"
                               name={"cheque"}
                               fileName={preData[`cheque${i}`]}
-                              placeHolder="Upload Cancel Bank Cheque"
+                              placeHolder="Upload Cancel Cheque"
                               handleChange={(e) => handleChangeCommonFile(e, i)}
                               href={ preData.landlord[i].cheque}
                             />

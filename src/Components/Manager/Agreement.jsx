@@ -21,7 +21,7 @@ import {
   Collapse,
 } from "@mui/material";
 
-import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 // Custom Style Component
 
@@ -50,7 +50,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 import PermissionAlert from "./Alert";
 
-function Agreement({history}) {
+function Agreement({ history }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -85,7 +85,7 @@ function Agreement({history}) {
     pincode: "",
     location: "",
     city: "",
-    area : ""
+    area: "",
   });
 
   useEffect(() => {
@@ -110,7 +110,7 @@ function Agreement({history}) {
     pincode: "",
     location: "",
     city: "",
-    area: ""
+    area: "",
   });
   const [isSubmit, setIsSubmit] = useState(false);
 
@@ -143,13 +143,12 @@ function Agreement({history}) {
     let response = await uploadDoc(FD);
     // console.log(data)
     if (response.status === 200) {
-
-      console.log(e.target.name)
-      console.log(formError)
-      setFormError((old) => ({...old,
-        [e.target.name + "_name"] : "",
-        [e.target.name] : "",
-      
+      console.log(e.target.name);
+      console.log(formError);
+      setFormError((old) => ({
+        ...old,
+        [e.target.name + "_name"]: "",
+        [e.target.name]: "",
       }));
 
       setData((old) => ({
@@ -293,10 +292,12 @@ function Agreement({history}) {
         else error = { ...error, message: null };
         break;
       case "ifscCode":
-        if (!e.target.value.match(/^[A-Z]{4}0[A-Z0-9]{6}$/) && e.target.value !== "" )
-        error = { ...error, message: "Incorrect IFSC" };
-        else
-        error = { ...error, message: null };
+        if (
+          !e.target.value.match(/^[A-Z]{4}0[A-Z0-9]{6}$/) &&
+          e.target.value !== ""
+        )
+          error = { ...error, message: "Incorrect IFSC" };
+        else error = { ...error, message: null };
 
         break;
       default:
@@ -451,15 +452,11 @@ function Agreement({history}) {
         else error = { ...error, message: null };
         break;
       case "ifscCode":
+        e.target.value = e.target.value.toUpperCase();
 
-      e.target.value = e.target.value.toUpperCase();
+        if (!e.target.value.match(/^[^@#$%^&*<>'\"/;`%]*$/))
+          error = { state: true, message: null };
 
-      if (
-        !e.target.value.match(/^[^@#$%^&*<>'\"/;`%]*$/)
-      )
-        error = { state: true, message: null };
-      
-   
         break;
       default:
         break;
@@ -544,12 +541,10 @@ function Agreement({history}) {
         break;
     }
     console.log(e.target.name, e.target.value);
-    if (!error.state)
-    {
+    if (!error.state) {
       setData((old) => ({ ...old, [e.target.name]: e.target.value }));
-      console.log(formError)
-      setFormError((old) => ({...old,[e.target.name] : "" }));
-
+      console.log(formError);
+      setFormError((old) => ({ ...old, [e.target.name]: "" }));
     }
   }
 
@@ -584,13 +579,14 @@ function Agreement({history}) {
       address,
       location,
       city,
-      area
+      area,
     } = data;
 
     const { landlord } = data;
 
     APICall(
-      {area,
+      {
+        area,
         code,
         lockInYear,
         monthlyRent,
@@ -628,11 +624,9 @@ function Agreement({history}) {
     // setData({ ...data, ...increment });
     console.log(validate(data), validateFields(data));
     if (validate(data) && validateFields(data)) {
-   
       handleHoldApiCall(id, { ...data, ...increment });
     }
   }
-
 
   async function handleHoldApiCall(id, data) {
     // console.log(data)
@@ -667,7 +661,8 @@ function Agreement({history}) {
     console.log(year1, year2, year3, year4, year5);
     const { landlord } = data;
     APICall(
-      {area,
+      {
+        area,
         code,
         lockInYear,
         monthlyRent,
@@ -695,7 +690,7 @@ function Agreement({history}) {
         city,
         manager_id: id,
         status: "Hold",
-        remark:""
+        remark: "",
       },
       landlord
     );
@@ -739,7 +734,7 @@ function Agreement({history}) {
       const result = await add_landlord(landlordData);
 
       if (result) {
-        window.location.href =  "/listing";
+        window.location.href = "/listing";
         dispatch(
           setAlert({
             open: true,
@@ -760,7 +755,11 @@ function Agreement({history}) {
           ...old,
           landlord: old.landlord.map((row, index) => {
             if (index === i) {
-              return { ...row, bankName: res.data.BANK, branchName : res.data.BRANCH };
+              return {
+                ...row,
+                bankName: res.data.BANK,
+                branchName: res.data.BRANCH,
+              };
             } else return row;
           }),
         }));
@@ -770,7 +769,7 @@ function Agreement({history}) {
         ...old,
         landlord: old.landlord.map((row, index) => {
           if (index === i) {
-            return { ...row, bankName: "Not Found",  branchName : ""  };
+            return { ...row, bankName: "Not Found", branchName: "" };
           } else return row;
         }),
       }));
@@ -786,7 +785,6 @@ function Agreement({history}) {
 
   // form validation
   function validate(data) {
-
     let field = [
       ,
       "draft_agreement",
@@ -796,7 +794,7 @@ function Agreement({history}) {
       "tax_receipt",
     ];
 
-    data.landlord.length > 1 && field.push("noc")
+    data.landlord.length > 1 && field.push("noc");
 
     if (landloard.length > 0) {
       data.landlord.map((row, i) => {
@@ -835,7 +833,6 @@ function Agreement({history}) {
     } else return false;
   }
   function validateFields(data) {
-
     console.log("Validate Called");
 
     let field = [
@@ -850,7 +847,7 @@ function Agreement({history}) {
       "address",
       "pincode",
       "location",
-      "area"
+      "area",
     ];
 
     let dataError = [];
@@ -865,7 +862,7 @@ function Agreement({history}) {
         ifscCode: data.landlord[i].ifscCode ? false : "Field is required.",
         bankName: data.landlord[i].bankName ? false : "Field is required.",
         accountNo: data.landlord[i].accountNo ? false : "Field is required.",
-        benificiaryName: data.landlord[i].benificiaryName 
+        benificiaryName: data.landlord[i].benificiaryName
           ? false
           : "Field is required.",
       }));
@@ -885,13 +882,12 @@ function Agreement({history}) {
       }
     });
 
-    dataError.map((row,i)=>{
-      finalCheck.push(Object.values(row).includes("Field is required."))
-    })
+    dataError.map((row, i) => {
+      finalCheck.push(Object.values(row).includes("Field is required."));
+    });
 
-    
-    console.log("Field Check >>>>",finalCheck.includes(true))
-    console.log("Field Check >>>>", formError,);
+    console.log("Field Check >>>>", finalCheck.includes(true));
+    console.log("Field Check >>>>", formError);
     if (!finalCheck.includes(true)) {
       return true;
     } else return false;
@@ -923,9 +919,11 @@ function Agreement({history}) {
       let response = await getLocation(e.target.value);
       if (response.data[0].PostOffice) {
         let address = response.data[0].PostOffice[0];
-        setFormError((old)=>({
-...old,city :"" , state : ""
-        }))
+        setFormError((old) => ({
+          ...old,
+          city: "",
+          state: "",
+        }));
         return setData((old) => ({
           ...old,
           state: address.State,
@@ -960,15 +958,18 @@ function Agreement({history}) {
           monthlyBtn="true"
         />
         <Box className="backButton">
-              <IconButton
-                variant="contained"
-                color='primary'
-                onClick={()=>navigate(-1)}
-                size={'large'}
-              >
-                <ArrowCircleLeftIcon sx={{fontSize:'3rem'}} color="#FFFFF !important" />
-              </IconButton>
-            </Box>
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => navigate(-1)}
+            size={"large"}
+          >
+            <ArrowCircleLeftIcon
+              sx={{ fontSize: "3rem" }}
+              color="#FFFFF !important"
+            />
+          </IconButton>
+        </Box>
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Rental Management System</MyHeader>
@@ -990,7 +991,7 @@ function Agreement({history}) {
               >
                 {/* Basic details start here */}
 
-                <Grid container sx={{ px: 3 }} spacing={isSmall ? 2 : 4}>
+                <Grid container  spacing={isSmall ? 2 : 4}>
                   <TextFieldWrapper
                     label="Code"
                     disabled={true}
@@ -1024,7 +1025,6 @@ function Agreement({history}) {
                     value={data.state || ""}
                     error={formError.state}
                     onChange={handleCommonChange}
-
                   />
 
                   <TextFieldWrapper
@@ -1036,7 +1036,6 @@ function Agreement({history}) {
                     value={data.city || ""}
                     error={formError.city}
                     onChange={handleCommonChange}
-
                   />
 
                   <TextFieldWrapper
@@ -1054,7 +1053,7 @@ function Agreement({history}) {
                     label="Area"
                     placeHolder="Area in sq. ft"
                     name="area"
-                    notationVal = "sq. ft"
+                    notationVal="sq. ft"
                     textAlignRight={"textAlignRight"}
                     error={formError.area}
                     required={true}
@@ -1252,7 +1251,7 @@ function Agreement({history}) {
                         />
                         <TextFieldWrapper
                           label="PAN Number"
-                          placeHolder="Enter Pan No."
+                          placeHolder="Enter PAN No."
                           name="panNo"
                           onBlur={(e) => handleOnBlur(e, i)}
                           required={true}
@@ -1359,7 +1358,7 @@ function Agreement({history}) {
                           label="Bank IFSC Code"
                           placeHolder="Enter IFSC Code"
                           name="ifscCode"
-                          maxLength = {11}
+                          maxLength={11}
                           onBlur={(e) => handleOnBlur(e, i)}
                           required={true}
                           value={
@@ -1380,9 +1379,11 @@ function Agreement({history}) {
                           label="Bank Name"
                           placeHolder="Enter Bank Name"
                           name="bankName"
-                          partLabel = {data.landlord[i] && data.landlord[i].branchName
-                            ? data.landlord[i].branchName
-                            : ""}
+                          partLabel={
+                            data.landlord[i] && data.landlord[i].branchName
+                              ? data.landlord[i].branchName
+                              : ""
+                          }
                           error={
                             data.landlord[i] &&
                             data.landlord[i].bankName === "Not Found"
@@ -1400,13 +1401,11 @@ function Agreement({history}) {
                           onChange={(e) => handleOnBlur(e, i)}
                         />
 
-
                         <TextFieldWrapper
                           label="Benificiary Name"
                           placeHolder="Enter Benificiary Name"
                           name="benificiaryName"
                           onBlur={(e) => handleOnBlur(e, i)}
-                      
                           value={
                             data.landlord[i] && data.landlord[i].benificiaryName
                               ? data.landlord[i].benificiaryName
@@ -1549,7 +1548,7 @@ function Agreement({history}) {
 
                         <Grid item xs={6}>
                           <DocumentUpload
-                            label="Upload Pan Card"
+                            label="Upload PAN Card"
                             uploaded={
                               landloard[i]
                                 ? data[
@@ -1592,8 +1591,8 @@ function Agreement({history}) {
 
                         <Grid item xs={6}>
                           <DocumentUpload
-                            label="Upload Cancel Bank Cheque"
-                            placeHolder="Upload Cancel Bank Cheque"
+                            label="Upload Cancel Cheque"
+                            placeHolder="Upload Cancel Cheque"
                             uploaded={
                               landloard[i]
                                 ? data[
@@ -1764,19 +1763,19 @@ function Agreement({history}) {
                       error={formError.tax_receipt}
                     />
                   </Grid>
-                  { data.landlord.length > 1 &&
-                  <Grid item xs={6}>
-                    <DocumentUpload
-                      uploaded={data.noc && true}
-                      label="Upload NOC (If Multiple Owners)"
-                      placeHolder="NOC"
-                      fileName={data.noc_name}
-                      handleChange={handleChangeFile}
-                      name={"noc"}
-                      error={formError.noc}
-                    />
-                  </Grid>
-}
+                  {data.landlord.length > 1 && (
+                    <Grid item xs={6}>
+                      <DocumentUpload
+                        uploaded={data.noc && true}
+                        label="Upload NOC (If Multiple Owners)"
+                        placeHolder="NOC"
+                        fileName={data.noc_name}
+                        handleChange={handleChangeFile}
+                        name={"noc"}
+                        error={formError.noc}
+                      />
+                    </Grid>
+                  )}
                 </Grid>
 
                 {/* Document upload section end here */}

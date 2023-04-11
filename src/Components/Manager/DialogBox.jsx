@@ -12,6 +12,7 @@ import React, { useState } from "react";
 
 import { useDispatch } from "react-redux";
 import { addLandLoard } from "../../store/action/action";
+import { useNavigate } from "react-router-dom";
 
 const TextFieldWrapper = ({ type,label, placeHolder, value, name, onChange }) => {
   const fieldStyle = {
@@ -160,6 +161,8 @@ function DialogBox({ value, setValue }) {
 
   };
 
+  const navigate = useNavigate()
+
   return (
     <>
       <Dialog
@@ -249,8 +252,23 @@ function DialogBox({ value, setValue }) {
               ""
             )}
           </Grid>
+          
           </Grid>
             </Box>
+            <Button
+                variant="outlined"
+                
+                sx={{
+                  height: "30px",
+                  borderRadius: "10px",
+                  fontSize: "16px",
+                  lineHeight: "32px",
+                  textTransform: "capitalize",
+                }}
+                onClick={()=>navigate(-1)}
+              >
+               Close
+              </Button>
         </Grid>
       </Dialog>
     </>
