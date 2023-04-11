@@ -70,13 +70,13 @@ function DialogBoxSBM({ open, handleClose, handleConfirm, value, setValue }) {
       setFormError(error);
       return false;
     }
-    
+    handleConfirm()
   }
 
   function handleSubmit(e){
     e.preventDefault()
     validate(e)
-    handleConfirm()
+   
   }
 
   return (
