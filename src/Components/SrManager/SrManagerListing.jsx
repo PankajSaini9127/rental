@@ -46,6 +46,9 @@ function SrManagerListing() {
     };
   });
 
+  
+ const {refresh} = useSelector(s=>s)
+
   //search
   async function SearchAPi(id, searchValue) {
     const search = await get_search_srmanager(id, searchValue);
@@ -55,14 +58,13 @@ function SrManagerListing() {
   }
 
   useEffect(() => {
-    if (searchValue.length >= 1) {
-      SearchAPi(login_srm_id, searchValue);
-    }
-  }, [searchValue]);
-
-  useEffect(() => {
     getData(login_srm_id);
-  }, []);
+  }, [refresh]);
+
+  function handleSerachChange(e){
+    SearchAPi(login_srm_id, searchValue);
+    setsearchValue(e.target.value)
+  }
 
   const navigate = useNavigate();
 
@@ -83,7 +85,8 @@ function SrManagerListing() {
           rows={rows}
           dropDown={false}
           searchValue={searchValue}
-          setsearchValue={setsearchValue}
+          // setsearchValue={setsearchValue}
+          handleSerachChange={handleSerachChange}
         />
       </Stack>
     </>

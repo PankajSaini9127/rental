@@ -172,12 +172,9 @@ function SrManagerApproval() {
           {/* <a id="button"></a> */}
           {console.log(agreement[ids[0]].op_id)};
           <HamburgerMenu
-            navigateHome={"dashboard"}
-            handleListing={() => navigate("/listing")}
-            monthlyRent={() => navigate("/monthly-payment")}
-            renewal={() => navigate(`/renewal`)}
-            // monthlyBtn="true"
-          />
+          handleListing={() => navigate("/srManagerListing")}
+          navigateHome={"srManagerDashboard"}
+        />
           <Box sx={{ flexGrow: 1 }}>
             <MyHeader>Rental Management System</MyHeader>
             <Box className="backButton">
@@ -537,7 +534,7 @@ function SrManagerApproval() {
                     </Grid>
                   </Grid>
 
-                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                  <Grid item md={8} sx={{ mt: 4, mb: 2 }} spacing={2} >
                     <Grid
                       container
                       

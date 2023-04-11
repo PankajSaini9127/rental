@@ -9,6 +9,7 @@ import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
 import {
   ApprovedByFinance,
 } from "../../Services/Services";
+import Remark from "../RentalPortal/Remark";
 function FinanceTable({ rows, setRows }) {
   const navigate = useNavigate();
 
@@ -91,7 +92,7 @@ function FinanceTable({ rows, setRows }) {
       renderCell: (params) => (
         <>
           {console.log(params)}
-          {params.formattedValue === "Sent To BHU" ? (
+          {params.formattedValue === "Sent To Finance Team" ? (
             <Checkbox
               onChange={handleSwitch}
               name={params.id}
@@ -193,10 +194,14 @@ function FinanceTable({ rows, setRows }) {
   //     setIds(ids)
   //   };
 
-  function handleSelect() {
+  const [remarkOpen,setRemarkOpen] = useState(false)
+
+  const [remarkMSG,setRemarkMSG] = useState("")
+
+  function handleSend() {
     ids.map(async (id) => {
       const response = await send_to_operations(
-        { status: "Sent To Operations", srm_id },
+        { status: "Approved", finance_id:srm_id ,remark:remarkMSG},
         id
       );
       if (response.data.success) {
@@ -204,9 +209,10 @@ function FinanceTable({ rows, setRows }) {
           setAlert({
             vatiant: "success",
             open: true,
-            message: "Approved And Sent To Operations",
+            message: "Approved ",
           })
         );
+        setRemarkOpen(false)
       } else {
         dispatch(
           setAlert({
@@ -280,12 +286,13 @@ function FinanceTable({ rows, setRows }) {
           <Button
             variant="contained"
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
-            onClick={handleSelect}
+            onClick={()=>setRemarkOpen(true)}
           >
-            Send To Operations
+            Approve
           </Button>
         </Box>
       )}
+       <Remark remark={remarkMSG} setRemark={setRemarkMSG} handleSend={handleSend} open={remarkOpen} handleClose={()=>setRemarkOpen(false)} />
 
       <Box
         sx={{

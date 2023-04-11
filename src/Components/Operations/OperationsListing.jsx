@@ -31,6 +31,7 @@ function SrManagerListing() {
 
   const rows = data.ids.map((item) => {
     return {
+      checkbox: data.agreement[item].status,
       i: data.agreement[item].id,
       id: data.agreement[item].agreement_id,
       status: data.agreement[item].status,
@@ -52,11 +53,13 @@ function SrManagerListing() {
     }
   }
 
-  useEffect(() => {
-    // if(searchValue.length >= 1){
-    // SearchAPi(login_operations_id, searchValue);
-    // }
-  }, [searchValue]);
+
+  function handleSerachChange(e){
+    SearchAPi(login_operations_id, searchValue);
+    setsearchValue(e.target.value)
+  }
+
+
 
   useEffect(() => {
     getData(login_operations_id);
@@ -82,7 +85,8 @@ function SrManagerListing() {
             rows={rows}
             dropDown={false}
             searchValue={searchValue}
-            setsearchValue={setsearchValue}
+            // setsearchValue={setsearchValue}
+            handleSerachChange={handleSerachChange}
           />
         </Stack>
       {/* )} */}

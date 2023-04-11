@@ -5,6 +5,7 @@ import { Box, Button, Checkbox } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { send_to_operations } from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
+import Remark from "../RentalPortal/Remark";
 
 function ManagerTable({ rows }) {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ function ManagerTable({ rows }) {
       renderCell: (params) => (
         <>
           {console.log(params)}
-          {params.formattedValue === "Sent To BHU" ? (
+          {params.formattedValue === "Sent To BUH" ? (
             <Checkbox
               onChange={handleSwitch}
               name={params.id}
@@ -147,10 +148,14 @@ function ManagerTable({ rows }) {
   //     setIds(ids)
   //   };
 
+  const [remarkOpen,setRemarkOpen] = useState(false)
+
+  const [remarkMSG,setRemarkMSG] = useState("")
+
   function handleSelect() {
     ids.map(async (id) => {
       const response = await send_to_operations(
-        { status: "Sent To Operations", srm_id },
+        { status: "Sent To Operations", bhu_id:srm_id ,remark:remarkMSG},
         id
       );
       if (response.data.success) {
@@ -161,6 +166,7 @@ function ManagerTable({ rows }) {
             message: "Approved And Sent To Operations",
           })
         );
+        setRemarkOpen(false)
       } else {
         dispatch(
           setAlert({
@@ -180,13 +186,13 @@ function ManagerTable({ rows }) {
           <Button
             variant="contained"
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
-            onClick={handleSelect}
+            onClick={()=>setRemarkOpen(true)}
           >
             Send To Operations
           </Button>
         </Box>
       )}
-
+      <Remark remark={remarkMSG} setRemark={setRemarkMSG} handleSend={handleSelect} open={remarkOpen} handleClose={()=>setRemarkOpen(false)} />
       <Box
         sx={{
           height: "430px",

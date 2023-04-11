@@ -2,8 +2,10 @@ import { DataGrid } from "@mui/x-data-grid";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Checkbox } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { send_to_bhu } from "../../Services/Services";
+import Remark from "../RentalPortal/Remark";
+import { setAlert, setRefreshBox } from "../../store/action/action";
 
 function ManagerTable({ rows }) {
   const navigate = useNavigate();
@@ -11,6 +13,8 @@ function ManagerTable({ rows }) {
   const [ids, setIds] = useState([]);
 
   const { auth } = useSelector((s) => s);
+
+  const dispatch = useDispatch()
 
   const srm_id = auth.id;
 
@@ -133,14 +137,24 @@ function ManagerTable({ rows }) {
     },
   ];
 
-  const onRowsSelectionHandler = (ids) => {
-    setIds(ids);
-  };
+  const [remarkOpen,setRemarkOpen] = useState(false)
 
-  function handleSelect() {
+  const [remarkMSG,setRemarkMSG] = useState("")
+
+
+
+
+  function handleSend() {
     ids.map(async (id) => {
-      const response = await send_to_bhu({ status: "Sent To BUH", srm_id }, id);
-      console.log(response);
+      const response = await send_to_bhu({ status: "Sent To BUH", srm_id ,remark:remarkMSG}, id);
+      if(response.data.success){
+        setIds([])
+        setRemarkOpen(false)
+        dispatch(setRefreshBox())
+        dispatch(setAlert({variant:"success",open:true,message:"Agreement Sent To BUH."}));
+      }else{
+        dispatch(setAlert({variant:"error",open:true,message:"Something Went Wrong ! Please Try Again."}))
+      };
     });
   }
 
@@ -151,12 +165,13 @@ function ManagerTable({ rows }) {
           <Button
             variant="contained"
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
-            onClick={handleSelect}
+            onClick={()=>setRemarkOpen(true)}
           >
             Send To BUH
           </Button>
         </Box>
       )}
+      <Remark remark={remarkMSG} setRemark={setRemarkMSG} handleSend={handleSend} open={remarkOpen} handleClose={()=>setRemarkOpen(false)} />
 
       <Box
         sx={{

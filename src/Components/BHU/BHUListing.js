@@ -55,15 +55,15 @@ function SrManagerListing() {
     }
   }
 
-  useEffect(() => {
-    // if(searchValue.length >= 1){
+  function handleSerachChange(e){
     SearchAPi(login_bhu_id, searchValue);
-    // }
-  }, [searchValue]);
+    setsearchValue(e.target.value)
+  }
+  const {refresh} = useSelector(s=>s)
 
   useEffect(() => {
     getData(login_bhu_id);
-  }, []);
+  }, [refresh]);
 
   const navigate = useNavigate();
 
@@ -85,7 +85,8 @@ function SrManagerListing() {
             rows={rows}
             dropDown={false}
             searchValue={searchValue}
-            setsearchValue={setsearchValue}
+            // setsearchValue={setsearchValue}
+            handleSerachChange={handleSerachChange}
           />
         </Stack>
       )}

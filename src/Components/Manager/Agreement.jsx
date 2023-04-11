@@ -1516,7 +1516,7 @@ function Agreement({ history }) {
                                 : false
                             }
                             label="Upload Aadhaar Card"
-                            placeHolder="Upload Aadhar Card"
+                            placeHolder="Upload Aadhaar Card"
                             handleChange={handleChangeFile}
                             name={
                               landloard[i]

@@ -18,19 +18,24 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setRefreshBox } from "../../store/action/action";
 import FinalAgreement from "./FinalAgreement";
+import Remark from "../RentalPortal/Remark";
 
 function DataTable({ rows, loading, check, setCheck }) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [ids, setIds] = useState([]);
 
-  const { auth} = useSelector((s) => s);
+  const { auth } = useSelector((s) => s);
 
-  const [open,setopen] = useState(false);
+  const [open, setopen] = useState(false);
 
-  const [final_agreement,setFinalAgreement] = useState({agreement_date:"",final_agreement:"",rent_start_date:""})
+  const [final_agreement, setFinalAgreement] = useState({
+    agreement_date: "",
+    final_agreement: "",
+    rent_start_date: "",
+  });
 
-  const [selectID,setSelectID] = useState('')
- 
+  const [selectID, setSelectID] = useState("");
+
   const manager_id = auth.id;
 
   const [err, setErr] = useState({
@@ -72,35 +77,37 @@ function DataTable({ rows, loading, check, setCheck }) {
   const renderDetailsButton = (e) => {
     const id = e.id;
 
-    console.log(e.row)
+    console.log(e.row);
 
     return (
       <>
-      
-      {(e.row.status === "Sent Back Form Sr Manager" ||e.row.status === "Sent Back Form BUH"||e.row.status === "Sent Back Form Finance"||e.row.status === "Sent Back Form Operations") && (
-        <Grid container>
-           <Grid item md={6} sx={{ color: "white !important" }}>
-           <Button
-             variant="contained"
-             color="primary"
-             size="small"
-             style={{
-               backgroundColor: "#62CDFF",
-               color: "white",
-               fontSize: "12px",
-               textTransform: "capitalize",
-             }}
-             startIcon={<EditIcon />}
-             onClick={(e) => {
-               e.stopPropagation(); // don't select this row after clicking
-               id && navigate(`/editAgreement/${id}`, { id });
-             }}
-           >
-             Edit
-           </Button>
-         </Grid>
-         </Grid>
-      )}
+        {(e.row.status === "Sent Back Form Sr Manager" ||
+          e.row.status === "Sent Back Form BUH" ||
+          e.row.status === "Sent Back Form Finance" ||
+          e.row.status === "Sent Back Form Operations") && (
+          <Grid container>
+            <Grid item md={6} sx={{ color: "white !important" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{
+                  backgroundColor: "#62CDFF",
+                  color: "white",
+                  fontSize: "12px",
+                  textTransform: "capitalize",
+                }}
+                startIcon={<EditIcon />}
+                onClick={(e) => {
+                  e.stopPropagation(); // don't select this row after clicking
+                  id && navigate(`/editAgreement/${id}`, { id });
+                }}
+              >
+                Edit
+              </Button>
+            </Grid>
+          </Grid>
+        )}
         {e.row.status === "Hold" && (
           <Grid container>
             <Grid item md={6} sx={{ color: "white !important" }}>
@@ -146,31 +153,31 @@ function DataTable({ rows, loading, check, setCheck }) {
             </Grid>
           </Grid>
         )}
-        {(e.row.status === "Approved" && e.row.utr_number !== "") && (
-        <Grid container>
-           <Grid item md={6} sx={{ color: "white !important" }}>
-           <Button
-             variant="contained"
-             color="primary"
-             size="small"
-             style={{
-               backgroundColor: "#62CDFF",
-               color: "white",
-               fontSize: "12px",
-               textTransform: "capitalize",
-             }}
-            //  startIcon={<EditIcon />}
-             onClick={(e) => {
-               e.stopPropagation(); // don't select this row after clicking
-               setSelectID(id)
-             setopen(true)
-             }}
-           >
-             Final Agreement
-           </Button>
-         </Grid>
-         </Grid>
-      )}
+        {e.row.status === "Approved" && e.row.utr_number !== "" && (
+          <Grid container>
+            <Grid item md={6} sx={{ color: "white !important" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{
+                  backgroundColor: "#62CDFF",
+                  color: "white",
+                  fontSize: "12px",
+                  textTransform: "capitalize",
+                }}
+                //  startIcon={<EditIcon />}
+                onClick={(e) => {
+                  e.stopPropagation(); // don't select this row after clicking
+                  setSelectID(id);
+                  setopen(true);
+                }}
+              >
+                Final Agreement
+              </Button>
+            </Grid>
+          </Grid>
+        )}
       </>
     );
   };
@@ -238,7 +245,7 @@ function DataTable({ rows, loading, check, setCheck }) {
       field: "code",
       headerName: "Code",
       width: 90,
-      flex : 1,
+      flex: 1,
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -247,7 +254,7 @@ function DataTable({ rows, loading, check, setCheck }) {
       field: "name",
       headerName: "Name",
       width: 160,
-      flex : 1,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
@@ -255,7 +262,7 @@ function DataTable({ rows, loading, check, setCheck }) {
       field: "location",
       headerName: "Location",
       width: 160,
-      flex : 1,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
@@ -263,7 +270,7 @@ function DataTable({ rows, loading, check, setCheck }) {
       field: "rentalAmount",
       headerName: "Rental Amount",
       width: 160,
-      flex : 1,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
@@ -271,7 +278,7 @@ function DataTable({ rows, loading, check, setCheck }) {
       field: "status",
       headerName: "Status",
       width: 200,
-      flex : 1,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
@@ -279,7 +286,7 @@ function DataTable({ rows, loading, check, setCheck }) {
       field: "view",
       headerName: "View",
       width: 150,
-      flex : 1,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: detailsButton,
@@ -288,31 +295,12 @@ function DataTable({ rows, loading, check, setCheck }) {
       field: "action",
       headerName: "Action",
       width: 200,
-      flex : 1,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: renderDetailsButton,
     },
   ];
-
-
-  const handleSelectSend = (e) => {
-    console.log(ids);
-    ids.map(async (id) => {
-      const response = await send_to_bhu(
-        { status: "Sent To Sr Manager", manager_id },
-        id
-      );
-      
-      if(response.data.success){
-        setIds([])
-        dispatch(setAlert({variant:"success",open:true,message:"Agreement Sent To Senior Manager"}));
-        dispatch(setRefreshBox())
-      }else{
-        dispatch(setAlert({variant:"error",open:true,message:"Something Went Wrong ! Please Try Again."}))
-      };
-    });
-  };
 
   //form delete alert
   const [deleteAlert, setDeleteAlert] = useState({ open: false, id: "" });
@@ -326,47 +314,84 @@ function DataTable({ rows, loading, check, setCheck }) {
     setDeleteAlert({ open: false, id: "" });
   };
 
+  async function AgreementFinal() {
+    try {
+      const response = await send_to_bhu(
+        {
+          final_agreement: final_agreement.final_agreement,
+          final_agreement_date: final_agreement.agreement_date,
+          rent_start_date: final_agreement.rent_start_date,
+          status: "Deposited",
+        },
+        selectID
+      );
+      console.log(response);
 
-
-
- async function AgreementFinal (){
-         try{
-
-           const response = await send_to_bhu({final_agreement:final_agreement.final_agreement,
-            final_agreement_date:final_agreement.agreement_date,rent_start_date:final_agreement.rent_start_date,status:"Deposited"},selectID)  
-        console.log(response)
-
-            if (response.data.success) {
-              dispatch(
-                setAlert({
-                  variant: "success",
-                  open: true,
-                  message: "Final Agreement Submitted Successfully.",
-                })
-              );
-              setopen(false)
-              dispatch(setRefreshBox())
-            } else {
-              dispatch(
-                setAlert({
-                  variant: "error",
-                  open: true,
-                  message: "Something went wrong! Please again later.",
-                })
-              );
-
-         }
-        }
-         catch(error){
-          dispatch(
-            setAlert({
-              variant: "error",
-              open: true,
-              message: "Something went wrong! Please again later.",
-            }))
-         }
+      if (response.data.success) {
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Final Agreement Submitted Successfully.",
+          })
+        );
+        setopen(false);
+        dispatch(setRefreshBox());
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          })
+        );
+      }
+    } catch (error) {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Something went wrong! Please again later.",
+        })
+      );
+    }
   }
 
+  const [remarkOpen, setRemarkOpen] = useState(false);
+
+  const [remarkMSG, setRemarkMSG] = useState("");
+
+  const handleSelectSend = (e) => {
+    console.log(ids);
+    console.log(remarkMSG);
+    ids.map(async (id) => {
+      const response = await send_to_bhu(
+        { status: "Sent To Sr Manager", manager_id, remark: remarkMSG },
+        id
+      );
+
+      if (response.data.success) {
+        setIds([]);
+        setRemarkOpen(false);
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Agreement Sent To Senior Manager",
+          })
+        );
+        dispatch(setRefreshBox());
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something Went Wrong ! Please Try Again.",
+          })
+        );
+      }
+    });
+  };
 
   return (
     <>
@@ -375,19 +400,26 @@ function DataTable({ rows, loading, check, setCheck }) {
           <Button
             variant="contained"
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
-            onClick={handleSelectSend}
+            onClick={() => setRemarkOpen(true)}
           >
             Send To Sr Manager
           </Button>
         </Box>
       )}
+      <Remark
+        remark={remarkMSG}
+        setRemark={setRemarkMSG}
+        handleSend={handleSelectSend}
+        open={remarkOpen}
+        handleClose={() => setRemarkOpen(false)}
+      />
 
-      <FinalAgreement 
-      open={open} 
-      setOpen={setopen} 
-      handleConfirm1={AgreementFinal}
-      value={final_agreement}
-      setValue={setFinalAgreement}
+      <FinalAgreement
+        open={open}
+        setOpen={setopen}
+        handleConfirm1={AgreementFinal}
+        value={final_agreement}
+        setValue={setFinalAgreement}
       />
 
       <Snackbar
@@ -457,7 +489,8 @@ function DataTable({ rows, loading, check, setCheck }) {
             let cellClass = [];
             if (
               parms.field === "status" &&
-              (parms.row.status === "Approved" || parms.row.status === "Deposited")
+              (parms.row.status === "Approved" ||
+                parms.row.status === "Deposited")
             ) {
               cellClass.push("green statusCell");
             } else if (
@@ -465,16 +498,16 @@ function DataTable({ rows, loading, check, setCheck }) {
               (parms.row.status === "Sent To Sr Manager" ||
                 parms.row.status === "Sent To BUH" ||
                 parms.row.status === "Sent To Operations" ||
-                parms.row.status === "Sent To Finance Team" || 
-                parms.row.status === "Hold"
-                )
+                parms.row.status === "Sent To Finance Team" ||
+                parms.row.status === "Hold")
             ) {
               cellClass.push("yellow statusCell");
             } else if (
               parms.field === "status" &&
-              (parms.row.status === "Sent Back Form Sr Manager"  || parms.row.status === "Sent Back Form BUH" ||
-              parms.row.status === "Sent Back Form Operations" || parms.row.status === "Sent Back Form Finance"
-              )
+              (parms.row.status === "Sent Back Form Sr Manager" ||
+                parms.row.status === "Sent Back Form BUH" ||
+                parms.row.status === "Sent Back Form Operations" ||
+                parms.row.status === "Sent Back Form Finance")
             ) {
               cellClass.push("red statusCell");
             }

@@ -6,7 +6,6 @@ import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
 import {
   get_search_srmanager,
-  get_Operations_agreements,
   get_finance_agreements,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
@@ -17,7 +16,7 @@ const options = ["New Agreement", "Monthly Payment", "Rental"];
 function FinanceListing() {
   const { auth } = useSelector((state) => state);
 
-  const login_operations_id = auth.id;
+  const finance_ID = auth.id;
   const [rows,setRows] = useState([])
 
   const [data, setData] = useState({ ids: [] });
@@ -29,6 +28,7 @@ function FinanceListing() {
       setData(response.data );
       setRows(response.data.ids.map((item) => {
         return {
+          
           i: response.data.agreement[item].id,
           id: response.data.agreement[item].agreement_id,
           status: response.data.agreement[item].status,
@@ -37,7 +37,8 @@ function FinanceListing() {
           location: response.data.agreement[item].location,
           address: response.data.agreement[item].address,
           rentalAmount: response.data.agreement[item].monthlyRent,
-          utr_number : response.data.agreement[item].utr_number
+          utr_number : response.data.agreement[item].utr_number,
+          checkbox: response.data.agreement[item].status
         };
       }))
     }
@@ -54,14 +55,15 @@ function FinanceListing() {
     }
   }
 
-  useEffect(() => {
-    // if(searchValue.length >= 1){
-    // SearchAPi(login_operations_id, searchValue);
-    // }
-  }, [searchValue]);
+  function handleSerachChange(e){
+    SearchAPi(finance_ID, searchValue);
+    setsearchValue(e.target.value)
+  }
+
+  
 
   useEffect(() => {
-    getData(login_operations_id);
+    getData(finance_ID);
   }, []);
 
   const navigate = useNavigate();
@@ -85,7 +87,8 @@ function FinanceListing() {
             rows={rows}
             dropDown={false}
             searchValue={searchValue}
-            setsearchValue={setsearchValue}
+            // setsearchValue={setsearchValue}
+            handleSerachChange={handleSerachChange}
           />
         </Stack>
       {/* )} */}
