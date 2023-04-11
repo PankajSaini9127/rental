@@ -205,7 +205,7 @@ function SrManagerApproval() {
                   </>
                 )}
 
-                <Grid container sx={{ mt: 2 }}>
+                <Grid container sx={{ mt: 2}}>
                   <DataFieldStyle
                     field={"code"}
                     value={agreement[ids[0]].code}
