@@ -7,9 +7,7 @@ import ListingComponent from "../StyleComponents/ListingComponent";
 import { Stack } from "@mui/material";
 import { get_agreements, get_search_manager } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
-import { AuthContext } from "../../App";
 import { useNavigate } from "react-router-dom";
-import { getRowIdFromRowModel } from "@mui/x-data-grid/hooks/features/rows/gridRowsUtils";
 
 
 function Listing() {

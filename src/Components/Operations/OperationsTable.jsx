@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button, Checkbox } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { send_to_operations } from "../../Services/Services";
-import { setAlert } from "../../store/action/action";
+import { setAlert, setRefreshBox } from "../../store/action/action";
+import Remark from "../RentalPortal/Remark";
 
 function OperationsTable({ rows }) {
   const navigate = useNavigate();
@@ -62,8 +63,8 @@ function OperationsTable({ rows }) {
       headerAlign: "center",
       renderCell: (params) => (
         <>
-          {console.log(params)}
-          {params.formattedValue === "Sent To BHU" ? (
+          {console.log(params.formattedValue )}
+          {params.formattedValue === "Sent To Operations" ? (
             <Checkbox
               onChange={handleSwitch}
               name={params.id}
@@ -152,14 +153,15 @@ function OperationsTable({ rows }) {
     },
   ];
 
-  // const onRowsSelectionHandler = (ids) => {
-  //     setIds(ids)
-  //   };
+  const [remarkOpen,setRemarkOpen] = useState(false)
 
-  function handleSelect() {
+  const [remarkMSG,setRemarkMSG] = useState("")
+
+
+  function handleSend() {
     ids.map(async (id) => {
       const response = await send_to_operations(
-        { status: "Sent To Operations", srm_id },
+        { status: "Sent To Finance Team", op_id:srm_id ,remark:remarkMSG},
         id
       );
       if (response.data.success) {
@@ -167,9 +169,12 @@ function OperationsTable({ rows }) {
           setAlert({
             vatiant: "success",
             open: true,
-            message: "Approved And Sent To Operations",
+            message: "Approved And Sent To Finance",
+
           })
         );
+        setRemarkOpen(false)
+        dispatch(setRefreshBox())
       } else {
         dispatch(
           setAlert({
@@ -189,12 +194,13 @@ function OperationsTable({ rows }) {
           <Button
             variant="contained"
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
-            onClick={handleSelect}
+            onClick={()=>setRemarkOpen(true)}
           >
             Send To Operations
           </Button>
         </Box>
       )}
+      <Remark remark={remarkMSG} setRemark={setRemarkMSG} handleSend={handleSend} open={remarkOpen} handleClose={()=>setRemarkOpen(false)} />
 
       <Box
         sx={{
