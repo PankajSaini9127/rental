@@ -97,7 +97,7 @@ function ManagerApproval() {
     rent = Number(rent);
     value = Number(value);
     if (type === "Percentage") {
-      incrementType = parseInt(((value - rent) / rent) * 100);
+      incrementType = `${parseInt(((value - rent) / rent) * 100)}%`;
     } else if (type === "Value") {
       incrementType = value - rent;
     }
@@ -443,14 +443,14 @@ function ManagerApproval() {
 
               {/* Buttons start here*/}
 
-              {agreement[ids[0]].status === "Hold" && (
+              {(agreement[ids[0]].status === "Hold") && (
                 <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                   <Grid container spacing={2} sx={{ justifyContent: "center" }}>
-                    <Grid item md={6} xs={11}>
+                    <Grid item md={4} xs={11}>
                       <Button
                         variant="contained"
                         sx={{
-                          height: "65px",
+                          height: "55px",
                           borderRadius: "12px",
                           backgroundColor: "primary",
                           width: "100%",

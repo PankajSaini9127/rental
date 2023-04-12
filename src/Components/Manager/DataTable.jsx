@@ -81,10 +81,10 @@ function DataTable({ rows, loading, check, setCheck }) {
 
     return (
       <>
-        {(e.row.status === "Sent Back Form Sr Manager" ||
-          e.row.status === "Sent Back Form BUH" ||
-          e.row.status === "Sent Back Form Finance" ||
-          e.row.status === "Sent Back Form Operations") && (
+        {(e.row.status === "Sent Back From Sr Manager" ||
+          e.row.status === "Sent Back From BUH" ||
+          e.row.status === "Sent Back From Finance" ||
+          e.row.status === "Sent Back From Operations") && (
           <Grid container>
             <Grid item md={6} sx={{ color: "white !important" }}>
               <Button
@@ -504,10 +504,10 @@ function DataTable({ rows, loading, check, setCheck }) {
               cellClass.push("yellow statusCell");
             } else if (
               parms.field === "status" &&
-              (parms.row.status === "Sent Back Form Sr Manager" ||
-                parms.row.status === "Sent Back Form BUH" ||
-                parms.row.status === "Sent Back Form Operations" ||
-                parms.row.status === "Sent Back Form Finance")
+              (parms.row.status === "Sent Back From Sr Manager" ||
+                parms.row.status === "Sent Back From BUH" ||
+                parms.row.status === "Sent Back From Operations" ||
+                parms.row.status === "Sent Back From Finance")
             ) {
               cellClass.push("red statusCell");
             }
