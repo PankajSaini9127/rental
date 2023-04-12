@@ -83,7 +83,7 @@ function SrManagerApproval() {
     } else {
       const response = await send_back_to_manager(
         {
-          status: "Sent Back Form Sr Manager",
+          status: "Sent Back From Sr Manager",
           remark: remark,
         },
         id
@@ -93,7 +93,7 @@ function SrManagerApproval() {
           setAlert({
             variant: "success",
             open: true,
-            message: "Send back For Rectification",
+            message: "Send back From Sr Manager",
           })
         );
         navigate("/srManagerListing");
@@ -122,7 +122,7 @@ function SrManagerApproval() {
       const response = await send_to_bhu(
         {
           status:
-            agreement[ids[0]].op_id === 0
+            (agreement[ids[0]].op_id === null)
               ? "Sent To BUH"
               : "Sent To Operations",
           srm_id: login_manager_id,
@@ -135,7 +135,7 @@ function SrManagerApproval() {
             variant: "success",
             open: true,
             message:
-              agreement[ids[0]].op_id === 0
+              agreement[ids[0]].op_id === null
                 ? "Agreement Sent To BUH"
                 : "Agreement Sent To Operations ",
           })
@@ -158,7 +158,7 @@ function SrManagerApproval() {
     rent = Number(rent);
     value = Number(value);
     if (type === "Percentage") {
-      incrementType = parseInt(((value - rent) / rent) * 100);
+      incrementType = `${parseInt(((value - rent) / rent) * 100)}%`;
     } else if (type === "Value") {
       incrementType = value - rent;
     }
@@ -283,11 +283,14 @@ function SrManagerApproval() {
                   />
                   {agreement[ids[0]].tenure !== "11 Month" && (
                     <>
-                      <DataFieldStyle
+                      
+                      <Grid container  sx={{ mt: 6 }}>
+                        <Grid item xs={12} sx={{mb:1}}>
+                        <DataFieldStyle
                         field={"yearly Increment"}
                         value={agreement[ids[0]].yearlyIncrement}
                       />
-                      <Grid container  sx={{ mt: 6 }}>
+                        </Grid>
                         <YearField
                           year={"Year 1"}
                           incrementType={agreement[ids[0]].yearlyIncrement}
@@ -534,36 +537,37 @@ function SrManagerApproval() {
                     </Grid>
                   </Grid>
 
-                  <Grid item md={8} sx={{ mt: 4, mb: 2 }} spacing={2} >
+                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}  >
                     <Grid
                       container
-                      
+                      spacing={2}
                       sx={{ justifyContent: "center" }}
                     >
-                      <Grid item md={6} xs={11}>
+                      <Grid item md={4} xs={11}>
                         <Button
                           variant="contained"
                           sx={{
-                            height: "65px",
+                            height: "55px",
                             borderRadius: "12px",
                             backgroundColor: "primary",
                             width: "100%",
                             color: "#FFFFFF",
                             textTransform: "capitalize",
                             fontSize: "18px",
+                            lineHeight:"20px"
                           }}
                           onClick={handleSubmit}
                         >
-                          {agreement[ids[0]].op_id === 0
+                          {(agreement[ids[0]].op_id === "" || agreement[ids[0]].op_id === null )
                             ? "Approve And Send to BUH"
                             : "Approve And Send To Operations"}
                         </Button>
                       </Grid>
-                      <Grid item md={6} xs={11}>
+                      <Grid item md={4} xs={11}>
                         <Button
                           variant="outlined"
                           sx={{
-                            height: "65px",
+                            height: "55px",
                             borderRadius: "12px",
                             width: "100%",
                             textTransform: "capitalize",

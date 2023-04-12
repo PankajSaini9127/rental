@@ -118,7 +118,7 @@ function SrManagerApproval() {
     } else {
       const response = await send_back_to_manager(
         {
-          status: "Sent Back Form BUH",
+          status: "Sent Back From BUH",
           remark: sendBackMsg,
         },
         id
@@ -149,7 +149,7 @@ function SrManagerApproval() {
     rent = Number(rent);
     value = Number(value);
     if (type === "Percentage") {
-      incrementType = parseInt(((value - rent) / rent) * 100);
+      incrementType = `${parseInt(((value - rent) / rent) * 100)}%`;
     } else if (type === "Value") {
       incrementType = value - rent;
     }
@@ -258,11 +258,14 @@ function SrManagerApproval() {
                   />
                   {agreement[ids[0]].tenure !== "11 Month" && (
                     <>
-                      <DataFieldStyle
+                      
+                      <Grid container spacing={1} sx={{ mt: 6 }}>
+                        <Grid item xs={12} sx={{mb:1}}>
+                        <DataFieldStyle
                         field={"yearly Increment"}
                         value={agreement[ids[0]].yearlyIncrement}
                       />
-                      <Grid container spacing={1} sx={{ mt: 6 }}>
+                        </Grid>
                         <YearField
                           year={"Year 1"}
                           incrementType={agreement[ids[0]].yearlyIncrement}
@@ -355,37 +358,39 @@ function SrManagerApproval() {
                   <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                     <Grid
                       container
-                      
+                      spacing={1}
                       sx={{ justifyContent: "space-evenly" }}
                     >
-                      <Grid item md={6} xs={11}>
+                      <Grid item md={4} xs={11}>
                         <Button
                           variant="contained"
                           sx={{
-                            height: "65px",
+                            height: "55px",
                             borderRadius: "12px",
                             backgroundColor: "primary",
                             width: "100%",
                             color: "#FFFFFF",
                             textTransform: "capitalize",
                             fontSize: "18px",
+                            lineHeight:"20px"
                           }}
                           onClick={handleSubmit}
                         >
                           Approve And Send To Operations
                         </Button>
                       </Grid>
-                      <Grid item md={6} xs={11}>
+                      <Grid item md={4} xs={11}>
                         <Button
                           variant="outlined"
                           sx={{
                             color: "var(--main-color)",
-                            height: "65px",
+                            height: "55px",
                             borderRadius: "12px",
                             backgroundColor: "primary",
                             width: "100%",
                             textTransform: "capitalize",
                             fontSize: "18px",
+                            lineHeight:"20px"
                           }}
                           onClick={handleSendBack}
                         >

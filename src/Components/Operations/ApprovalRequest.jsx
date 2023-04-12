@@ -119,7 +119,7 @@ function ApprovalRequest() {
     } else {
       const response = await send_back_to_manager(
         {
-          status: "Sent Back Form Operations",
+          status: "Sent Back From Operations",
           remark: remark,
         },
         id
@@ -150,7 +150,7 @@ function ApprovalRequest() {
     rent = Number(rent);
     value = Number(value);
     if (type === "Percentage") {
-      incrementType = parseInt(((value - rent) / rent) * 100);
+      incrementType = `${parseInt(((value - rent) / rent) * 100)}%`;
     } else if (type === "Value") {
       incrementType = value - rent;
     }
@@ -277,11 +277,14 @@ function ApprovalRequest() {
                   />
                   {agreement[ids[0]].tenure !== "11 Month" && (
                     <>
-                      <DataFieldStyle
+                      
+                      <Grid container spacing={1} sx={{ mt: 6 }}>
+                        <Grid item xs={12} container>
+                        <DataFieldStyle
                         field={"yearly Increment"}
                         value={agreement[ids[0]].yearlyIncrement}
                       />
-                      <Grid container spacing={1} sx={{ mt: 6 }}>
+                        </Grid>
                         <YearField
                           year={"Year 1"}
                           incrementType={agreement[ids[0]].yearlyIncrement}
@@ -531,31 +534,32 @@ function ApprovalRequest() {
                   <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                     <Grid
                       container
-                    
+                      spacing={1}
                       sx={{ justifyContent: "center" }}
                     >
-                      <Grid item md={6} xs={11}>
+                      <Grid item md={4} xs={11}>
                         <Button
                           variant="contained"
                           sx={{
-                            height: "65px",
+                            height: "55px",
                             borderRadius: "12px",
                             backgroundColor: "primary",
                             width: "100%",
                             color: "#FFFFFF",
                             textTransform: "capitalize",
                             fontSize: "18px",
+                            lineHeight:"20px"
                           }}
                           onClick={handleSubmit}
                         >
                           Approve And Send To Finance
                         </Button>
                       </Grid>
-                      <Grid item md={6} xs={11}>
+                      <Grid item md={4} xs={11}>
                         <Button
                           variant="outlined"
                           sx={{
-                            height: "65px",
+                            height: "55px",
                             borderRadius: "12px",
                             width: "100%",
                             textTransform: "capitalize",

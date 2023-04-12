@@ -355,8 +355,8 @@ function FinanceTable({ rows, setRows }) {
               cellClass.push("yellow statusCell");
             } else if (
               parms.field === "status" &&
-              (parms.row.status === "Sent Back Form Sr Manager"  || parms.row.status === "Sent Back Form BUH" ||
-              parms.row.status === "Sent Back Form Operations" || parms.row.status === "Sent Back Form Finance"
+              (parms.row.status === "Sent Back From Sr Manager"  || parms.row.status === "Sent Back From BUH" ||
+              parms.row.status === "Sent Back From Operations" || parms.row.status === "Sent Back From Finance"
               )
             ) {
               cellClass.push("red statusCell");
