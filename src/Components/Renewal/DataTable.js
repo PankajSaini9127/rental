@@ -38,38 +38,86 @@ function DataTable() {
 
   // api call for get data
 
-  const APICALL = async()=>{
-    setLoading(true)
-    setData([])
-    const result = await get_renewal()
+  // const APICALL = async()=>{
+  //   setLoading(true)
+  //   setData([])
+  //   const result = await get_renewal()
 
-   console.log(result)
-    if(result.data.success){
-    //   const data = result.data.data.reverse();
-   setData(result.data.renewal)
-      setLoading(false)
-    }
-  }
-
-
+  //  console.log(result)
+  //   if(result.data.success){
+  //   //   const data = result.data.data.reverse();
+  //  setData(result.data.renewal)
+  //     setLoading(false)
+  //   }
+  // }
 
 
-  useEffect(()=>{
-    APICALL()
-  },[])
 
- const row = data.map((item)=>{
-  // console.log(item)
-  return  {
-    id: item.id,
-    status: item.status,
-    code: item.code,
-    name: item.leeseName,
-    location:item.location,
-    rentalAmount:item.monthlyRent,
+
+  // useEffect(()=>{
+  //   // APICALL()
+  // },[])
+
+//  const row = data.map((item)=>{
+//   // console.log(item)
+//   return  {
+//     id: item.id,
+//     status: item.status,
+//     code: item.code,
+//     name: item.leeseName,
+//     location:item.location,
+//     rentalAmount:item.monthlyRent,
   
-  }
- })
+//   }
+//  })
+
+ const row = [
+  {
+    id: 1,
+    status: "Pending",
+    code: 123,
+    name: "Pankaj",
+    location:"jodhpur",
+    rentalAmount:3000
+  },
+  {
+    id: 2,
+    status: "Active",
+    code: 123,
+    name: "John Doe", 
+    location:"jodhpur",
+    rentalAmount:3000}
+,  {
+    id: 3,
+    status: "Pending",
+    code: 123,
+    name: "John Doe", location:"jodhpur",
+    rentalAmount:3000
+  },
+  {
+    id: 4,
+    status: "Inactive",
+    code: 123,
+    name: "John Doe", location:"jodhpur",
+    rentalAmount:3000
+  },
+  {
+    id: 5,
+    status: "Pending",
+    code: 123,
+    name: "John Doe", location:"jodhpur",
+    rentalAmount:3000
+  },
+  {
+    id: 6,
+    status: "Pending",
+    code: 123,
+    name: "John Doe", location:"jodhpur",
+    rentalAmount:3000
+  },
+  
+  
+];
 
 
   const navigate = useNavigate()
