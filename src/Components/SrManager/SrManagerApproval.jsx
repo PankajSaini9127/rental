@@ -135,7 +135,7 @@ function SrManagerApproval() {
             variant: "success",
             open: true,
             message:
-              agreement[ids[0]].op_id === null
+              agreement[ids[0]].op_id === ""
                 ? "Agreement Sent To BUH"
                 : "Agreement Sent To Operations ",
           })
@@ -558,7 +558,7 @@ function SrManagerApproval() {
                           }}
                           onClick={handleSubmit}
                         >
-                          {(agreement[ids[0]].op_id === "" || agreement[ids[0]].op_id === null )
+                          {(agreement[ids[0]].op_id === "" )
                             ? "Approve And Send to BUH"
                             : "Approve And Send To Operations"}
                         </Button>
