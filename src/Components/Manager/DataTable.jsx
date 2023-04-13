@@ -356,8 +356,8 @@ function DataTable({ rows, loading, check, setCheck }) {
             const rent = await add_monthly_rent({
               agreement_id:selectID,
               landlord_id:row.id,
-              rent_month: data[0].monthlyRent,
-              amount :data[0].rent_month
+              amount : data[0].monthlyRent,
+              rent_month :data[0].rent_month
 
             })
 
