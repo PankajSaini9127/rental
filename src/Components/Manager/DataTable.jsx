@@ -338,7 +338,7 @@ function DataTable({ rows, loading, check, setCheck }) {
           final_agreement: final_agreement.final_agreement,
           final_agreement_date: final_agreement.agreement_date,
           rent_start_date: final_agreement.rent_start_date,
-          status: "Approved",
+          status: "Deposited",
         },
         selectID
       );
