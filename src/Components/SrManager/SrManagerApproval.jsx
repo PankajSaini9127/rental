@@ -122,7 +122,7 @@ function SrManagerApproval() {
       const response = await send_to_bhu(
         {
           status:
-            (agreement[ids[0]].op_id === null)
+            (agreement[ids[0]].op_id === 0)
               ? "Sent To BUH"
               : "Sent To Operations",
           srm_id: login_manager_id,
@@ -135,7 +135,7 @@ function SrManagerApproval() {
             variant: "success",
             open: true,
             message:
-              agreement[ids[0]].op_id === null
+              agreement[ids[0]].op_id === 0
                 ? "Agreement Sent To BUH"
                 : "Agreement Sent To Operations ",
           })
@@ -503,7 +503,7 @@ function SrManagerApproval() {
 
               {/* document section ends here */}
 
-              {agreement[ids[0]].remark.length > 0 && (
+              {agreement[ids[0]].remark !== null && (
                 <Grid item container xs={10} sx={{ mt: 5 }}>
                   <DataFieldStyle
                     field={"Remark !"}
