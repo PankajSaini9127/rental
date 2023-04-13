@@ -11,8 +11,11 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PermissionAlert from "./Alert";
 import {
+  add_monthly_rent,
   delete_agreement,
   get_agreements,
+  get_landlord_id,
+  get_monthaly_rent,
   send_to_bhu,
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,6 +46,8 @@ function DataTable({ rows, loading, check, setCheck }) {
     type: "",
     message: "",
   });
+
+  const [data,setData] = useState([])
 
   //altet close
   const handleClose = () => {
@@ -77,7 +82,7 @@ function DataTable({ rows, loading, check, setCheck }) {
   const renderDetailsButton = (e) => {
     const id = e.id;
 
-    console.log(e.row);
+    // console.log(e.row);
 
     return (
       <>
@@ -169,6 +174,7 @@ function DataTable({ rows, loading, check, setCheck }) {
                 //  startIcon={<EditIcon />}
                 onClick={(e) => {
                   e.stopPropagation(); // don't select this row after clicking
+                  APICALL(id)
                   setSelectID(id);
                   setopen(true);
                 }}
@@ -314,6 +320,17 @@ function DataTable({ rows, loading, check, setCheck }) {
     setDeleteAlert({ open: false, id: "" });
   };
 
+  async function APICALL(id){
+    console.log(id)
+    const result = await get_monthaly_rent(id)
+   console.log(result)
+    if(result.status === 200){
+    //   const data = result.data.data.reverse();
+   setData(result.data.monthly_rent)
+    }
+  }
+ 
+
   async function AgreementFinal() {
     try {
       const response = await send_to_bhu(
@@ -325,27 +342,52 @@ function DataTable({ rows, loading, check, setCheck }) {
         },
         selectID
       );
-      console.log(response);
 
       if (response.data.success) {
-        dispatch(
-          setAlert({
-            variant: "success",
-            open: true,
-            message: "Final Agreement Submitted Successfully.",
-          })
-        );
-        setopen(false);
-        dispatch(setRefreshBox());
-      } else {
-        dispatch(
-          setAlert({
-            variant: "error",
-            open: true,
-            message: "Something went wrong! Please again later.",
-          })
-        );
-      }
+     
+    const result = await get_landlord_id(selectID)
+    // console.log(result)
+    if(result.data.success){
+      // setLandlord(result.data.landlords_id)
+      console.log(result.data.landlords_id)
+
+      result.data.landlords_id.map(async(row)=>{
+        // console.log(row)
+            const rent = await add_monthly_rent({
+              agreement_id:selectID,
+              landlord_id:row.id,
+              amount : data[0].monthlyRent,
+              rent_month :data[0].rent_month
+
+            })
+
+            if(rent.data.success){
+              dispatch(
+                setAlert({
+                  variant: "success",
+                  open: true,
+                  message: "Final Agreement Submitted Successfully.",
+                })
+              );
+              setopen(false);
+              dispatch(setRefreshBox());
+            }else {
+              dispatch(
+                setAlert({
+                  variant: "error",
+                  open: true,
+                  message: "Something went wrong! Please again later.",
+                })
+              );}
+
+      
+      })
+    }
+
+
+       
+      } 
+      
     } catch (error) {
       dispatch(
         setAlert({

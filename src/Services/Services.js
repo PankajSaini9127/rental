@@ -88,8 +88,8 @@ export async function getMetaData (){
 
 
 
-export async function get_monthaly_rent(){
-    return await axios.get(`${API_LIVE}/api/list_monthly`)
+export async function get_monthaly_rent(id){
+    return await axios.get(`${API_LIVE}/api/list_monthly/${id}`)
 }
 
 export async function get_renewal(){
@@ -117,6 +117,14 @@ export async function editAgreement(data){
 
 export async function get_search_manager (name){
     return await axios.post(`${API_LIVE}/api/search/manager`,{name})
+}
+
+export async function add_monthly_rent (data){
+    return await axios.post(`${API_LIVE}/api/monthly_rent/add`,data)
+}
+
+export async function get_landlord_id (id){
+    return await axios.get(`${API_LIVE}/api/month_rent/get_landlord_id/${id}`)
 }
 
 

@@ -10,6 +10,7 @@ import axios from 'axios'
 //
 import PermissionAlert from '../Manager/Alert';
 import { get_monthaly_rent, get_monthly_rent } from '../../Services/Services';
+import UploadInvoice from './UploadInvoice';
  
 
 
@@ -17,24 +18,12 @@ function DataTable() {
 
   const [data,setData] = useState([])
 
+  const [open,setOpen] = useState(false);
+
   const [loading, setLoading] = useState(false)
 
-  const [err,setErr] = useState({
-    open:false,
-    type:"",
-    message:''
-  })
 
-  //altet close 
-  const handleClose = ()=>{
-      setErr(
-        {
-          open:false,
-          type:"",
-          message:''
-        }
-      )
-  }
+
 
   // api call for get data
 
@@ -65,10 +54,24 @@ function DataTable() {
     code: item.code,
     name: item.leeseName,
     location:item.location,
-    rentalAmount:item.monthlyRent,
-  
+    rentalAmount:parseInt(Number((item.monthlyRent)/100)*Number(item.percentage)),
+    gst:item.gstNo?item.gstNo: '-',
+    utr:item.utr_number,
+    month_of_rent:`${item.rent_month}-${item.rent_year}`,
+    status:"Pending"
   }
  })
+
+
+ const [invoiceDetails,setInvoiceDetails] = useState({
+  invoiceNo: "",
+  invoiceDate: "",
+  rentAmount: "",
+  gstAmount: "",
+  totalAmount: "",
+  invoice: "",
+  invoice_file_name: "",
+})
 
 
   const navigate = useNavigate()
@@ -77,6 +80,32 @@ function DataTable() {
     
     const id = ids[0]
       // navigate(`/managerApproval/${id}`)
+  };
+
+  const gstUploadButton = (e) => {
+    const id = e.id;
+
+    return (
+      <Button
+        variant="contained"
+        color="primary"
+        size="small"
+        style={{
+          backgroundColor: "rgb(103 185 68 / 89%)",
+          color: "white",
+          fontSize: "12px",
+          textTransform: "capitalize",
+          // width:"100%"
+        }}
+        onClick={(e) => {
+          e.stopPropagation(); // don't select this row after clicking
+          // navigate(`/BHUapproval/${id}`);
+          setOpen(true)
+        }}
+      >
+        Upload 
+      </Button>
+    );
   };
 
 
@@ -94,7 +123,15 @@ function DataTable() {
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: "Landlord Name",
+      width: 230,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      flex:1
+    },
+    {
+      field: "month_of_rent",
+      headerName: "Rent Month",
       width: 230,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -115,31 +152,60 @@ function DataTable() {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex:1
+    },
+    {
+      field: "utr",
+      headerName: "UTR Number",
+      width: 200,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      flex:1
+    },
+    {
+      field: "gst",
+      headerName: "GST Number",
+      width: 200,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      flex:1,
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 200,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      flex:1,
+    },
+    {
+      field: "gst_certificate",
+      headerName: "GST Details",
+      width: 200,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      flex:1,
+      renderCell: gstUploadButton,
     }
   ];
   
 
   //form delete alert
 
-const [deleteAlert, setDeleteAlert] = useState({open:false,id:''})
 
-  const handleConfirm = ()=>{
-    setDeleteAlert({open:false,id:''})
-  }
+function uploadInvoiceDetails(){
+  console.log(invoiceDetails)
+}
+
  
-  const handleCancel = ()=>{
-      setDeleteAlert({open:false,id:''})
-  }
   return (
     <>
-<Snackbar open={err.open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:"top", horizontal:"center" }}>
-  <Alert onClose={handleClose} severity={err.type} sx={{ width: '100%' }}>
-    {err.message}
-  </Alert>
-</Snackbar>
-
-<PermissionAlert handleClose={handleCancel} handleConfirm={handleConfirm} open={ deleteAlert.open} message={"Are you sure you want to delete this item?"}/>
-
+<UploadInvoice
+        open={open}
+        setOpen={setOpen}
+        handleConfirm={uploadInvoiceDetails}
+        value={invoiceDetails}
+        setValue={setInvoiceDetails}
+      />
       <Box
       sx={{
         height: "430px",

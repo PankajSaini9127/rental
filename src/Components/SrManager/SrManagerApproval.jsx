@@ -503,7 +503,7 @@ function SrManagerApproval() {
 
               {/* document section ends here */}
 
-              {agreement[ids[0]].remark.length > 0 && (
+              {agreement[ids[0]].remark !== null && (
                 <Grid item container xs={10} sx={{ mt: 5 }}>
                   <DataFieldStyle
                     field={"Remark !"}
