@@ -24,8 +24,9 @@ function SrManagerListing() {
 
   const getData = async (id) => {
     const response = await get_srm_agreements(id);
-    console.log(response);
-    setData(response.data);
+    if (response.status === 200) {
+      setData(response.data);
+    }
   };
 
   //  console.log(data)
@@ -46,11 +47,11 @@ function SrManagerListing() {
     };
   });
 
-  
- const {refresh} = useSelector(s=>s)
+  const { refresh } = useSelector((s) => s);
 
   //search
   async function SearchAPi(id, searchValue) {
+    console.log(id, searchValue);
     const search = await get_search_srmanager(id, searchValue);
     // setAgreement(search.data.agreement)
     setData(search.data);
@@ -61,9 +62,9 @@ function SrManagerListing() {
     getData(login_srm_id);
   }, [refresh]);
 
-  function handleSerachChange(e){
+  function handleSerachChange(e) {
     SearchAPi(login_srm_id, searchValue);
-    setsearchValue(e.target.value)
+    setsearchValue(e.target.value);
   }
 
   const navigate = useNavigate();
@@ -74,6 +75,9 @@ function SrManagerListing() {
         <HamburgerMenu
           handleListing={() => navigate("/srManagerListing")}
           navigateHome={"srManagerDashboard"}
+          monthlyRent={() => navigate("/srm-monthly-rent")}
+          renewal={() => navigate("/srm-monthly-rent")}
+          monthlyBtn="true"
         />
         <ListingComponent
           title1="Rental Management System"

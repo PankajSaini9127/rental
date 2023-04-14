@@ -72,9 +72,12 @@ function SrManagerListing() {
       {data.success && (
         <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
           <HamburgerMenu
-            navigateHome={"BHUDashboard"}
-            handleListing={() => navigate("/BHUListing")}
-          />
+          navigateHome={"BHUDashboard"}
+          handleListing={() => navigate("/BHUListing")}
+          // monthlyRent={() => navigate("/buh-monthly-rent")}
+          // renewal={() => navigate("/buh-monthly-rent")}
+          // monthlyBtn="true"
+        />
           <ListingComponent
             title="Rental Agreement"
             title1={"Rental Management System"}

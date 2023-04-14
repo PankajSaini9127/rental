@@ -26,8 +26,11 @@ function SrManagerDashboard() {
         <HamburgerMenu
           navigateHome={"BHUDashboard"}
           handleListing={() => navigate("/BHUListing")}
-          monthlyBtn={false}
+          // monthlyRent={() => navigate("/buh-monthly-rent")}
+          // renewal={() => navigate("/buh-monthly-rent")}
+          // monthlyBtn="true"
         />
+
 
         {/* dashboard content */}
         <Grid container sx={{ justifyContent: "center" }}>

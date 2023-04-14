@@ -166,6 +166,9 @@ function ApprovalRequest() {
           <HamburgerMenu
             navigateHome={"operationsDashboard"}
             handleListing={() => navigate("/operationsListing")}
+          monthlyRent={() => navigate("/opr-monthly-rent")}
+          renewal={() => navigate("/opr-monthly-rent")}
+          monthlyBtn="true"
           />
 
           <Box sx={{ flexGrow: 1 }}>

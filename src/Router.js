@@ -47,6 +47,13 @@ import SuperAdminUserEdit from "./Components/SuperAdmin/EditUser";
 import FinanceDashboard from "./Components/FinancePanel/FinanceDashboard";
 import FinanceListing from "./Components/FinancePanel/FinanceListing";
 import FinanceApproval from "./Components/FinancePanel/ApprovalRequest";
+import MonthlyPayement from "./Components/SrManager/Montly-rent/MonthlyPayement";
+import BUHMonthlyPayement from "./Components/BHU/Montly-rent/MonthlyPayement";
+import FinanceMonthlyPayement from "./Components/FinancePanel/Montly-rent/MonthlyPayement";
+import OperationsMonthlyPayement from "./Components/Operations/Montly-rent/MonthlyPayement";
+import MonthalyRentView from "./Components/Operations/Montly-rent/MonthalyRentView";
+import SRMMonthlyRentView from "./Components/SrManager/Montly-rent/SRMMonthlyRentView";
+import FinanceMonthlyRentView from "./Components/FinancePanel/Montly-rent/FinanceMonthlyView";
 
 function MyRouter() {
   const history = useNavigate();
@@ -120,6 +127,22 @@ function MyRouter() {
           isAuth && role.includes("Senior_Manager") ? <SrManagerApproval /> : <Login />
         }
       />
+      <Route
+        exact
+        path="/srm-monthly-rent"
+        element={
+          isAuth && role.includes("Senior_Manager") ? <MonthlyPayement /> : <Login />
+        }
+      />
+      <Route
+        exact
+        path="/srm-monthly-view/:id"
+        element={
+          isAuth && role.includes("Senior_Manager") ? <SRMMonthlyRentView /> : <Login />
+        }
+      />
+
+
 
       {/* Operations Section */}
 
@@ -144,7 +167,20 @@ function MyRouter() {
           isAuth && role.includes("Operations") ? <ApprovalRequest /> : <Login />
         }
       />
-
+      <Route
+        exact
+        path="/opr-monthly-rent"
+        element={
+          isAuth && role.includes("Operations") ? <OperationsMonthlyPayement /> : <Login />
+        }
+      />
+<Route
+        exact
+        path="/opr-monthly-view/:id"
+        element={
+          isAuth && role.includes("Operations") ? <MonthalyRentView /> : <Login />
+        }
+      />
       {/* BHU Section */}
       <Route
         exact
@@ -160,6 +196,11 @@ function MyRouter() {
         exact
         path="/BHUapproval/:id"
         element={isAuth && role.includes("BUH") ? <BHUapproval /> : <Login />}
+      />
+       <Route
+        exact
+        path="/buh-monthly-rent"
+        element={isAuth && role.includes("BUH") ? <BUHMonthlyPayement/> : <Login />}
       />
 
       {/* Admin Section */}
@@ -223,15 +264,23 @@ function MyRouter() {
 
      <Route 
      path="/finance-dashboard"
-     element={<FinanceDashboard/>}
+     element={isAuth && role.includes("Finance") ?<FinanceDashboard/> : <Login />}
      />
      <Route 
      path="/finance-listing"
-     element={<FinanceListing/>}
+     element={isAuth && role.includes("Finance") ?<FinanceListing/>: <Login />}
      />
      <Route 
      path="/finance-approval/:id"
-     element={<FinanceApproval/>}
+     element={isAuth && role.includes("Finance") ?<FinanceApproval/>: <Login />}
+     />
+     <Route 
+     path="/finance-monthly-rent"
+     element={isAuth && role.includes("Finance") ?<FinanceMonthlyPayement/>: <Login />}
+     />
+     <Route 
+     path="/finance-monthly-view/:id"
+     element={isAuth && role.includes("Finance") ?<FinanceMonthlyRentView/>: <Login />}
      />
 
       {/* Finance team end here */}

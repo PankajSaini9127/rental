@@ -334,6 +334,7 @@ function DataTable({ rows, loading, check, setCheck }) {
         selectID
       );
 
+
       console.log(response)
       if (response.status === 200) {
 
@@ -361,6 +362,7 @@ function DataTable({ rows, loading, check, setCheck }) {
               gst : row.gst,
               utr_no : row.utr_no,
               status : row.status,
+
             })
       }))
       .then((response)=>{
