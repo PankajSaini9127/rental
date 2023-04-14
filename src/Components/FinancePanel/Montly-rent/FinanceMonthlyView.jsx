@@ -1,6 +1,6 @@
 import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import HamburgerMenu from "../../HamburgerMenu";
@@ -11,8 +11,10 @@ import {
 } from "../../StyledComponent";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { DocumentView } from "../../StyleComponents/Rental";
+import { setAlert } from "../../../store/action/action";
+import { get_rent_data_ID, sendMonthyPaymentForword } from "../../../Services/Services";
 
 export default function FinanceMonthlyRentView() {
   const navigate = useNavigate();
@@ -24,6 +26,7 @@ export default function FinanceMonthlyRentView() {
 
   const [remark, setRemark] = useState("");
 
+  const {auth} = useSelector(s=>s)
 
   const [preData, setPredata] = useState({
     invoice_no: "",
@@ -32,10 +35,40 @@ export default function FinanceMonthlyRentView() {
     gst_amount: "",
     total_amount: "",
     invoice: "",
-    fileName:""
+    status:""
   });
 
-  function handleSubmit(e) {
+  async function fetchData(id) {
+    try {
+      const response = await get_rent_data_ID(id);
+
+      console.log(response.data.data[0].invoice_number);
+      if (response.data.succes) {
+        setPredata({
+          invoice: response.data.data[0].invoice,
+          invoice_no: response.data.data[0].invoice_number,
+          invoice_date: response.data.data[0].invoice_date,
+          rent_amount: parseFloat(response.data.data[0].rent_amount).toFixed(2),
+          gst_amount: response.data.data[0].gst_amount,
+          total_amount: parseFloat(
+            Number(response.data.data[0].rent_amount) +
+              Number(response.data.data[0].gst_amount)
+          ).toFixed(2),
+          status: response.data.data[0].status,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData(id);
+  }, []);
+
+  async function handleSubmit(e) {
+    
+    // console.log(send)
   }
 
   function handleSendBack() {}
@@ -131,9 +164,9 @@ export default function FinanceMonthlyRentView() {
 
             {/* Buttons start here*/}
 
-            {status === "Sent To Sr Manager" && (
+            {preData.status === "Sent To Finance" && (
               <>
-                <Grid
+                {/* <Grid
                   item
                   xs={10}
                   sx={{ mt: 5 }}
@@ -152,7 +185,7 @@ export default function FinanceMonthlyRentView() {
                       onChange={(e) => setRemark(e.target.value)}
                     />
                   </Grid>
-                </Grid>
+                </Grid> */}
                 <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                   <Grid container spacing={1} sx={{ justifyContent: "center" }}>
                     <Grid item md={4} xs={11}>
@@ -170,7 +203,7 @@ export default function FinanceMonthlyRentView() {
                         }}
                         onClick={handleSubmit}
                       >
-                        Approve And Send To Operations
+                        Approve
                       </Button>
                     </Grid>
                     <Grid item md={4} xs={11}>

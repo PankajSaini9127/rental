@@ -1,6 +1,6 @@
 import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import HamburgerMenu from "../../HamburgerMenu";
@@ -12,10 +12,11 @@ import {
 } from "../../StyledComponent";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import { uploadDoc } from "../../../Services/Services";
-import { useDispatch } from "react-redux";
+import { get_rent_data_ID, sendMonthyPaymentForword, uploadDoc } from "../../../Services/Services";
+import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../../store/action/action";
 import { DocumentView } from "../../StyleComponents/Rental";
+import { SensorDoor } from "@mui/icons-material";
 
 export default function SRMMonthlyRentView() {
   const navigate = useNavigate();
@@ -25,17 +26,36 @@ export default function SRMMonthlyRentView() {
 
   const dispatch = useDispatch()
 
+  const {auth} = useSelector(s=>s);
+
   const [remark, setRemark] = useState("");
 
-  const [formError, setError] = useState({
-    invoice_no: "",
-    invoice_date: "",
-    rent_amount: "",
-    gst_amount: "",
-    total_amount: "",
-    invoice: "",
-    fileName:""
-  })
+ async function fetchData(id){
+      try {
+        const response = await get_rent_data_ID(id)
+        
+        
+        console.log(response.data.data[0].invoice_number)
+        if(response.data.succes){
+          setPredata({
+            invoice:response.data.data[0].invoice,
+            invoice_no:response.data.data[0].invoice_number,
+            invoice_date:response.data.data[0].invoice_date,
+            rent_amount:parseFloat(response.data.data[0].rent_amount).toFixed(2),
+            gst_amount:response.data.data[0].gst_amount,
+            total_amount:parseFloat(Number(response.data.data[0].rent_amount)+Number(response.data.data[0].gst_amount)).toFixed(2),
+            status:response.data.data[0].status
+          })
+        }
+
+      } catch (error) {
+        console.log(error)
+      }
+ } 
+
+useEffect(()=>{
+  fetchData(id)
+},[])
 
   const [preData, setPredata] = useState({
     invoice_no: "",
@@ -44,10 +64,20 @@ export default function SRMMonthlyRentView() {
     gst_amount: "",
     total_amount: "",
     invoice: "",
-    fileName:""
+    fileName:"",
+    status:""
   });
 
-  function handleSubmit(e) {
+   async function handleSubmit(e) {
+    const send = await sendMonthyPaymentForword(id,{status:"Sent To Operations",srm_id:auth.id})
+    console.log(send.data.success)
+   if(send.data.success){
+    dispatch(setAlert({open:true,variant:"success",message:"Payment Details Send To Opertaions Successfully."}))
+     navigate(-1)
+   }else{
+    dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+   }
+    // console.log(send)
   }
 
   function handleSendBack() {}
@@ -143,9 +173,9 @@ export default function SRMMonthlyRentView() {
 
             {/* Buttons start here*/}
 
-            {status === "Sent To Sr Manager" && (
+            {preData.status === "Sent To Sr Manager" && (
               <>
-                <Grid
+                {/* <Grid
                   item
                   xs={10}
                   sx={{ mt: 5 }}
@@ -164,7 +194,7 @@ export default function SRMMonthlyRentView() {
                       onChange={(e) => setRemark(e.target.value)}
                     />
                   </Grid>
-                </Grid>
+                </Grid> */}
                 <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                   <Grid container spacing={1} sx={{ justifyContent: "center" }}>
                     <Grid item md={4} xs={11}>

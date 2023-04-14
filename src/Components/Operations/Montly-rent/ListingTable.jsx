@@ -1,17 +1,66 @@
 import { Button, Checkbox } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid } from '@mui/x-data-grid';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { get_monthlt_rent_opr, get_monthlt_rent_srm } from '../../../Services/Services';
+import { useSelector } from 'react-redux';
 
 
 
 
 
 export default function ListingTable() {
+  const {auth}= useSelector(s=>s)
 
     const [ids, setIds] = useState([]);
     const navigate = useNavigate()
+
+    const [agIDS,setAgIds] = useState([])
+    const [rentData,setRent] = useState({})
+
+    async function fetchData(id){
+      try {
+  const data = await get_monthlt_rent_opr(id)
+     if(data.data.success){
+           setAgIds(data.data.ids)
+           setRent(data.data.agreement)
+           console.log(data.data.agreement)
+     }else{
+     console.log(data)
+     }
+  
+      } catch (error) {
+          console.log(error)
+      }
+    }    
+  
+    useEffect(()=>{
+      fetchData(auth.id)
+    },[])
+
+    const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+      const rows = agIDS.map((row)=>{
+        return(
+          {
+            id : rentData[row].id,
+            code:rentData[row].code,
+            checkbox:rentData[row].status,
+            status:rentData[row].status,
+            utr:rentData[row].utr_no,
+            // srmanager:rentData[row].manager,
+            name:rentData[row].landlord_name,
+            location:rentData[row].location,
+            gst:rentData[row].gst,
+            percentage:rentData[row].share,
+            month_of_rent: month [new Date(rentData[row].rent_date).getUTCMonth()] + " " + new Date(rentData[row].rent_date).getFullYear(),
+            total_month_rent:rentData[row].monthly_rent,
+            payable_amount: parseFloat(rentData[row].rent_amount).toFixed(2)
+          }
+        )
+      })
+
 
     const renderDetailsButton = (e) => {
         const id = e.id;
@@ -50,7 +99,7 @@ export default function ListingTable() {
         }
       };
 
-    const columns = [
+      const columns = [
         {
           field: "checkbox",
           width: 20,
@@ -60,8 +109,7 @@ export default function ListingTable() {
           renderCell: (params) => (
             <>
               {/* {console.log(params)} */}
-              {params.formattedValue === "Sent Sr Manager" ||
-              params.formattedValue === "Sent To Sr Manager" ? (
+              {(params.formattedValue === "Sent To Operations") ? (
                 <Checkbox
                   onChange={handleSwitch}
                   name={params.id}
@@ -83,17 +131,25 @@ export default function ListingTable() {
             flex:1
           },
           {
-            field: "name",
-            headerName: "Landlord Name",
-            width: 230,
+            field: "utr",
+            headerName: "UTR Number",
+            width: 150,
             headerClassName: "dataGridHeader",
             headerAlign: "center",
             flex:1
           },
+          // {
+          //   field: "srmanager",
+          //   headerName: "Sr Manager Name",
+          //   width: 150,
+          //   headerClassName: "dataGridHeader",
+          //   headerAlign: "center",
+          //   flex:1
+          // },
           {
-            field: "month_of_rent",
-            headerName: "Rent Month",
-            width: 230,
+            field: "name",
+            headerName: "Landlord Name",
+            width: 200,
             headerClassName: "dataGridHeader",
             headerAlign: "center",
             flex:1
@@ -107,28 +163,44 @@ export default function ListingTable() {
             flex:1
           },
           {
-            field: "rentalAmount",
-            headerName: "Rental Amount",
-            width: 200,
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1
-          },
-          {
-            field: "utr",
-            headerName: "UTR Number",
-            width: 200,
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1
-          },
-          {
             field: "gst",
             headerName: "GST Number",
             width: 200,
             headerClassName: "dataGridHeader",
             headerAlign: "center",
             flex:1,
+          },
+          {
+            field: "percentage",
+            headerName: "Percentage Share",
+            width: 200,
+            headerClassName: "dataGridHeader",
+            headerAlign: "center",
+            flex:1,
+          },
+          {
+            field: "month_of_rent",
+            headerName: "Rent Month",
+            width: 230,
+            headerClassName: "dataGridHeader",
+            headerAlign: "center",
+            flex:1
+          },
+          {
+            field: "total_month_rent",
+            headerName: "Total Month Rent",
+            width: 200,
+            headerClassName: "dataGridHeader",
+            headerAlign: "center",
+            flex:1,
+          },
+          {
+            field: "payable_amount",
+            headerName: "Payable Amount",
+            width: 200,
+            headerClassName: "dataGridHeader",
+            headerAlign: "center",
+            flex:1
           },
           {
             field: "status",
@@ -147,81 +219,81 @@ export default function ListingTable() {
             flex:1,
             renderCell:renderDetailsButton
           }
+        
       ];
-
       function sendToOperations (){
 
       }
 
-      const rows =[
-        {
-            id:1,
-            code:123456,
-            name:"Andromeda",
-            month_of_rent:"April",
-            location:"bombay",
-            rentalAmount:3000,
-            utr:123456,
-            gst:1234678952,
-            status:"Sent To Sr Manager"
-        },{
-            id:2,
-            code:123456,
-            name:"Andromeda",
-            month_of_rent:"April",
-            location:"bombay",
-            rentalAmount:3000,
-            utr:123456,
-            gst:1234678952,
-            status:"Sent To Sr Manager"
-        },
-        {
-            id:3,
-            code:123456,
-            name:"Andromeda",
-            month_of_rent:"April",
-            location:"bombay",
-            rentalAmount:3000,
-            utr:123456,
-            gst:1234678952,
-            status:"Sent To Sr Manager"
-        },
-        {
-            id:4,
-            code:123456,
-            name:"Andromeda",
-            month_of_rent:"April",
-            location:"bombay",
-            rentalAmount:3000,
-            utr:123456,
-            gst:1234678952,
-            status:"Sent To Sr Manager"
-        },
-        {
-            id:5,
-            code:123456,
-            name:"Andromeda",
-            month_of_rent:"April",
-            location:"bombay",
-            rentalAmount:3000,
-            utr:123456,
-            gst:1234678952,
-            status:"Sent To Sr Manager"
-        },
-        {
-            id:6,
-            code:123456,
-            name:"Andromeda",
-            month_of_rent:"April",
-            location:"bombay",
-            rentalAmount:3000,
-            utr:123456,
-            gst:1234678952,
-            status:"Sent To Sr Manager"
-        }
+      // const rows =[
+      //   {
+      //       id:1,
+      //       code:123456,
+      //       name:"Andromeda",
+      //       month_of_rent:"April",
+      //       location:"bombay",
+      //       rentalAmount:3000,
+      //       utr:123456,
+      //       gst:1234678952,
+      //       status:"Sent To Sr Manager"
+      //   },{
+      //       id:2,
+      //       code:123456,
+      //       name:"Andromeda",
+      //       month_of_rent:"April",
+      //       location:"bombay",
+      //       rentalAmount:3000,
+      //       utr:123456,
+      //       gst:1234678952,
+      //       status:"Sent To Sr Manager"
+      //   },
+      //   {
+      //       id:3,
+      //       code:123456,
+      //       name:"Andromeda",
+      //       month_of_rent:"April",
+      //       location:"bombay",
+      //       rentalAmount:3000,
+      //       utr:123456,
+      //       gst:1234678952,
+      //       status:"Sent To Sr Manager"
+      //   },
+      //   {
+      //       id:4,
+      //       code:123456,
+      //       name:"Andromeda",
+      //       month_of_rent:"April",
+      //       location:"bombay",
+      //       rentalAmount:3000,
+      //       utr:123456,
+      //       gst:1234678952,
+      //       status:"Sent To Sr Manager"
+      //   },
+      //   {
+      //       id:5,
+      //       code:123456,
+      //       name:"Andromeda",
+      //       month_of_rent:"April",
+      //       location:"bombay",
+      //       rentalAmount:3000,
+      //       utr:123456,
+      //       gst:1234678952,
+      //       status:"Sent To Sr Manager"
+      //   },
+      //   {
+      //       id:6,
+      //       code:123456,
+      //       name:"Andromeda",
+      //       month_of_rent:"April",
+      //       location:"bombay",
+      //       rentalAmount:3000,
+      //       utr:123456,
+      //       gst:1234678952,
+      //       status:"Sent To Sr Manager"
+      //   }
 
 
-      ]
+      // ]
 
   return (
     <>
@@ -292,7 +364,7 @@ export default function ListingTable() {
               (parms.row.status === "Sent To Sr Manager" ||
                 parms.row.status === "Sent To BUH" ||
                 parms.row.status === "Sent To Operations" ||
-                parms.row.status === "Sent To Finance Team" || 
+                parms.row.status === "Sent To Finance" || 
                 parms.row.status === "Hold"
                 )
             ) {

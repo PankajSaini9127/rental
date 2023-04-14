@@ -1,4 +1,4 @@
-import { Alert, Box, Button, Grid, Snackbar } from '@mui/material';
+import { Alert, Box, Button, Checkbox, Grid, Snackbar } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useState,useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
@@ -9,9 +9,10 @@ import axios from 'axios'
 
 //
 import PermissionAlert from '../Manager/Alert';
-import { get_monthaly_rent, get_monthly_rent, listMonthRent } from '../../Services/Services';
+import { add_invoice, get_monthaly_rent, get_monthly_rent, listMonthRent } from '../../Services/Services';
 import UploadInvoice from './UploadInvoice';
- import { useSelector } from 'react-redux'; 
+ import { useDispatch, useSelector } from 'react-redux'; 
+import { setAlert } from '../../store/action/action';
 
 
 function DataTable() {
@@ -54,7 +55,7 @@ function DataTable() {
   console.log(item.rent_date)
 
   return  {
-    id: index + 1,
+    id: item.id,
     landlord_name : item.landlord_name ,
     rent_amount : parseFloat(item.rent_amount).toFixed(2) ,
     rent_date : month[new Date(item.rent_date).getUTCMonth()] + " " + new Date(item.rent_date).getFullYear(),
@@ -66,6 +67,7 @@ function DataTable() {
     gst : item.gst || "---",
     utr_no : item.utr_no || "---",
     status : item.status,
+    checkbox: item.status,
   }
  })
 
@@ -78,8 +80,10 @@ function DataTable() {
   totalAmount: "",
   invoice: "",
   invoice_file_name: "",
+  manager_id:auth.id
 })
 
+const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
@@ -89,35 +93,78 @@ function DataTable() {
       // navigate(`/managerApproval/${id}`)
   };
 
+  const [selectID,setSelectID] = useState(0)
+
   const gstUploadButton = (e) => {
     const id = e.id;
 
     return (
-      <Button
-        variant="contained"
-        color="primary"
-        size="small"
-        style={{
-          backgroundColor: "rgb(103 185 68 / 89%)",
-          color: "white",
-          fontSize: "12px",
-          textTransform: "capitalize",
-          // width:"100%"
-        }}
-        onClick={(e) => {
-          e.stopPropagation(); // don't select this row after clicking
-          // navigate(`/BHUapproval/${id}`);
-          setOpen(true)
-        }}
-      >
-        Upload 
-      </Button>
+      <>
+      {
+        e.row.status === "Hold" && (
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          style={{
+            backgroundColor: "rgb(103 185 68 / 89%)",
+            color: "white",
+            fontSize: "12px",
+            textTransform: "capitalize",
+            // width:"100%"
+          }}
+          onClick={(e) => {
+            e.stopPropagation(); // don't select this row after clicking
+            // navigate(`/BHUapproval/${id}`);
+            setSelectID(id)
+            setOpen(true)
+          }}
+        >
+          Upload 
+        </Button>)
+      }
+      </>
+      
     );
   };
 
+  const [ids, setIds] = useState([]);
+
+  const handleSwitch = (e) => {
+    console.log(ids.includes(e.target.name));
+    console.log(ids);
+    if (ids.includes(e.target.name)) {
+      console.log("out");
+      setIds(ids.filter((i) => i !== e.target.name));
+    } else {
+      console.log("in", e.target.name, ids);
+      setIds([...ids, e.target.name]);
+    }
+  };
 
 
   const columns = [
+    {
+      field: "checkbox",
+      width: 20,
+
+      type: "number",
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      renderCell: (params) => (
+        <>
+          {params.formattedValue === "Hold" ? (
+            <Checkbox
+              onChange={handleSwitch}
+              name={params.id}
+              checked={ids.includes(params.id)}
+            />
+          ) : (
+            <Checkbox disabled={true} />
+          )}
+        </>
+      ),
+    },
    
     {
       field: "code",
@@ -129,7 +176,7 @@ function DataTable() {
     },
     {
       field: "utr_no",
-      headerName: "URT Number",
+      headerName: "UTR Number",
       width: 100,
       headerAlign: "center",
       flex:1
@@ -161,7 +208,7 @@ function DataTable() {
     },
     {
       field: "share",
-      headerName: "Percentage Shear",
+      headerName: "Percentage Share",
       width: 150,
       headerAlign: "center",
     },
@@ -188,8 +235,16 @@ function DataTable() {
       field: "status",
       headerName: "Status",
       headerAlign: "center",
+      width:200,
       flex:1
     },
+    {
+      field: "action",
+      headerName: "Action",
+      headerAlign: "center",
+      flex:1,
+      renderCell:gstUploadButton
+    }
     
   ];
   
@@ -197,16 +252,35 @@ function DataTable() {
   //form delete alert
 
 
-function uploadInvoiceDetails(){
-  console.log(invoiceDetails)
-}
+async function uploadInvoiceDetails(){
+ 
+  try {
+    const addInvoice = await add_invoice(selectID,invoiceDetails)
+
+    console.log(addInvoice)
+
+    if(addInvoice.data.success){
+      dispatch(setAlert({open:true,variant:"success",message:"Invoice Details Submited & Sent To Manger"}))
+      setOpen(false)
+    }else{
+      dispatch(setAlert({open:true,variant:"error",message:"Some Error Occured Please Try Again Later."}))
+    }
+  } catch (error) {
+    console.log(error)
+    dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+  }
+    
+      }
+
+
 
  
   return (
     <>
 <UploadInvoice
         open={open}
-        setOpen={setOpen}
+        // setOpen={setOpen}
+        handleClose={()=>setOpen(false)}
         handleConfirm={uploadInvoiceDetails}
         value={invoiceDetails}
         setValue={setInvoiceDetails}
@@ -232,14 +306,11 @@ function uploadInvoiceDetails(){
           color:"#CF482A"
         },
         "& .statusCell":{
-          maxWidth:"92px !important",
-          minWidth:"92px !important",
           maxHeight:"30px !important",
           minHeight:"25px !important",
           textAlign:"center !important",
           borderRadius:"10px !important",
-          m:'auto',
-          mx:6
+          my:1
         },
         "& .allCell":{
           justifyContent:"center !important"          
@@ -252,7 +323,6 @@ function uploadInvoiceDetails(){
         pageSize={6}
         rowsPerPageOptions={[6]}
         loading={loading}
-        checkboxSelection
         sx={{ color: "black !important",  minWidth:"50px" }}
         getCellClassName={(parms) => {
            let cellClass = []
@@ -260,7 +330,7 @@ function uploadInvoiceDetails(){
             cellClass.push("green statusCell") ;
           } else if (
             parms.field === "status" &&
-            parms.row.status === "Pending"
+           ( parms.row.status === "Hold"|| parms.row.status === "Sent To Sr Manager"|| parms.row.status === "Sent To Operations"|| parms.row.status === "Sent To Finance")
           ) {
             cellClass.push( "yellow statusCell") ;
           } else if (
@@ -274,7 +344,6 @@ function uploadInvoiceDetails(){
           return(cellClass)
 
         }}
-        // onSelectionModelChange={(ids) => {console.log(ids)}}
       >
 
       </DataGrid>

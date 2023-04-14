@@ -7,6 +7,8 @@ import ListingTable from './ListingTable'
 
 function MonthlyPayement() {
     const navigate = useNavigate()
+
+    
   return (
     <>
     <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>

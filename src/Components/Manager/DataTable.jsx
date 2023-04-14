@@ -361,7 +361,7 @@ function DataTable({ rows, loading, check, setCheck }) {
               location : row.location,
               gst : row.gst,
               utr_no : row.utr_no,
-              status : row.status,
+              status : "Hold"
 
             })
       }))

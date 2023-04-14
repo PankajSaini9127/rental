@@ -96,6 +96,10 @@ export async function get_renewal(){
     return await axios.get(`${API_LIVE}/api/list_teure`)
 }
 
+export async function add_invoice(id,data){
+    return await axios.put(`${API_LIVE}/api/add_invoice/${id}`,data)
+}
+
 export async function meta(){
     return await axios.get(`${API_LIVE}/api/admin/meta`)
 }
@@ -133,6 +137,32 @@ export async function get_landlord_id (id){
 export async function get_srm_agreements(id){
     return await axios.get(`${API_LIVE}/api/srmanager/get-agreement/${id}`)
 }
+
+export async function get_monthlt_rent_srm (id){
+    return await axios.get(`${API_LIVE}/api/srmanager/get-monthly-rent/${id}`)
+}
+
+export async function get_rent_data_ID(id){
+    return await axios.get(`${API_LIVE}/api/srmanager/get-monthly-rent-id/${id}`)
+}
+
+export async function sendMonthyPaymentForword(id,data){
+    return await axios.put(`${API_LIVE}/api/sent-monthly-payment/${id}`,data)
+}
+
+//operations get monthaly rent 
+export async function get_monthlt_rent_opr(id){
+    return await axios.get(`${API_LIVE}/api/operations/opr-monthly-payment/${id}`)
+}
+
+//finance get monthaly rent 
+export async function get_monthlt_rent_finance(id){
+    return await axios.get(`${API_LIVE}/api/finance/finance-monthly-rent/${id}`)
+}
+
+
+
+
 
 //search in srmanager
 export async function get_search_srmanager (id,name){
