@@ -19,6 +19,7 @@ import {
 } from "../../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../../store/action/action";
+import { CloseFullscreen } from "@mui/icons-material";
 
 export default function MonthalyRentView() {
   const navigate = useNavigate();
@@ -45,11 +46,26 @@ export default function MonthalyRentView() {
     invoice_date: "",
     rent_amount: "",
     gst_amount: "",
-    total_amount: "",
+    total_amount: 0,
     invoice: "",
     fileName: "",
     status: "",
   });
+
+
+function getTotal (){
+  let total = parseFloat(
+    Number(preData.rent_amount) +
+      Number(preData.gst_amount)
+  ).toFixed(2)
+
+  setPredata({...preData,total_amount:total})
+}
+console.log(  )
+
+useEffect(()=>{
+   getTotal()
+},[preData.rent_amount,preData.gst_amount])
 
   function handleChange(e) {
     setPredata({
@@ -97,15 +113,16 @@ export default function MonthalyRentView() {
       console.log(response.data.data[0].invoice_number);
       if (response.data.succes) {
         setPredata({
+          ...preData,
           invoice: response.data.data[0].invoice,
           invoice_no: response.data.data[0].invoice_number,
           invoice_date: response.data.data[0].invoice_date,
           rent_amount: parseFloat(response.data.data[0].rent_amount).toFixed(2),
           gst_amount: response.data.data[0].gst_amount,
-          total_amount: parseFloat(
-            Number(response.data.data[0].rent_amount) +
-              Number(response.data.data[0].gst_amount)
-          ).toFixed(2),
+          // total_amount: parseFloat(
+          //   Number(response.data.data[0].rent_amount) +
+          //     Number(response.data.data[0].gst_amount)
+          // ).toFixed(2),
           status: response.data.data[0].status,
         });
       }
@@ -113,6 +130,8 @@ export default function MonthalyRentView() {
       console.log(error);
     }
   }
+
+ 
 
   useEffect(() => {
     fetchData(id);
@@ -149,6 +168,10 @@ export default function MonthalyRentView() {
   }
 
   function handleSendBack() {}
+
+ 
+
+  console.log(preData)
 
   return (
     <>
@@ -232,7 +255,7 @@ export default function MonthalyRentView() {
                     label="Total Amount"
                     placeHolder="Enter Total Amount"
                     value={preData.total_amount}
-                    onChange={(e) => handleChange(e)}
+                    disabled={true}
                     name="total_amount"
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }

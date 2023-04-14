@@ -52,7 +52,7 @@ function DataTable() {
 
 
  const row = data.map((item,index)=>{
-  console.log(item.rent_date)
+  // console.log(item.rent_date)
 
   return  {
     id: item.id,
@@ -129,6 +129,7 @@ const dispatch = useDispatch()
   };
 
   const [ids, setIds] = useState([]);
+  console.log(ids)
 
   const handleSwitch = (e) => {
     console.log(ids.includes(e.target.name));
@@ -143,6 +144,7 @@ const dispatch = useDispatch()
   };
 
 
+
   const columns = [
     {
       field: "checkbox",
@@ -153,11 +155,12 @@ const dispatch = useDispatch()
       headerAlign: "center",
       renderCell: (params) => (
         <>
+        {console.log(ids.includes(params.id))}
           {params.formattedValue === "Hold" ? (
             <Checkbox
               onChange={handleSwitch}
               name={params.id}
-              checked={ids.includes(params.id)}
+              checked={ids.includes(params.id)?true:false}
             />
           ) : (
             <Checkbox disabled={true} />

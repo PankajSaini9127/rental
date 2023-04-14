@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import DatePicker from "react-datepicker";
 
@@ -50,11 +50,18 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
     invoice_file_name: "",
   });
 
+  useEffect(()=>{
+    let total =  parseFloat(Number(value.rentAmount) + Number(value.gstAmount)).toFixed(2)
+    setValue({...value,totalAmount:total})
+  },[value.rentAmount,value.gstAmount])
+   
+
   function onChange(e) {
     setFormError({
       ...formError,
       [e.target.name]: "",
     });
+    
     setValue({
       ...value,
       [e.target.name]: e.target.value,
@@ -270,7 +277,7 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
                 </FormLabel>
                 <TextField
                   variant="standard"
-                  onChange={(e) => onChange(e)}
+                  disabled
                   InputProps={{
                     disableUnderline: true,
                     style: {
