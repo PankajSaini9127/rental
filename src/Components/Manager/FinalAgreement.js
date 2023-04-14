@@ -114,13 +114,14 @@ function validate(){
         setError({...formError,final_agreement:"Please Upload Final Agreement Document !!"})
         return false
       }else if(value.agreement_date.length < 1){
-        setError({...formError,agreement_date:"Please Select Final Agreemenet Date !!"})
+        setError({...formError,agreement_date:"Please Select Final Agreement Date !!"})
         return false
       }else if(value.rent_start_date.length < 1){
         setError({...formError,rent_start_date:"Please Select Rent Start Date !!"})
         return false
       }
-     handleConfirm1() 
+      else
+        return handleConfirm1() 
 
 }
   
@@ -179,10 +180,10 @@ function validate(){
                 </FormLabel>
                 <input type="date" 
                 name="rent_start_date" 
-                value={value.ent_start_date}  
+                value={value.rent_start_date}  
                 min={disablePastDate()} 
                 className="DatePicker"   
-                onChange={(e) => onChange(e)}
+                onChange={onChange}
                 // error={formError.date && true}
                  />
                 <Typography variant = 'caption' sx = {{color : 'red'}}>{formError.rent_start_date}</Typography>

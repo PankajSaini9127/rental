@@ -9,9 +9,9 @@ import axios from 'axios'
 
 //
 import PermissionAlert from '../Manager/Alert';
-import { get_monthaly_rent, get_monthly_rent } from '../../Services/Services';
+import { get_monthaly_rent, get_monthly_rent, listMonthRent } from '../../Services/Services';
 import UploadInvoice from './UploadInvoice';
- 
+ import { useSelector } from 'react-redux'; 
 
 
 function DataTable() {
@@ -22,6 +22,7 @@ function DataTable() {
 
   const [loading, setLoading] = useState(false)
 
+  const {auth} = useSelector(state=>state)
 
 
 
@@ -30,11 +31,11 @@ function DataTable() {
   const APICALL = async()=>{
     setLoading(true)
     setData([])
-    const result = await get_monthaly_rent()
+    const result = await listMonthRent(auth.id)
    console.log(result)
     if(result.status === 200){
     //   const data = result.data.data.reverse();
-   setData(result.data.monthly_rent)
+   setData(result.data)
       setLoading(false)
     }
   }
@@ -46,19 +47,25 @@ function DataTable() {
     APICALL()
   },[])
 
- const row = data.map((item)=>{
-  // console.log(item)
+  const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+
+ const row = data.map((item,index)=>{
+  console.log(item.rent_date)
+
   return  {
-    id: item.id,
-    status: item.status,
-    code: item.code,
-    name: item.leeseName,
-    location:item.location,
-    rentalAmount:parseInt(Number((item.monthlyRent)/100)*Number(item.percentage)),
-    gst:item.gstNo?item.gstNo: '-',
-    utr:item.utr_number,
-    month_of_rent:`${item.rent_month}-${item.rent_year}`,
-    status:"Pending"
+    id: index + 1,
+    landlord_name : item.landlord_name ,
+    rent_amount : parseFloat(item.rent_amount).toFixed(2) ,
+    rent_date : month[new Date(item.rent_date).getUTCMonth()] + " " + new Date(item.rent_date).getFullYear(),
+    payment_date : item.payment_date || "---",
+    share : item.share ,
+    monthly_rent : item.monthly_rent ,
+    code : item.code,
+    location : item.location,
+    gst : item.gst || "---",
+    utr_no : item.utr_no || "---",
+    status : item.status,
   }
  })
 
@@ -115,77 +122,75 @@ function DataTable() {
     {
       field: "code",
       headerName: "Code",
-      width: 130,
+      width: 70,
+      flex:1,
       type: "number",
-      headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
     },
     {
-      field: "name",
+      field: "utr_no",
+      headerName: "URT Number",
+      width: 100,
+      headerAlign: "center",
+      flex:1
+
+    },
+    {
+      field: "landlord_name",
       headerName: "Landlord Name",
-      width: 230,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      flex:1
-    },
-    {
-      field: "month_of_rent",
-      headerName: "Rent Month",
-      width: 230,
-      headerClassName: "dataGridHeader",
+      width: 100,
       headerAlign: "center",
       flex:1
     },
     {
       field: "location",
       headerName: "Location",
-      width: 230,
-      headerClassName: "dataGridHeader",
+      width: 150,
       headerAlign: "center",
       flex:1
+
     },
-    {
-      field: "rentalAmount",
-      headerName: "Rental Amount",
-      width: 200,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      flex:1
-    },
-    {
-      field: "utr",
-      headerName: "UTR Number",
-      width: 200,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      flex:1
-    },
+
     {
       field: "gst",
-      headerName: "GST Number",
-      width: 200,
-      headerClassName: "dataGridHeader",
+      headerName: "GST",
+      width: 100,
       headerAlign: "center",
-      flex:1,
+      flex:1
+
+    },
+    {
+      field: "share",
+      headerName: "Percentage Shear",
+      width: 150,
+      headerAlign: "center",
+    },
+    {
+      field: "rent_date",
+      headerName: "Rent Date",
+      headerAlign: "center",
+      flex:1
+    },
+    {
+      field: "monthly_rent",
+      headerName: "Month Rent",
+      headerAlign: "center",
+      flex:1
+    },
+    
+    {
+      field: "rent_amount",
+      headerName: "Payable Amount",
+      headerAlign: "center",
+      flex:1
     },
     {
       field: "status",
       headerName: "Status",
-      width: 200,
-      headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1,
+      flex:1
     },
-    {
-      field: "gst_certificate",
-      headerName: "GST Details",
-      width: 200,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      flex:1,
-      renderCell: gstUploadButton,
-    }
+    
   ];
   
 

@@ -6,8 +6,9 @@ import { BrowserRouter} from 'react-router-dom'
 // Component
 import MyRouter from './Router';
 
-// untility 
+// utility 
 import Snackbar from './Components/utility/Snackbar'
+import ErrorBound from "./Components/utility/ErrorBound";
 
 import {ThemeProvider} from '@mui/material'
 import {Theam} from './Components/Theam';
@@ -35,10 +36,14 @@ const [state, dispatch] = useReducer(reducer, initialState)
   return (
     <AuthContext.Provider value={{state,dispatch}}>
    <ThemeProvider theme={Theam}>
+   <ErrorBound fallback = {'Sorry for the inconvenience !!! '}>
+
    <BrowserRouter>
     <Snackbar/>
    <MyRouter/>
    </BrowserRouter>
+   </ErrorBound>
+
    </ThemeProvider>
    </AuthContext.Provider>
   );

@@ -193,3 +193,14 @@ export async function get_finance_agreements(data){
 export async function ApprovedByFinance (data,id){
     return await axios.put(`${API_LIVE}/api/finance/updateAgreement/finance/${id}`,data)
 }
+
+
+// APIs for finalize the Agreement
+export async function setFinalAgreement (data){
+    return await axios.put(`${API_LIVE}/api/setFinalAgreement`,data)
+}
+
+// APIs for listMonthRent
+export async function listMonthRent (data){
+    return await axios.get(`${API_LIVE}/api/listMonthRent`)
+}
