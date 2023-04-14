@@ -56,16 +56,25 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
   },[value.rentAmount,value.gstAmount])
    
 
+  const [error,setError] = useState({})
+
   function onChange(e) {
-    setFormError({
-      ...formError,
-      [e.target.name]: "",
-    });
+
+
+    let error = false
     
-    setValue({
-      ...value,
-      [e.target.name]: e.target.value,
-    });
+    if (!e.target.value.match(/^[0-9]*$/))
+     error = true
+
+
+
+if(!error)
+{
+  setValue({
+    ...value,
+    [e.target.name]: e.target.value,
+  });
+}
   }
 
   const disablePastDate = () => {
@@ -78,34 +87,32 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
 
 
   function validate() {
-    let error = {};
-    // console.log(e.target.name);
-    if (value.invoiceNo === "") {
-      error.invoiceNo = "Please Enter Invoice Number.";
-      setFormError(error);
-      return false;
-    } else if (value.invoiceDate === "") {
-      error.invoiceDate = "Please Select Invoice Date.";
-      setFormError(error);
-      return false;
-    } else if (value.rentAmount === "") {
-        error.rentAmount = "Please Enter Rent Amount.";
-        setFormError(error);
-        return false;
-      } else if (value.gstAmount === "") {
-        error.gstAmount = "Please Enter GST Amount.";
-        setFormError(error);
-        return false;
-      } else if (value.totalAmount === "") {
-        error.totalAmount = "Please Enter Total Amount.";
-        setFormError(error);
-        return false;
-      }else if (value.invoice === "") {
-        error.invoice = "Please Upload Invoice.";
-        setFormError(error);
-        return false;
-      }
-    handleConfirm();
+    let error = false;
+
+    let fields = [
+      "invoiceNo"
+      ,"invoiceDate"
+      ,"rentAmount"
+      ,"gstAmount"
+      ,"totalAmount"
+      ,"invoice"
+      ,"invoice_file_name"
+,
+    ]
+    
+    console.log(value)
+    fields.map((row)=>{
+      if(value[row].length === 0)
+      {
+       console.log(value[row].length)
+       setFormError(old=>({...old,[row] : "Field is required."}));
+        error = true
+     }
+    })
+
+    console.log(formError)
+    if(!error)
+      handleConfirm();
   }
 
   function handleSubmit(e) {
@@ -157,6 +164,7 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
           style: { borderRadius: 18 },
         }}
       >
+        
         <Box sx={{ pt: 5, px: 2, pb: 2 }}>
           <Grid container spacing={2}>
 
@@ -169,7 +177,7 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
                 </FormLabel>
                 <TextField
                   variant="standard"
-                  onChange={(e) => onChange(e)}
+                  onChange={onChange}
                   InputProps={{
                     disableUnderline: true,
                     style: {
@@ -179,12 +187,13 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
                   }}
                   inputProps={{ maxLength: 22 }}
                   value={value.invoiceNo}
+                  // helperText ={formError.invoiceNo || ""}
                   fullWidth
                   name="invoiceNo"
                   sx={fieldStyle}
                   placeholder="Invoice Number"
                 />
-                <Typography variant="body1" color="red" mt={1}>
+                <Typography variant="caption" color="red" mt={1}>
                   {formError.invoiceNo}
                 </Typography>
               </FormControl>
@@ -204,7 +213,7 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
                   className="DatePicker"
                   onChange={(e) => onChange(e)}
                 />
-                <Typography variant="body1" color="red" mt={1}>
+                <Typography variant="caption" color="red" mt={1}>
                   {formError.invoiceDate}
                 </Typography>
               </FormControl>
@@ -228,12 +237,13 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
                   }}
                   inputProps={{ maxLength: 22 }}
                   value={value.rentAmount}
+                  // helperText ={formError.rentAmount || ""}
                   fullWidth
                   name="rentAmount"
                   sx={fieldStyle}
                   placeholder="Rent Amount"
                 />
-                <Typography variant="body1" color="red" mt={1}>
+                <Typography variant="caption" color="red" mt={1}>
                   {formError.rentAmount}
                 </Typography>
               </FormControl>
@@ -258,11 +268,12 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
                   inputProps={{ maxLength: 22 }}
                   value={value.gstAmount}
                   fullWidth
+                  // helperText = {formError.gstAmount} 
                   name="gstAmount"
                   sx={fieldStyle}
                   placeholder="GST Amount"
                 />
-                <Typography variant="body1" color="red" mt={1}>
+                <Typography variant="caption" color="red" mt={1}>
                   {formError.gstAmount}
                 </Typography>
               </FormControl>

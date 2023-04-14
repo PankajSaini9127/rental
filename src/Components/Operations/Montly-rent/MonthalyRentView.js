@@ -68,10 +68,19 @@ useEffect(()=>{
 },[preData.rent_amount,preData.gst_amount])
 
   function handleChange(e) {
+    
+    let error = false
+    
+    if (!e.target.value.match(/^[0-9]*$/))
+     error = true
+
+    if(!error)
+    {
     setPredata({
       ...preData,
       [e.target.name]: e.target.value,
     });
+  }
   }
 
   async function handleChangeFile(e) {
