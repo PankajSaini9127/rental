@@ -1,7 +1,4 @@
 import React, {  useState } from "react";
-
-
-
 import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
 import { Stack } from "@mui/material";

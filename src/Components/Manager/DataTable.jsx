@@ -174,7 +174,7 @@ function DataTable({ rows, loading, check, setCheck }) {
                 //  startIcon={<EditIcon />}
                 onClick={(e) => {
                   e.stopPropagation(); // don't select this row after clicking
-                  APICALL(id)
+                 
                   setSelectID(id);
                   setopen(true);
                 }}
@@ -320,16 +320,7 @@ function DataTable({ rows, loading, check, setCheck }) {
     setDeleteAlert({ open: false, id: "" });
   };
 
-  async function APICALL(id){
-    console.log(id)
-    const result = await get_monthaly_rent(id)
-   console.log(result)
-    if(result.status === 200){
-    //   const data = result.data.data.reverse();
-   setData(result.data.monthly_rent)
-    }
-  }
- 
+
 
   async function AgreementFinal() {
     try {
@@ -343,52 +334,70 @@ function DataTable({ rows, loading, check, setCheck }) {
         selectID
       );
 
-      if (response.data.success) {
+      console.log(response)
+      if (response.status === 200) {
+
+        const monthCalculation = await get_monthaly_rent(selectID)
+        if(monthCalculation.status === 200){
+        setData(monthCalculation.data.monthly_rent)
+        
+ 
      
-    const result = await get_landlord_id(selectID)
-    // console.log(result)
-    if(result.data.success){
-      // setLandlord(result.data.landlords_id)
-      console.log(result.data.landlords_id)
+    // const result = await get_landlord_id(selectID)
+    // // console.log(result)
+    // if(result.data.success){
+    //   // setLandlord(result.data.landlords_id)
+    //   console.log(result.data.landlords_id)
 
-      result.data.landlords_id.map(async(row)=>{
-        // console.log(row)
-            const rent = await add_monthly_rent({
-              agreement_id:selectID,
-              landlord_id:row.id,
-              amount : data[0].monthlyRent,
-              rent_month :data[0].rent_month
-
+      Promise.allSettled(monthCalculation.data.monthly_rent.map(async(row,index)=>{
+            return await add_monthly_rent({
+              rent_amount : row.rent_amount,
+              rent_date :row.rent_date,
+              landlord_name :row.landlord_name,
+              share :row.share,
+              monthly_rent :row.monthly_rent,
+              code : row.code,
+              location : row.location,
+              gst : row.gst,
+              utr_no : row.utr_no,
+              status : row.status,
             })
-
-            if(rent.data.success){
-              dispatch(
-                setAlert({
-                  variant: "success",
-                  open: true,
-                  message: "Final Agreement Submitted Successfully.",
-                })
-              );
-              setopen(false);
-              dispatch(setRefreshBox());
-            }else {
-              dispatch(
-                setAlert({
-                  variant: "error",
-                  open: true,
-                  message: "Something went wrong! Please again later.",
-                })
-              );}
-
+      }))
+      .then((response)=>{
+        console.log(response)
+        setFinalAgreement({
+          agreement_date: "",
+          final_agreement: "",
+          rent_start_date: "",
+        });
       
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Final Agreement Submitted Successfully.",
+          })
+        );
+        setopen(false);
+        dispatch(setRefreshBox());
       })
+      .catch((err)=>{
+        console.log(err)
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          }))
+      })
+    }
     }
 
 
        
       } 
-      
-    } catch (error) {
+catch (error) {
+  console.log(error)
       dispatch(
         setAlert({
           variant: "error",
