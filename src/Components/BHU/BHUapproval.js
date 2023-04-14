@@ -160,10 +160,13 @@ function SrManagerApproval() {
     <>
       {ids.length > 0 && (
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
-          <HamburgerMenu
-            navigateHome={"BHUDashboard"}
-            handleListing={() => navigate("/BHUListing")}
-          />
+           <HamburgerMenu
+          navigateHome={"BHUDashboard"}
+          handleListing={() => navigate("/BHUListing")}
+          // monthlyRent={() => navigate("/buh-monthly-rent")}
+          // renewal={() => navigate("/buh-monthly-rent")}
+          // monthlyBtn="true"
+        />
 
           <Box sx={{ flexGrow: 1 }}>
             <Grid container sx={{ justifyContent: "center", mt: 2 }}>
@@ -329,14 +332,12 @@ function SrManagerApproval() {
                 </Grid>
               </Grid>
 
-              {agreement[ids[0]].remark.length > 0 && (
                 <Grid item xs={10} sx={{ mt: 5 }}>
                   <DataFieldStyle
                     field={"Remark"}
                     value={agreement[ids[0]].remark}
                   />
                 </Grid>
-              )}
 
               {agreement[ids[0]].status === "Sent To BUH" && (
                 <>

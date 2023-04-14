@@ -25,6 +25,9 @@ function SrManagerDashboard() {
         <HamburgerMenu
           navigateHome={"operationsDashboard"}
           handleListing={() => navigate("/operationsListing")}
+          monthlyRent={() => navigate("/opr-monthly-rent")}
+          renewal={() => navigate("/opr-monthly-rent")}
+          monthlyBtn="true"
         />
 
         {/* dashboard content */}

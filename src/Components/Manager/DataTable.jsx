@@ -352,13 +352,12 @@ function DataTable({ rows, loading, check, setCheck }) {
       console.log(result.data.landlords_id)
 
       result.data.landlords_id.map(async(row)=>{
-        // console.log(row)
+        console.log(row)
             const rent = await add_monthly_rent({
               agreement_id:selectID,
               landlord_id:row.id,
               amount : data[0].monthlyRent,
               rent_month :data[0].rent_month
-
             })
 
             if(rent.data.success){

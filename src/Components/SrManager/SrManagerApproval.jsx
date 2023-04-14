@@ -174,6 +174,9 @@ function SrManagerApproval() {
           <HamburgerMenu
           handleListing={() => navigate("/srManagerListing")}
           navigateHome={"srManagerDashboard"}
+          monthlyRent={() => navigate("/srm-monthly-rent")}
+          renewal={() => navigate("/srm-monthly-rent")}
+          monthlyBtn="true"
         />
           <Box sx={{ flexGrow: 1 }}>
             <MyHeader>Rental Management System</MyHeader>

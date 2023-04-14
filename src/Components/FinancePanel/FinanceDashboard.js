@@ -24,6 +24,9 @@ function FinanceDashboard() {
         <HamburgerMenu
           navigateHome={"finance-dashboard"}
           handleListing={() => navigate("/finance-listing")}
+          monthlyRent={() => navigate("/finance-monthly-rent")}
+          renewal={() => navigate("/finance-monthly-rent")}
+          monthlyBtn="true"
         />
 
         {/* dashboard content */}

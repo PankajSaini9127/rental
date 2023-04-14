@@ -74,6 +74,9 @@ function SrManagerListing() {
           <HamburgerMenu
             navigateHome={"operationsDashboard"}
             handleListing={() => navigate("/operationsListing")}
+            monthlyRent={() => navigate("/opr-monthly-rent")}
+            renewal={() => navigate("/opr-monthly-rent")}
+            monthlyBtn="true"
           />
           <ListingComponent
             title1={'Rental Management System'}
