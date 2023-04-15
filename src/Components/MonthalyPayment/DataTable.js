@@ -101,7 +101,7 @@ function DataTable() {
 
       
         {
-          e.row.status === "Hold" && (
+          (e.row.status === "Hold" || e.row.status === "Pending") && (
             <Grid item xs={6}>
             <Button
               variant="contained"
