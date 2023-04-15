@@ -17,7 +17,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { DocumentUpload } from "../StyledComponent";
 import { setAlert } from "../../store/action/action";
 import { useDispatch } from "react-redux";
-import { uploadDoc } from "../../Services/Services";
+import { invoice_validation, uploadDoc } from "../../Services/Services";
+import { Try } from "@mui/icons-material";
 
 const labelStyle = {
   fontSize: "20px",
@@ -56,7 +57,6 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
   },[value.rentAmount,value.gstAmount])
    
 
-  const [error,setError] = useState({})
 
   function onChange(e) {
 
@@ -91,9 +91,10 @@ if(!error)
     return yyyy + "-" + mm + "-" + dd;
   };
 
+const [error,serError] = useState(false)
 
   function validate() {
-    let error = false;
+    // let error = false;
 
     let fields = [
       "invoiceNo"
@@ -112,7 +113,7 @@ if(!error)
       {
        console.log(value[row].length)
        setFormError(old=>({...old,[row] : "Field is required."}));
-        error = true
+        serError(true)
      }
     })
 
@@ -161,6 +162,21 @@ if(!error)
     }
   }
 
+ async function handleValidateInvoiceNo (){
+   try {
+     const validate = await invoice_validation(value.invoiceNo)
+    if(validate.data.alreadyInvoice){
+      setFormError(old=>({...old,invoiceNo : "Invoice Number Already Added."}))
+      serError(true)
+    }else{
+      setFormError(old=>({...old,invoiceNo : ""}))
+      serError(false)
+    }
+  } catch (error) {
+    
+  }
+ }
+
   return (
     <>
       <Dialog
@@ -198,6 +214,7 @@ if(!error)
                   name="invoiceNo"
                   sx={fieldStyle}
                   placeholder="Invoice Number"
+                  onBlur={handleValidateInvoiceNo}
                 />
                 <Typography variant="caption" color="red" mt={1}>
                   {formError.invoiceNo}

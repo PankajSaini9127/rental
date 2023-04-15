@@ -84,6 +84,11 @@ export async function get_agreement_code (code) {
 }  
 
 
+//invoice  number validation
+export async function invoice_validation (invoiceNo) {
+    return axios.get(`${API_LIVE}/api/get-invoice-number-validate/${invoiceNo}`)
+}
+
 export async function delete_agreement (id){
     return await axios.delete(`${API_LIVE}/api/delAgreement/${id}`)
 }

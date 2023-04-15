@@ -370,6 +370,7 @@ function DataTable() {
         sx={{
           height: "430px",
           px: 2,
+          overflow:"auto",
           "& .dataGridHeader": {
             color: "#CACACA",
             textAlign: 'left'
