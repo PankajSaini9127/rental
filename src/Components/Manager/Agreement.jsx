@@ -1402,8 +1402,8 @@ function Agreement({ history }) {
                         />
 
                         <TextFieldWrapper
-                          label="Benificiary Name"
-                          placeHolder="Enter Benificiary Name"
+                          label="Beneficiary Name"
+                          placeHolder="Enter Beneficiary Name"
                           name="benificiaryName"
                           onBlur={(e) => handleOnBlur(e, i)}
                           value={

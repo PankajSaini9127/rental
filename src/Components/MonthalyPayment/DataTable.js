@@ -370,7 +370,8 @@ function DataTable() {
         sx={{
           height: "430px",
           px: 2,
-          overflow:"auto",
+          overflowX:"scroll",
+          width:"100%",
           "& .dataGridHeader": {
             color: "#CACACA",
             textAlign: 'left'
@@ -405,7 +406,7 @@ function DataTable() {
           pageSize={6}
           rowsPerPageOptions={[6]}
           loading={loading}
-          sx={{ color: "black !important", minWidth: "50px" }}
+          sx={{ color: "black !important", minWidth: "50px" ,overflow:"auto",}}
           getCellClassName={(parms) => {
             let cellClass = []
             if (parms.field === "status" && (parms.row.status === "Paid")) {
