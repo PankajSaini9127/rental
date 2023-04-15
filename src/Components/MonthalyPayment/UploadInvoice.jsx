@@ -60,6 +60,12 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
 
   function onChange(e) {
 
+    if(e.target.name === "invoiceDate"){
+      setValue({
+        ...value,
+        [e.target.name]: e.target.value,
+      });
+    }
 
     let error = false
     
@@ -79,7 +85,7 @@ if(!error)
 
   const disablePastDate = () => {
     const today = new Date();
-    const dd = String(today.getDate() + 1).padStart(2, "0");
+    const dd = String(today.getDate() + 0).padStart(2, "0");
     const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
     const yyyy = today.getFullYear();
     return yyyy + "-" + mm + "-" + dd;

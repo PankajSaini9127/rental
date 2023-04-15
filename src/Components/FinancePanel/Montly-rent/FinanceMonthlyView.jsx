@@ -71,10 +71,23 @@ export default function FinanceMonthlyRentView() {
     // console.log(send)
   }
 
-  function handleSendBack() {}
+  async function handleSendBack() {
+    try {
+      const send = await sendMonthyPaymentForword(id,{status:"Sent Back From Finance"})
+      console.log(send.data.success)
+     if(send.data.success){
+      dispatch(setAlert({open:true,variant:"success",message:"Sent Back To Manager Successfully."}))
+       navigate(-1)
+     }else{
+      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+     }
+    } catch (error) {
+      console.log(error)
+      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+    }
+      
+    }
 
-  ///dummy
-  const status = "Sent To Operations";
   return (
     <>
       <Stack sx={{ flexDirection: "row", mb: 4 }}>

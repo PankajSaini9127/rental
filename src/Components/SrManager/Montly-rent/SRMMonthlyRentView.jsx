@@ -80,20 +80,33 @@ useEffect(()=>{
     // console.log(send)
   }
 
-  function handleSendBack() {}
+ async function handleSendBack() {
+  try {
+    const send = await sendMonthyPaymentForword(id,{status:"Sent Back From Sr Manager"})
+    console.log(send.data.success)
+   if(send.data.success){
+    dispatch(setAlert({open:true,variant:"success",message:"Sent Back To Manager Successfully."}))
+     navigate(-1)
+   }else{
+    dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+   }
+  } catch (error) {
+    console.log(error)
+    dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+  }
+    
+  }
 
-  ///dummy
-  const status = "Sent To Operations";
   return (
     <>
       <Stack sx={{ flexDirection: "row", mb: 4 }}>
         {/* <a id="button"></a> */}
 
         <HamburgerMenu
-          navigateHome={"operationsDashboard"}
-          handleListing={() => navigate("/operationsListing")}
-          monthlyRent={() => navigate("/opr-monthly-rent")}
-          renewal={() => navigate("/opr-monthly-rent")}
+          handleListing={() => navigate("/srManagerListing")}
+          navigateHome={"srManagerDashboard"}
+          monthlyRent={() => navigate("/srm-monthly-rent")}
+          renewal={() => navigate("/srm-monthly-rent")}
           monthlyBtn="true"
         />
 
