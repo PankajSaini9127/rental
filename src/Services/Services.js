@@ -78,6 +78,12 @@ export async function get_agreement_id (id) {
     return axios.post(`${API_LIVE}/api/agreement/${id}`)
 }   
 
+//get monthly rent details by code
+export async function get_agreement_code (code) {
+    return axios.get(`${API_LIVE}/api/get-monthly-rent-by-code/${code}`)
+}  
+
+
 export async function delete_agreement (id){
     return await axios.delete(`${API_LIVE}/api/delAgreement/${id}`)
 }

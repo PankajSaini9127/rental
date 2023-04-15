@@ -9,10 +9,10 @@ import axios from 'axios'
 
 //
 import PermissionAlert from '../Manager/Alert';
-import { add_invoice, get_monthaly_rent, get_monthly_rent, listMonthRent } from '../../Services/Services';
+import { add_invoice, get_monthaly_rent, get_monthly_rent, listMonthRent, sendMonthyPaymentForword } from '../../Services/Services';
 import UploadInvoice from './UploadInvoice';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAlert } from '../../store/action/action';
+import { setAlert, setRefreshBox } from '../../store/action/action';
 
 
 function DataTable() {
@@ -23,7 +23,7 @@ function DataTable() {
 
   const [loading, setLoading] = useState(false)
 
-  const { auth } = useSelector(state => state)
+  const { auth ,refresh} = useSelector(state => state)
 
 
 
@@ -46,7 +46,7 @@ function DataTable() {
 
   useEffect(() => {
     APICALL()
-  }, [])
+  }, [refresh])
 
   const month = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -87,21 +87,22 @@ function DataTable() {
 
   const navigate = useNavigate()
 
-  const onRowsSelectionHandler = (ids) => {
-
-    const id = ids[0]
-    // navigate(`/managerApproval/${id}`)
-  };
 
   const [selectID, setSelectID] = useState(0)
 
   const gstUploadButton = (e) => {
     const id = e.id;
+    // console.log(">>>>>>",e.row.code)
+    const code = e.row.code;
 
     return (
       <>
+      <Grid container spacing={5}>
+
+      
         {
           e.row.status === "Hold" && (
+            <Grid item xs={6}>
             <Button
               variant="contained"
               color="primary"
@@ -121,8 +122,59 @@ function DataTable() {
               }}
             >
               Upload
-            </Button>)
+            </Button>
+            </Grid>
+            )
         }
+        {
+          (e.row.status === "Sent Back From Sr Manager"|| 
+          e.row.status === "Sent Back From Operations" || 
+          e.row.status === "Sent Back From Finance" )&& (
+            <Grid item xs={6}>
+            <Button
+            variant="contained"
+            size="small"
+            style={{
+              backgroundColor: "#97999c",
+              color: "white",
+              fontSize: "12px",
+              textTransform: "capitalize",
+              // width:"100%"
+            }}
+            onClick={(e) => {
+              e.stopPropagation(); // don't select this row after clicking
+              navigate(`/monthly-payment-edit/${id}`)
+            }}
+          >
+            Edit
+          </Button>
+          </Grid>
+          )
+        }
+        <Grid item xs={6}>
+        <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              style={{
+                backgroundColor: "rgb(103 185 68 / 89%)",
+                color: "white",
+                fontSize: "12px",
+                textTransform: "capitalize",
+                // width:"100%"
+              }}
+              onClick={(e) => {
+                e.stopPropagation(); // don't select this row after clicking
+                navigate(`/monthly-payment-view/${code}`);
+                // setSelectID(id)
+                // setOpen(true)
+
+              }}
+            >
+              View
+            </Button>
+            </Grid>
+            </Grid>
       </>
 
     );
@@ -155,7 +207,7 @@ function DataTable() {
       renderCell: (params) => (
         <>
           {/* {console.log(ids.includes(params.id))} */}
-          {params.formattedValue === "Hold" ? (
+          {params.formattedValue === "Pending" ? (
             <Checkbox
               onChange={handleSwitch}
               name={params.id}
@@ -171,80 +223,82 @@ function DataTable() {
     {
       field: "code",
       headerName: "Code",
-      width: 70,
       flex: 1,
+      width: 50,
       type: "number",
-      headerAlign: "center",
-    },
-    {
-      field: "utr_no",
-      headerName: "UTR Number",
-      width: 100,
-      headerAlign: "center",
-      flex: 1
-
-    },
-    {
-      field: "landlord_name",
-      headerName: "Landlord Name",
-      width: 100,
-      headerAlign: "center",
-      flex: 1
-    },
-    {
-      field: "location",
-      headerName: "Location",
-      width: 150,
-      headerAlign: "center",
-      flex: 1
-
-    },
-
-    {
-      field: "gst",
-      headerName: "GST",
-      width: 100,
-      headerAlign: "center",
-      flex: 1
-
-    },
-    {
-      field: "share",
-      headerName: "Percentage Share",
-      width: 150,
       headerAlign: "center",
     },
     {
       field: "rent_date",
       headerName: "Rent Date",
       headerAlign: "center",
-      flex: 1
+      flex: 1,
+      width:70
+    },
+    {
+      field: "landlord_name",
+      headerName: "Landlord Name",
+      headerAlign: "center",
+      flex: 1,
+      width: 100,
+    },
+    {
+      field: "location",
+      headerName: "Location",
+      headerAlign: "center",
+      flex: 1,
+      width: 100,
+
+    },
+    {
+      field: "gst",
+      headerName: "GST",
+      headerAlign: "center",
+      flex: 1,
+      width: 120,
+
     },
     {
       field: "monthly_rent",
       headerName: "Month Rent",
       headerAlign: "center",
-      flex: 1
+      // flex: 1,
+      width:100
     },
-
+    {
+      field: "share",
+      headerName: "Percentage Share",
+      headerAlign: "center",
+      width: 90,
+    },
     {
       field: "rent_amount",
       headerName: "Payable Amount",
       headerAlign: "center",
-      flex: 1
+      flex: 1,
+       width:100
     },
     {
       field: "status",
       headerName: "Status",
       headerAlign: "center",
+      // flex: 1,
       width: 200,
-      flex: 1
+    },
+    {
+      field: "utr_no",
+      headerName: "UTR Number",
+      headerAlign: "center",
+      flex: 1,
+      width: 150,
+
     },
     {
       field: "action",
       headerName: "Action",
       headerAlign: "center",
-      flex: 1,
+      // flex: 1,
+      width:130,
       renderCell: gstUploadButton
     }
 
@@ -263,6 +317,7 @@ function DataTable() {
 
       if (addInvoice.data.success) {
         dispatch(setAlert({ open: true, variant: "success", message: "Invoice Details Submited & Sent To Manger" }))
+        dispatch(setRefreshBox())
         setOpen(false)
       } else {
         dispatch(setAlert({ open: true, variant: "error", message: "Some Error Occured Please Try Again Later." }))
@@ -274,7 +329,20 @@ function DataTable() {
 
   }
 
-
+ function handleHold (){
+  ids.map(async(id)=>{
+    const send = await sendMonthyPaymentForword(id,{status:"Hold",manager_id:auth.id})
+    console.log(send.data.success)
+   if(send.data.success){
+    dispatch(setAlert({open:true,variant:"success",message:"Payment Details Set On Hold."}))
+    dispatch(setRefreshBox())
+    //  navigate(-1)
+   }else{
+    dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+   }
+  })
+  
+}
 
 
   return (
@@ -284,9 +352,9 @@ function DataTable() {
           <Button
             variant="contained"
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
-            onClick={() => {}}
+            onClick={() => {handleHold()}}
           >
-            Send To Sr Manager
+            Hold
           </Button>
         </Box>
       )}
@@ -339,16 +407,18 @@ function DataTable() {
           sx={{ color: "black !important", minWidth: "50px" }}
           getCellClassName={(parms) => {
             let cellClass = []
-            if (parms.field === "status" && parms.row.status === "Approved") {
+            if (parms.field === "status" && (parms.row.status === "Paid")) {
               cellClass.push("green statusCell");
             } else if (
               parms.field === "status" &&
-              (parms.row.status === "Hold" || parms.row.status === "Sent To Sr Manager" || parms.row.status === "Sent To Operations" || parms.row.status === "Sent To Finance")
+              (parms.row.status === "Pending" ||parms.row.status === "Hold" || parms.row.status === "Sent To Sr Manager" || parms.row.status === "Sent To Operations" || parms.row.status === "Sent To Finance")
             ) {
               cellClass.push("yellow statusCell");
             } else if (
               parms.field === "status" &&
-              parms.row.status === "Rejected"
+              (parms.row.status === "Sent Back From Sr Manager"  || parms.row.status === "Sent Back From BUH" ||
+              parms.row.status === "Sent Back From Operations" || parms.row.status === "Sent Back From Finance"
+              )
             ) {
               cellClass.push("red statusCell");
             }

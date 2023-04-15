@@ -19,7 +19,7 @@ function OperationsMonthlyPayement() {
         />
         <ListingComponent
           title1="Rental Management System"
-          title="Rental Agreement"
+          title="Monthly Payment"
           buttonText="Upload"
         //   options={options}
           value={"New Agreement"}
