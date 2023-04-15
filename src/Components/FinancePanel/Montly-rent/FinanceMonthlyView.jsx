@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import HamburgerMenu from "../../HamburgerMenu";
 
 import {
+  DocumentUpload,
   MyHeader,
   TextFieldWrapper,
 } from "../../StyledComponent";
@@ -13,7 +14,7 @@ import {
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { useDispatch, useSelector } from "react-redux";
 import { DocumentView } from "../../StyleComponents/Rental";
-import { setAlert } from "../../../store/action/action";
+import { setAlert, setRefreshBox } from "../../../store/action/action";
 import { get_rent_data_ID, sendMonthyPaymentForword } from "../../../Services/Services";
 
 export default function FinanceMonthlyRentView() {
@@ -67,7 +68,20 @@ export default function FinanceMonthlyRentView() {
   }, []);
 
   async function handleSubmit(e) {
-    
+    try {
+      const send = await sendMonthyPaymentForword(id,{status:"Paid"})
+      // console.log(send.data.success)
+     if(send.data.success){
+      dispatch(setAlert({open:true,variant:"success",message:"Approved Successfully."}))
+      dispatch(setRefreshBox())
+       navigate(-1)
+     }else{
+      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+     }
+    } catch (error) {
+      console.log(error)
+      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+    }
     // console.log(send)
   }
 
@@ -77,6 +91,7 @@ export default function FinanceMonthlyRentView() {
       console.log(send.data.success)
      if(send.data.success){
       dispatch(setAlert({open:true,variant:"success",message:"Sent Back To Manager Successfully."}))
+      dispatch(setRefreshBox())
        navigate(-1)
      }else{
       dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
@@ -166,11 +181,16 @@ export default function FinanceMonthlyRentView() {
                   // onBlur={(e) => handleOnBlur(e, i)}
                   // error={ }
                 />
-                <Grid item xs={12} container>
-                <DocumentView
-                    title={"Invoice"}
-                    img={preData.invoice}
-                  />
+                <Grid item xs={12} container spacing={2}>
+                  <Grid item xs={4}>
+                   <DocumentUpload
+                      label="Invoice"
+                      disabled={true}
+                      placeHolder="Invoice"
+                      name={"invoice"}
+                      href={preData.invoice}
+                    />
+                    </Grid>
                 </Grid>
               </Grid>
             </Grid>
@@ -201,7 +221,7 @@ export default function FinanceMonthlyRentView() {
                 </Grid> */}
                 <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                   <Grid container spacing={1} sx={{ justifyContent: "center" }}>
-                    <Grid item md={4} xs={11}>
+                    <Grid item md={5} xs={11}>
                       <Button
                         variant="contained"
                         sx={{
@@ -219,7 +239,7 @@ export default function FinanceMonthlyRentView() {
                         Approve
                       </Button>
                     </Grid>
-                    <Grid item md={4} xs={11}>
+                    <Grid item md={5} xs={11}>
                       <Button
                         variant="outlined"
                         sx={{

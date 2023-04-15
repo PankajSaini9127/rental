@@ -184,6 +184,7 @@ const DocumentUpload = ({
   uploaded,
   error,
   href,
+  disabled
 }) => {
   const [imgView,setImgView] =useState(false)
 
@@ -222,6 +223,7 @@ const DocumentUpload = ({
             "@media(max-width:900px)": { height: "35px" },
           }}
           component="label"
+          disabled={disabled}
         >
           <Typography
             sx={{

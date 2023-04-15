@@ -60,7 +60,7 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
 
   function onChange(e) {
 
-    if(e.target.name === "invoiceDate"){
+    if(e.target.name === "invoiceDate" || e.target.name === "invoiceNo"){
       setValue({
         ...value,
         [e.target.name]: e.target.value,

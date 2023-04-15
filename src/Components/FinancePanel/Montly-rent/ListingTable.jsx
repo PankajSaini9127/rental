@@ -18,7 +18,7 @@ export default function ListingTable() {
     const [agIDS,setAgIds] = useState([])
     const [rentData,setRent] = useState({})
 
-    const {auth} = useSelector(s=>s)
+    const {auth,refresh} = useSelector(s=>s)
 
     async function fetchData(id){
       try {
@@ -38,7 +38,7 @@ export default function ListingTable() {
   
     useEffect(()=>{
       fetchData(auth.id)
-    },[])
+    },[refresh])
 
     const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
@@ -89,16 +89,18 @@ export default function ListingTable() {
       };
     
       const handleSwitch = (e) => {
-        console.log(ids);
-        if (ids.includes(e.target.name)) {
-          console.log("out");
-          setIds(ids.filter((i) => i !== e.target.name));
+
+        let idVar = Number(e.target.name)
+        if (ids.includes(idVar)) {
+          // console.log("out");
+          setIds(ids.filter((i) => i !== idVar));
         } else {
-          console.log("in", e.target.name, ids);
-          setIds([...ids, e.target.name]);
+          // console.log("in", idVar, ids);
+          setIds([...ids, idVar]);
         }
       };
-
+    
+    
       const columns = [
         {
           field: "checkbox",
@@ -108,12 +110,12 @@ export default function ListingTable() {
           headerAlign: "center",
           renderCell: (params) => (
             <>
-              {/* {console.log(params)} */}
-              {(params.formattedValue === "Sent To Finance") ? (
+              {/* {console.log(ids.includes(params.id))} */}
+              {params.formattedValue === "Hold" ? (
                 <Checkbox
                   onChange={handleSwitch}
                   name={params.id}
-                  checked={ids.includes(params.id)}
+                  checked={ids.includes(params.id) ? true : false}
                 />
               ) : (
                 <Checkbox disabled={true} />
@@ -121,105 +123,85 @@ export default function ListingTable() {
             </>
           ),
         },
+    
         {
-            field: "code",
-            headerName: "Code",
-            width: 130,
-            type: "number",
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1
-          },
-          {
-            field: "utr",
-            headerName: "UTR Number",
-            width: 150,
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1
-          },
-          // {
-          //   field: "srmanager",
-          //   headerName: "Sr Manager Name",
-          //   width: 150,
-          //   headerClassName: "dataGridHeader",
-          //   headerAlign: "center",
-          //   flex:1
-          // },
-          {
-            field: "name",
-            headerName: "Landlord Name",
-            width: 200,
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1
-          },
-          {
-            field: "location",
-            headerName: "Location",
-            width: 230,
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1
-          },
-          {
-            field: "gst",
-            headerName: "GST Number",
-            width: 200,
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1,
-          },
-          {
-            field: "percentage",
-            headerName: "Percentage Share",
-            width: 200,
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1,
-          },
-          {
-            field: "month_of_rent",
-            headerName: "Rent Month",
-            width: 230,
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1
-          },
-          {
-            field: "total_month_rent",
-            headerName: "Total Month Rent",
-            width: 200,
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1,
-          },
-          {
-            field: "payable_amount",
-            headerName: "Payable Amount",
-            width: 200,
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1
-          },
-          {
-            field: "status",
-            headerName: "Status",
-            width: 200,
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1,
-          },
-          {
-            field: "action",
-            headerName: "Action",
-            width: 200,
-            headerClassName: "dataGridHeader",
-            headerAlign: "center",
-            flex:1,
-            renderCell:renderDetailsButton
-          }
-        
+          field: "code",
+          headerName: "Code",
+          width: 70,
+          flex: 1,
+          type: "number",
+          headerAlign: "center",
+        },
+        {
+          field: "month_of_rent",
+          headerName: "Rent Date",
+          headerAlign: "center",
+          flex: 1
+        },
+        {
+          field: "name",
+          headerName: "Landlord Name",
+          width: 100,
+          headerAlign: "center",
+          flex: 1
+        },
+        {
+          field: "location",
+          headerName: "Location",
+          width: 150,
+          headerAlign: "center",
+          flex: 1
+    
+        },
+        {
+          field: "gst",
+          headerName: "GST",
+          width: 100,
+          headerAlign: "center",
+          flex: 1
+    
+        },
+        {
+          field: "total_month_rent",
+          headerName: "Month Rent",
+          headerAlign: "center",
+          flex: 1
+        },
+        {
+          field: "percentage",
+          headerName: "Percentage Share",
+          width: 150,
+          headerAlign: "center",
+        },
+        {
+          field: "payable_amount",
+          headerName: "Payable Amount",
+          headerAlign: "center",
+          flex: 1
+        },
+        {
+          field: "status",
+          headerName: "Status",
+          headerAlign: "center",
+          width: 200,
+          flex: 1
+        },
+        {
+          field: "utr",
+          headerName: "UTR Number",
+          width: 100,
+          headerAlign: "center",
+          flex: 1
+    
+        },
+        {
+          field: "action",
+          headerName: "Action",
+          headerAlign: "center",
+          flex: 1,
+          renderCell: renderDetailsButton
+        }
+    
       ];
 
       function sendToOperations (){
@@ -236,7 +218,7 @@ export default function ListingTable() {
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
             onClick={sendToOperations}
           >
-            Send To Operations
+            Approve
           </Button>
         </Box>
       )}
@@ -288,7 +270,7 @@ export default function ListingTable() {
             let cellClass = [];
             if (
               parms.field === "status" &&
-              (parms.row.status === "Approved" || parms.row.status === "Deposited")
+              (parms.row.status === "Paid")
             ) {
               cellClass.push("green statusCell");
             } else if (

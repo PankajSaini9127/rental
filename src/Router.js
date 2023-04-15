@@ -54,6 +54,8 @@ import OperationsMonthlyPayement from "./Components/Operations/Montly-rent/Month
 import MonthalyRentView from "./Components/Operations/Montly-rent/MonthalyRentView";
 import SRMMonthlyRentView from "./Components/SrManager/Montly-rent/SRMMonthlyRentView";
 import FinanceMonthlyRentView from "./Components/FinancePanel/Montly-rent/FinanceMonthlyView";
+import EditInvoice from "./Components/MonthalyPayment/EditInvoice";
+import ViewPage from "./Components/MonthalyPayment/ViewPage";
 
 function MyRouter() {
   const history = useNavigate();
@@ -93,6 +95,20 @@ function MyRouter() {
         path="/monthly-payment"
         element={isAuth && role.includes("Manager")  ? <MonthalyList /> : <Login />}
       />
+      <Route
+        exact
+        path="/monthly-payment-edit/:id"
+        element={isAuth && role.includes("Manager")  ? <EditInvoice /> : <Login />}
+      />
+       <Route
+        exact
+        path="/monthly-payment-view/:code"
+        element={isAuth && role.includes("Manager")  ? <ViewPage /> : <Login />}
+      />
+
+
+
+
       <Route
         exact
         path="/renewal"

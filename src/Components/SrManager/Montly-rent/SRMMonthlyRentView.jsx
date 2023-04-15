@@ -14,7 +14,7 @@ import {
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { get_rent_data_ID, sendMonthyPaymentForword, uploadDoc } from "../../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
-import { setAlert } from "../../../store/action/action";
+import { setAlert, setRefreshBox } from "../../../store/action/action";
 import { DocumentView } from "../../StyleComponents/Rental";
 import { SensorDoor } from "@mui/icons-material";
 
@@ -86,6 +86,7 @@ useEffect(()=>{
     console.log(send.data.success)
    if(send.data.success){
     dispatch(setAlert({open:true,variant:"success",message:"Sent Back To Manager Successfully."}))
+    dispatch(setRefreshBox())
      navigate(-1)
    }else{
     dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
@@ -175,11 +176,17 @@ useEffect(()=>{
                   // onBlur={(e) => handleOnBlur(e, i)}
                   // error={ }
                 />
-                <Grid item xs={12} container>
-                <DocumentView
-                    title={"Invoice"}
-                    img={preData.invoice}
-                  />
+                
+                  <Grid item xs={12} container spacing={2}>
+                  <Grid item xs={4}>
+                   <DocumentUpload
+                      label="Invoice"
+                      disabled={true}
+                      placeHolder="Invoice"
+                      name={"invoice"}
+                      href={preData.invoice}
+                    />
+                    </Grid>
                 </Grid>
               </Grid>
             </Grid>
@@ -210,7 +217,7 @@ useEffect(()=>{
                 </Grid> */}
                 <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                   <Grid container spacing={1} sx={{ justifyContent: "center" }}>
-                    <Grid item md={4} xs={11}>
+                    <Grid item md={6} xs={11}>
                       <Button
                         variant="contained"
                         sx={{
@@ -228,7 +235,7 @@ useEffect(()=>{
                         Approve And Send To Operations
                       </Button>
                     </Grid>
-                    <Grid item md={4} xs={11}>
+                    <Grid item md={6} xs={11}>
                       <Button
                         variant="outlined"
                         sx={{

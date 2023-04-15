@@ -361,8 +361,7 @@ function DataTable({ rows, loading, check, setCheck }) {
               location : row.location,
               gst : row.gst,
               utr_no : row.utr_no,
-              status : "Hold"
-
+              status : "Pending"
             })
       }))
       .then((response)=>{

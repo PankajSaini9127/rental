@@ -3,25 +3,25 @@ import { Stack } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import HamburgerMenu from "../../HamburgerMenu";
+import HamburgerMenu from "../HamburgerMenu";
 
 import {
   DocumentUpload,
   MyHeader,
   TextFieldWrapper,
-} from "../../StyledComponent";
+} from "../StyledComponent";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import {
   get_rent_data_ID,
   sendMonthyPaymentForword,
   uploadDoc,
-} from "../../../Services/Services";
+} from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
-import { setAlert, setRefreshBox } from "../../../store/action/action";
+import { setAlert } from "../../store/action/action";
 import { CloseFullscreen } from "@mui/icons-material";
 
-export default function MonthalyRentView() {
+export default function EditInvoice() {
   const navigate = useNavigate();
   const { id } = useParams();
 
@@ -148,7 +148,7 @@ useEffect(()=>{
 
   async function handleSubmit(e) {
     const send = await sendMonthyPaymentForword(id, {
-      status: "Sent To Finance",
+      status: preData.status === "Sent Back From Operations"?"Sent To Operations":"Sent To Sr Manager",
       op_id: auth.id,
       rent_amount:  preData.rent_amount ,
       gst_amount:   preData.gst_amount,
@@ -160,10 +160,9 @@ useEffect(()=>{
         setAlert({
           open: true,
           variant: "success",
-          message: "Payment Details Send To Finance Successfully.",
+          message: preData.status === "Sent Back From Operations"?"Payment Details Send To Operations Successfully.":"Payment Details Send To Sr Manager Successfully.",
         })
       );
-      dispatch(setRefreshBox())
       navigate(-1);
     } else {
       dispatch(
@@ -204,11 +203,11 @@ useEffect(()=>{
         {/* <a id="button"></a> */}
 
         <HamburgerMenu
-          navigateHome={"operationsDashboard"}
-          handleListing={() => navigate("/operationsListing")}
-          monthlyRent={() => navigate("/opr-monthly-rent")}
-          renewal={() => navigate("/opr-monthly-rent")}
-          monthlyBtn="true"
+      navigateHome={'dashboard'}
+          handleListing={()=>navigate('/listing')}
+          monthlyRent={() => navigate("/monthly-payment")}
+          renewal={() => navigate(`/renewal`)}
+          monthlyBtn='true'
         />
 
         <Box sx={{ flexGrow: 1 }}>
@@ -236,7 +235,8 @@ useEffect(()=>{
                     label="Invoice Number"
                     placeHolder="Enter Invoice Number"
                     value={preData.invoice_no}
-                    disabled={true}
+                    // disabled={true}
+                    onChange={(e) => handleChange(e)}
                     name="invoice_no"
                   />
                   <TextFieldWrapper
@@ -244,17 +244,19 @@ useEffect(()=>{
                     label="Invoice Date"
                     placeHolder="Enter Invoice Date"
                     value={preData.invoice_date}
-                    disabled={true}
+                    // disabled={true}
+                    onChange={(e) => handleChange(e)}
                     name="invoice_date"
                   />
-                  {/* <TextFieldWrapper
+                  <TextFieldWrapper
                     required={true}
                     label="Year"
                     placeHolder="Enter Invoice Date"
                     value={preData.invoice_date}
-                    disabled={true}
+                    // disabled={true}
+                    onChange={(e) => handleChange(e)}
                     name="invoice_date"
-                  /> */}
+                  />
                   <TextFieldWrapper
                     required={true}
                     label="Rent Amount"
@@ -262,6 +264,7 @@ useEffect(()=>{
                     value={preData.rent_amount}
                     onChange={(e) => handleChange(e)}
                     name="rent_amount"
+                    disabled={preData.status === "Sent Back From Operations"?true:false}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />
@@ -272,6 +275,7 @@ useEffect(()=>{
                     value={preData.gst_amount}
                     onChange={(e) => handleChange(e)}
                     name="gst_amount"
+                    disabled={preData.status === "Sent Back From Operations"?true:false}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />
@@ -301,7 +305,11 @@ useEffect(()=>{
 
               {/* Buttons start here*/}
 
-              {preData.status === "Sent To Operations" && (
+              {(preData.status === "Sent To Sr Manager"
+                ||preData.status === "Sent Back From Sr Manager" 
+                || preData.status === "Sent Back From Operations"
+                || preData.status === "Sent Back From Finance"
+              ) && (
                 <>
                   {/* <Grid
                   item
@@ -344,7 +352,7 @@ useEffect(()=>{
                           }}
                           onClick={handleSubmit}
                         >
-                          Approve And Send To Finance
+                         {preData.status === "Sent Back From Operations"? "Approve And Send To Operations":"Approve And Send To Sr Manager"}
                         </Button>
                       </Grid>
                       <Grid item md={6} xs={11}>
