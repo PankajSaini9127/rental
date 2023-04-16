@@ -2,9 +2,10 @@ import { Button, Checkbox } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { get_monthlt_rent_srm } from '../../../Services/Services';
+import { get_monthlt_rent_srm, sendMonthyPaymentForword } from '../../../Services/Services';
+import { setAlert, setRefreshBox } from '../../../store/action/action';
 
 
 
@@ -16,6 +17,8 @@ export default function ListingTable() {
 
     const [ids, setIds] = useState([]);
     const navigate = useNavigate()
+
+    const dispatch = useDispatch()
 
     const [agIDS,setAgIds] = useState([])
     const [rentData,setRent] = useState({})
@@ -67,10 +70,36 @@ console.log(data)
     fetchData(auth.id)
   },[refresh])
 
-      function sendToOperations (){
-
+     async function sendToOperations (){
+        ids.map(async (id) => {
+          const send = await sendMonthyPaymentForword(id, {
+            status: "Sent To Operations",
+            srm_id: auth.id,
+          });
+          console.log(send.data.success);
+          if (send.data.success) {
+            dispatch(
+              setAlert({
+                open: true,
+                variant: "success",
+                message: "Payment Details Sent To Operations.",
+              })
+            );
+            dispatch(setRefreshBox());
+            //  navigate(-1)
+          } else {
+            dispatch(
+              setAlert({
+                open: true,
+                variant: "error",
+                message: "Something Went Wrong Please Try Again Later.",
+              })
+            );
+          }
+        });
       }
 
+      //handle check box 
       const handleSwitch = (e) => {
 
         let idVar = Number(e.target.name)
@@ -94,7 +123,7 @@ console.log(data)
           renderCell: (params) => (
             <>
               {/* {console.log(ids.includes(params.id))} */}
-              {params.formattedValue === "Hold" ? (
+              {params.formattedValue === "Sent To Sr Manager" ? (
                 <Checkbox
                   onChange={handleSwitch}
                   name={params.id}
@@ -110,7 +139,7 @@ console.log(data)
         {
           field: "code",
           headerName: "Code",
-          width: 70,
+          minWidth: 70,
           flex: 1,
           type: "number",
           headerAlign: "center",
@@ -124,14 +153,14 @@ console.log(data)
         {
           field: "name",
           headerName: "Landlord Name",
-          width: 100,
+          minWidth: 100,
           headerAlign: "center",
           flex: 1
         },
         {
           field: "location",
           headerName: "Location",
-          width: 150,
+          minWidth: 150,
           headerAlign: "center",
           flex: 1
     
@@ -139,7 +168,15 @@ console.log(data)
         {
           field: "gst",
           headerName: "GST",
-          width: 100,
+          minWidth: 100,
+          headerAlign: "center",
+          flex: 1
+    
+        },
+        {
+          field: "manager",
+          headerName: "Manager Name",
+          minWidth: 100,
           headerAlign: "center",
           flex: 1
     
@@ -153,7 +190,7 @@ console.log(data)
         {
           field: "percentage",
           headerName: "Percentage Share",
-          width: 150,
+          minWidth: 150,
           headerAlign: "center",
         },
         {
@@ -166,13 +203,13 @@ console.log(data)
           field: "status",
           headerName: "Status",
           headerAlign: "center",
-          width: 200,
+          minWidth: 200,
           flex: 1
         },
         {
           field: "utr",
           headerName: "UTR Number",
-          width: 100,
+          minWidth: 100,
           headerAlign: "center",
           flex: 1
     
@@ -201,6 +238,7 @@ console.log(data)
             name:rentData[row].landlord_name,
             location:rentData[row].location,
             gst:rentData[row].gst,
+            manager:rentData[row].manager,
             percentage:rentData[row].share,
             month_of_rent: month [new Date(rentData[row].rent_date).getUTCMonth()] + " " + new Date(rentData[row].rent_date).getFullYear(),
             total_month_rent:rentData[row].monthly_rent,

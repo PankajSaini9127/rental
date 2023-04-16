@@ -57,8 +57,8 @@ export async function get_search (name){
 
 //manager sEction start here
 
-export async function get_agreements (){
-    return axios.get(`${API_LIVE}/api/agreements`)
+export async function get_agreements (manager_id){
+    return axios.get(`${API_LIVE}/api/agreements/${manager_id}`)
 }
 
 export async function add_agreement (data){
@@ -242,6 +242,6 @@ export async function setFinalAgreement (data){
 }
 
 // APIs for listMonthRent
-export async function listMonthRent (data){
-    return await axios.get(`${API_LIVE}/api/listMonthRent`)
+export async function listMonthRent (manager_id){
+    return await axios.get(`${API_LIVE}/api/listMonthRent/${manager_id}`)
 }

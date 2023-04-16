@@ -129,7 +129,7 @@ const [error,serError] = useState(false)
 
   const dispatch = useDispatch();
 
-
+//for invoice upload
   async function onfileChange(e) {
     const FD = new FormData();
     console.log(e.target.files[0]);
@@ -162,6 +162,7 @@ const [error,serError] = useState(false)
     }
   }
 
+  // invoice number validate in db
  async function handleValidateInvoiceNo (){
    try {
      const validate = await invoice_validation(value.invoiceNo)

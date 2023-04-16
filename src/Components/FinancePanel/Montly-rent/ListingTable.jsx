@@ -2,9 +2,10 @@ import { Button, Checkbox } from '@mui/material';
 import { Box } from '@mui/system';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { get_monthlt_rent_finance } from '../../../Services/Services';
+import { get_monthlt_rent_finance, sendMonthyPaymentForword } from '../../../Services/Services';
+import { setAlert, setRefreshBox } from '../../../store/action/action';
 
 
 
@@ -19,6 +20,9 @@ export default function ListingTable() {
     const [rentData,setRent] = useState({})
 
     const {auth,refresh} = useSelector(s=>s)
+
+
+    const dispatch = useDispatch()
 
     async function fetchData(id){
       try {
@@ -57,7 +61,10 @@ export default function ListingTable() {
             percentage:rentData[row].share,
             month_of_rent: month [new Date(rentData[row].rent_date).getUTCMonth()] + " " + new Date(rentData[row].rent_date).getFullYear(),
             total_month_rent:rentData[row].monthly_rent,
-            payable_amount: parseFloat(rentData[row].rent_amount).toFixed(2)
+            payable_amount: parseFloat(rentData[row].rent_amount).toFixed(2),
+            manager:rentData[row].manager_name,
+            operations:rentData[row].operations_name,
+            srm_name:rentData[row].srm_name
           }
         )
       })
@@ -111,7 +118,7 @@ export default function ListingTable() {
           renderCell: (params) => (
             <>
               {/* {console.log(ids.includes(params.id))} */}
-              {params.formattedValue === "Hold" ? (
+              {params.formattedValue === "Sent To Finance" ? (
                 <Checkbox
                   onChange={handleSwitch}
                   name={params.id}
@@ -162,6 +169,30 @@ export default function ListingTable() {
     
         },
         {
+          field: "manager",
+          headerName: "Manager",
+          width: 100,
+          headerAlign: "center",
+          flex: 1
+    
+        },
+        {
+          field: "srm_name",
+          headerName: "Sr Manager",
+          width: 100,
+          headerAlign: "center",
+          flex: 1
+    
+        },
+        {
+          field: "operations",
+          headerName: "Operations",
+          width: 100,
+          headerAlign: "center",
+          flex: 1
+    
+        },
+        {
           field: "total_month_rent",
           headerName: "Month Rent",
           headerAlign: "center",
@@ -204,8 +235,34 @@ export default function ListingTable() {
     
       ];
 
-      function sendToOperations (){
-
+      async function handleApprove (){
+        ids.map(async (id) => {
+          const send = await sendMonthyPaymentForword(id, {
+            status: "Paid",
+            finance_id: auth.id,
+          });
+          console.log(send.data.success);
+          if (send.data.success) {
+            dispatch(
+              setAlert({
+                open: true,
+                variant: "success",
+                message: "Approved.",
+              })
+            );
+            setIds([])
+            dispatch(setRefreshBox());
+            //  navigate(-1)
+          } else {
+            dispatch(
+              setAlert({
+                open: true,
+                variant: "error",
+                message: "Something Went Wrong Please Try Again Later.",
+              })
+            );
+          }
+        });
       }
 
 
@@ -216,7 +273,7 @@ export default function ListingTable() {
           <Button
             variant="contained"
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
-            onClick={sendToOperations}
+            onClick={handleApprove}
           >
             Approve
           </Button>

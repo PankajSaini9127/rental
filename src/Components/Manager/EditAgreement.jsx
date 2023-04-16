@@ -1510,7 +1510,7 @@ function EditAgreement({ history }) {
 
                           <TextFieldWrapper
                             required={true}
-                            label="Benificiary Name"
+                            label="Beneficiary Name"
                             onBlur={(e) => handleOnBlur(e, i)}
                             error={
                               formError.landlord[i] &&
@@ -1518,7 +1518,7 @@ function EditAgreement({ history }) {
                                 ? formError.landlord[i].benificiaryName
                                 : ""
                             }
-                            placeHolder="Enter Benificiary Name"
+                            placeHolder="Enter Beneficiary Name"
                             name="benificiaryName"
                             value={preData.landlord[i].benificiaryName}
                             onChange={(e) => handleChange(e, i)}
