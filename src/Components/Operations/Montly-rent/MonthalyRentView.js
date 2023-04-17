@@ -60,6 +60,8 @@ export default function MonthalyRentView() {
     invoice: "",
     fileName: "",
     status: "",
+    remark:"",
+    paymentDate:""
   });
 
   function getTotal() {
@@ -150,9 +152,13 @@ export default function MonthalyRentView() {
           gst_amount: response.data.data[0].gst_amount,
           status: response.data.data[0].status,
           dateMonth:
-            month[new Date(response.data.data[0].invoice_date).getUTCMonth()] +
+            month[new Date(response.data.data[0].rent_date).getUTCMonth()] +
             " " +
-            new Date(response.data.data[0].invoice_date).getFullYear(),
+            new Date(response.data.data[0].rent_date).getFullYear(),
+          remark:  response.data.data[0].remark,
+          paymentDate:new Date(response.data.data[0].payment_date).getDate() +" "+
+          month[new Date(response.data.data[0].rent_date).getUTCMonth()]+ " "+
+          new Date(response.data.data[0].payment_date).getFullYear()
         });
       }
     } catch (error) {
@@ -165,12 +171,14 @@ export default function MonthalyRentView() {
   }, []);
 
   async function handleSubmit(e) {
+    if(remark.length >0){
     const send = await sendMonthyPaymentForword(id, {
       status: "Sent To Finance",
       op_id: auth.id,
       rent_amount: preData.rent_amount,
       gst_amount: preData.gst_amount,
       invoice: preData.invoice,
+      remark:remark
     });
     console.log(send.data.success);
     if (send.data.success) {
@@ -192,13 +200,24 @@ export default function MonthalyRentView() {
         })
       );
     }
+  }else{
+    dispatch(
+      setAlert({
+        open: true,
+        variant: "error",
+        message: "Remark Required.",
+      })
+    )
+  }
     // console.log(send)
   }
 
   async function handleSendBack() {
+    if(remark.length > 0){
     try {
       const send = await sendMonthyPaymentForword(id, {
         status: "Sent Back From Operations",
+        remark : remark
       });
       console.log(send.data.success);
       if (send.data.success) {
@@ -229,6 +248,15 @@ export default function MonthalyRentView() {
         })
       );
     }
+  }else{
+    dispatch(
+      setAlert({
+        open: true,
+        variant: "error",
+        message: "Remark Required.",
+      })
+    )
+  }
   }
 
   console.log(preData);
@@ -270,6 +298,11 @@ export default function MonthalyRentView() {
                     value={preData.dateMonth}
                   />
                 </Grid>
+                { preData.status === "Paid" &&
+                <Grid container spacing={2} sx={{mb:2}}>
+           <DataFieldStyle field={"Payment Date"} value={preData.paymentDate}/>
+                  </Grid>
+               }
                 <Grid container spacing={2}>
                   <TextFieldWrapper
                     required={true}
@@ -369,6 +402,12 @@ export default function MonthalyRentView() {
                       href={preData.invoice}
                     />
                   </Grid>
+
+                  {
+                  preData.remark.length >0 && <Grid item xs={12} container spacing={2} sx={{mt:4}}>
+                  <DataFieldStyle field={"Remark"} value={preData.remark} />
+                </Grid>
+                }
                 </Grid>
               </Grid>
 
@@ -376,7 +415,7 @@ export default function MonthalyRentView() {
 
               {preData.status === "Sent To Operations" && (
                 <>
-                  {/* <Grid
+                  <Grid
                   item
                   xs={10}
                   sx={{ mt: 5 }}
@@ -395,7 +434,7 @@ export default function MonthalyRentView() {
                       onChange={(e) => setRemark(e.target.value)}
                     />
                   </Grid>
-                </Grid> */}
+                </Grid>
                   <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                     <Grid
                       container

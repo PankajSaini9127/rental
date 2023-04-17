@@ -60,9 +60,13 @@ export default function SRMMonthlyRentView() {
             gst_amount:response.data.data[0].gst_amount,
             total_amount:parseFloat(Number(response.data.data[0].rent_amount)+Number(response.data.data[0].gst_amount)).toFixed(2),
             status:response.data.data[0].status,
-            dateMonth: month[new Date(response.data.data[0].invoice_date).getUTCMonth()] +
+            dateMonth: month[new Date(response.data.data[0].rent_date).getUTCMonth()] +
           " " +
-          new Date(response.data.data[0].invoice_date).getFullYear()
+          new Date(response.data.data[0].rent_date).getFullYear(),
+          remark :response.data.data[0].remark,
+          paymentDate:new Date(response.data.data[0].payment_date).getDate() +" "+
+          month[new Date(response.data.data[0].rent_date).getUTCMonth()]+ " "+
+          new Date(response.data.data[0].payment_date).getFullYear()
           })
         }
 
@@ -83,25 +87,38 @@ useEffect(()=>{
     total_amount: "",
     invoice: "",
     fileName:"",
-    status:""
+    status:"",
+    remark:"",
+    paymentDate:""
   });
 
    async function handleSubmit(e) {
-    const send = await sendMonthyPaymentForword(id,{status:"Sent To Operations",srm_id:auth.id})
-    console.log(send.data.success)
-   if(send.data.success){
-    dispatch(setAlert({open:true,variant:"success",message:"Payment Details Send To Opertaions Successfully."}))
-     navigate(-1)
-   }else{
-    dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
-   }
+    if(remark.length > 0){
+      try{
+        const send = await sendMonthyPaymentForword(id,{status:"Sent To Operations",srm_id:auth.id,remark})
+        console.log(send.data.success)
+       if(send.data.success){
+        dispatch(setAlert({open:true,variant:"success",message:"Payment Details Send To Opertaions Successfully."}))
+         navigate(-1)
+       }else{
+        dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+       }
+      }catch(error){
+        console.log(error)
+        dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+      }
+    }else{
+      dispatch(setAlert({open:true,variant:"error",message:"Remark Required."}))
+    }
+   
+    
     // console.log(send)
   }
 
  async function handleSendBack() {
+  if(remark.length > 0){
   try {
-    const send = await sendMonthyPaymentForword(id,{status:"Sent Back From Sr Manager"})
-    console.log(send.data.success)
+    const send = await sendMonthyPaymentForword(id,{status:"Sent Back From Sr Manager",remark})
    if(send.data.success){
     dispatch(setAlert({open:true,variant:"success",message:"Sent Back To Manager Successfully."}))
     dispatch(setRefreshBox())
@@ -113,8 +130,12 @@ useEffect(()=>{
     console.log(error)
     dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
   }
-    
+  }else{
+  dispatch(setAlert({open:true,variant:"error",message:"Remark Required."}))
+   }    
   }
+
+  
 
   return (
     <>
@@ -150,6 +171,13 @@ useEffect(()=>{
             <Grid container spacing={2} sx={{mb:2}}>
                 <DataFieldStyle field={"Rent Month"} value={preData.dateMonth}/>
               </Grid>
+               { preData.status === "Paid" &&
+                <Grid container spacing={2} sx={{mb:2}}>
+           <DataFieldStyle field={"Payment Date"} value={preData.paymentDate}/>
+                  </Grid>
+               }
+ 
+     
               <Grid container spacing={2}>
                 <TextFieldWrapper
                   required={true}
@@ -233,6 +261,12 @@ useEffect(()=>{
                     />
                     </Grid>
                 </Grid>
+                {
+                  preData.remark.length >0 && <Grid item xs={12} container spacing={2} sx={{mt:4}}>
+                  <DataFieldStyle field={"Remark"} value={preData.remark} />
+                </Grid>
+                }
+                
               </Grid>
             </Grid>
 
@@ -240,7 +274,7 @@ useEffect(()=>{
 
             {preData.status === "Sent To Sr Manager" && (
               <>
-                {/* <Grid
+                <Grid
                   item
                   xs={10}
                   sx={{ mt: 5 }}
@@ -259,7 +293,7 @@ useEffect(()=>{
                       onChange={(e) => setRemark(e.target.value)}
                     />
                   </Grid>
-                </Grid> */}
+                </Grid>
                 <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                   <Grid container spacing={1} sx={{ justifyContent: "center" }}>
                     <Grid item md={6} xs={11}>

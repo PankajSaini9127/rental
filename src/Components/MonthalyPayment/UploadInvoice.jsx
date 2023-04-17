@@ -41,22 +41,16 @@ const fieldStyle = {
 };
 
 function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
-  const [formError, setFormError] = useState({
-    invoiceNo: "",
-    invoiceDate: "",
-    rentAmount: "",
-    gstAmount: "",
-    totalAmount: "",
-    invoice: "",
-    invoice_file_name: "",
-  });
+  const [formError, setFormError] = useState({ });
+
+  console.log(value)
 
   useEffect(()=>{
-    let total =  parseFloat(Number(value.rentAmount) + Number(value.gstAmount)).toFixed(2)
+    let total =  parseFloat(Number(value.rentAmount) + parseFloat(Number(value.gstAmount)))
     setValue({...value,totalAmount:total})
   },[value.rentAmount,value.gstAmount])
    
-
+// console.log(value)
 
   function onChange(e) {
 
@@ -66,21 +60,23 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
         [e.target.name]: e.target.value,
       });
     }
-
-    let error = false
     
-    if (!e.target.value.match(/^[0-9]*$/))
-     error = true
+    if (e.target.value.match(/^[0-9]*$/)){
+      setValue({
+        ...value,
+        [e.target.name]: e.target.value,
+      });
+    }
 
 
 
-if(!error)
-{
-  setValue({
-    ...value,
-    [e.target.name]: e.target.value,
-  });
-}
+// if(!error)
+// {
+//   setValue({
+//     ...value,
+//     [e.target.name]: e.target.value,
+//   });
+// }
   }
 
   const disablePastDate = () => {
@@ -91,35 +87,60 @@ if(!error)
     return yyyy + "-" + mm + "-" + dd;
   };
 
-const [error,serError] = useState(false)
+const [ferror,setError] = useState(true)
+const [invoiceValidate , setInvoice] = useState(true)
 
   function validate() {
     // let error = false;
 
-    let fields = [
-      "invoiceNo"
-      ,"invoiceDate"
-      ,"rentAmount"
-      ,"gstAmount"
-      ,"totalAmount"
-      ,"invoice"
-      ,"invoice_file_name"
-,
-    ]
+//     let fields = [
+//       "invoiceNo"
+//       ,"invoiceDate"
+//       ,"rentAmount"
+//       ,"gstAmount"
+//       ,"totalAmount"
+//       ,"invoice"
+//       ,"invoice_file_name"
+// ,
+//     ]
     
-    console.log(value)
-    fields.map((row)=>{
-      if(value[row].length === 0)
-      {
-       console.log(value[row].length)
-       setFormError(old=>({...old,[row] : "Field is required."}));
-        serError(true)
-     }
-    })
+//     console.log(value)
+//     fields.map((row)=>{
+//       if(value[row].length === 0)
+//       {
+//        console.log(value[row].length)
+//        serError(true)
+//        setFormError(old=>({...old,[row] : "Field is required."}));
+//      }else{setFormError(false)}
+//     })
 
-    console.log(formError)
-    if(!error)
-      handleConfirm();
+
+  let error = {};
+  if(value.gst !== "---"){
+  if(value.invoiceNo === "" ){
+    error.invoiceNo =  "Invoice Number Required !"
+    setError(true)
+    setFormError(error)
+   }else if(value.invoiceDate === ""){
+    error.invoiceDate =  "Please Select Invoice Date!"
+    setError(true)
+    setFormError(error)
+   }else if(value.invoice === ""){
+    error.invoice =  "Please Upload Invoice Copy."
+    setError(true)
+    setFormError(error)
+   }else{
+    setError(false)
+    setFormError(error)
+   }
+  
+   if(Object.keys(formError).length === 0 && !ferror && !invoiceValidate){
+    handleConfirm()
+  }
+}else{
+  handleConfirm()
+}
+
   }
 
   function handleSubmit(e) {
@@ -168,13 +189,13 @@ const [error,serError] = useState(false)
      const validate = await invoice_validation(value.invoiceNo)
     if(validate.data.alreadyInvoice){
       setFormError(old=>({...old,invoiceNo : "Invoice Number Already Added."}))
-      serError(true)
+      setInvoice(true)
     }else{
-      setFormError(old=>({...old,invoiceNo : ""}))
-      serError(false)
+      setInvoice(false)
+      setFormError({})
     }
   } catch (error) {
-    
+    console.log(error)
   }
  }
 
@@ -259,8 +280,7 @@ const [error,serError] = useState(false)
                       fontSize: "15px",
                     },
                   }}
-                  inputProps={{ maxLength: 22 }}
-                  value={value.rentAmount}
+                  value={parseInt(value.rentAmount).toFixed(2)}
                   // helperText ={formError.rentAmount || ""}
                   fullWidth
                   name="rentAmount"
@@ -291,7 +311,7 @@ const [error,serError] = useState(false)
                     },
                   }}
                   inputProps={{ maxLength: 22 }}
-                  value={value.gstAmount}
+                  value={parseInt(value.gstAmount).toFixed(2)}
                   className={"textAlignRight"}
                   fullWidth
                   // helperText = {formError.gstAmount} 
@@ -323,7 +343,7 @@ const [error,serError] = useState(false)
                     },
                   }}
                   inputProps={{ maxLength: 22 }}
-                  value={value.totalAmount}
+                  value={parseInt(value.totalAmount).toFixed(2)}
                   fullWidth
                   name="totalAmount"
                   sx={fieldStyle}

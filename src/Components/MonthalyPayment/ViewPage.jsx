@@ -23,7 +23,10 @@ import {
   
   
   function ViewPage() {
-    const { code } = useParams();
+
+    const { id } = useParams();
+    
+    console.log(id)
 
     const navigate = useNavigate();
   
@@ -31,24 +34,22 @@ import {
     const [ids, setIds] = useState([]);
   
     const [sendBackMsg, setSendBackMsg] = useState("");
+
   
-    const { auth } = useSelector((s) => s);
   
-    const manager_id = auth.id;
-  
-    const dispatch = useDispatch();
-  
-    const getData = async (code) => {
-      const agreement = await get_agreement_code(code);
+    const getData = async (id) => {
+      console.log(id)
+      const agreement = await get_agreement_code(id);
      if(agreement.status === 200){
         setAgreement(agreement.data.agreement);
         setIds(agreement.data.ids);
-        setSendBackMsg(agreement.data.agreement[ids[0]].remark);
+        // setSendBackMsg(agreement.data.agreement[ids[0]].remark);
      }
     };
   
     useEffect(() => {
-      getData(code);
+
+      getData(id);
     }, []);
   
     async function handleSubmit(e) {
@@ -108,9 +109,41 @@ import {
   
                 {/* Basic Details */}
                 <Grid item md={10} sx={{ mt: 2 }}>
-                {agreement[ids[0]].status === "Deposited" && (
                     <>
-                      <Grid container >
+ {
+  agreement[ids[0]].payment_status === "Paid" && (
+<Grid container>
+                    <DataFieldStyle
+                          field={"Invoice"}
+                          href={agreement[ids[0]].invoice}
+                          name={"Invoice"}
+                          bold={true}
+                          cursor={true}
+                        />
+                        
+                        <DataFieldStyle
+                          field={"Payment Date"}
+                          value={new Date(agreement[ids[0]].rent_paid_date).toDateString()}
+                        />
+                        <DataFieldStyle
+                          field={"Rent Amount"}
+                          value={agreement[ids[0]].rent_amount}
+                        />
+                        <DataFieldStyle
+                          field={"GST Amount"}
+                          value={agreement[ids[0]].gst_amount}
+                        />
+                        <DataFieldStyle
+                          field={"Total Amount"}
+                          value={parseInt(parseInt(agreement[ids[0]].rent_amount) + parseInt(agreement[ids[0]].gst_amount)).toFixed(2)}
+                        />
+
+                    </Grid>
+  )
+ }
+                    
+
+                      <Grid container sx={{mt:4}} >
                         <DataFieldStyle
                           field={"Final Agreement"}
                           href={agreement[ids[0]].final_agreement}
@@ -138,7 +171,6 @@ import {
                         />
                       </Grid>
                     </>
-                  )}
   
                   <Grid container sx={{ mt: 2}}>
                     <DataFieldStyle

@@ -102,7 +102,7 @@ function MyRouter() {
       />
        <Route
         exact
-        path="/monthly-payment-view/:code"
+        path="/monthly-payment-view/:id"
         element={isAuth && role.includes("Manager")  ? <ViewPage /> : <Login />}
       />
 
