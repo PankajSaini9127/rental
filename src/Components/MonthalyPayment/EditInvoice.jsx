@@ -242,12 +242,13 @@ useEffect(()=>{
               <FormControl fullWidth>
                 <input
                   type="date"
-                  name="invoiceDate"
+                  name="invoice_date"
                   value={preData.invoice_date}
                   className="DatePicker"
                   // disabled
                   style={{height:'55px'}}
                   onChange={(e) => handleChange(e)}
+                  
                 />
               </FormControl>
             </Grid>
@@ -271,7 +272,7 @@ useEffect(()=>{
                     onChange={(e) => handleChange(e)}
                     name="rent_amount"
                     disabled={preData.status === "Sent Back From Operations"?true:false}
-                    className={"textAlignRight"}
+                    textAlignRight={"textAlignRight"}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />
@@ -285,7 +286,7 @@ useEffect(()=>{
                     })}
                     onChange={(e) => handleChange(e)}
                     name="gst_amount"
-                    className={"textAlignRight"}
+                    textAlignRight={"textAlignRight"}
                     disabled={preData.status === "Sent Back From Operations"?true:false}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
@@ -300,7 +301,7 @@ useEffect(()=>{
                     })}
                     disabled={true}
                     name="total_amount"
-                    className={"textAlignRight"}
+                    textAlignRight={"textAlignRight"}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />
