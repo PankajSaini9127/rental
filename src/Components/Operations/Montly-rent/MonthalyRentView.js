@@ -1,9 +1,18 @@
-import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  IconButton,
+  TextField,
+} from "@mui/material";
 import { Stack } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import HamburgerMenu from "../../HamburgerMenu";
+
+import { format } from "date-fns";
 
 import {
   DocumentUpload,
@@ -20,6 +29,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setRefreshBox } from "../../../store/action/action";
 import { CloseFullscreen } from "@mui/icons-material";
+import { DataFieldStyle } from "../../StyleComponents/Rental";
 
 export default function MonthalyRentView() {
   const navigate = useNavigate();
@@ -52,35 +62,30 @@ export default function MonthalyRentView() {
     status: "",
   });
 
+  function getTotal() {
+    let total = parseFloat(
+      Number(preData.rent_amount) + Number(preData.gst_amount)
+    ).toFixed(2);
 
-function getTotal (){
-  let total = parseFloat(
-    Number(preData.rent_amount) +
-      Number(preData.gst_amount)
-  ).toFixed(2)
+    setPredata({ ...preData, total_amount: total });
+  }
+  console.log();
 
-  setPredata({...preData,total_amount:total})
-}
-console.log(  )
-
-useEffect(()=>{
-   getTotal()
-},[preData.rent_amount,preData.gst_amount])
+  useEffect(() => {
+    getTotal();
+  }, [preData.rent_amount, preData.gst_amount]);
 
   function handleChange(e) {
-    
-    let error = false
-    
-    if (!e.target.value.match(/^[0-9]*$/))
-     error = true
+    let error = false;
 
-    if(!error)
-    {
-    setPredata({
-      ...preData,
-      [e.target.name]: e.target.value,
-    });
-  }
+    if (!e.target.value.match(/^[0-9]*$/)) error = true;
+
+    if (!error) {
+      setPredata({
+        ...preData,
+        [e.target.name]: e.target.value,
+      });
+    }
   }
 
   async function handleChangeFile(e) {
@@ -115,11 +120,26 @@ useEffect(()=>{
     }
   }
 
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   async function fetchData(id) {
     try {
       const response = await get_rent_data_ID(id);
 
-      console.log(response.data.data[0].invoice_number);
+      console.log(response.data.data[0].invoice_date);
       if (response.data.succes) {
         setPredata({
           ...preData,
@@ -128,19 +148,17 @@ useEffect(()=>{
           invoice_date: response.data.data[0].invoice_date,
           rent_amount: parseFloat(response.data.data[0].rent_amount).toFixed(2),
           gst_amount: response.data.data[0].gst_amount,
-          // total_amount: parseFloat(
-          //   Number(response.data.data[0].rent_amount) +
-          //     Number(response.data.data[0].gst_amount)
-          // ).toFixed(2),
           status: response.data.data[0].status,
+          dateMonth:
+            month[new Date(response.data.data[0].invoice_date).getUTCMonth()] +
+            " " +
+            new Date(response.data.data[0].invoice_date).getFullYear(),
         });
       }
     } catch (error) {
       console.log(error);
     }
   }
-
- 
 
   useEffect(() => {
     fetchData(id);
@@ -150,9 +168,9 @@ useEffect(()=>{
     const send = await sendMonthyPaymentForword(id, {
       status: "Sent To Finance",
       op_id: auth.id,
-      rent_amount:  preData.rent_amount ,
-      gst_amount:   preData.gst_amount,
-      invoice: preData.invoice
+      rent_amount: preData.rent_amount,
+      gst_amount: preData.gst_amount,
+      invoice: preData.invoice,
     });
     console.log(send.data.success);
     if (send.data.success) {
@@ -163,7 +181,7 @@ useEffect(()=>{
           message: "Payment Details Send To Finance Successfully.",
         })
       );
-      dispatch(setRefreshBox())
+      dispatch(setRefreshBox());
       navigate(-1);
     } else {
       dispatch(
@@ -179,24 +197,41 @@ useEffect(()=>{
 
   async function handleSendBack() {
     try {
-      const send = await sendMonthyPaymentForword(id,{status:"Sent Back From Operations"})
-      console.log(send.data.success)
-     if(send.data.success){
-      dispatch(setAlert({open:true,variant:"success",message:"Sent Back To Manager Successfully."}))
-       navigate(-1)
-     }else{
-      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
-     }
+      const send = await sendMonthyPaymentForword(id, {
+        status: "Sent Back From Operations",
+      });
+      console.log(send.data.success);
+      if (send.data.success) {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "success",
+            message: "Sent Back To Manager Successfully.",
+          })
+        );
+        navigate(-1);
+      } else {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong Please Try Again Later.",
+          })
+        );
+      }
     } catch (error) {
-      console.log(error)
-      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong Please Try Again Later.",
+        })
+      );
     }
-      
-    }
+  }
 
- 
-
-  console.log(preData)
+  console.log(preData);
 
   return (
     <>
@@ -228,8 +263,13 @@ useEffect(()=>{
           </Box>
           <Box component={"form"}>
             <Grid container sx={{ justifyContent: "center", mt: 3 }}>
-              {/* Basic Details */}
               <Grid item md={10}>
+                <Grid container spacing={2} sx={{ mb: 2 }}>
+                  <DataFieldStyle
+                    field={"Rent Month"}
+                    value={preData.dateMonth}
+                  />
+                </Grid>
                 <Grid container spacing={2}>
                   <TextFieldWrapper
                     required={true}
@@ -239,14 +279,26 @@ useEffect(()=>{
                     disabled={true}
                     name="invoice_no"
                   />
-                  <TextFieldWrapper
+                  {/* <TextFieldWrapper
                     required={true}
                     label="Invoice Date"
                     placeHolder="Enter Invoice Date"
                     value={preData.invoice_date}
                     disabled={true}
                     name="invoice_date"
-                  />
+                  /> */}
+                  <Grid item xs={6} md={4}>
+                    <FormControl fullWidth>
+                      <input
+                        type="date"
+                        name="invoiceDate"
+                        value={preData.invoice_date}
+                        className="DatePicker"
+                        disabled
+                        style={{ height: "55px" }}
+                      />
+                    </FormControl>
+                  </Grid>
                   {/* <TextFieldWrapper
                     required={true}
                     label="Year"
@@ -259,19 +311,33 @@ useEffect(()=>{
                     required={true}
                     label="Rent Amount"
                     placeHolder="Enter Rent Amount"
-                    value={preData.rent_amount}
+                    value={parseInt(preData.rent_amount).toLocaleString(
+                      "us-Rs",
+                      {
+                        style: "currency",
+                        currency: "INR",
+                      }
+                    )}
                     onChange={(e) => handleChange(e)}
                     name="rent_amount"
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
+                    textAlignRight={"textAlignRight"}
                   />
                   <TextFieldWrapper
                     required={true}
                     label="GST Amount"
                     placeHolder="Enter GST AMount"
-                    value={preData.gst_amount}
+                    value={parseInt(preData.gst_amount).toLocaleString(
+                      "us-Rs",
+                      {
+                        style: "currency",
+                        currency: "INR",
+                      }
+                    )}
                     onChange={(e) => handleChange(e)}
                     name="gst_amount"
+                    textAlignRight={"textAlignRight"}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />
@@ -279,9 +345,16 @@ useEffect(()=>{
                     required={true}
                     label="Total Amount"
                     placeHolder="Enter Total Amount"
-                    value={preData.total_amount}
+                    value={parseInt(preData.total_amount).toLocaleString(
+                      "us-Rs",
+                      {
+                        style: "currency",
+                        currency: "INR",
+                      }
+                    )}
                     disabled={true}
                     name="total_amount"
+                    textAlignRight={"textAlignRight"}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />

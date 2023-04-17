@@ -6,15 +6,14 @@ import config from "../../config.json";
 
 import axios from "axios";
 
-//
-import PermissionAlert from "../Manager/Alert";
+
 import {
   add_invoice,
-  get_monthaly_rent,
-  get_monthly_rent,
+  get_rent_data_ID,
   listMonthRent,
   sendMonthyPaymentForword,
 } from "../../Services/Services";
+
 import UploadInvoice from "./UploadInvoice";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setRefreshBox } from "../../store/action/action";
@@ -95,12 +94,28 @@ function DataTable() {
     manager_id: auth.id,
   });
 
+
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const [selectID, setSelectID] = useState(0);
 
+  async function getData(id){
+    try {
+      const response = await get_rent_data_ID(id)
+                
+        console.log(response.data.data[0].invoice_number)
+        if(response.data.succes){
+            setInvoiceDetails({...invoiceDetails ,rentAmount:response.data.data[0].rent_amount,gstAmount:(response.data.data[0].rent_amount/100)*18})
+        }else{
+          dispatch(setAlert({open:true,message:"something Went Wrong Please Try Again Later.",variant:"error"}))
+        }
+    } catch (error) {
+      console.log(error)
+      dispatch(setAlert({open:true,message:"something Went Wrong Please Try Again Later.",variant:"error"}))
+    }
+  }
 
   const gstUploadButton = (e) => {
     const id = e.id;
@@ -122,11 +137,9 @@ function DataTable() {
                 textTransform: "capitalize",
                 // width:"100%"
               }}
-              onClick={(e) => {
+              onClick={async(e) => {
                 e.stopPropagation(); // don't select this row after clicking
                 navigate(`/monthly-payment-view/${code}`);
-                // setSelectID(id)
-                // setOpen(true)
               }}
             >
               View
@@ -171,6 +184,7 @@ function DataTable() {
                 onClick={(e) => {
                   e.stopPropagation(); // don't select this row after clicking
                   // navigate(`/BHUapproval/${id}`);
+                  getData(id)
                   setSelectID(id);
                   setOpen(true);
                 }}
@@ -405,6 +419,7 @@ function DataTable() {
           </Button>
         </Box>
       )}
+
       <UploadInvoice
         open={open}
         // setOpen={setOpen}
@@ -413,6 +428,7 @@ function DataTable() {
         value={invoiceDetails}
         setValue={setInvoiceDetails}
       />
+
       <Box
         sx={{
           height: "430px",

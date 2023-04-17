@@ -266,6 +266,7 @@ const [error,serError] = useState(false)
                   name="rentAmount"
                   sx={fieldStyle}
                   placeholder="Rent Amount"
+                  className={"textAlignRight"}
                 />
                 <Typography variant="caption" color="red" mt={1}>
                   {formError.rentAmount}
@@ -291,6 +292,7 @@ const [error,serError] = useState(false)
                   }}
                   inputProps={{ maxLength: 22 }}
                   value={value.gstAmount}
+                  className={"textAlignRight"}
                   fullWidth
                   // helperText = {formError.gstAmount} 
                   name="gstAmount"
@@ -326,6 +328,7 @@ const [error,serError] = useState(false)
                   name="totalAmount"
                   sx={fieldStyle}
                   placeholder="GST Amount"
+                  className={"textAlignRight"}
                 />
                 <Typography variant="body1" color="red" mt={1}>
                   {formError.totalAmount}
