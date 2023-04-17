@@ -79,8 +79,8 @@ export async function get_agreement_id (id) {
 }   
 
 //get monthly rent details by code
-export async function get_agreement_code (code) {
-    return axios.get(`${API_LIVE}/api/get-monthly-rent-by-code/${code}`)
+export async function get_agreement_code (id) {
+    return axios.get(`${API_LIVE}/api/get-monthly-rent-by-code/${id}`)
 }  
 
 
@@ -158,6 +158,7 @@ export async function get_rent_data_ID(id){
 }
 
 export async function sendMonthyPaymentForword(id,data){
+    console.log(data)
     return await axios.put(`${API_LIVE}/api/sent-monthly-payment/${id}`,data)
 }
 

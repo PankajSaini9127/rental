@@ -51,12 +51,14 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
     invoice_file_name: "",
   });
 
+  // console.log(value)
+
   useEffect(()=>{
-    let total =  parseFloat(Number(value.rentAmount) + Number(value.gstAmount)).toFixed(2)
+    let total =  parseFloat(Number(value.rentAmount) + parseFloat(Number(value.gstAmount)))
     setValue({...value,totalAmount:total})
   },[value.rentAmount,value.gstAmount])
    
-
+// console.log(value)
 
   function onChange(e) {
 
@@ -118,7 +120,7 @@ const [error,serError] = useState(false)
     })
 
     console.log(formError)
-    if(!error)
+    if(error)
       handleConfirm();
   }
 
@@ -259,8 +261,7 @@ const [error,serError] = useState(false)
                       fontSize: "15px",
                     },
                   }}
-                  inputProps={{ maxLength: 22 }}
-                  value={value.rentAmount}
+                  value={parseInt(value.rentAmount).toFixed(2)}
                   // helperText ={formError.rentAmount || ""}
                   fullWidth
                   name="rentAmount"
@@ -291,7 +292,7 @@ const [error,serError] = useState(false)
                     },
                   }}
                   inputProps={{ maxLength: 22 }}
-                  value={value.gstAmount}
+                  value={parseInt(value.gstAmount).toFixed(2)}
                   className={"textAlignRight"}
                   fullWidth
                   // helperText = {formError.gstAmount} 
@@ -323,7 +324,7 @@ const [error,serError] = useState(false)
                     },
                   }}
                   inputProps={{ maxLength: 22 }}
-                  value={value.totalAmount}
+                  value={parseInt(value.totalAmount).toFixed(2)}
                   fullWidth
                   name="totalAmount"
                   sx={fieldStyle}

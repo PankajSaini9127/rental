@@ -107,7 +107,8 @@ function DataTable() {
                 
         console.log(response.data.data[0].invoice_number)
         if(response.data.succes){
-            setInvoiceDetails({...invoiceDetails ,rentAmount:response.data.data[0].rent_amount,gstAmount:(response.data.data[0].rent_amount/100)*18})
+            setInvoiceDetails({...invoiceDetails ,rentAmount:(response.data.data[0].rent_amount),gstAmount:(response.data.data[0].rent_amount/100)*18
+          })
         }else{
           dispatch(setAlert({open:true,message:"something Went Wrong Please Try Again Later.",variant:"error"}))
         }
@@ -139,7 +140,8 @@ function DataTable() {
               }}
               onClick={async(e) => {
                 e.stopPropagation(); // don't select this row after clicking
-                navigate(`/monthly-payment-view/${code}`);
+                console.log(id)
+               navigate(`/monthly-payment-view/${id}`);
               }}
             >
               View
