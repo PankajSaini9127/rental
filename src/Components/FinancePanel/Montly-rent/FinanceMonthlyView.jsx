@@ -37,7 +37,9 @@ export default function FinanceMonthlyRentView() {
     total_amount: "",
     invoice: "",
     status:"",
-    dateMonth:""
+    dateMonth:"",
+    remark:"",
+    paymentDate:""
   });
 
   const month = [
@@ -72,9 +74,13 @@ export default function FinanceMonthlyRentView() {
               Number(response.data.data[0].gst_amount)
           ).toFixed(2),
           status: response.data.data[0].status,
-          dateMonth: month[new Date(response.data.data[0].invoice_date).getUTCMonth()] +
+          dateMonth: month[new Date(response.data.data[0].rent_date).getUTCMonth()] +
           " " +
-          new Date(response.data.data[0].invoice_date).getFullYear()
+          new Date(response.data.data[0].rent_date).getFullYear(),
+          remark: response.data.data[0].remark,
+          paymentDate:new Date(response.data.data[0].payment_date).getDate() +" "+
+          month[new Date(response.data.data[0].rent_date).getUTCMonth()]+ " "+
+          new Date(response.data.data[0].payment_date).getFullYear()
         });
       }
     } catch (error) {
@@ -91,7 +97,7 @@ export default function FinanceMonthlyRentView() {
 
   async function handleSubmit(e) {
     try {
-      const send = await sendMonthyPaymentForword(id,{status:"Paid",finance_id: auth.id,payment_date:today})
+      const send = await sendMonthyPaymentForword(id,{status:"Paid",finance_id: auth.id,payment_date:today,remark:remark})
       // console.log(send.data.success)
      if(send.data.success){
       dispatch(setAlert({open:true,variant:"success",message:"Approved Successfully."}))
@@ -104,12 +110,14 @@ export default function FinanceMonthlyRentView() {
       console.log(error)
       dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
     }
+  
     // console.log(send)
   }
 
   async function handleSendBack() {
+    if(remark.length >0){
     try {
-      const send = await sendMonthyPaymentForword(id,{status:"Sent Back From Finance"})
+      const send = await sendMonthyPaymentForword(id,{status:"Sent Back From Finance",remark})
       console.log(send.data.success)
      if(send.data.success){
       dispatch(setAlert({open:true,variant:"success",message:"Sent Back To Manager Successfully."}))
@@ -122,6 +130,9 @@ export default function FinanceMonthlyRentView() {
       console.log(error)
       dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
     }
+  }else{
+    dispatch(setAlert({open:true,variant:"error",message:"Remark Required !"}))
+  }
       
     }
 
@@ -158,6 +169,11 @@ export default function FinanceMonthlyRentView() {
               <Grid container spacing={2} sx={{mb:2}}>
                 <DataFieldStyle field={"Rent Month"} value={preData.dateMonth}/>
               </Grid>
+              { preData.status === "Paid" &&
+                <Grid container spacing={2} sx={{mb:2}}>
+           <DataFieldStyle field={"Payment Date"} value={preData.paymentDate}/>
+                  </Grid>
+               }
               <Grid container spacing={2}>
               
                 <TextFieldWrapper
@@ -241,6 +257,11 @@ export default function FinanceMonthlyRentView() {
                     />
                     </Grid>
                 </Grid>
+                {
+                  preData.remark.length >0 && <Grid item xs={12} container spacing={2} sx={{mt:4}}>
+                  <DataFieldStyle field={"Remark"} value={preData.remark} />
+                </Grid>
+                }
               </Grid>
             </Grid>
 
@@ -248,7 +269,7 @@ export default function FinanceMonthlyRentView() {
 
             {preData.status === "Sent To Finance" && (
               <>
-                {/* <Grid
+                <Grid
                   item
                   xs={10}
                   sx={{ mt: 5 }}
@@ -267,7 +288,7 @@ export default function FinanceMonthlyRentView() {
                       onChange={(e) => setRemark(e.target.value)}
                     />
                   </Grid>
-                </Grid> */}
+                </Grid>
                 <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                   <Grid container spacing={1} sx={{ justifyContent: "center" }}>
                     <Grid item md={5} xs={11}>

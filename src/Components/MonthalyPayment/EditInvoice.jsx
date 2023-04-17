@@ -20,6 +20,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 import { CloseFullscreen } from "@mui/icons-material";
+import { DataFieldStyle } from "../StyleComponents/Rental";
 
 export default function EditInvoice() {
   const navigate = useNavigate();
@@ -50,6 +51,7 @@ export default function EditInvoice() {
     invoice: "",
     fileName: "",
     status: "",
+    remark:""
   });
 
 
@@ -142,6 +144,7 @@ useEffect(()=>{
           //     Number(response.data.data[0].gst_amount)
           // ).toFixed(2),
           status: response.data.data[0].status,
+          remark : response.data.data[0].remark
         });
       }
     } catch (error) {
@@ -161,7 +164,8 @@ useEffect(()=>{
       op_id: auth.id,
       rent_amount:  preData.rent_amount ,
       gst_amount:   preData.gst_amount,
-      invoice: preData.invoice
+      invoice: preData.invoice,
+      remark:""
     });
     console.log(send.data.success);
     if (send.data.success) {
@@ -316,6 +320,13 @@ useEffect(()=>{
                       href={preData.invoice}
                     />
                   </Grid>
+
+                    
+                  {
+                  preData.remark.length >0 && <Grid item xs={12} container spacing={2} sx={{mt:4}}>
+                  <DataFieldStyle field={"Remark"} value={preData.remark} />
+                </Grid>
+                }
                 </Grid>
               </Grid>
 
