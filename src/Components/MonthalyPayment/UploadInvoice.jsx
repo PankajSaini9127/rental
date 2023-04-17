@@ -129,7 +129,7 @@ const [error,serError] = useState(false)
 
   const dispatch = useDispatch();
 
-
+//for invoice upload
   async function onfileChange(e) {
     const FD = new FormData();
     console.log(e.target.files[0]);
@@ -162,6 +162,7 @@ const [error,serError] = useState(false)
     }
   }
 
+  // invoice number validate in db
  async function handleValidateInvoiceNo (){
    try {
      const validate = await invoice_validation(value.invoiceNo)
@@ -265,6 +266,7 @@ const [error,serError] = useState(false)
                   name="rentAmount"
                   sx={fieldStyle}
                   placeholder="Rent Amount"
+                  className={"textAlignRight"}
                 />
                 <Typography variant="caption" color="red" mt={1}>
                   {formError.rentAmount}
@@ -290,6 +292,7 @@ const [error,serError] = useState(false)
                   }}
                   inputProps={{ maxLength: 22 }}
                   value={value.gstAmount}
+                  className={"textAlignRight"}
                   fullWidth
                   // helperText = {formError.gstAmount} 
                   name="gstAmount"
@@ -325,6 +328,7 @@ const [error,serError] = useState(false)
                   name="totalAmount"
                   sx={fieldStyle}
                   placeholder="GST Amount"
+                  className={"textAlignRight"}
                 />
                 <Typography variant="body1" color="red" mt={1}>
                   {formError.totalAmount}

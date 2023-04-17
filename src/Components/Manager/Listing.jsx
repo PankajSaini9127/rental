@@ -16,7 +16,7 @@ function Listing() {
 
  
   
- const {refresh} = useSelector(s=>s)
+ const {refresh,auth} = useSelector(s=>s)
 
   const handleChange = (e) => {
     setSelect(e.target.value);
@@ -29,10 +29,11 @@ function Listing() {
   const [check,setCheck] = useState([])
 
 
-  const APICALL = async () => {
-    setLoading(true);
+  async function APICALL (){
+    try {
+      setLoading(true);
     setData([]);
-    const result = await get_agreements();
+    const result = await get_agreements(auth.id);
 
     if (result.status === 200) {
       const data = result.data.ids;
@@ -41,6 +42,10 @@ function Listing() {
      
       setLoading(false);
     }
+    } catch (error) {
+      console.log(error)
+    }
+    
   };
   
   

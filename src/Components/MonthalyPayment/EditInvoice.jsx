@@ -1,4 +1,4 @@
-import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
+import { Box, Button, FormControl, Grid, IconButton, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -68,6 +68,15 @@ useEffect(()=>{
 },[preData.rent_amount,preData.gst_amount])
 
   function handleChange(e) {
+
+    console.log(e)
+    if(e.target.name === "invoice_date" || e.target.name === "invoice_no"){
+      setPredata({
+        ...preData,
+        [e.target.name]: e.target.value,
+      });
+    }
+
     
     let error = false
     
@@ -176,26 +185,7 @@ useEffect(()=>{
     // console.log(send)
   }
 
-  async function handleSendBack() {
-    try {
-      const send = await sendMonthyPaymentForword(id,{status:"Sent Back From Operations"})
-      console.log(send.data.success)
-     if(send.data.success){
-      dispatch(setAlert({open:true,variant:"success",message:"Sent Back To Manager Successfully."}))
-       navigate(-1)
-     }else{
-      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
-     }
-    } catch (error) {
-      console.log(error)
-      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
-    }
-      
-    }
 
- 
-
-  console.log(preData)
 
   return (
     <>
@@ -239,7 +229,7 @@ useEffect(()=>{
                     onChange={(e) => handleChange(e)}
                     name="invoice_no"
                   />
-                  <TextFieldWrapper
+                  {/* <TextFieldWrapper
                     required={true}
                     label="Invoice Date"
                     placeHolder="Enter Invoice Date"
@@ -247,8 +237,21 @@ useEffect(()=>{
                     // disabled={true}
                     onChange={(e) => handleChange(e)}
                     name="invoice_date"
-                  />
-                  <TextFieldWrapper
+                  /> */}
+                   <Grid item xs={6} md={4}>
+              <FormControl fullWidth>
+                <input
+                  type="date"
+                  name="invoiceDate"
+                  value={preData.invoice_date}
+                  className="DatePicker"
+                  // disabled
+                  style={{height:'55px'}}
+                  onChange={(e) => handleChange(e)}
+                />
+              </FormControl>
+            </Grid>
+                  {/* <TextFieldWrapper
                     required={true}
                     label="Year"
                     placeHolder="Enter Invoice Date"
@@ -256,15 +259,19 @@ useEffect(()=>{
                     // disabled={true}
                     onChange={(e) => handleChange(e)}
                     name="invoice_date"
-                  />
+                  /> */}
                   <TextFieldWrapper
                     required={true}
                     label="Rent Amount"
                     placeHolder="Enter Rent Amount"
-                    value={preData.rent_amount}
+                    value={parseInt(preData.rent_amount).toLocaleString("us-Rs", {
+                      style: "currency",
+                      currency: "INR",
+                    })}
                     onChange={(e) => handleChange(e)}
                     name="rent_amount"
                     disabled={preData.status === "Sent Back From Operations"?true:false}
+                    className={"textAlignRight"}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />
@@ -272,9 +279,13 @@ useEffect(()=>{
                     required={true}
                     label="GST Amount"
                     placeHolder="Enter GST AMount"
-                    value={preData.gst_amount}
+                    value={parseInt(preData.gst_amount).toLocaleString("us-Rs", {
+                      style: "currency",
+                      currency: "INR",
+                    })}
                     onChange={(e) => handleChange(e)}
                     name="gst_amount"
+                    className={"textAlignRight"}
                     disabled={preData.status === "Sent Back From Operations"?true:false}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
@@ -283,9 +294,13 @@ useEffect(()=>{
                     required={true}
                     label="Total Amount"
                     placeHolder="Enter Total Amount"
-                    value={preData.total_amount}
+                    value={parseInt(preData.total_amount).toLocaleString("us-Rs", {
+                      style: "currency",
+                      currency: "INR",
+                    })}
                     disabled={true}
                     name="total_amount"
+                    className={"textAlignRight"}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />
@@ -353,21 +368,6 @@ useEffect(()=>{
                           onClick={handleSubmit}
                         >
                          {preData.status === "Sent Back From Operations"? "Approve And Send To Operations":"Approve And Send To Sr Manager"}
-                        </Button>
-                      </Grid>
-                      <Grid item md={6} xs={11}>
-                        <Button
-                          variant="outlined"
-                          sx={{
-                            height: "55px",
-                            borderRadius: "12px",
-                            width: "100%",
-                            textTransform: "capitalize",
-                            fontSize: "18px",
-                          }}
-                          onClick={handleSendBack}
-                        >
-                          Send Back To Manager
                         </Button>
                       </Grid>
                     </Grid>

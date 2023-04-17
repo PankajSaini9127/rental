@@ -1,4 +1,4 @@
-import { Box, Button, Grid, IconButton, TextField } from "@mui/material";
+import { Box, Button, FormControl, Grid, IconButton, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -13,7 +13,7 @@ import {
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { useDispatch, useSelector } from "react-redux";
-import { DocumentView } from "../../StyleComponents/Rental";
+import { DataFieldStyle, DocumentView } from "../../StyleComponents/Rental";
 import { setAlert, setRefreshBox } from "../../../store/action/action";
 import { get_rent_data_ID, sendMonthyPaymentForword } from "../../../Services/Services";
 
@@ -36,8 +36,24 @@ export default function FinanceMonthlyRentView() {
     gst_amount: "",
     total_amount: "",
     invoice: "",
-    status:""
+    status:"",
+    dateMonth:""
   });
+
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
   async function fetchData(id) {
     try {
@@ -48,7 +64,7 @@ export default function FinanceMonthlyRentView() {
         setPredata({
           invoice: response.data.data[0].invoice,
           invoice_no: response.data.data[0].invoice_number,
-          invoice_date: response.data.data[0].invoice_date,
+          invoice_date:(response.data.data[0].invoice_date),
           rent_amount: parseFloat(response.data.data[0].rent_amount).toFixed(2),
           gst_amount: response.data.data[0].gst_amount,
           total_amount: parseFloat(
@@ -56,6 +72,9 @@ export default function FinanceMonthlyRentView() {
               Number(response.data.data[0].gst_amount)
           ).toFixed(2),
           status: response.data.data[0].status,
+          dateMonth: month[new Date(response.data.data[0].invoice_date).getUTCMonth()] +
+          " " +
+          new Date(response.data.data[0].invoice_date).getFullYear()
         });
       }
     } catch (error) {
@@ -69,7 +88,7 @@ export default function FinanceMonthlyRentView() {
 
   async function handleSubmit(e) {
     try {
-      const send = await sendMonthyPaymentForword(id,{status:"Paid"})
+      const send = await sendMonthyPaymentForword(id,{status:"Paid",finance_id: auth.id})
       // console.log(send.data.success)
      if(send.data.success){
       dispatch(setAlert({open:true,variant:"success",message:"Approved Successfully."}))
@@ -109,12 +128,12 @@ export default function FinanceMonthlyRentView() {
         {/* <a id="button"></a> */}
 
         <HamburgerMenu
-          navigateHome={"operationsDashboard"}
-          handleListing={() => navigate("/operationsListing")}
-          monthlyRent={() => navigate("/opr-monthly-rent")}
-          renewal={() => navigate("/opr-monthly-rent")}
-          monthlyBtn="true"
-        />
+            navigateHome={"finance-dashboard"}
+            handleListing={() => navigate("/finance-listing")}
+            monthlyRent={() => navigate("/finance-monthly-rent")}
+            renewal={() => navigate("/finance-monthly-rent")}
+            monthlyBtn="true"
+          />
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Rental Management System</MyHeader>
@@ -132,9 +151,12 @@ export default function FinanceMonthlyRentView() {
             </IconButton>
           </Box>
           <Grid container sx={{ justifyContent: "center", mt: 3 }}>
-                       {/* Basic Details */}
             <Grid item md={10}>
+              <Grid container spacing={2} sx={{mb:2}}>
+                <DataFieldStyle field={"Rent Month"} value={preData.dateMonth}/>
+              </Grid>
               <Grid container spacing={2}>
+              
                 <TextFieldWrapper
                   required={true}
                   label="Invoice Number"
@@ -143,21 +165,37 @@ export default function FinanceMonthlyRentView() {
                   disabled={true}
                   name="invoice_no"
                 />
-                <TextFieldWrapper
+                {/* <TextFieldWrapper
                   required={true}
                   label="Invoice Date"
                   placeHolder="Enter Invoice Date"
                   value={preData.invoice_date}
                   disabled={true}
                   name="invoice_date"
+                /> */}
+                 <Grid item xs={6} md={4}>
+              <FormControl fullWidth>
+                <input
+                  type="date"
+                  name="invoiceDate"
+                  value={preData.invoice_date}
+                  className="DatePicker"
+                  disabled
+                  style={{height:'55px'}}
                 />
+              </FormControl>
+            </Grid>
                 <TextFieldWrapper
                   required={true}
                   label="Rent Amount"
                   placeHolder="Enter Rent Amount"
-                  value={preData.rent_amount}
+                  value={parseInt(preData.rent_amount).toLocaleString("us-Rs", {
+                    style: "currency",
+                    currency: "INR",
+                  })}
                   disabled={true}
                   name="rent_amount"
+                  textAlignRight={"textAlignRight"}
                   // onBlur={(e) => handleOnBlur(e, i)}
                   // error={ }
                 />
@@ -165,17 +203,25 @@ export default function FinanceMonthlyRentView() {
                   required={true}
                   label="GST Amount"
                   placeHolder="Enter GST AMount"
-                  value={preData.gst_amount}
+                  value={parseInt(preData.gst_amount).toLocaleString("us-Rs", {
+                    style: "currency",
+                    currency: "INR",
+                  })}
                   disabled={true}
                   name="gst_amount"
+                  textAlignRight={"textAlignRight"}
                   // onBlur={(e) => handleOnBlur(e, i)}
                   // error={ }
                 />
                 <TextFieldWrapper
                   required={true}
                   label="Total Amount"
+                  textAlignRight={"textAlignRight"}
                   placeHolder="Enter Total Amount"
-                  value={preData.total_amount}
+                  value={parseInt(preData.total_amount).toLocaleString("us-Rs", {
+                    style: "currency",
+                    currency: "INR",
+                  })}
                   disabled={true}
                   name="total_amount"
                   // onBlur={(e) => handleOnBlur(e, i)}

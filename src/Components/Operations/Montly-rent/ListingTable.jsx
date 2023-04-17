@@ -3,8 +3,9 @@ import { Box } from '@mui/system';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { get_monthlt_rent_opr, get_monthlt_rent_srm } from '../../../Services/Services';
-import { useSelector } from 'react-redux';
+import { get_monthlt_rent_opr, get_monthlt_rent_srm, sendMonthyPaymentForword } from '../../../Services/Services';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAlert, setRefreshBox } from '../../../store/action/action';
 
 
 
@@ -19,9 +20,12 @@ export default function ListingTable() {
     const [agIDS,setAgIds] = useState([])
     const [rentData,setRent] = useState({})
 
+    const dispatch = useDispatch()
+
     async function fetchData(id){
       try {
   const data = await get_monthlt_rent_opr(id)
+  console.log(data)
      if(data.data.success){
            setAgIds(data.data.ids)
            setRent(data.data.agreement)
@@ -49,14 +53,15 @@ export default function ListingTable() {
             checkbox:rentData[row].status,
             status:rentData[row].status,
             utr:rentData[row].utr_no,
-            // srmanager:rentData[row].manager,
             name:rentData[row].landlord_name,
             location:rentData[row].location,
             gst:rentData[row].gst,
             percentage:rentData[row].share,
             month_of_rent: month [new Date(rentData[row].rent_date).getUTCMonth()] + " " + new Date(rentData[row].rent_date).getFullYear(),
             total_month_rent:rentData[row].monthly_rent,
-            payable_amount: parseFloat(rentData[row].rent_amount).toFixed(2)
+            payable_amount: parseFloat(rentData[row].rent_amount).toFixed(2),
+            manager:rentData[row].manager_name,
+            srm:rentData[row].srm_name
           }
         )
       })
@@ -112,7 +117,7 @@ export default function ListingTable() {
           renderCell: (params) => (
             <>
               {/* {console.log(ids.includes(params.id))} */}
-              {params.formattedValue === "Hold" ? (
+              {params.formattedValue === "Sent To Operations" ? (
                 <Checkbox
                   onChange={handleSwitch}
                   name={params.id}
@@ -163,6 +168,22 @@ export default function ListingTable() {
     
         },
         {
+          field: "manager",
+          headerName: "Manager",
+          width: 100,
+          headerAlign: "center",
+          flex: 1
+    
+        },
+        {
+          field: "srm",
+          headerName: "Sr Manager",
+          width: 100,
+          headerAlign: "center",
+          flex: 1
+    
+        },
+        {
           field: "total_month_rent",
           headerName: "Month Rent",
           headerAlign: "center",
@@ -205,8 +226,33 @@ export default function ListingTable() {
     
       ];
       
-      function sendToOperations (){
-
+    async function sendToFinance (){
+        ids.map(async (id) => {
+          const send = await sendMonthyPaymentForword(id, {
+            status: "Sent To Finance",
+            op_id: auth.id,
+          });
+          console.log(send.data.success);
+          if (send.data.success) {
+            dispatch(
+              setAlert({
+                open: true,
+                variant: "success",
+                message: "Payment Details Sent To Operations.",
+              })
+            );
+            dispatch(setRefreshBox());
+            //  navigate(-1)
+          } else {
+            dispatch(
+              setAlert({
+                open: true,
+                variant: "error",
+                message: "Something Went Wrong Please Try Again Later.",
+              })
+            );
+          }
+        });
       }
 
 
@@ -217,7 +263,7 @@ export default function ListingTable() {
           <Button
             variant="contained"
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
-            onClick={sendToOperations}
+            onClick={sendToFinance}
           >
             Send To Finance
           </Button>
