@@ -110,8 +110,9 @@ import {
                 {/* Basic Details */}
                 <Grid item md={10} sx={{ mt: 2 }}>
                     <>
-
-                    <Grid container>
+ {
+  agreement[ids[0]].payment_status === "Paid" && (
+<Grid container>
                     <DataFieldStyle
                           field={"Invoice"}
                           href={agreement[ids[0]].invoice}
@@ -138,6 +139,10 @@ import {
                         />
 
                     </Grid>
+  )
+ }
+                    
+
                       <Grid container sx={{mt:4}} >
                         <DataFieldStyle
                           field={"Final Agreement"}
