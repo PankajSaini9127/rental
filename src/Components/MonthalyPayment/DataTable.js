@@ -225,7 +225,7 @@ function DataTable() {
               </Button>
             </Grid>
           )}
-          {(e.row.status === "Hold" || e.row.status === "Pending" && e.row.gst !== "---") && (
+          {((e.row.status === "Hold" || e.row.status === "Pending") && e.row.gst !== "---") && (
             <Grid item xs={6}>
               <Button
                 variant="contained"
@@ -250,7 +250,7 @@ function DataTable() {
               </Button>
             </Grid>
           )}
-          {(e.row.status === "Hold" || e.row.status === "Pending" && e.row.gst === "---") && (
+          {((e.row.status === "Hold" || e.row.status === "Pending")&& e.row.gst === "---") && (
             <Grid item xs={6}>
               <Button
                 variant="contained"
