@@ -6,7 +6,6 @@ import config from "../../config.json";
 
 import axios from "axios";
 
-
 import {
   add_invoice,
   get_rent_data_ID,
@@ -92,9 +91,8 @@ function DataTable() {
     invoice: "",
     invoice_file_name: "",
     manager_id: auth.id,
-    gst:""
+    gst: "",
   });
-
 
   const dispatch = useDispatch();
 
@@ -102,21 +100,77 @@ function DataTable() {
 
   const [selectID, setSelectID] = useState(0);
 
-  async function getData(id){
+  async function getData(id) {
     try {
-      const response = await get_rent_data_ID(id)
-                
-        console.log(response.data.data[0].invoice_number)
-        if(response.data.succes){
-            setInvoiceDetails({...invoiceDetails ,gst:response.data.data[0].gst?response.data.data[0].gst:"---",rentAmount:(response.data.data[0].rent_amount),gstAmount:(response.data.data[0].rent_amount/100)*18
+      const response = await get_rent_data_ID(id);
+
+      console.log(response.data.data[0].invoice_number);
+      if (response.data.succes) {
+        setInvoiceDetails({
+          ...invoiceDetails,
+          gst: response.data.data[0].gst ? response.data.data[0].gst : "---",
+          rentAmount: response.data.data[0].rent_amount,
+          gstAmount: response.data.data[0].gst
+            ? (response.data.data[0].rent_amount / 100) * 18
+            : 0,
+        });
+      } else {
+        dispatch(
+          setAlert({
+            open: true,
+            message: "something Went Wrong Please Try Again Later.",
+            variant: "error",
           })
-        }else{
-          dispatch(setAlert({open:true,message:"something Went Wrong Please Try Again Later.",variant:"error"}))
-        }
+        );
+      }
     } catch (error) {
-      console.log(error)
-      dispatch(setAlert({open:true,message:"something Went Wrong Please Try Again Later.",variant:"error"}))
+      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          message: "something Went Wrong Please Try Again Later.",
+          variant: "error",
+        })
+      );
     }
+  }
+
+  async function handleSendSRM (id){
+     try {
+      const send = await sendMonthyPaymentForword(id, {
+        status: "Sent To Sr Manager",
+        manager_id: auth.id,
+      });
+      console.log(send.data.success);
+      if (send.data.success) {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "success",
+            message: "Payment Details Sent To Sr Manager.",
+          })
+        );
+        dispatch(setRefreshBox());
+        //  navigate(-1)
+      } else {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong Please Try Again Later.",
+          })
+        );
+      }
+     } catch (error) {
+      console.log(error)
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong Please Try Again Later.",
+        })
+      );
+     }
   }
 
   const gstUploadButton = (e) => {
@@ -139,10 +193,10 @@ function DataTable() {
                 textTransform: "capitalize",
                 // width:"100%"
               }}
-              onClick={async(e) => {
+              onClick={async (e) => {
                 e.stopPropagation(); // don't select this row after clicking
-                console.log(id)
-               navigate(`/monthly-payment-view/${id}`);
+                console.log(id);
+                navigate(`/monthly-payment-view/${id}`);
               }}
             >
               View
@@ -171,7 +225,7 @@ function DataTable() {
               </Button>
             </Grid>
           )}
-          {(e.row.status === "Hold" || e.row.status === "Pending") && (
+          {(e.row.status === "Hold" || e.row.status === "Pending" && e.row.gst !== "---") && (
             <Grid item xs={6}>
               <Button
                 variant="contained"
@@ -187,12 +241,34 @@ function DataTable() {
                 onClick={(e) => {
                   e.stopPropagation(); // don't select this row after clicking
                   // navigate(`/BHUapproval/${id}`);
-                  getData(id)
+                  getData(id);
                   setSelectID(id);
                   setOpen(true);
                 }}
               >
                 Upload
+              </Button>
+            </Grid>
+          )}
+          {(e.row.status === "Hold" || e.row.status === "Pending" && e.row.gst === "---") && (
+            <Grid item xs={6}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{
+                  backgroundColor: "rgb(103 185 68 / 89%)",
+                  color: "white",
+                  fontSize: "12px",
+                  textTransform: "capitalize",
+                  // width:"100%"
+                }}
+                onClick={(e) => {
+                  e.stopPropagation(); // don't select this row after clicking
+                  handleSendSRM(id)
+                }}
+              >
+               Approve
               </Button>
             </Grid>
           )}

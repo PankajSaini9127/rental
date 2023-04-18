@@ -1,40 +1,56 @@
-import { Alert, Box, Button, Grid, Snackbar } from '@mui/material';
+import { Alert, Box, Button, Checkbox, Grid, Snackbar } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useState,useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 import config from '../../config.json'
 
 
-import axios from 'axios'
-
-//
 import PermissionAlert from '../Manager/Alert';
-import { get_monthaly_rent, get_monthly_rent, get_renewal } from '../../Services/Services';
+import { useDispatch } from 'react-redux';
+import { setAlert } from '../../store/action/action';
  
 
 
 function DataTable() {
 
   const [data,setData] = useState([])
+  const dispatch = useDispatch()
 
   const [loading, setLoading] = useState(false)
 
-  const [err,setErr] = useState({
-    open:false,
-    type:"",
-    message:''
-  })
-
-  //altet close 
-  const handleClose = ()=>{
-      setErr(
-        {
-          open:false,
-          type:"",
-          message:''
-        }
-      )
+ async function handleRenewal (id){
+   try {
+    
+   } catch (error) {
+    console.log(error)
+    dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+   }
   }
+
+function actionButton (e){
+      const id = e.id 
+      return <Grid item xs={6}>
+      <Button
+        variant="contained"
+        color="primary"
+        size="small"
+        style={{
+          backgroundColor: "rgb(103 185 68 / 89%)",
+          color: "white",
+          fontSize: "12px",
+          textTransform: "capitalize",
+          // width:"100%"
+        }}
+        onClick={async (e) => {
+          e.stopPropagation(); // don't select this row after clicking
+          console.log(id);
+          handleRenewal(id)
+        }}
+      >
+        Renew
+      </Button>
+    </Grid>
+}
 
   // api call for get data
 
@@ -82,7 +98,7 @@ function DataTable() {
   },
   {
     id: 2,
-    status: "Active",
+    status: "Pending",
     code: 123,
     name: "John Doe", 
     location:"jodhpur",
@@ -96,7 +112,7 @@ function DataTable() {
   },
   {
     id: 4,
-    status: "Inactive",
+    status: "Pending",
     code: 123,
     name: "John Doe", location:"jodhpur",
     rentalAmount:3000
@@ -128,10 +144,45 @@ function DataTable() {
       // navigate(`/managerApproval/${id}`)
   };
 
+  const [ids, setIds] = useState([]);
+  console.log(ids);
+
+
+ //handle Checkbox
+ const handleSwitch = (e) => {
+  let idVar = Number(e.target.name);
+  if (ids.includes(idVar)) {
+    // console.log("out");
+    setIds(ids.filter((i) => i !== idVar));
+  } else {
+    // console.log("in", idVar, ids);
+    setIds([...ids, idVar]);
+  }
+};
 
 
   const columns = [
-   
+    {
+      field: "checkbox",
+      width: 20,
+      type: "number",
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      renderCell: (params) => (
+        <>
+          {/* {console.log(ids.includes(params.id))} */}
+          {params.formattedValue === "Pending" ? (
+            <Checkbox
+              onChange={handleSwitch}
+              name={params.id}
+              checked={ids.includes(params.id) ? true : false}
+            />
+          ) : (
+            <Checkbox disabled={true} />
+          )}
+        </>
+      ),
+    },   
     {
       field: "code",
       headerName: "Code",
@@ -165,6 +216,23 @@ function DataTable() {
       headerAlign: "center",
       flex:1
     },
+    {
+      field: "status",
+      headerName: "Status",
+      width: 200,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      flex:1
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 200,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      flex:1,
+      renderCell:actionButton
+    },
   ];
   
 
@@ -181,11 +249,6 @@ const [deleteAlert, setDeleteAlert] = useState({open:false,id:''})
   }
   return (
     <>
-<Snackbar open={err.open} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:"top", horizontal:"center" }}>
-  <Alert onClose={handleClose} severity={err.type} sx={{ width: '100%' }}>
-    {err.message}
-  </Alert>
-</Snackbar>
 
 <PermissionAlert handleClose={handleCancel} handleConfirm={handleConfirm} open={ deleteAlert.open} message={"Are you sure you want to delete this item?"}/>
 
@@ -230,7 +293,6 @@ const [deleteAlert, setDeleteAlert] = useState({open:false,id:''})
         pageSize={6}
         rowsPerPageOptions={[6]}
         loading={loading}
-        checkboxSelection
         sx={{ color: "black !important",  minWidth:"50px" }}
         getCellClassName={(parms) => {
            let cellClass = []
