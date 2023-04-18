@@ -8,7 +8,6 @@ import { Stack } from "@mui/material";
 import DataTable from "./DataTable";
 import { useNavigate } from "react-router-dom";
 
-const options = ["New Agreement","Monthly Payment","Rental"]
 
 
 export default function RenewalList() {
@@ -32,7 +31,6 @@ const navigate = useNavigate()
       <ListingComponent
         title1={'Rental Management System'}
         title={'Renewal'}
-        options={options}
         value={Select}
         Table={DataTable}
         onChange={handleChange}

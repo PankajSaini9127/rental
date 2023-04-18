@@ -12,6 +12,7 @@ import EditAgreement from "./Components/Manager/EditAgreement";
 import ManagerApproval from "./Components/Manager/ManagerApproval";
 import MonthalyList from "./Components/MonthalyPayment/MonthalyList";
 import RenewalList from "./Components/Renewal/RenewalList";
+import RenewalEditAgreement from "./Components/Renewal/EditAgreement";
 
 //sr MAnager section
 import SrManagerDashboard from "./Components/SrManager/SrManagerDashboard";
@@ -105,6 +106,14 @@ function MyRouter() {
         path="/monthly-payment-view/:id"
         element={isAuth && role.includes("Manager")  ? <ViewPage /> : <Login />}
       />
+      <Route
+        exact
+        path="/renewal-edit-agreement/:id"
+        element={isAuth && role.includes("Manager")  ? <RenewalEditAgreement /> : <Login />}
+      />
+
+
+
 
 
 
