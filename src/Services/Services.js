@@ -147,6 +147,17 @@ export async function get_landlord_id (id){
     return await axios.get(`${API_LIVE}/api/month_rent/get_landlord_id/${id}`)
 }
 
+
+//get search in renewal manager
+export async function get_search_renewal(searchValue,id){
+    return await axios.get(`${API_LIVE}/api/get-search-renewal/${id}?search=${searchValue}`)
+}
+
+//get search in srm renewal manager
+export async function get_search_renewal_srm(searchValue,id){
+    return await axios.get(`${API_LIVE}/api/srmanager/get-search-renewal-srm/${id}?search=${searchValue}`)
+}
+
 //get Depposit 
 export async function get_deposit_amount (code){
     return await axios.get(`${API_LIVE}/api/get-deposit-amount?code=${code}`)

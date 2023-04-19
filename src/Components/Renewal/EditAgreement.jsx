@@ -95,7 +95,7 @@ function EditAgreement({ history }) {
 
 
   
- console.log(preData.landlord)
+ console.log(preData)
 
   async function fetchData() {
     try {
@@ -133,7 +133,8 @@ function EditAgreement({ history }) {
           area,
           landlord,
           remark,
-          manager_id
+          manager_id,
+          branchName
         } = response.data;
 
 
@@ -157,6 +158,7 @@ function EditAgreement({ history }) {
         }
         
         setPreData({
+          ...preData,
           id,
           area,
           code,
@@ -170,18 +172,19 @@ function EditAgreement({ history }) {
           noticePeriod,
           yearlyIncrement,
           deposit,
-          gst_certificate,
-          draft_agreement,
-          electricity_bill,
-          poa,
-          maintaince_bill,
-          cheque,
-          tax_receipt,
-          noc,
+          // gst_certificate,
+          // draft_agreement,
+          // electricity_bill,
+          // poa,
+          // maintaince_bill,
+          // cheque,
+          // tax_receipt,
+          // noc,
           tenure,
           landlord,
           remark,
-          manager_id
+          manager_id,
+          branchName
         });
 
         setPartLable({
@@ -213,7 +216,8 @@ function EditAgreement({ history }) {
           year2,
           year3,
           year4,
-          year5
+          year5,
+          branchName
         });
 
         setFormError({
@@ -693,6 +697,8 @@ function EditAgreement({ history }) {
 
 
 
+console.log(partLabel)
+
   const [expand, setExpand] = useState(0);
 
   // const APICall = async (values, landlordData) => {
@@ -1100,66 +1106,66 @@ function EditAgreement({ history }) {
   }
 
 
-  function handleHold() {
-    const {
-      id,
-      area,
-      code,
-      lockInYear,
-      monthlyRent,
-      noticePeriod,
-      yearlyIncrement,
-      deposit,
-      gst_certificate,
-      draft_agreement,
-      electricity_bill,
-      poa,
-      maintaince_bill,
-      tax_receipt,
-      noc,
-      tenure,
-      pincode,
-      state,
-      address,
-      location,
-      city,
-      landlord,
-    } = preData;
-    console.log(preData);
-    console.log(validate(preData), validateFields(preData));
-    if (validate(preData) && validateFields(preData)) {
-      APICall(
-        {
-          pincode,
-          state,
-          address,
-          area,
-          location,
-          city,
-          id,
-          code,
-          lockInYear,
-          monthlyRent,
-          noticePeriod,
-          yearlyIncrement,
-          deposit,
-          gst_certificate,
-          draft_agreement,
-          electricity_bill,
-          poa,
-          maintaince_bill,
-          tax_receipt,
-          noc,
-          tenure,
-          ...increment,
-          status: "Hold",
-          remark: "",
+  // function handleHold() {
+  //   const {
+  //     id,
+  //     area,
+  //     code,
+  //     lockInYear,
+  //     monthlyRent,
+  //     noticePeriod,
+  //     yearlyIncrement,
+  //     deposit,
+  //     gst_certificate,
+  //     draft_agreement,
+  //     electricity_bill,
+  //     poa,
+  //     maintaince_bill,
+  //     tax_receipt,
+  //     noc,
+  //     tenure,
+  //     pincode,
+  //     state,
+  //     address,
+  //     location,
+  //     city,
+  //     landlord,
+  //   } = preData;
+  //   console.log(preData);
+  //   console.log(validate(preData), validateFields(preData));
+  //   if (validate(preData) && validateFields(preData)) {
+  //     APICall(
+  //       {
+  //         pincode,
+  //         state,
+  //         address,
+  //         area,
+  //         location,
+  //         city,
+  //         id,
+  //         code,
+  //         lockInYear,
+  //         monthlyRent,
+  //         noticePeriod,
+  //         yearlyIncrement,
+  //         deposit,
+  //         gst_certificate,
+  //         draft_agreement,
+  //         electricity_bill,
+  //         poa,
+  //         maintaince_bill,
+  //         tax_receipt,
+  //         noc,
+  //         tenure,
+  //         ...increment,
+  //         status: "Hold",
+  //         remark: "",
 
-        },
-        landlord
-      );
-    }
-  }
+  //       },
+  //       landlord
+  //     );
+  //   }
+  // }
 
   function Docview ( href, name ){
     console.log("docview")
@@ -1211,7 +1217,7 @@ function EditAgreement({ history }) {
               >
                 {/* Basic details start here */}
 
-                <Grid container sx={{ px: 3 }} spacing={isSmall ? 2 : 4}>
+                <Grid container sx={{ px: 3,mb:2 }} spacing={isSmall ? 4 : 4} rowSpacing={5}>
                   <TextFieldWrapper
                     label="Code"
                     placeHolder=""
@@ -1289,13 +1295,12 @@ function EditAgreement({ history }) {
                     required={true}
                     value={preData.area}
                     partLabel={
-                      partLabel.landlord[i] &&
-                      partLabel.landlord[i].area
-                        ? partLabel.landlord[i].area+' sq. ft'
+                      partLabel &&
+                      partLabel.area
+                        ?"Old Area:"+ partLabel.area+' sq. ft'
                         : ""
                     }
                     onChange={handleCommonChange}
-                    index={i}
                   />
 
                   <TextFieldWrapper
@@ -1318,7 +1323,7 @@ function EditAgreement({ history }) {
                     partLabel={
                       partLabel.lockInYear &&
                       partLabel.lockInYear
-                        ? partLabel.lockInYear + ' (Month)'
+                        ?"Old Lock In Month :"+ partLabel.lockInYear + ' (Month)'
                         : ""
                     }
                     error={formError.lockInYear}
@@ -1334,7 +1339,7 @@ function EditAgreement({ history }) {
                     partLabel={
                       partLabel.noticePeriod &&
                       partLabel.noticePeriod
-                        ? partLabel.noticePeriod + ' (Notice Period)'
+                        ?"Old Notice Period :"+ partLabel.noticePeriod
                         : ""
                     }
                     onChange={handleCommonChange}
@@ -1349,7 +1354,7 @@ function EditAgreement({ history }) {
                     partLabel={
                       partLabel.deposit &&
                       partLabel.deposit
-                        ? partLabel.deposit
+                        ?"Old Deposit Amount :"+ partLabel.deposit
                         : ""
                     }
                     onChange={handleCommonChange}
@@ -1365,7 +1370,7 @@ function EditAgreement({ history }) {
                     partLabel={
                       partLabel.monthlyRent &&
                       partLabel.monthlyRent
-                        ? partLabel.monthlyRent
+                        ? "Old Monthly Rent:"+ partLabel.monthlyRent
                         : ""
                     }
                     onChange={handleCommonChange}
@@ -1386,7 +1391,7 @@ function EditAgreement({ history }) {
                     partLabel={
                       partLabel.tenure &&
                       partLabel.tenure
-                        ? partLabel.tenure
+                        ? "Old Tenure:"+ partLabel.tenure
                         : ""
                     }
                     value={preData.tenure || ""}  
@@ -1402,7 +1407,7 @@ function EditAgreement({ history }) {
                       partLabel={
                         partLabel.yearlyIncrement &&
                         partLabel.yearlyIncrement
-                          ? partLabel.yearlyIncrement
+                          ?"Old Yearly Increment" + partLabel.yearlyIncrement
                           : ""
                       }
                       options={["Percentage", "Value"]}
@@ -1435,6 +1440,7 @@ function EditAgreement({ history }) {
                   lineHeight="28px"
                   fontWeight="600"
                   my="20px"
+                  mt="35px !important"
                 >
                   Landlord Detail
                 </Typography>
@@ -1478,7 +1484,9 @@ function EditAgreement({ history }) {
                         <Grid
                           container
                           sx={{ px: 3, mb: "25px" }}
+                          
                           spacing={isSmall ? 2 : 4}
+                          rowSpacing={5}
                         >
                           <Grid item xs={12}>
                             {preData.landlord.length > 0 ? (
@@ -1547,7 +1555,7 @@ function EditAgreement({ history }) {
                             partLabel={
                               partLabel.landlord[i] &&
                               partLabel.landlord[i].mobileNo
-                                ? partLabel.landlord[i].mobileNo
+                                ? "Old Mobile Number: " + partLabel.landlord[i].mobileNo
                                 : ""
                             }
                             error={
@@ -1568,7 +1576,7 @@ function EditAgreement({ history }) {
                             onBlur={(e) => handleOnBlur(e, i)}
                             maxLength={10}
                             partLabel={
-                              partLabel.landlord[i].alternateMobile
+                             "Old Alternate Number: " + partLabel.landlord[i].alternateMobile
                             }
                             value={preData.landlord[i].alternateMobile}
                             // error={formError.alternateMobile}
@@ -1589,7 +1597,7 @@ function EditAgreement({ history }) {
                             }
                             name="email"
                             partLabel={
-                              partLabel.landlord[i].email
+                              "Old Email: "+ partLabel.landlord[i].email
                             }
                             value={preData.landlord[i].email}
                             onChange={(e) => handleChange(e, i)}
@@ -1610,7 +1618,7 @@ function EditAgreement({ history }) {
                             name="gstNo"
                             maxLength={15}
                             partLabel={
-                              partLabel.landlord[i].gstNo
+                              "Old GST Number :"+ partLabel.landlord[i].gstNo
                             }
                             value={preData.landlord[i].gstNo}
                             onChange={(e) => handleChange(e, i)}
@@ -1621,12 +1629,15 @@ function EditAgreement({ history }) {
                             placeHolder="Enter IFSC Code"
                             onBlur={(e) => handleOnBlur(e, i)}
                             name="ifscCode"
-                            disabled={true}
+                            // disabled={true}
                             error={
                               formError.landlord[i] &&
                               formError.landlord[i].ifscCode
                                 ? formError.landlord[i].ifscCode
                                 : ""
+                            }
+                            partLabel={
+                              "Old Bank IFSC Code :"+ partLabel.landlord[i].ifscCode
                             }
                             value={preData.landlord[i].ifscCode}
                             onChange={(e) => handleChange(e, i)}
@@ -1639,10 +1650,7 @@ function EditAgreement({ history }) {
                             name="bankName"
                             onBlur={(e) => handleOnBlur(e, i)}
                             partLabel={
-                              partLabel.landlord[i] &&
-                              partLabel.landlord[i].branchName
-                                ? partLabel.landlord[i].branchName
-                                : ""
+                              "Old Bank Branch Name:"+ partLabel.landlord[i].branchName
                             }
                             error={
                               formError.landlord[i] &&
@@ -1666,11 +1674,13 @@ function EditAgreement({ history }) {
                                 ? formError.landlord[i].benificiaryName
                                 : ""
                             }
-                            disabled={true}
                             placeHolder="Enter Beneficiary Name"
                             name="benificiaryName"
                             value={preData.landlord[i].benificiaryName}
                             onChange={(e) => handleChange(e, i)}
+                            partLabel={
+                              "Old Beneficiary Name:"+ partLabel.landlord[i].benificiaryName
+                            }
                           />
                           <TextFieldWrapper
                             label="Bank A/C Number "
@@ -1683,9 +1693,11 @@ function EditAgreement({ history }) {
                                 ? formError.landlord[i].accountNo
                                 : ""
                             }
-                            disabled={true}
                             value={preData.landlord[i].accountNo}
                             onChange={(e) => handleChange(e, i)}
+                            partLabel={
+                              "Old Bank A/C Number:"+ partLabel.landlord[i].accountNo
+                            }
                           />
                         </Grid>
                       </Collapse>
@@ -1810,7 +1822,7 @@ function EditAgreement({ history }) {
                               handleChange={(e) => handleChangeCommonFile(e, i)}
                               name={"gst"}
                               fileName={preData[`gst${i}`]}
-                              href={ preData.landlord[i].gst}
+                              href={ partLabel.landlord[i].gst}
                             />
                           </Grid>
                           <Grid item xs={6}>
@@ -1823,11 +1835,10 @@ function EditAgreement({ history }) {
                               }
                               label="Upload Cancel Cheque"
                               name={"cheque"}
-                              disabled={true}
                               fileName={preData[`cheque${i}`]}
                               placeHolder="Upload Cancel Cheque"
                               handleChange={(e) => handleChangeCommonFile(e, i)}
-                              href={ preData.landlord[i].cheque}
+                              href={ partLabel.landlord[i].cheque}
                             />
                           </Grid>
                         </Grid>
@@ -1864,7 +1875,7 @@ function EditAgreement({ history }) {
                       fileName={preData.draft_agreement_name}
                       handleChange={handleChangeFile}
                       name={"draft_agreement"}
-                      href={ preData.draft_agreement}
+                      href={ partLabel.draft_agreement}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1876,7 +1887,7 @@ function EditAgreement({ history }) {
                       handleChange={handleChangeFile}
                       fileName={preData.electricity_bill_name}
                       name={"electricity_bill"}
-                      href={ preData.electricity_bill}
+                      href={ partLabel.electricity_bill}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1888,7 +1899,7 @@ function EditAgreement({ history }) {
                       fileName={preData.poa_name}
                       handleChange={handleChangeFile}
                       name={"poa"}
-                      href={ preData.poa}
+                      href={ partLabel.poa}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1900,7 +1911,7 @@ function EditAgreement({ history }) {
                       handleChange={handleChangeFile}
                       fileName={preData.maintaince_bill_name}
                       name={"maintaince_bill"}
-                      href={ preData.maintaince_bill}
+                      href={ partLabel.maintaince_bill}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1912,7 +1923,7 @@ function EditAgreement({ history }) {
                       fileName={preData.tax_receipt_name}
                       error={formError.tax_receipt}
                       name={"tax_receipt"}
-                      href={ preData.tax_receipt}
+                      href={ partLabel.tax_receipt}
                     />
                   </Grid>
                   {console.log(preData.landlord.length)}
@@ -1926,7 +1937,7 @@ function EditAgreement({ history }) {
                       fileName={preData.noc_name}
                       handleChange={handleChangeFile}
                       name={"noc"}
-                      href={ preData.noc}
+                      href={ partLabel.noc}
                       />
                   </Grid>
                     }
@@ -1998,7 +2009,7 @@ function EditAgreement({ history }) {
                           height: "40px",
                         },
                       }}
-                      onClick={handleHold}
+                      // onClick={handleHold}
                     >
                       Hold
                     </Button>

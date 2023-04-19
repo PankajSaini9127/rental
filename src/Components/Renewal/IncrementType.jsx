@@ -188,7 +188,7 @@ function handleChange (e){
           Amount={increment.year1}
           label="Percentage"
           name="year1"
-          partLabel={partLabel.year1}
+          // partLabel={"Old Year1 Percentage:" + partLabel.year1}
           increment={0}
           onChange={handleChange}
           disabled={true}
