@@ -277,3 +277,8 @@ export async function setFinalAgreement (data){
 export async function listMonthRent (manager_id){
     return await axios.get(`${API_LIVE}/api/listMonthRent/${manager_id}`)
 }
+
+// APIs for listMonthRent
+export async function insertAdjustmentAmount (data){
+    return await axios.post(`${API_LIVE}/api/insertAdjustmentAmount`,data)
+}
