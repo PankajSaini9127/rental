@@ -11,16 +11,16 @@ import Remark from '../../RentalPortal/Remark';
  
 
 
-function DataTable() {
+function DataTable({rows,loading}) {
 
- const [agreements,setAgreements] = useState({})
- const [agIds,setAgIds] = useState([])
+//  const [agreements,setAgreements] = useState({})
+//  const [agIds,setAgIds] = useState([])
 
   const dispatch = useDispatch()
 
-  const {auth,refresh} = useSelector(s=>s)
+//   const {auth,refresh} = useSelector(s=>s)
 
-  const [loading, setLoading] = useState(false)
+//   const [loading, setLoading] = useState(false)
 
   const [remarkMSG,setRemarkMSG] = useState("")
   const [remarkOpen,setRemarkOpen] = useState({open:false})
@@ -111,45 +111,11 @@ function actionButton (e){
     )
 }
 
-  // api call for get data
-console.log(agreements)
-console.log(agIds)
-
-  const APICALL = async(id)=>{
-    try {
-      setLoading(true)
-      const result = await get_renewal_srm(id)
-  
-     console.log(result)
-      if(result.data.success){
-      //   const data = result.data.data.reverse();
-      setAgreements(result.data.agreement)
-      setAgIds(result.data.ids)
-      setLoading(false)
-
-      }
-    } catch (error) {
-      console.log(error)
-      return dispatch({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."})
-    }
-   
-  }
-
-  useEffect(()=>{
-    APICALL(auth.id)
-  },[refresh])
 
 
-const row =agIds.map(row=>{
-  return {
-      id: agreements[row].id,
-      status: agreements[row].renewal_status,
-      code: agreements[row].code,
-      name: agreements[row].name,
-      location: agreements[row].location,
-      rentalAmount: agreements[row].monthlyRent
-    }
-})
+
+
+ 
 
   const navigate = useNavigate()
 
@@ -172,86 +138,125 @@ const row =agIds.map(row=>{
 };
 
 
-  const columns = [
-    {
-      field: "checkbox",
-      width: 20,
-      type: "number",
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      renderCell: (params) => (
-        <>
-          {/* {console.log(ids.includes(params.id))} */}
-          {params.formattedValue === "Sent To Sr Manager For Renewal" ? (
-            <Checkbox
-              onChange={handleSwitch}
-              name={params.id}
-              checked={ids.includes(params.id) ? true : false}
-            />
-          ) : (
-            <Checkbox disabled={true} />
-          )}
-        </>
-      ),
-    },   
-    {
-      field: "code",
-      headerName: "Code",
-      width: 130,
-      type: "number",
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      flex:1
-    },
-    {
-      field: "name",
-      headerName: "Name",
-      width: 230,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      flex:1
-    },
-    {
-      field: "location",
-      headerName: "Location",
-      width: 230,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      flex:1
-    },
-    {
-      field: "rentalAmount",
-      headerName: "Rental Amount",
-      width: 200,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      flex:1
-    },
-    {
-      field: "status",
-      headerName: "Status",
-      width: 200,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      flex:1
-    },
-    {
-      field: "action",
-      headerName: "Action",
-      width: 200,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      flex:1,
-      renderCell:actionButton
-    },
-  ];
-  
+const columns = [
+  {
+    field: "checkbox",
+    width: 20,
+    type: "number",
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    renderCell: (params) => (
+      <>
+        {/* {console.log(ids.includes(params.id))} */}
+        {params.formattedValue === "Pending For Renewal" ? (
+          <Checkbox
+            onChange={handleSwitch}
+            name={params.id}
+            checked={ids.includes(params.id) ? true : false}
+          />
+        ) : (
+          <Checkbox disabled={true} />
+        )}
+      </>
+    ),
+  },
+  {
+    field: "code",
+    headerName: "Code",
+    width: 130,
+    type: "number",
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    flex: 1,
+  },
+  {
+    field: "name",
+    headerName: " Landlord Name",
+    width: 230,
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    flex: 1,
+  },
+  {
+    field: "location",
+    headerName: "Location",
+    width: 230,
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    flex: 1,
+  },
+  {
+    field: "city",
+    headerName: "City",
+    width: 230,
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    flex: 1,
+  },
+  {
+    field: "state",
+    headerName: "State",
+    width: 230,
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    flex: 1,
+  },
+  {
+    field: "deposit",
+    headerName: "Deposit Amount",
+    width: 230,
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    flex: 1,
+  },
+  {
+    field: "rentalAmount",
+    headerName: "Rent Amount",
+    width: 200,
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    flex: 1,
+  },
+  {
+    field: "expiry_date",
+    headerName: "Agreement Expiry Date",
+    width: 230,
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    flex: 1,
+  },
+  {
+    field:"expiry_day" ,
+    headerName:"Day In Expire" ,
+    width: 230,
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    flex: 1,
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    width: 200,
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    flex: 1,
+  },
+  {
+    field: "action",
+    headerName: "Action",
+    minWidth: 200,
+    headerClassName: "dataGridHeader",
+    headerAlign: "center",
+    flex: 1,
+    renderCell: actionButton,
+  },
+];
 
   //send back
   async function handleSendBack (){
     try {
       const response = await send_to_bhu(
-        { renewal_status: "Sent Back Fro Renewal Rectification",remark:remarkMSG },
+        { renewal_status: "Sent Back For Renewal Rectification",renewal_remark:remarkMSG },
         remarkOpen.id
       );
       if (response.data.success) {
@@ -262,6 +267,8 @@ const row =agIds.map(row=>{
             message: "Agreement Sent Back To Manager.",
           })
           );
+          setRemarkOpen({open:false})
+          setRemarkMSG("")
           dispatch(setRefreshBox())
       } else {
         dispatch(
@@ -322,7 +329,7 @@ const row =agIds.map(row=>{
       }}
     >
       <DataGrid
-        rows={row}
+        rows={rows}
         columns={columns}
         pageSize={6}
         rowsPerPageOptions={[6]}
@@ -339,7 +346,7 @@ const row =agIds.map(row=>{
             cellClass.push( "yellow statusCell") ;
           } else if (
             parms.field === "status" &&
-            parms.row.status === "Sent Back Fro Renewal Rectification"
+            parms.row.status === "Sent Back For Renewal Rectification"
           ) {
             cellClass.push("red statusCell")  ;
           }

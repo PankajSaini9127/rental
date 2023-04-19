@@ -58,6 +58,7 @@ import FinanceMonthlyRentView from "./Components/FinancePanel/Montly-rent/Financ
 import EditInvoice from "./Components/MonthalyPayment/EditInvoice";
 import ViewPage from "./Components/MonthalyPayment/ViewPage";
 import SrmRenwalList from "./Components/SrManager/Renewal/RenewalListing";
+import RenewalViewPage from "./Components/Renewal/ViewPage";
 
 function MyRouter() {
   const history = useNavigate();
@@ -111,6 +112,11 @@ function MyRouter() {
         exact
         path="/renewal-edit-agreement/:id"
         element={isAuth && role.includes("Manager")  ? <RenewalEditAgreement /> : <Login />}
+      />
+<Route
+        exact
+        path="/renewal-view-agreement/:id"
+        element={isAuth && role.includes("Manager")  ? <RenewalViewPage /> : <Login />}
       />
 
 
