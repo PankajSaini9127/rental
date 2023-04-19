@@ -355,12 +355,14 @@ export default function MonthalyRentView() {
                     name="rent_amount"
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
+                    disabled={true}
                     textAlignRight={"textAlignRight"}
                   />
                   <TextFieldWrapper
                     required={true}
                     label="GST Amount"
                     placeHolder="Enter GST AMount"
+                    disabled={true}
                     value={parseInt(preData.gst_amount).toLocaleString(
                       "us-Rs",
                       {

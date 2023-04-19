@@ -50,7 +50,7 @@ import FinanceDashboard from "./Components/FinancePanel/FinanceDashboard";
 import FinanceListing from "./Components/FinancePanel/FinanceListing";
 import FinanceApproval from "./Components/FinancePanel/ApprovalRequest";
 import MonthlyPayement from "./Components/SrManager/Montly-rent/MonthlyPayement";
-import BUHMonthlyPayement from "./Components/BHU/Montly-rent/MonthlyPayement";
+// import BUHMonthlyPayement from "./Components/BHU/Montly-rent/MonthlyPayement";
 import FinanceMonthlyPayement from "./Components/FinancePanel/Montly-rent/MonthlyPayement";
 import OperationsMonthlyPayement from "./Components/Operations/Montly-rent/MonthlyPayement";
 import MonthalyRentView from "./Components/Operations/Montly-rent/MonthalyRentView";
@@ -237,11 +237,6 @@ function MyRouter() {
         exact
         path="/BHUapproval/:id"
         element={isAuth && role.includes("BUH") ? <BHUapproval /> : <Login />}
-      />
-       <Route
-        exact
-        path="/buh-monthly-rent"
-        element={isAuth && role.includes("BUH") ? <BUHMonthlyPayement/> : <Login />}
       />
 
       {/* Admin Section */}

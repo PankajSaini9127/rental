@@ -45,31 +45,50 @@ function DataTable({ rows, loading }) {
     }
   }
 
+  //handle terminate  
+  async function handleTerminate (id){
+    try {
+      const response = await send_to_bhu(
+        { renewal_status: "Sent To Sr Manager For Termination" },
+        id
+      );
+      if (response.data.success) {
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Agreement Sent To Sr Manager For Terminate",
+          })
+        );
+        dispatch(setRefreshBox());
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          })
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong Please Try Again Later.",
+        })
+      );
+    }
+  }
+
   function actionButton(e) {
     const id = e.id;
     return (
       <Grid container>
-        <Grid item xs={6}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            style={{
-              backgroundColor: "rgb(103 185 68 / 89%)",
-              color: "white",
-              fontSize: "12px",
-              textTransform: "capitalize",
-              // width:"100%"
-            }}
-            onClick={(e) => {
-              e.stopPropagation(); // don't select this row after clicking
-              navigate(`/renewal-view-agreement/${id}`);
-            }}
-          >
-            View
-          </Button>
-        </Grid>
+       
         {e.row.status === "Pending For Renewal" && (
+          <>
           <Grid item xs={6}>
             <Button
               variant="contained"
@@ -91,15 +110,37 @@ function DataTable({ rows, loading }) {
               Renew
             </Button>
           </Grid>
-        )}
-        {e.row.status === "Approved for Renewal" && (
           <Grid item xs={6}>
             <Button
               variant="contained"
-              color="primary"
+              // color="primary"
               size="small"
               style={{
-                backgroundColor: "rgb(103 185 68 / 89%)",
+                backgroundColor: "#b53f3f",
+                color: "white",
+                fontSize: "12px",
+                textTransform: "capitalize",
+                // width:"100%"
+              }}
+              onClick={async (e) => {
+                e.stopPropagation(); // don't select this row after clicking
+                // console.log(id);
+                handleTerminate(id);
+              }}
+            >
+              Terminate
+            </Button>
+          </Grid>
+          </>
+        )}
+        {(e.row.status === "Approved for Renewal") && (
+          <>
+          <Grid item xs={6}>
+            <Button
+              variant="contained"
+              size="small"
+              style={{
+                backgroundColor: "#807a7a",
                 color: "white",
                 fontSize: "12px",
                 textTransform: "capitalize",
@@ -114,6 +155,71 @@ function DataTable({ rows, loading }) {
               Edit
             </Button>
           </Grid>
+           <Grid item xs={6}>
+           <Button
+             variant="contained"
+             color="primary"
+             size="small"
+             style={{
+               backgroundColor: "rgb(103 185 68 / 89%)",
+               color: "white",
+               fontSize: "12px",
+               textTransform: "capitalize",
+               // width:"100%"
+             }}
+             onClick={(e) => {
+               e.stopPropagation(); // don't select this row after clicking
+               navigate(`/renewal-view-agreement/${id}`);
+             }}
+           >
+             View
+           </Button>
+         </Grid>
+         </>
+        )}
+        {(e.row.status === "Sent Back For Renewal Rectification" )&&(
+          <Grid item xs={6}>
+           <Button
+             variant="contained"
+             color="primary"
+             size="small"
+             style={{
+               backgroundColor: "rgb(103 185 68 / 89%)",
+               color: "white",
+               fontSize: "12px",
+               textTransform: "capitalize",
+               // width:"100%"
+             }}
+             onClick={(e) => {
+               e.stopPropagation(); // don't select this row after clicking
+               navigate(`/renewal-view-agreement/${id}`);
+             }}
+           >
+             View
+           </Button>
+         </Grid>
+        )}
+         {(e.row.status === "Sent Back For Termination Rectification" )&&(
+          <Grid item xs={6}>
+           <Button
+             variant="contained"
+             color="primary"
+             size="small"
+             style={{
+               backgroundColor: "rgb(103 185 68 / 89%)",
+               color: "white",
+               fontSize: "12px",
+               textTransform: "capitalize",
+               // width:"100%"
+             }}
+             onClick={(e) => {
+               e.stopPropagation(); // don't select this row after clicking
+               navigate(`/renewal-view-agreement/${id}`);
+             }}
+           >
+             View
+           </Button>
+         </Grid>
         )}
       </Grid>
     );
@@ -233,7 +339,7 @@ function DataTable({ rows, loading }) {
     {
       field: "status",
       headerName: "Status",
-      width: 200,
+      minWidth: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex: 1,
@@ -294,18 +400,24 @@ function DataTable({ rows, loading }) {
             let cellClass = [];
             if (
               parms.field === "status" &&
-              parms.row.status === "Approved for Renewal"
+              (parms.row.status === "Approved for Renewal"||
+              parms.row.status === "Approved for Terminate")
             ) {
               cellClass.push("green statusCell");
             } else if (
               parms.field === "status" &&
               (parms.row.status === "Pending For Renewal" ||
-                parms.row.status === "Sent To Sr Manager For Renewal")
+                parms.row.status === "Sent To Sr Manager For Renewal" ||
+                parms.row.status === "Hold"
+                 )
             ) {
               cellClass.push("yellow statusCell");
             } else if (
               parms.field === "status" &&
-              parms.row.status === "Sent Back For Renewal Rectification"
+              (parms.row.status === "Sent Back For Renewal Rectification" || 
+              parms.row.status === "Sent To Sr Manager For Termination" ||
+              parms.row.status === "Sent Back For Termination Rectification"
+              )
             ) {
               cellClass.push("red statusCell");
             }

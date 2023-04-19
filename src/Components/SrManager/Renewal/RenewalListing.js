@@ -80,9 +80,6 @@ export default function SrmRenwalList() {
         console.log(error)
         dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
       }
-      const search = await get_search_renewal_srm(searchValue,id)
-      setAgIds(search.data.ids)
-      setAgreements(search.data.agreement)
     } 
 
 

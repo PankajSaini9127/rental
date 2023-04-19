@@ -33,7 +33,6 @@ import { setAlert } from "../../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
 import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
 
-
 const Heading = ({ heading }) => {
   return (
     <Grid item xs={11} sx={{ mt: 6, mb: 2 }}>
@@ -42,7 +41,7 @@ const Heading = ({ heading }) => {
         fontSize={"20px"}
         color={"primary"}
         fontWeight={"600"}
-        sx={{textDecoration:"underline"}}
+        sx={{ textDecoration: "underline" }}
       >
         {heading}
       </Typography>
@@ -68,45 +67,59 @@ function FinanceApproval() {
 
   const dispatch = useDispatch();
 
-  const [deposit ,setDeposit] = useState("")
+  const [deposit, setDeposit] = useState("");
 
-  console.log(deposit)
+  console.log(deposit);
 
-  async function get_deposit(code){
+  async function get_deposit(code) {
     try {
-      const deposit_amount = await get_deposit_amount(code)
-          console.log(deposit_amount)
-          if(deposit_amount.data.success){
-            setDeposit(deposit_amount.data.deposit[0].deposit)
-          }else{
-            setDeposit(0)
-          }
+      const deposit_amount = await get_deposit_amount(code);
+      console.log(deposit_amount);
+      if (deposit_amount.data.success) {
+        setDeposit(deposit_amount.data.deposit[0].deposit);
+      } else {
+        setDeposit(0);
+      }
     } catch (error) {
-      console.log(error)
-      dispatch(setAlert({open:true,variant:"success",message:"Something Went Wrong Please Try Again Later."}))
+      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "success",
+          message: "Something Went Wrong Please Try Again Later.",
+        })
+      );
     }
   }
-
 
   const getData = async (id) => {
     try {
       const agreement = await get_agreement_id(id);
-      console.log(agreement.data)
-         if(agreement.data.success){
-          setAgreement(agreement.data.agreement);
-          console.log(agreement.data.ids);
-          setIds(agreement.data.ids);
-          get_deposit(agreement.data.agreement[agreement.data.ids[0]].code) 
-
-         }else{
-          dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
-         }
-    
+      console.log(agreement.data);
+      if (agreement.data.success) {
+        setAgreement(agreement.data.agreement);
+        console.log(agreement.data.ids);
+        setIds(agreement.data.ids);
+        get_deposit(agreement.data.agreement[agreement.data.ids[0]].code);
+      } else {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong Please Try Again Later.",
+          })
+        );
+      }
     } catch (error) {
-      console.log(error)
-      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong Please Try Again Later.",
+        })
+      );
     }
-    
   };
 
   console.log(agreement);
@@ -190,7 +203,8 @@ function FinanceApproval() {
     // console.log(agreement[ids[0]].deposit-deposit === 0 ? "Deposited" : "Approved")
     const response = await ApprovedByFinance(
       {
-        status: agreement[ids[0]].deposit-deposit === 0 ? "Deposited" : "Approved",
+        status:
+          agreement[ids[0]].deposit - deposit === 0 ? "Deposited" : "Approved",
         finance_id: "",
         utr_number: "",
         payment_date: "",
@@ -274,9 +288,9 @@ function FinanceApproval() {
               ></Grid>
               {/* Basic Details */}
               <Grid item md={10}>
-              {agreement[ids[0]].status === "Deposited" && (
+                {agreement[ids[0]].status === "Deposited" && (
                   <>
-                    <Grid container >
+                    <Grid container>
                       <DataFieldStyle
                         field={"Final Agreement"}
                         href={agreement[ids[0]].final_agreement}
@@ -305,7 +319,7 @@ function FinanceApproval() {
                     </Grid>
                   </>
                 )}
-                <Grid container sx={{mt:2}}>
+                <Grid container sx={{ mt: 2 }}>
                   <DataFieldStyle
                     field={"code"}
                     value={agreement[ids[0]].code}
@@ -315,7 +329,7 @@ function FinanceApproval() {
                     field={"state"}
                     value={agreement[ids[0]].state}
                   />
-                   <DataFieldStyle
+                  <DataFieldStyle
                     field={"city"}
                     value={agreement[ids[0]].city}
                   />
@@ -323,7 +337,7 @@ function FinanceApproval() {
                     field={"location"}
                     value={agreement[ids[0]].location}
                   />
-                 
+
                   <DataFieldStyle
                     field={"pincode"}
                     value={agreement[ids[0]].pincode}
@@ -358,13 +372,12 @@ function FinanceApproval() {
                   />
                   {agreement[ids[0]].tenure !== "11 Month" && (
                     <>
-                      
-                      <Grid container  sx={{ mt: 6 }}>
-                        <Grid item xs={12} sx={{mb:1}}>
-                        <DataFieldStyle
-                        field={"yearly Increment"}
-                        value={agreement[ids[0]].yearlyIncrement}
-                        />
+                      <Grid container sx={{ mt: 6 }}>
+                        <Grid item xs={12} sx={{ mb: 1 }}>
+                          <DataFieldStyle
+                            field={"yearly Increment"}
+                            value={agreement[ids[0]].yearlyIncrement}
+                          />
                         </Grid>
                         <YearField
                           year={"Year 1"}
@@ -428,13 +441,15 @@ function FinanceApproval() {
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
-                      <Grid container sx={{ mt: 3 }} >
+                      <Grid container sx={{ mt: 3 }}>
                         {/* <Grid item xs={12}>
                           <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
                           </Typography>
                         </Grid> */}
-                          <Heading heading={`Landlord ${id + 1} Personal Details`} />
+                        <Heading
+                          heading={`Landlord ${id + 1} Personal Details`}
+                        />
                         <DataFieldStyle
                           field={"name of lessee"}
                           value={agreement[ids[0]].name[id]}
@@ -498,7 +513,7 @@ function FinanceApproval() {
               {/* <Heading heading={"Bank Details"} /> */}
 
               <Grid item md={10}>
-                <Grid container >
+                <Grid container>
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
@@ -535,11 +550,11 @@ function FinanceApproval() {
               {/* Bank Details Ends here */}
 
               {/* Document Section start here */}
-             
+
               <Grid item md={10}>
                 <Grid container spacing={4} sx={{ mt: 1 }}>
                   <Grid item xs={12}>
-                  <Heading heading={"Document View/Download"} />
+                    <Heading heading={"Document View/Download"} />
                   </Grid>
                   <DocumentView
                     title={"draft agreement"}
@@ -570,19 +585,17 @@ function FinanceApproval() {
                   )}
                 </Grid>
               </Grid>
-
-              {/* document section ends here */}
+                {/* document section ends here */}
+              <Grid item container xs={10} sx={{ mt: 5 }}>
+                  <DataFieldStyle
+                    field={"Landlord Assets"}
+                    value={agreement[ids[0]].assets}
+                  />  
+                  </Grid>
 
               {agreement[ids[0]].remark.length > 0 && (
                 <>
-                  {/* <Grid item container xs={10} sx={{ mt: 5 }} spacing={3}>
-                    <Grid item xs={8}>
-                      <DataFieldStyle
-                        field={"Remark !"}
-                        value={agreement[ids[0]].remark}
-                      />
-                    </Grid>
-                  </Grid> */}
+                 
 
                   <Grid item container xs={10} sx={{ mt: 5 }} spacing={3}>
                     <Grid item xs={8}>
@@ -637,7 +650,7 @@ function FinanceApproval() {
                             color: "#FFFFFF",
                             textTransform: "capitalize",
                             fontSize: "18px",
-                            lineHeight:"20px"
+                            lineHeight: "20px",
                           }}
                           onClick={handleSubmit}
                         >

@@ -134,7 +134,8 @@ function EditAgreement({ history }) {
           landlord,
           remark,
           manager_id,
-          branchName
+          branchName,
+          assets
         } = response.data;
 
 
@@ -172,6 +173,7 @@ function EditAgreement({ history }) {
           noticePeriod,
           yearlyIncrement,
           deposit,
+          assets,
           // gst_certificate,
           // draft_agreement,
           // electricity_bill,
@@ -217,7 +219,8 @@ function EditAgreement({ history }) {
           year3,
           year4,
           year5,
-          branchName
+          branchName,
+          assets
         });
 
         setFormError({
@@ -304,11 +307,11 @@ function EditAgreement({ history }) {
     if (response.status === 200) {
       console.log(e.target.name);
       console.log(formError);
-      // setFormError((old) => ({...old,
-      //   [e.target.name + i]  : "",
-      //   [e.target.name] : "",
+      setFormError((old) => ({...old,
+        [e.target.name + i]  : "",
+        [e.target.name] : "",
 
-      // }));
+      }));
 
       // setting the value to appropiate lanlord
       setPreData((old) => ({
@@ -662,7 +665,7 @@ function EditAgreement({ history }) {
         ...increment,
         manager_id,
         // landlord,
-        status: "Sent To Sr Manager",
+        renewal_status: "Renewed",
         remark: "",
       },
       landlord
@@ -751,7 +754,7 @@ console.log(partLabel)
       if (result) {
         // window.location.href = "/listing";
         const response = await send_to_bhu(
-          { renewal_status:"Renewed" },
+          { renewal_status:values.renewal_status },
           preData.id
         )
         if(response.data.success){
@@ -783,7 +786,7 @@ console.log(partLabel)
       "poa",
       "maintaince_bill",
       "tax_receipt",
-      "cheque",
+      // "cheque",
     ];
      preData.landlord.length > 1 && field.push("noc")
 
@@ -808,7 +811,7 @@ console.log(partLabel)
     // }
 
     let finalCheck = field.map((row) => {
-      if (!data[row]) {
+      if (!preData[row]) {
         console.log(row);
         setFormError((old) => ({ ...old, [row]: "Document required." }));
         return true;
@@ -1106,66 +1109,66 @@ console.log(partLabel)
   }
 
 
-  // function handleHold() {
-  //   const {
-  //     id,
-  //     area,
-  //     code,
-  //     lockInYear,
-  //     monthlyRent,
-  //     noticePeriod,
-  //     yearlyIncrement,
-  //     deposit,
-  //     gst_certificate,
-  //     draft_agreement,
-  //     electricity_bill,
-  //     poa,
-  //     maintaince_bill,
-  //     tax_receipt,
-  //     noc,
-  //     tenure,
-  //     pincode,
-  //     state,
-  //     address,
-  //     location,
-  //     city,
-  //     landlord,
-  //   } = preData;
-  //   console.log(preData);
-  //   console.log(validate(preData), validateFields(preData));
-  //   if (validate(preData) && validateFields(preData)) {
-  //     APICall(
-  //       {
-  //         pincode,
-  //         state,
-  //         address,
-  //         area,
-  //         location,
-  //         city,
-  //         id,
-  //         code,
-  //         lockInYear,
-  //         monthlyRent,
-  //         noticePeriod,
-  //         yearlyIncrement,
-  //         deposit,
-  //         gst_certificate,
-  //         draft_agreement,
-  //         electricity_bill,
-  //         poa,
-  //         maintaince_bill,
-  //         tax_receipt,
-  //         noc,
-  //         tenure,
-  //         ...increment,
-  //         status: "Hold",
-  //         remark: "",
+  function handleHold() {
+    const {
+      id,
+      area,
+      code,
+      lockInYear,
+      monthlyRent,
+      noticePeriod,
+      yearlyIncrement,
+      deposit,
+      gst_certificate,
+      draft_agreement,
+      electricity_bill,
+      poa,
+      maintaince_bill,
+      tax_receipt,
+      noc,
+      tenure,
+      pincode,
+      state,
+      address,
+      location,
+      city,
+      landlord,
+    } = preData;
+    console.log(preData);
+    console.log(validate(preData), validateFields(preData));
+    if (validate(preData) && validateFields(preData)) {
+      APICall(
+        {
+          pincode,
+          state,
+          address,
+          area,
+          location,
+          city,
+          // id,
+          code,
+          lockInYear,
+          monthlyRent,
+          noticePeriod,
+          yearlyIncrement,
+          deposit,
+          gst_certificate,
+          draft_agreement,
+          electricity_bill,
+          poa,
+          maintaince_bill,
+          tax_receipt,
+          noc,
+          tenure,
+          ...increment,
+          renewal_status: "Hold",
+          remark: "",
 
-  //       },
-  //       landlord
-  //     );
-  //   }
-  // }
+        },
+        landlord
+      );
+    }
+  }
 
   function Docview ( href, name ){
     console.log("docview")
@@ -1945,6 +1948,31 @@ console.log(partLabel)
 
                 {/* Document upload section end here */}
                
+
+                <Grid
+                  item
+                  xs={10}
+                  sx={{ mt: 5 }}
+                  className={"textFieldWrapper"}
+                >
+                  <Grid item xs={8}>
+                    <TextField
+                      type="text"
+                      multiline
+                      rows={3}
+                      fullWidth
+                      variant="outlined"
+                      label="Landlord Assets *"
+                      placeholder="Landlord Assets *"
+                      value={preData.assets}
+                      name={"assets"}
+                      onChange={handleCommonChange}
+                      disabled
+                    />
+
+                  </Grid>
+                </Grid>
+
                 {/* {preData.remark.length > 0 && (
                 <Grid
                   item
@@ -2009,7 +2037,7 @@ console.log(partLabel)
                           height: "40px",
                         },
                       }}
-                      // onClick={handleHold}
+                      onClick={handleHold}
                     >
                       Hold
                     </Button>
