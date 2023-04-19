@@ -1,14 +1,13 @@
-import { Alert, Box, Button, Checkbox, Grid, Snackbar } from '@mui/material';
+import {  Box, Button, Checkbox, Grid} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useState,useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
-import config from '../../config.json'
 
-
-import PermissionAlert from '../Manager/Alert';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAlert, setRefreshBox } from '../../store/action/action';
-import { get_renewal, send_to_bhu } from '../../Services/Services';
+import { get_renewal_srm,send_to_bhu } from '../../../Services/Services';
+import { setAlert, setRefreshBox } from '../../../store/action/action';
+
+import Remark from '../../RentalPortal/Remark';
  
 
 
@@ -23,10 +22,13 @@ function DataTable() {
 
   const [loading, setLoading] = useState(false)
 
- async function handleRenewal (id){
+  const [remarkMSG,setRemarkMSG] = useState("")
+  const [remarkOpen,setRemarkOpen] = useState({open:false})
+
+ async function handleApprove (id){
    try {
     const response = await send_to_bhu(
-      { renewal_status: "Sent To Sr Manager For Renewal" },
+      { renewal_status: "Approved for Renewal" },
       id
     );
     if (response.data.success) {
@@ -34,7 +36,7 @@ function DataTable() {
         setAlert({
           variant: "success",
           open: true,
-          message: "Agreement Sent To Sr Manager For Renewal.",
+          message: "Agreement Approved For Renewal.",
         })
         );
         dispatch(setRefreshBox())
@@ -57,58 +59,56 @@ function DataTable() {
 function actionButton (e){
       const id = e.id 
       return (
-      <Grid container>
-         {
-     e.row.status === "Pending For Renewal" &&
-      <Grid item xs={6}>
-      <Button
-        variant="contained"
-        color="primary"
-        size="small"
-        style={{
-          backgroundColor: "rgb(103 185 68 / 89%)",
-          color: "white",
-          fontSize: "12px",
-          textTransform: "capitalize",
-          // width:"100%"
-        }}
-        onClick={async (e) => {
-          e.stopPropagation(); // don't select this row after clicking
-          console.log(id);
-          handleRenewal(id)
-        }}
-      >
-        Renew
-      </Button>
-    </Grid>
-}
-    {
-     e.row.status === "Approved for Renewal" && <Grid item xs={6}>
-      <Button
-        variant="contained"
-        color="primary"
-        size="small"
-        style={{
-          backgroundColor: "rgb(103 185 68 / 89%)",
-          color: "white",
-          fontSize: "12px",
-          textTransform: "capitalize",
-          // width:"100%"
-        }}
-        onClick={async (e) => {
-          e.stopPropagation(); // don't select this row after clicking
-          // console.log(id);
-          navigate(`/renewal-edit-agreement/${id}`)
-        }}
-      >
-        Edit
-      </Button>
-    </Grid>
-    }
-    </Grid>
-      )
-
-
+        <>
+        {e.row.status === "Sent To Sr Manager For Renewal" &&(
+            <Grid container>
+            <Grid item xs={6}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              style={{
+                backgroundColor: "rgb(103 185 68 / 89%)",
+                color: "white",
+                fontSize: "12px",
+                textTransform: "capitalize",
+                // width:"100%"
+              }}
+              onClick={async (e) => {
+                e.stopPropagation(); // don't select this row after clicking
+                console.log(id);
+                handleApprove(id)
+              }}
+            >
+              Approve
+            </Button>
+          </Grid>
+          <Grid item xs={6}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              style={{
+                backgroundColor: "rgb(103 185 68 / 89%)",
+                color: "white",
+                fontSize: "12px",
+                textTransform: "capitalize",
+                // width:"100%"
+              }}
+              onClick={async (e) => {
+                e.stopPropagation(); // don't select this row after clicking
+                
+                setRemarkOpen({open:true,id})
+              }}
+            >
+              Send back 
+            </Button>
+          </Grid>
+          </Grid>
+          )
+        }
+        </>
+    )
 }
 
   // api call for get data
@@ -118,7 +118,7 @@ console.log(agIds)
   const APICALL = async(id)=>{
     try {
       setLoading(true)
-      const result = await get_renewal(id)
+      const result = await get_renewal_srm(id)
   
      console.log(result)
       if(result.data.success){
@@ -182,7 +182,7 @@ const row =agIds.map(row=>{
       renderCell: (params) => (
         <>
           {/* {console.log(ids.includes(params.id))} */}
-          {params.formattedValue === "Pending For Renewal" ? (
+          {params.formattedValue === "Sent To Sr Manager For Renewal" ? (
             <Checkbox
               onChange={handleSwitch}
               name={params.id}
@@ -247,11 +247,48 @@ const row =agIds.map(row=>{
   ];
   
 
-  //form delete alert
+  //send back
+  async function handleSendBack (){
+    try {
+      const response = await send_to_bhu(
+        { renewal_status: "Sent Back Fro Renewal Rectification",remark:remarkMSG },
+        remarkOpen.id
+      );
+      if (response.data.success) {
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Agreement Sent Back To Manager.",
+          })
+          );
+          dispatch(setRefreshBox())
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          })
+        );
+      }
+  
+     } catch (error) {
+      console.log(error)
+      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+   }
+  }
 
 
   return (
     <>
+      <Remark
+        remark={remarkMSG}
+        setRemark={setRemarkMSG}
+        handleSend={handleSendBack}
+        open={remarkOpen.open}
+        handleClose={() => setRemarkOpen({open:false})}
+      />
       <Box
       sx={{
         height: "430px",

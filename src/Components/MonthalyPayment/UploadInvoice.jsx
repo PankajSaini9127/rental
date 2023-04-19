@@ -59,6 +59,7 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
         ...value,
         [e.target.name]: e.target.value,
       });
+      setFormError({...formError,[e.target.name]:""})
     }
     
     if (e.target.value.match(/^[0-9]*$/)){

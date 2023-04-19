@@ -103,8 +103,8 @@ export async function get_monthaly_rent(id){
     return await axios.get(`${API_LIVE}/api/list_monthly/${id}`)
 }
 
-export async function get_renewal(){
-    return await axios.get(`${API_LIVE}/api/list_teure`)
+export async function get_renewal(id){
+    return await axios.get(`${API_LIVE}/api/get-renewal-list/${id}`)
 }
 
 export async function add_invoice(id,data){
@@ -126,6 +126,11 @@ export async function getCityList(search){
 export async function getDetails(search){
     return await axios.get(`${API_LIVE}/api/getDetails?id=${search}`)
 }
+
+export async function getDetails_renewal(search){
+    return await axios.get(`${API_LIVE}/api/getDetails-renewal?id=${search}`)
+}
+
 export async function editAgreement(data){
     return await axios.patch(`${API_LIVE}/api/editAgreement`,data)
 }
@@ -141,6 +146,12 @@ export async function add_monthly_rent (data){
 export async function get_landlord_id (id){
     return await axios.get(`${API_LIVE}/api/month_rent/get_landlord_id/${id}`)
 }
+
+//get Depposit 
+export async function get_deposit_amount (code){
+    return await axios.get(`${API_LIVE}/api/get-deposit-amount?code=${code}`)
+}
+
 
 
 //senior manager start here
@@ -161,6 +172,15 @@ export async function sendMonthyPaymentForword(id,data){
     console.log(data)
     return await axios.put(`${API_LIVE}/api/sent-monthly-payment/${id}`,data)
 }
+
+//get Renewal in sr manager
+export async function get_renewal_srm(id){
+    return await axios.get(`${API_LIVE}/api/srmanager/get-renewal-srm/${id}`)
+}
+
+
+
+
 
 //operations get monthaly rent 
 export async function get_monthlt_rent_opr(id){

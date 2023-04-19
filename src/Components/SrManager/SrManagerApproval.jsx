@@ -29,6 +29,7 @@ import {
 } from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
+import { get_deposit_amount } from "../../Services/Services";
 
 const Heading = ({ heading }) => {
   return (
@@ -60,12 +61,45 @@ function SrManagerApproval() {
 
   const [remark, setRemark] = useState("");
 
+  const [deposit ,setDeposit] = useState("")
+
+  console.log(deposit)
+
+  async function get_deposit(code){
+    try {
+      const deposit_amount = await get_deposit_amount(code)
+          console.log(deposit_amount)
+          if(deposit_amount.data.success){
+            setDeposit(deposit_amount.data.deposit[0].deposit)
+          }
+    } catch (error) {
+      console.log(error)
+      dispatch(setAlert({open:true,variant:"success",message:"Something Went Wrong Please Try Again Later."}))
+    }
+  }
+
   const getData = async (id) => {
-    const agreement = await get_agreement_id(id);
-    setAgreement(agreement.data.agreement);
-    console.log(agreement.data.ids);
-    setIds(agreement.data.ids);
+    try {
+      const agreement = await get_agreement_id(id);
+      console.log(agreement.data)
+         if(agreement.data.success){
+          setAgreement(agreement.data.agreement);
+          console.log(agreement.data.ids);
+          setIds(agreement.data.ids);
+          get_deposit(agreement.data.agreement[agreement.data.ids[0]].code) 
+
+         }else{
+          dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+         }
+    
+    } catch (error) {
+      console.log(error)
+      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+    }
+    
   };
+
+
 
   useEffect(() => {
     getData(id);
@@ -122,7 +156,7 @@ function SrManagerApproval() {
       const response = await send_to_bhu(
         {
           status:
-            (agreement[ids[0]].op_id === 0)
+          (agreement[ids[0]].op_id === 0 || agreement[ids[0]].op_id === null  && ( agreement[ids[0]].deposit - deposit !== 0) )
               ? "Sent To BUH"
               : "Sent To Operations",
           srm_id: login_manager_id,
@@ -135,7 +169,7 @@ function SrManagerApproval() {
             variant: "success",
             open: true,
             message:
-              agreement[ids[0]].op_id === 0
+              (agreement[ids[0]].op_id === 0 || agreement[ids[0]].op_id === null  && ( agreement[ids[0]].deposit - deposit !== 0) )
                 ? "Agreement Sent To BUH"
                 : "Agreement Sent To Operations ",
           })
@@ -175,7 +209,7 @@ function SrManagerApproval() {
           handleListing={() => navigate("/srManagerListing")}
           navigateHome={"srManagerDashboard"}
           monthlyRent={() => navigate("/srm-monthly-rent")}
-          renewal={() => navigate("/srm-monthly-rent")}
+          renewal={() => navigate("/srm-renewal-list")}
           monthlyBtn="true"
         />
           <Box sx={{ flexGrow: 1 }}>
@@ -561,7 +595,8 @@ function SrManagerApproval() {
                           }}
                           onClick={handleSubmit}
                         >
-                          {(agreement[ids[0]].op_id === 0 )
+                          {console.log( agreement[ids[0]].deposit - deposit )}
+                          {(agreement[ids[0]].op_id === 0 || agreement[ids[0]].op_id === null && ( agreement[ids[0]].deposit - deposit !== 0)  )
                             ? "Approve And Send to BUH"
                             : "Approve And Send To Operations"}
                         </Button>

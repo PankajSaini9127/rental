@@ -25,6 +25,7 @@ import { saveAs } from "file-saver";
 import {
   ApprovedByFinance,
   get_agreement_id,
+  get_deposit_amount,
   send_back_to_manager,
   send_to_bhu,
 } from "../../Services/Services";
@@ -67,11 +68,45 @@ function FinanceApproval() {
 
   const dispatch = useDispatch();
 
+  const [deposit ,setDeposit] = useState("")
+
+  console.log(deposit)
+
+  async function get_deposit(code){
+    try {
+      const deposit_amount = await get_deposit_amount(code)
+          console.log(deposit_amount)
+          if(deposit_amount.data.success){
+            setDeposit(deposit_amount.data.deposit[0].deposit)
+          }else{
+            setDeposit(0)
+          }
+    } catch (error) {
+      console.log(error)
+      dispatch(setAlert({open:true,variant:"success",message:"Something Went Wrong Please Try Again Later."}))
+    }
+  }
+
+
   const getData = async (id) => {
-    const agreement = await get_agreement_id(id);
-    setAgreement(agreement.data.agreement);
-    console.log(agreement.data.ids);
-    setIds(agreement.data.ids);
+    try {
+      const agreement = await get_agreement_id(id);
+      console.log(agreement.data)
+         if(agreement.data.success){
+          setAgreement(agreement.data.agreement);
+          console.log(agreement.data.ids);
+          setIds(agreement.data.ids);
+          get_deposit(agreement.data.agreement[agreement.data.ids[0]].code) 
+
+         }else{
+          dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+         }
+    
+    } catch (error) {
+      console.log(error)
+      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+    }
+    
   };
 
   console.log(agreement);
@@ -149,10 +184,13 @@ function FinanceApproval() {
     }
   };
 
+  // console.log(agreement[ids[0]].deposit - deposit === 0 )
+
   async function handleSubmit() {
+    // console.log(agreement[ids[0]].deposit-deposit === 0 ? "Deposited" : "Approved")
     const response = await ApprovedByFinance(
       {
-        status: "Approved",
+        status: agreement[ids[0]].deposit-deposit === 0 ? "Deposited" : "Approved",
         finance_id: "",
         utr_number: "",
         payment_date: "",
