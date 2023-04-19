@@ -158,7 +158,7 @@ function DataTable({ rows, loading, check, setCheck }) {
             </Grid>
           </Grid>
         )}
-        {e.row.status === "Approved" && e.row.utr_number !== "" && (
+        {(e.row.status === "Approved" && e.row.utr_number !== "" || e.row.status === "Deposited" && e.row.rent_date === null) && (
           <Grid container>
             <Grid item md={6} sx={{ color: "white !important" }}>
               <Button

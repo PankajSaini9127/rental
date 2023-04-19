@@ -76,7 +76,7 @@ function SrManagerListing() {
           handleListing={() => navigate("/srManagerListing")}
           navigateHome={"srManagerDashboard"}
           monthlyRent={() => navigate("/srm-monthly-rent")}
-          renewal={() => navigate("/srm-monthly-rent")}
+          renewal={() => navigate("/srm-renewal-list")}
           monthlyBtn="true"
         />
         <ListingComponent

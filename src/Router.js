@@ -57,6 +57,7 @@ import SRMMonthlyRentView from "./Components/SrManager/Montly-rent/SRMMonthlyRen
 import FinanceMonthlyRentView from "./Components/FinancePanel/Montly-rent/FinanceMonthlyView";
 import EditInvoice from "./Components/MonthalyPayment/EditInvoice";
 import ViewPage from "./Components/MonthalyPayment/ViewPage";
+import SrmRenwalList from "./Components/SrManager/Renewal/RenewalListing";
 
 function MyRouter() {
   const history = useNavigate();
@@ -167,6 +168,14 @@ function MyRouter() {
         }
       />
 
+       //SRM Renewal Listing     
+       <Route
+        exact
+        path="/srm-renewal-list"
+        element={
+          isAuth && role.includes("Senior_Manager") ? <SrmRenwalList /> : <Login />
+        }
+      />
 
 
       {/* Operations Section */}

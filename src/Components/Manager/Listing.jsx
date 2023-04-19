@@ -64,6 +64,7 @@ function Listing() {
  
 
 const row = data.map((item) => {
+  console.log(agreement[item].rent_start_date)
     
     return {
       id: agreement[item].agreement_id,
@@ -73,7 +74,8 @@ const row = data.map((item) => {
       location: agreement[item].location,
       rentalAmount: agreement[item].monthlyRent,
       checkbox: agreement[item].status,
-      utr_number: agreement[item].utr_number
+      utr_number: agreement[item].utr_number,
+      rent_date : agreement[item].rent_start_date
     };
   });
 

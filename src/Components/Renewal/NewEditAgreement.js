@@ -48,21 +48,50 @@ import {
   getBankName,
   getLocation,
   getDetails_renewal,
-  send_to_bhu,
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
-import { setAlert } from "../../store/action/action";
-import PermissionAlert from "../Manager/Alert";
+
 import { useParams, useNavigate } from "react-router-dom";
 import { DataFieldStyle, ImageView } from "../StyleComponents/Rental";
+import { setAlert } from "../../store/action/action";
+import PermissionAlert from "../Manager/Alert";
 
-function EditAgreement({ history }) {
+function NewEditAgreement({ history }) {
   const navigate = useNavigate();
   const { landloard } = useSelector((state) => state);
   const dispatch = useDispatch();
   const [agreement, setAgreement] = useState([]);
   const { id } = useParams();
 
+  const [buh_id, setBuh_ID] = useState(null);
+
+  const [finance_id, setFinance_ID] = useState(null);
+
+  const [partLabel,setPartLable] = useState({
+    landlord: [],
+    area: "",
+    code: "",
+    lockInYear: "",
+    address: "",
+    pincode: "",
+    state: "",
+    city: "",
+    locaiton: "",
+    noticePeriod: "",
+    deposit: "",
+    monthlyRent: "",
+    yearlyIncrement: "",
+    status: "",
+    gst_certificate: "",
+    draft_agreement: "",
+    electricity_bill: "",
+    poa: "",
+    maintaince_bill: "",
+    cheque: "",
+    tax_receipt: "",
+    noc: "",
+    remark: "",
+  })
 
   // modified by yashwant
   const [preData, setPreData] = useState({
@@ -89,13 +118,7 @@ function EditAgreement({ history }) {
     tax_receipt: "",
     noc: "",
     remark: "",
-    precentage:"",
-    manager_id:""
   });
-
-
-  
- console.log(preData.landlord)
 
   async function fetchData() {
     try {
@@ -133,11 +156,11 @@ function EditAgreement({ history }) {
           area,
           landlord,
           remark,
-          manager_id
         } = response.data;
 
+        setBuh_ID(response.data.bhu_id);
+        setFinance_ID(response.data.op_id);
 
-        let rent = monthlyRent;
         if(yearlyIncrement === "Percentage"){
           setYearValue({
             year1: 0,
@@ -181,40 +204,39 @@ function EditAgreement({ history }) {
           tenure,
           landlord,
           remark,
-          manager_id
         });
 
         setPartLable({
-          id,
-          area,
-          code,
-          pincode,
-          state,
-          address,
-          location,
-          city,
-          lockInYear,
-          monthlyRent,
-          noticePeriod,
-          yearlyIncrement,
-          deposit,
-          gst_certificate,
-          draft_agreement,
-          electricity_bill,
-          poa,
-          maintaince_bill,
-          cheque,
-          tax_receipt,
-          noc,
-          tenure,
-          landlord,
-          remark,
-          year1,
-          year2,
-          year3,
-          year4,
-          year5
-        });
+            id,
+            area,
+            code,
+            pincode,
+            state,
+            address,
+            location,
+            city,
+            lockInYear,
+            monthlyRent,
+            noticePeriod,
+            yearlyIncrement,
+            deposit,
+            gst_certificate,
+            draft_agreement,
+            electricity_bill,
+            poa,
+            maintaince_bill,
+            cheque,
+            tax_receipt,
+            noc,
+            tenure,
+            landlord,
+            remark,
+            year1,
+            year2,
+            year3,
+            year4,
+            year5
+          });
 
         setFormError({
           id: undefined,
@@ -247,7 +269,7 @@ function EditAgreement({ history }) {
       //console.log('err>>',error)
     }
   }
-  
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -259,7 +281,16 @@ function EditAgreement({ history }) {
   // }, []);
   //console.log(">>>>", landloard);
   const [i, setIndex] = useState(0);
- 
+  const [data, setData] = useState({
+    landlord: [...landloard],
+    code: "",
+    lockInYear: "",
+    noticePeriod: "",
+    deposit: "",
+    monthlyRent: "",
+    yearlyIncrement: "",
+    tenure: "",
+  });
 
   useEffect(() => {
     setPreData((old) => ({ ...old, landlord: [...landloard] }));
@@ -604,7 +635,6 @@ function EditAgreement({ history }) {
   const handleConfirm = ( ) => {
     setOpen(false);
     // //console.log(data)
-    console.log(preData.landlord)
     const {
       id,
       code,
@@ -626,10 +656,8 @@ function EditAgreement({ history }) {
       state,
       address,
       location,
-      precentage,
       city,
       landlord,
-      manager_id
     } = preData;
 
     APICall(
@@ -656,112 +684,42 @@ function EditAgreement({ history }) {
         noc,
         tenure,
         ...increment,
-        manager_id,
         // landlord,
         status: "Sent To Sr Manager",
+
         remark: "",
       },
       landlord
     );
   };
-
-  const [partLabel,setPartLable] = useState({
-    landlord: [],
-    area: "",
-    code: "",
-    lockInYear: "",
-    address: "",
-    pincode: "",
-    state: "",
-    city: "",
-    locaiton: "",
-    noticePeriod: "",
-    deposit: "",
-    monthlyRent: "",
-    yearlyIncrement: "",
-    status: "",
-    gst_certificate: "",
-    draft_agreement: "",
-    electricity_bill: "",
-    poa: "",
-    maintaince_bill: "",
-    cheque: "",
-    tax_receipt: "",
-    noc: "",
-    remark: "",
-  })
-
-
-
   const [expand, setExpand] = useState(0);
 
-  // const APICall = async (values, landlordData) => {
+  const APICall = async (values, landlordData) => {
+    // for renaming the landlord ID to ID
+    // landlordData = landlordData.map((row)=>{
+    //   row['id'] = row["landlord_id"]
+    //   delete row["landlord_id"]
+    //   return row
+    // })
+    console.log(values);
+    const agreement = await editAgreement(values);
+    // const result = await add_landlord(landlordData);
 
-
-  //   // for renaming the landlord ID to ID
-  //   // landlordData = landlordData.map((row)=>{
-  //   //   row['id'] = row["landlord_id"]
-  //   //   delete row["landlord_id"]
-  //   //   return row
-  //   // })
-
-  //   console.log(values);
-  //   const agreement = await editAgreement(values);
-  //   // const result = await add_landlord(landlordData);
-
-  //   if (agreement.status === 200) {
-  //     // console.log(history);
-  //     // window.location.href = "/listing";
-  //     dispatch(
-  //       setAlert({
-  //         open: true,
-  //         variant: "success",
-  //         message:  "Agrement Edited & Submited Successfully",
-  //       })
-  //     );
-  //     navigate('/listing')
-  //   }
-  // };
-
-  async function APICall(values, landlordData) {
-    console.log(values, landlordData);
-    const agreement = await add_agreement(values);
-
-    // return 1
-    if (agreement.data.success) {
-      const agreement_id = agreement.data.agreement[0];
-
-      console.log(">>>", agreement_id);
-
-      landlordData = landlordData.map(row=>{
-           row.agreement_id = agreement_id
-           return row
-       })
-      
-
-      const result = await add_landlord(landlordData);
-      console.log(result)
-
-      if (result) {
-        // window.location.href = "/listing";
-        const response = await send_to_bhu(
-          { renewal_status:"Renewed" },
-          preData.id
-        )
-        if(response.data.success){
-          navigate(-1)
-          dispatch(
-            setAlert({
-              open: true,
-              variant: "success",
-              message: "Agreement Submitted.",
-            })
-          );
-        }
-        
-      }
+    if (agreement.status === 200) {
+      // console.log(history);
+      // window.location.href = "/listing";
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "success",
+          message:  "Agrement Sent To Renewal For Renewal",
+        })
+      );
+    //   navigate('/listing')
     }
-  }
+  };
+
+
   useEffect(() => {
     // //console.log(formError)
     if (Object.keys(formError).length === 0 && isSubmit) {
@@ -1152,9 +1110,9 @@ function EditAgreement({ history }) {
           noc,
           tenure,
           ...increment,
+          landlord,
           status: "Hold",
           remark: "",
-
         },
         landlord
       );
@@ -1168,7 +1126,7 @@ function EditAgreement({ history }) {
 
   return (
     <>
-    {preData.landlord.length > 0 && <>
+      {/* alert for submit form */}
       <PermissionAlert
         handleClose={handleCancel}
         handleConfirm={handleConfirm}
@@ -1176,12 +1134,7 @@ function EditAgreement({ history }) {
         message={"Please check agreement carefully before submission."}
       />
 
-      {/* dialog box ( popup box ) */}
-      {/* <DialogBox value={landblord} setValue={setLandblord} /> */}
-      {/* {//console.log(landblord)} */}
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        {/* side nav     */}
-        {/* <HamburgerMenu navigateTo={"listing"} /> */}
 
         <HamburgerMenu
           navigateHome={"dashboard"}
@@ -1224,11 +1177,11 @@ function EditAgreement({ history }) {
                   <TextFieldWrapper
                     label="Pincode"
                     placeHolder="Pincode"
+                    disabled={true}
                     backgroundColor="rgba(3, 193, 243, 0.2);"
                     value={preData.pincode}
                     required={true}
                     maxLength={6}
-                    disabled={true}
                     name="pincode"
                     onChange={(e) => {
                       handleCommonChange(e);
@@ -1289,11 +1242,11 @@ function EditAgreement({ history }) {
                     required={true}
                     value={preData.area}
                     partLabel={
-                      partLabel.landlord[i] &&
-                      partLabel.landlord[i].area
-                        ? partLabel.landlord[i].area+' sq. ft'
-                        : ""
-                    }
+                        partLabel.landlord[i] &&
+                        partLabel.landlord[i].area
+                          ? partLabel.landlord[i].area+' sq. ft'
+                          : ""
+                      }
                     onChange={handleCommonChange}
                     index={i}
                   />
@@ -1316,11 +1269,11 @@ function EditAgreement({ history }) {
                     maxLength={2}
                     value={preData.lockInYear}
                     partLabel={
-                      partLabel.lockInYear &&
-                      partLabel.lockInYear
-                        ? partLabel.lockInYear + ' (Month)'
-                        : ""
-                    }
+                        partLabel.lockInYear &&
+                        partLabel.lockInYear
+                          ? partLabel.lockInYear + ' (Month)'
+                          : ""
+                      }
                     error={formError.lockInYear}
                     onChange={handleCommonChange}
                   />
@@ -1330,13 +1283,13 @@ function EditAgreement({ history }) {
                     error={formError.noticePeriod}
                     name="noticePeriod"
                     maxLength={2}
-                    value={preData.noticePeriod}
                     partLabel={
-                      partLabel.noticePeriod &&
-                      partLabel.noticePeriod
-                        ? partLabel.noticePeriod + ' (Notice Period)'
-                        : ""
-                    }
+                        partLabel.noticePeriod &&
+                        partLabel.noticePeriod
+                          ? partLabel.noticePeriod + ' (Notice Period)'
+                          : ""
+                      }
+                    value={preData.noticePeriod}
                     onChange={handleCommonChange}
                   />
                   <TextFieldWrapper
@@ -1347,11 +1300,11 @@ function EditAgreement({ history }) {
                     error={formError.deposit}
                     value={preData.deposit}
                     partLabel={
-                      partLabel.deposit &&
-                      partLabel.deposit
-                        ? partLabel.deposit
-                        : ""
-                    }
+                        partLabel.deposit &&
+                        partLabel.deposit
+                          ? partLabel.deposit
+                          : ""
+                      }
                     onChange={handleCommonChange}
                   />
                   <TextFieldWrapper
@@ -1360,15 +1313,16 @@ function EditAgreement({ history }) {
                     required={true}
                     name="monthlyRent"
                     textAlignRight={"textAlignRight"}
+                    disabled={buh_id !== 0 || buh_id === null ? true : false}
                     error={formError.monthlyRent}
                     value={preData.monthlyRent}
-                    partLabel={
-                      partLabel.monthlyRent &&
-                      partLabel.monthlyRent
-                        ? partLabel.monthlyRent
-                        : ""
-                    }
                     onChange={handleCommonChange}
+                    partLabel={
+                        partLabel.monthlyRent &&
+                        partLabel.monthlyRent
+                          ? partLabel.monthlyRent
+                          : ""
+                      }
                   />
 
                   <SelectComponent
@@ -1376,6 +1330,7 @@ function EditAgreement({ history }) {
                     required={true}
                     error={formError.tenure}
                     name="tenure"
+                    disabled={buh_id !== 0 || buh_id === null ? true : false}
                     options={[
                       "11 Month",
                       "2 Year",
@@ -1383,14 +1338,13 @@ function EditAgreement({ history }) {
                       "4 Year",
                       "5 Year",
                     ]}
+                    value={preData.tenure || ""}
                     partLabel={
-                      partLabel.tenure &&
-                      partLabel.tenure
-                        ? partLabel.tenure
-                        : ""
-                    }
-                    value={preData.tenure || ""}  
-                    helperText = {partLabel.tenure}             
+                        partLabel.tenure &&
+                        partLabel.tenure
+                          ? partLabel.tenure
+                          : ""
+                      }
                     onChange={handleCommonChange}
                   />
                   {preData.tenure === "" ? null : preData.tenure ===
@@ -1399,15 +1353,16 @@ function EditAgreement({ history }) {
                       label={"Yearly Increment"}
                       required={true}
                       name="yearlyIncrement"
+                      options={["Percentage", "Value"]}
+                      value={preData.yearlyIncrement}
+                      onChange={handleCommonChange}
                       partLabel={
                         partLabel.yearlyIncrement &&
                         partLabel.yearlyIncrement
                           ? partLabel.yearlyIncrement
                           : ""
                       }
-                      options={["Percentage", "Value"]}
-                      value={preData.yearlyIncrement}
-                      onChange={handleCommonChange}
+                      disabled={buh_id !== 0 || buh_id === null ? true : false}
                     />
                   )}
                 </Grid>
@@ -1423,8 +1378,9 @@ function EditAgreement({ history }) {
                   rent={preData.monthlyRent || ""}
                   increment={increment}
                   setIncrement={setIncrement}
-                  monthlyRent={preData.monthlyRent || ""}
                   partLabel={partLabel}
+                  monthlyRent={preData.monthlyRent || ""}
+                  disabled={buh_id !== 0 || buh_id === null ? true : false}
                 />
 
                 {/* landlord Details start here*/}
@@ -1505,9 +1461,9 @@ function EditAgreement({ history }) {
                             label="Aadhar Number"
                             placeHolder="Enter Aadhar No."
                             required={true}
+                            disabled={true}
                             onBlur={(e) => handleOnBlur(e, i)}
                             name="aadharNo"
-                            disabled={true}
                             maxLength={12}
                             value={preData.landlord[i].aadharNo}
                             onChange={(e) => handleChange(e, i)}
@@ -1544,12 +1500,6 @@ function EditAgreement({ history }) {
                             onBlur={(e) => handleOnBlur(e, i)}
                             name="mobileNo"
                             maxLength={10}
-                            partLabel={
-                              partLabel.landlord[i] &&
-                              partLabel.landlord[i].mobileNo
-                                ? partLabel.landlord[i].mobileNo
-                                : ""
-                            }
                             error={
                               formError.landlord[i] &&
                               formError.landlord[i].mobileNo
@@ -1559,17 +1509,23 @@ function EditAgreement({ history }) {
                             value={preData.landlord[i].mobileNo}
                             onChange={(e) => handleChange(e, i)}
                             index={i}
+                            partLabel={
+                                partLabel.landlord[i] &&
+                                partLabel.landlord[i].mobileNo
+                                  ? partLabel.landlord[i].mobileNo
+                                  : ""
+                              }
                           />
                           <TextFieldWrapper
                             label="Alternate Number"
                             // error={formError.alternteMo}
                             placeHolder="Enter Alternate No."
                             name="alternateMobile"
+                            partLabel={
+                                partLabel.landlord[i].alternateMobile
+                              }
                             onBlur={(e) => handleOnBlur(e, i)}
                             maxLength={10}
-                            partLabel={
-                              partLabel.landlord[i].alternateMobile
-                            }
                             value={preData.landlord[i].alternateMobile}
                             // error={formError.alternateMobile}
                             onChange={(e) => handleChange(e, i)}
@@ -1589,8 +1545,8 @@ function EditAgreement({ history }) {
                             }
                             name="email"
                             partLabel={
-                              partLabel.landlord[i].email
-                            }
+                                partLabel.landlord[i].email
+                              }
                             value={preData.landlord[i].email}
                             onChange={(e) => handleChange(e, i)}
                             index={i}
@@ -1610,18 +1566,18 @@ function EditAgreement({ history }) {
                             name="gstNo"
                             maxLength={15}
                             partLabel={
-                              partLabel.landlord[i].gstNo
-                            }
+                                partLabel.landlord[i].gstNo
+                              }
                             value={preData.landlord[i].gstNo}
                             onChange={(e) => handleChange(e, i)}
                           />
                           <TextFieldWrapper
                             required={true}
                             label="Bank IFSC Code"
+                            disabled={true}
                             placeHolder="Enter IFSC Code"
                             onBlur={(e) => handleOnBlur(e, i)}
                             name="ifscCode"
-                            disabled={true}
                             error={
                               formError.landlord[i] &&
                               formError.landlord[i].ifscCode
@@ -1639,9 +1595,9 @@ function EditAgreement({ history }) {
                             name="bankName"
                             onBlur={(e) => handleOnBlur(e, i)}
                             partLabel={
-                              partLabel.landlord[i] &&
-                              partLabel.landlord[i].branchName
-                                ? partLabel.landlord[i].branchName
+                              preData.landlord[i] &&
+                              preData.landlord[i].branchName
+                                ? preData.landlord[i].branchName
                                 : ""
                             }
                             error={
@@ -1658,6 +1614,7 @@ function EditAgreement({ history }) {
 
                           <TextFieldWrapper
                             required={true}
+                            disabled={true}
                             label="Beneficiary Name"
                             onBlur={(e) => handleOnBlur(e, i)}
                             error={
@@ -1666,7 +1623,6 @@ function EditAgreement({ history }) {
                                 ? formError.landlord[i].benificiaryName
                                 : ""
                             }
-                            disabled={true}
                             placeHolder="Enter Beneficiary Name"
                             name="benificiaryName"
                             value={preData.landlord[i].benificiaryName}
@@ -1675,6 +1631,7 @@ function EditAgreement({ history }) {
                           <TextFieldWrapper
                             label="Bank A/C Number "
                             required={true}
+                            disabled={true}
                             placeHolder="Enter Account No."
                             name="accountNo"
                             error={
@@ -1683,7 +1640,6 @@ function EditAgreement({ history }) {
                                 ? formError.landlord[i].accountNo
                                 : ""
                             }
-                            disabled={true}
                             value={preData.landlord[i].accountNo}
                             onChange={(e) => handleChange(e, i)}
                           />
@@ -1790,8 +1746,8 @@ function EditAgreement({ history }) {
                                   ? true
                                   : false
                               }
-                              name={"pan_card"}
                               disabled={true}
+                              name={"pan_card"}
                               fileName={preData[`pan_card${i}`]}
                               placeHolder={"Upload PAN Card"}
                               handleChange={(e) => handleChangeCommonFile(e, i)}
@@ -1915,8 +1871,7 @@ function EditAgreement({ history }) {
                       href={ preData.tax_receipt}
                     />
                   </Grid>
-                  {console.log(preData.landlord.length)}
-                  { (preData.landlord && preData.landlord.length > 1)&&
+                  { preData.landlord.length > 1 &&
                     <Grid item xs={6}>
                     <DocumentUpload
                       uploaded={preData.noc && true}
@@ -1975,8 +1930,10 @@ function EditAgreement({ history }) {
                       }}
                     >
       
-                  Send To Sr Manager
-                       
+                    {(finance_id === 0 &&
+                       buh_id !== 0 ) ?
+                        "Send To Operations" :  "Send To Sr Manager"
+                        }
 
                     </Button>
                   </Grid>
@@ -2012,13 +1969,9 @@ function EditAgreement({ history }) {
             </Grid>
           </Grid>
         </Box>
-
       </Stack>
-    </>}
-      {/* alert for submit form */}
-      
     </>
   );
 }
 
-export default EditAgreement;
+export default NewEditAgreement;
