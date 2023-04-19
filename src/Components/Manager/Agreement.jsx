@@ -95,6 +95,8 @@ function Agreement({ history }) {
 
   const [landblord, setLandblord] = useState([1]);
 
+  const [assets,setAssets] = useState("")
+
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
   const [formError, setFormError] = useState({
@@ -614,6 +616,7 @@ function Agreement({ history }) {
         city,
         manager_id: id,
         status: "Sent To Sr Manager",
+        assets
       },
       landlord
     );
@@ -691,6 +694,7 @@ function Agreement({ history }) {
         manager_id: id,
         status: "Hold",
         remark: "",
+        assets
       },
       landlord
     );
@@ -1779,6 +1783,29 @@ function Agreement({ history }) {
                 </Grid>
 
                 {/* Document upload section end here */}
+
+                <Grid
+                    item
+                    xs={10}
+                    sx={{ mt: 5 }}
+                    className={"textFieldWrapper"}
+                  >
+                    <Grid item xs={8}>
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
+                        variant="outlined"
+                        label="Remark *"
+                        placeholder="Remark *"
+                        value={assets}
+                        onChange={(e) => setAssets(e.target.value)}
+                      />
+                    </Grid>
+                  </Grid>
+
+                {/* Landlord Assets */}
 
                 {/* Button Start from here */}
                 <Grid

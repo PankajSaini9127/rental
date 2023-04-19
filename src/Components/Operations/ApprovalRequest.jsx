@@ -501,6 +501,13 @@ function ApprovalRequest() {
 
               {/* document section ends here */}
 
+              <Grid item container xs={10} sx={{ mt: 5 }}>
+                  <DataFieldStyle
+                    field={"Landlord Assets"}
+                    value={agreement[ids[0]].assets}
+                  />
+                </Grid>
+
               {agreement[ids[0]].remark.length > 0 && (
                 <Grid item xs={10}>
                   <DataFieldStyle
@@ -540,7 +547,7 @@ function ApprovalRequest() {
                       spacing={1}
                       sx={{ justifyContent: "center" }}
                     >
-                      <Grid item md={4} xs={11}>
+                      <Grid item md={6} xs={11}>
                         <Button
                           variant="contained"
                           sx={{
@@ -558,7 +565,7 @@ function ApprovalRequest() {
                           Approve And Send To Finance
                         </Button>
                       </Grid>
-                      <Grid item md={4} xs={11}>
+                      <Grid item md={6} xs={11}>
                         <Button
                           variant="outlined"
                           sx={{

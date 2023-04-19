@@ -6,6 +6,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+
 // MUI Components
 import {
   Box,
@@ -65,7 +67,6 @@ function EditAgreement({ history }) {
 
   const [finance_id, setFinance_ID] = useState(null);
 
-
   // modified by yashwant
   const [preData, setPreData] = useState({
     landlord: [],
@@ -91,13 +92,14 @@ function EditAgreement({ history }) {
     tax_receipt: "",
     noc: "",
     remark: "",
+    assets: "",
   });
 
   async function fetchData() {
     try {
       let response = await getDetails(id);
 
-       console.log(response)
+      console.log(response);
       if (response.status === 200) {
         let {
           id,
@@ -129,13 +131,14 @@ function EditAgreement({ history }) {
           area,
           landlord,
           remark,
+          assets,
         } = response.data;
 
         setBuh_ID(response.data.bhu_id);
         setFinance_ID(response.data.op_id);
 
         let rent = monthlyRent;
-        if(yearlyIncrement === "Percentage"){
+        if (yearlyIncrement === "Percentage") {
           setYearValue({
             year1: 0,
             year2: year2 && parseInt(((year2 - year1) / year1) * 100),
@@ -143,16 +146,16 @@ function EditAgreement({ history }) {
             year4: year4 && parseInt(((year4 - year3) / year3) * 100),
             year5: year5 && parseInt(((year5 - year4) / year4) * 100),
           });
-        }else{
+        } else {
           setYearValue({
             year1: 0,
             year2: year2 && year2 - year1,
             year3: year3 && year3 - year2,
             year4: year4 && year4 - year3,
             year5: year5 && year5 - year4,
-          })
+          });
         }
-        
+
         setPreData({
           id,
           area,
@@ -178,6 +181,7 @@ function EditAgreement({ history }) {
           tenure,
           landlord,
           remark,
+          assets,
         });
 
         setFormError({
@@ -489,6 +493,8 @@ function EditAgreement({ history }) {
   // handle Change for common feilds
   function handleCommonChange(e, i) {
     // console.log(e.target.name);
+    // console.log(e.target.value);
+    // console.log(preData.assets)
     // console.log(data.state);
     var error = { state: false };
     switch (e.target.name) {
@@ -574,7 +580,7 @@ function EditAgreement({ history }) {
 
   // on form submit
 
-  const handleConfirm = ( ) => {
+  const handleConfirm = () => {
     setOpen(false);
     // //console.log(data)
     const {
@@ -600,10 +606,12 @@ function EditAgreement({ history }) {
       location,
       city,
       landlord,
+      assets,
     } = preData;
 
     APICall(
       {
+        assets,
         pincode,
         state,
         address,
@@ -627,7 +635,10 @@ function EditAgreement({ history }) {
         tenure,
         ...increment,
         landlord,
-        status: (finance_id === 0 && buh_id !== 0 )?"Sent To Operations" :  "Sent To Sr Manager",
+        status:
+          finance_id === 0 && buh_id !== 0
+            ? "Sent To Operations"
+            : "Sent To Sr Manager",
 
         remark: "",
       },
@@ -654,10 +665,10 @@ function EditAgreement({ history }) {
         setAlert({
           open: true,
           variant: "success",
-          message:  "Agrement Edited & Submited Successfully",
+          message: "Agrement Edited & Submited Successfully",
         })
       );
-      navigate('/listing')
+      navigate("/listing");
     }
   };
 
@@ -678,8 +689,7 @@ function EditAgreement({ history }) {
       "tax_receipt",
       "cheque",
     ];
-     preData.landlord.length > 1 && field.push("noc")
-
+    preData.landlord.length > 1 && field.push("noc");
 
     // if (preData.landlord.length > 0) {
     //   preData.landlord.map((row, i) => {
@@ -1036,6 +1046,7 @@ function EditAgreement({ history }) {
       location,
       city,
       landlord,
+      assets,
     } = preData;
     console.log(preData);
     console.log(validate(preData), validateFields(preData));
@@ -1067,15 +1078,18 @@ function EditAgreement({ history }) {
           landlord,
           status: "Hold",
           remark: "",
+          assets,
         },
         landlord
       );
     }
   }
 
-  function Docview ( href, name ){
-    console.log("docview")
-       return <ImageView open={true} handleClose={()=>{}} href={href} name={name} />
+  function Docview(href, name) {
+    console.log("docview");
+    return (
+      <ImageView open={true} handleClose={() => {}} href={href} name={name} />
+    );
   }
 
   return (
@@ -1102,6 +1116,19 @@ function EditAgreement({ history }) {
           renewal={() => navigate(`/renewal`)}
           monthlyBtn="true"
         />
+        <Box className="backButton">
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => navigate(-1)}
+            size={"large"}
+          >
+            <ArrowCircleLeftIcon
+              sx={{ fontSize: "3rem" }}
+              color="#FFFFF !important"
+            />
+          </IconButton>
+        </Box>
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Edit Agreement</MyHeader>
@@ -1484,7 +1511,6 @@ function EditAgreement({ history }) {
                             onChange={(e) => handleChange(e, i)}
                           />
 
-
                           <TextFieldWrapper
                             label="Bank Name"
                             placeHolder="Enter Bank Name"
@@ -1626,9 +1652,8 @@ function EditAgreement({ history }) {
                               handleChange={(e) => handleChangeCommonFile(e, i)}
                               name={"aadhar_card"}
                               fileName={preData[`aadhar_card${i}`]}
-                              href={ preData.landlord[i].aadhar_card}
+                              href={preData.landlord[i].aadhar_card}
                             />
-                            
                           </Grid>
                           <Grid item xs={6}>
                             <DocumentUpload
@@ -1643,7 +1668,7 @@ function EditAgreement({ history }) {
                               fileName={preData[`pan_card${i}`]}
                               placeHolder={"Upload PAN Card"}
                               handleChange={(e) => handleChangeCommonFile(e, i)}
-                              href={ preData.landlord[i].pan_card}
+                              href={preData.landlord[i].pan_card}
                             />
                           </Grid>
                           <Grid item xs={6}>
@@ -1658,7 +1683,7 @@ function EditAgreement({ history }) {
                               handleChange={(e) => handleChangeCommonFile(e, i)}
                               name={"gst"}
                               fileName={preData[`gst${i}`]}
-                              href={ preData.landlord[i].gst}
+                              href={preData.landlord[i].gst}
                             />
                           </Grid>
                           <Grid item xs={6}>
@@ -1674,7 +1699,7 @@ function EditAgreement({ history }) {
                               fileName={preData[`cheque${i}`]}
                               placeHolder="Upload Cancel Cheque"
                               handleChange={(e) => handleChangeCommonFile(e, i)}
-                              href={ preData.landlord[i].cheque}
+                              href={preData.landlord[i].cheque}
                             />
                           </Grid>
                         </Grid>
@@ -1711,7 +1736,7 @@ function EditAgreement({ history }) {
                       fileName={preData.draft_agreement_name}
                       handleChange={handleChangeFile}
                       name={"draft_agreement"}
-                      href={ preData.draft_agreement}
+                      href={preData.draft_agreement}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1723,7 +1748,7 @@ function EditAgreement({ history }) {
                       handleChange={handleChangeFile}
                       fileName={preData.electricity_bill_name}
                       name={"electricity_bill"}
-                      href={ preData.electricity_bill}
+                      href={preData.electricity_bill}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1735,7 +1760,7 @@ function EditAgreement({ history }) {
                       fileName={preData.poa_name}
                       handleChange={handleChangeFile}
                       name={"poa"}
-                      href={ preData.poa}
+                      href={preData.poa}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1747,7 +1772,7 @@ function EditAgreement({ history }) {
                       handleChange={handleChangeFile}
                       fileName={preData.maintaince_bill_name}
                       name={"maintaince_bill"}
-                      href={ preData.maintaince_bill}
+                      href={preData.maintaince_bill}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1759,40 +1784,55 @@ function EditAgreement({ history }) {
                       fileName={preData.tax_receipt_name}
                       error={formError.tax_receipt}
                       name={"tax_receipt"}
-                      href={ preData.tax_receipt}
+                      href={preData.tax_receipt}
                     />
                   </Grid>
-                  { preData.landlord.length > 1 &&
+                  {preData.landlord.length > 1 && (
                     <Grid item xs={6}>
-                    <DocumentUpload
-                      uploaded={preData.noc && true}
-                      label="Upload NOC (If Mutiple Oweners)"
-                      error={formError.noc}
-                      placeHolder="NOC"
-                      fileName={preData.noc_name}
-                      handleChange={handleChangeFile}
-                      name={"noc"}
-                      href={ preData.noc}
+                      <DocumentUpload
+                        uploaded={preData.noc && true}
+                        label="Upload NOC (If Mutiple Oweners)"
+                        error={formError.noc}
+                        placeHolder="NOC"
+                        fileName={preData.noc_name}
+                        handleChange={handleChangeFile}
+                        name={"noc"}
+                        href={preData.noc}
                       />
-                  </Grid>
-                    }
+                    </Grid>
+                  )}
                 </Grid>
 
                 {/* Document upload section end here */}
-               
+
                 {preData.remark.length > 0 && (
+                  <Grid item container xs={10} sx={{ mt: 5 }}>
+                    <DataFieldStyle field={"Remark !"} value={preData.remark} />
+                  </Grid>
+                )}
+
                 <Grid
                   item
-                  container
                   xs={10}
                   sx={{ mt: 5 }}
+                  className={"textFieldWrapper"}
                 >
-                    <DataFieldStyle
-                      field={"Remark !"}
-                      value={preData.remark}
+                  <Grid item xs={8}>
+                    <TextField
+                      type="text"
+                      multiline
+                      rows={3}
+                      fullWidth
+                      variant="outlined"
+                      label="Landlord Assets *"
+                      placeholder="Landlord Assets *"
+                      value={preData.assets}
+                      name={"assets"}
+                      onChange={handleCommonChange}
                     />
+                  </Grid>
                 </Grid>
-              )}
+
                 {/* Button Start from here */}
                 <Grid
                   container
@@ -1820,12 +1860,9 @@ function EditAgreement({ history }) {
                         },
                       }}
                     >
-      
-                    {(finance_id === 0 &&
-                       buh_id !== 0 ) ?
-                        "Send To Operations" :  "Send To Sr Manager"
-                        }
-
+                      {finance_id === 0 && buh_id !== 0
+                        ? "Send To Operations"
+                        : "Send To Sr Manager"}
                     </Button>
                   </Grid>
 

@@ -69,7 +69,7 @@ import {
   
     const handleSubmit = async (e) => {
       const response = await send_to_bhu(
-        { status: "Sent To Sr Manager For Renewal"},
+        { renewal_status: "Sent To Sr Manager For Renewal"},
         id
       );
       if (response.data.success) {
@@ -431,6 +431,12 @@ import {
                 </Grid>
   
                 {/* document section ends here */}
+                <Grid item container xs={10} sx={{ mt: 5 }}>
+                <DataFieldStyle
+                  field={"Landlord Assets"}
+                  value={agreement[ids[0]].assets}
+                />
+              </Grid>
   
                 {agreement[ids[0]].renewal_remark.length > 0 && (
                   <Grid item container xs={10} sx={{ mt: 5 }}>

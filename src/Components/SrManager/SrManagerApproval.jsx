@@ -39,7 +39,7 @@ const Heading = ({ heading }) => {
         fontSize={"20px"}
         color={"primary"}
         fontWeight={"600"}
-        sx={{textDecoration:"underline"}}
+        sx={{ textDecoration: "underline" }}
       >
         {heading}
       </Typography>
@@ -61,45 +61,58 @@ function SrManagerApproval() {
 
   const [remark, setRemark] = useState("");
 
-  const [deposit ,setDeposit] = useState("")
+  const [deposit, setDeposit] = useState("");
 
-  console.log(deposit)
+  console.log(deposit);
 
-  async function get_deposit(code){
+  async function get_deposit(code) {
     try {
-      const deposit_amount = await get_deposit_amount(code)
-          console.log(deposit_amount)
-          if(deposit_amount.data.success){
-            setDeposit(deposit_amount.data.deposit[0].deposit)
-          }
+      const deposit_amount = await get_deposit_amount(code);
+      console.log(deposit_amount);
+      if (deposit_amount.data.success) {
+        setDeposit(deposit_amount.data.deposit[0].deposit);
+      }
     } catch (error) {
-      console.log(error)
-      dispatch(setAlert({open:true,variant:"success",message:"Something Went Wrong Please Try Again Later."}))
+      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "success",
+          message: "Something Went Wrong Please Try Again Later.",
+        })
+      );
     }
   }
 
   const getData = async (id) => {
     try {
       const agreement = await get_agreement_id(id);
-      console.log(agreement.data)
-         if(agreement.data.success){
-          setAgreement(agreement.data.agreement);
-          console.log(agreement.data.ids);
-          setIds(agreement.data.ids);
-          get_deposit(agreement.data.agreement[agreement.data.ids[0]].code) 
-
-         }else{
-          dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
-         }
-    
+      console.log(agreement.data);
+      if (agreement.data.success) {
+        setAgreement(agreement.data.agreement);
+        console.log(agreement.data.ids);
+        setIds(agreement.data.ids);
+        get_deposit(agreement.data.agreement[agreement.data.ids[0]].code);
+      } else {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong Please Try Again Later.",
+          })
+        );
+      }
     } catch (error) {
-      console.log(error)
-      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong Please Try Again Later.",
+        })
+      );
     }
-    
   };
-
-
 
   useEffect(() => {
     getData(id);
@@ -156,7 +169,9 @@ function SrManagerApproval() {
       const response = await send_to_bhu(
         {
           status:
-          (agreement[ids[0]].op_id === 0 || agreement[ids[0]].op_id === null  && ( agreement[ids[0]].deposit - deposit !== 0) )
+            agreement[ids[0]].op_id === 0 ||
+            (agreement[ids[0]].op_id === null &&
+              agreement[ids[0]].deposit - deposit !== 0)
               ? "Sent To BUH"
               : "Sent To Operations",
           srm_id: login_manager_id,
@@ -169,7 +184,9 @@ function SrManagerApproval() {
             variant: "success",
             open: true,
             message:
-              (agreement[ids[0]].op_id === 0 || agreement[ids[0]].op_id === null  && ( agreement[ids[0]].deposit - deposit !== 0) )
+              agreement[ids[0]].op_id === 0 ||
+              (agreement[ids[0]].op_id === null &&
+                agreement[ids[0]].deposit - deposit !== 0)
                 ? "Agreement Sent To BUH"
                 : "Agreement Sent To Operations ",
           })
@@ -206,12 +223,12 @@ function SrManagerApproval() {
           {/* <a id="button"></a> */}
           {console.log(agreement[ids[0]].op_id)};
           <HamburgerMenu
-          handleListing={() => navigate("/srManagerListing")}
-          navigateHome={"srManagerDashboard"}
-          monthlyRent={() => navigate("/srm-monthly-rent")}
-          renewal={() => navigate("/srm-renewal-list")}
-          monthlyBtn="true"
-        />
+            handleListing={() => navigate("/srManagerListing")}
+            navigateHome={"srManagerDashboard"}
+            monthlyRent={() => navigate("/srm-monthly-rent")}
+            renewal={() => navigate("/srm-renewal-list")}
+            monthlyBtn="true"
+          />
           <Box sx={{ flexGrow: 1 }}>
             <MyHeader>Rental Management System</MyHeader>
             <Box className="backButton">
@@ -236,7 +253,7 @@ function SrManagerApproval() {
               ></Grid>
               {/* Basic Details */}
               <Grid item md={10}>
-              {agreement[ids[0]].status === "Deposited" && (
+                {agreement[ids[0]].status === "Deposited" && (
                   <>
                     <Grid container>
                       <DataFieldStyle
@@ -267,7 +284,7 @@ function SrManagerApproval() {
                     </Grid>
                   </>
                 )}
-                <Grid container sx={{ mt: 2}}>
+                <Grid container sx={{ mt: 2 }}>
                   <DataFieldStyle
                     field={"code"}
                     value={agreement[ids[0]].code}
@@ -285,7 +302,7 @@ function SrManagerApproval() {
                     field={"location"}
                     value={agreement[ids[0]].location}
                   />
-                  
+
                   <DataFieldStyle
                     field={"pincode"}
                     value={agreement[ids[0]].pincode}
@@ -320,13 +337,12 @@ function SrManagerApproval() {
                   />
                   {agreement[ids[0]].tenure !== "11 Month" && (
                     <>
-                      
-                      <Grid container  sx={{ mt: 6 }}>
-                        <Grid item xs={12} sx={{mb:1}}>
-                        <DataFieldStyle
-                        field={"yearly Increment"}
-                        value={agreement[ids[0]].yearlyIncrement}
-                      />
+                      <Grid container sx={{ mt: 6 }}>
+                        <Grid item xs={12} sx={{ mb: 1 }}>
+                          <DataFieldStyle
+                            field={"yearly Increment"}
+                            value={agreement[ids[0]].yearlyIncrement}
+                          />
                         </Grid>
                         <YearField
                           year={"Year 1"}
@@ -390,13 +406,15 @@ function SrManagerApproval() {
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
-                      <Grid container sx={{ mt: 3 }} >
+                      <Grid container sx={{ mt: 3 }}>
                         {/* <Grid item xs={12}>
                           <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
                           </Typography>
                         </Grid> */}
-                        <Heading heading={`Landlord ${id + 1} Personal Details`} />
+                        <Heading
+                          heading={`Landlord ${id + 1} Personal Details`}
+                        />
                         <DataFieldStyle
                           field={"name of lessee"}
                           value={agreement[ids[0]].name[id]}
@@ -460,7 +478,7 @@ function SrManagerApproval() {
               {/* <Heading heading={"Bank Details"} /> */}
 
               <Grid item md={10}>
-                <Grid container >
+                <Grid container>
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
@@ -470,7 +488,7 @@ function SrManagerApproval() {
                             Landlord {id + 1} Details
                           </Typography>
                         </Grid> */}
-                        <Heading heading={`Landlord ${id + 1} Bank Details`} /> 
+                        <Heading heading={`Landlord ${id + 1} Bank Details`} />
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement[ids[0]].bankName[id]}
@@ -502,11 +520,11 @@ function SrManagerApproval() {
               {/* Bank Details Ends here */}
 
               {/* Document Section start here */}
-              
+
               <Grid item md={10}>
                 <Grid container spacing={4} sx={{ mt: 1 }}>
                   <Grid item xs={12}>
-                  <Heading heading={"Document View/Download"} />
+                    <Heading heading={"Document View/Download"} />
                   </Grid>
                   <DocumentView
                     title={"draft agreement"}
@@ -538,6 +556,13 @@ function SrManagerApproval() {
                 </Grid>
               </Grid>
 
+              {/* // Landlord assets */}
+              <Grid item container xs={10} sx={{ mt: 5 }}>
+                <DataFieldStyle
+                  field={"Landlord Assets"}
+                  value={agreement[ids[0]].assets}
+                />
+              </Grid>
               {/* document section ends here */}
 
               {agreement[ids[0]].remark !== null && (
@@ -574,7 +599,7 @@ function SrManagerApproval() {
                     </Grid>
                   </Grid>
 
-                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}  >
+                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                     <Grid
                       container
                       spacing={2}
@@ -591,12 +616,14 @@ function SrManagerApproval() {
                             color: "#FFFFFF",
                             textTransform: "capitalize",
                             fontSize: "18px",
-                            lineHeight:"20px"
+                            lineHeight: "20px",
                           }}
                           onClick={handleSubmit}
                         >
-                          {console.log( agreement[ids[0]].deposit - deposit )}
-                          {(agreement[ids[0]].op_id === 0 || agreement[ids[0]].op_id === null && ( agreement[ids[0]].deposit - deposit !== 0)  )
+                          {console.log(agreement[ids[0]].deposit - deposit)}
+                          {agreement[ids[0]].op_id === 0 ||
+                          (agreement[ids[0]].op_id === null &&
+                            agreement[ids[0]].deposit - deposit !== 0)
                             ? "Approve And Send to BUH"
                             : "Approve And Send To Operations"}
                         </Button>

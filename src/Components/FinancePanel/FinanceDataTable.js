@@ -16,7 +16,7 @@ function FinanceTable({ rows, setRows }) {
   const [ids, setIds] = useState([]);
 
 
-  const [open, setopen] = useState(false);
+  const [open, setopen] = useState({open:false});
 
   const [utr, setUtr] = useState({ utr: "", paymentDate: "" });
 
