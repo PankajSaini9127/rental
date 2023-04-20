@@ -25,6 +25,7 @@ import { saveAs } from "file-saver";
 import {
   ApprovedByFinance,
   get_agreement_id,
+  get_data_recovery,
   get_deposit_amount,
   send_back_to_manager,
   send_to_bhu,
@@ -71,6 +72,62 @@ function FinanceApproval() {
 
   console.log(deposit);
 
+  const [recovery,setRecovery] = useState({});
+
+
+  async function get_recovery_data (id){
+    try {
+     const recovery = await get_data_recovery(id)
+     if(recovery.status === 200){
+       console.log(recovery.data)
+       setRecovery(recovery.data.data[0])
+     }
+    } catch (error) {
+     console.log(error)
+     dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong!!"}))
+    }
+ }
+
+ //termination
+ async function handleTerminate () {
+  if (remark.length <= 0) {
+    dispatch(
+      setAlert({
+        variant: "error",
+        open: true,
+        message: "Remark Required !.",
+      })
+    );
+  } else {
+    const response = await send_to_bhu(
+      {
+        status: "Approved for Termination",
+        finance_id:auth.id,
+        renewal_status:"Approved Termination"
+      },
+      id
+    );
+    if (response.data.success) {
+      dispatch(
+        setAlert({
+          variant: "success",
+          open: true,
+          message:"Agreement Approved For Termination."
+        })
+      );
+      navigate(-1);
+    } else {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Something went wrong! Please again later.",
+        })
+      );
+    }
+  }
+}
+
   async function get_deposit(code) {
     try {
       const deposit_amount = await get_deposit_amount(code);
@@ -100,6 +157,7 @@ function FinanceApproval() {
         setAgreement(agreement.data.agreement);
         console.log(agreement.data.ids);
         setIds(agreement.data.ids);
+        get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id)
         get_deposit(agreement.data.agreement[agreement.data.ids[0]].code);
       } else {
         dispatch(
@@ -608,7 +666,132 @@ function FinanceApproval() {
                 </>
               )}
 
+<Grid item xs={10}>
+ 
+ <Grid container>
+ <DataFieldStyle
+        field="Deposit Amount (Paid)"
+        value={recovery.depositedAmount}
+      />
+ </Grid>
+ <Grid container>
+ <DataFieldStyle
+        field="Remaining Months"
+        value={recovery.remainingMonth}
+      />
+      <DataFieldStyle
+        field="Adjustment Amount"
+        value={recovery.adjustmentAmount}
+      />
+      <DataFieldStyle
+        field="Remark"
+        value={recovery.adjustmentAmountRemark}
+      />
+ </Grid>
+
+ <Grid container>
+ <DataFieldStyle
+        field="Expenses Adjustment Amount"
+        value={recovery.expenses}
+      />
+<DataFieldStyle
+        field="Remark"
+        value={recovery.expansesRemark}
+      />
+ </Grid>
+
+ <Grid item xs={12} container >
+      <DataFieldStyle
+        field="Other Adjustments"
+        value={recovery.otherAdjustments}
+      />
+   <DataFieldStyle
+        field="Remark"
+        value={recovery.otherRemark}
+      />
+      </Grid>
+      <Grid item xs={12} container >
+      <DataFieldStyle
+        field="Total Adjustment Amount "
+        value={recovery.totalAdjustmentAmount}
+      />
+      <DataFieldStyle
+        field="Balance Deposit "
+        value={recovery.balanceDeposit}
+      />
+      </Grid>
+
+  </Grid>
+
               {/* Buttons start here*/}
+
+                {/* termination */}
+   {agreement[ids[0]].status === "Terminated By Operations" && (
+                <>
+                  <Grid
+                    item
+                    xs={10}
+                    sx={{ mt: 5 }}
+                    className={"textFieldWrapper"}
+                  >
+                    <Grid item xs={8}>
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
+                        variant="outlined"
+                        label="Remark *"
+                        placeholder="Remark *"
+                        value={remark}
+                        onChange={(e) => setRemark(e.target.value)}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                    <Grid
+                      container
+                      spacing={2}
+                      sx={{ justifyContent: "center" }}
+                    >
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            height: "55px",
+                            borderRadius: "12px",
+                            backgroundColor: "primary",
+                            width: "100%",
+                            color: "#FFFFFF",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                            lineHeight: "20px",
+                          }}
+                          onClick={handleTerminate}
+                        >
+                         Approve For Termination
+                        </Button>
+                      </Grid>
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            height: "55px",
+                            borderRadius: "12px",
+                            width: "100%",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                          }}
+                          onClick={handleSendBack}
+                        >
+                          Send Back To Manager
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </>
+              )}
 
               {agreement[ids[0]].status === "Sent To Finance Team" && (
                 <>

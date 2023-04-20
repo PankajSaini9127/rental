@@ -24,6 +24,7 @@ import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { saveAs } from "file-saver";
 import {
   get_agreement_id,
+  get_data_recovery,
   send_back_to_manager,
   send_to_bhu,
 } from "../../Services/Services";
@@ -57,6 +58,8 @@ function SrManagerApproval() {
   const [agreement, setAgreement] = useState({});
   const [ids, setIds] = useState([]);
 
+  const [recovery,setRecovery] = useState({})
+
   const dispatch = useDispatch();
 
   const [remark, setRemark] = useState("");
@@ -89,6 +92,8 @@ function SrManagerApproval() {
       const agreement = await get_agreement_id(id);
       console.log(agreement.data);
       if (agreement.data.success) {
+        console.log(agreement.data.agreement[agreement.data.ids[0]].id)
+        get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id)
         setAgreement(agreement.data.agreement);
         console.log(agreement.data.ids);
         setIds(agreement.data.ids);
@@ -113,6 +118,19 @@ function SrManagerApproval() {
       );
     }
   };
+
+  async function get_recovery_data (id){
+     try {
+      const recovery = await get_data_recovery(id)
+      if(recovery.status === 200){
+        console.log(recovery.data)
+        setRecovery(recovery.data.data[0])
+      }
+     } catch (error) {
+      console.log(error)
+      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong!!"}))
+     }
+  }
 
   useEffect(() => {
     getData(id);
@@ -204,6 +222,44 @@ function SrManagerApproval() {
     }
   };
 
+//termination
+  async function handleTerminate () {
+    if (remark.length <= 0) {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Remark Required !.",
+        })
+      );
+    } else {
+      const response = await send_to_bhu(
+        {
+          status: "Terminated By Sr Manager"
+        },
+        id
+      );
+      if (response.data.success) {
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message:"Agreement Sent to Operations For Termination."
+          })
+        );
+        navigate("/srManagerListing");
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          })
+        );
+      }
+    }
+  }
+
   function getIncrement(rent, value, type) {
     let incrementType;
     rent = Number(rent);
@@ -222,6 +278,7 @@ function SrManagerApproval() {
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
           {/* <a id="button"></a> */}
           {console.log(agreement[ids[0]].op_id)};
+          {/* <h1>555</h1> */}
           <HamburgerMenu
             handleListing={() => navigate("/srManagerListing")}
             navigateHome={"srManagerDashboard"}
@@ -575,6 +632,65 @@ function SrManagerApproval() {
               )}
 
               {/* Buttons start here*/}
+              <Grid item xs={10}>
+ 
+             <Grid container>
+             <DataFieldStyle
+                    field="Deposit Amount (Paid)"
+                    value={recovery.depositedAmount}
+                  />
+             </Grid>
+             <Grid container>
+             <DataFieldStyle
+                    field="Remaining Months"
+                    value={recovery.remainingMonth}
+                  />
+                  <DataFieldStyle
+                    field="Adjustment Amount"
+                    value={recovery.adjustmentAmount}
+                  />
+                  <DataFieldStyle
+                    field="Remark"
+                    value={recovery.adjustmentAmountRemark}
+                  />
+             </Grid>
+
+             <Grid container>
+             <DataFieldStyle
+                    field="Expenses Adjustment Amount"
+                    value={recovery.expenses}
+                  />
+            <DataFieldStyle
+                    field="Remark"
+                    value={recovery.expansesRemark}
+                  />
+             </Grid>
+
+             <Grid item xs={12} container >
+                  <DataFieldStyle
+                    field="Other Adjustments"
+                    value={recovery.otherAdjustments}
+                  />
+               <DataFieldStyle
+                    field="Remark"
+                    value={recovery.otherRemark}
+                  />
+                  </Grid>
+                  <Grid item xs={12} container >
+                  <DataFieldStyle
+                    field="Total Adjustment Amount "
+                    value={recovery.totalAdjustmentAmount}
+                  />
+                  <DataFieldStyle
+                    field="Balance Deposit "
+                    value={recovery.balanceDeposit}
+                  />
+                  </Grid>
+
+              </Grid>
+
+
+
 
               {agreement[ids[0]].status === "Sent To Sr Manager" && (
                 <>
@@ -605,7 +721,7 @@ function SrManagerApproval() {
                       spacing={2}
                       sx={{ justifyContent: "center" }}
                     >
-                      <Grid item md={4} xs={11}>
+                      <Grid item md={6} xs={11}>
                         <Button
                           variant="contained"
                           sx={{
@@ -628,7 +744,7 @@ function SrManagerApproval() {
                             : "Approve And Send To Operations"}
                         </Button>
                       </Grid>
-                      <Grid item md={4} xs={11}>
+                      <Grid item md={6} xs={11}>
                         <Button
                           variant="outlined"
                           sx={{
@@ -647,6 +763,76 @@ function SrManagerApproval() {
                   </Grid>
                 </>
               )}
+
+
+      {/* termonation */}
+      {agreement[ids[0]].status === "Terminated By Manager" && (
+                <>
+                  <Grid
+                    item
+                    xs={10}
+                    sx={{ mt: 5 }}
+                    className={"textFieldWrapper"}
+                  >
+                    <Grid item xs={8}>
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
+                        variant="outlined"
+                        label="Remark *"
+                        placeholder="Remark *"
+                        value={remark}
+                        onChange={(e) => setRemark(e.target.value)}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                    <Grid
+                      container
+                      spacing={2}
+                      sx={{ justifyContent: "center" }}
+                    >
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            height: "55px",
+                            borderRadius: "12px",
+                            backgroundColor: "primary",
+                            width: "100%",
+                            color: "#FFFFFF",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                            lineHeight: "20px",
+                          }}
+                          onClick={handleTerminate}
+                        >
+                         Approve And Send To Operations 
+                        </Button>
+                      </Grid>
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            height: "55px",
+                            borderRadius: "12px",
+                            width: "100%",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                          }}
+                          onClick={handleSendBack}
+                        >
+                          Send Back To Manager
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </>
+              )}
+
 
               {/* buttons end here */}
             </Grid>

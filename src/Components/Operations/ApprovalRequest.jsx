@@ -24,6 +24,7 @@ import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { saveAs } from "file-saver";
 import {
   get_agreement_id,
+  get_data_recovery,
   send_back_to_manager,
   send_to_bhu,
 } from "../../Services/Services";
@@ -57,14 +58,38 @@ function ApprovalRequest() {
 
   const dispatch = useDispatch();
 
-  const getData = async (id) => {
+ 
+async function getData (id){
+  try {
     const agreement = await get_agreement_id(id);
-    setAgreement(agreement.data.agreement);
-    console.log(agreement.data.ids);
-    setIds(agreement.data.ids);
-  };
+    console.log(agreement.data);
+    if (agreement.data.success) {
+      console.log(agreement.data.agreement[agreement.data.ids[0]].id)
+      get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id)
+      setAgreement(agreement.data.agreement);
+      console.log(agreement.data.ids);
+      setIds(agreement.data.ids);
+    } else {
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong Please Try Again Later.",
+        })
+      );
+    }
+  } catch (error) {
+    console.log(error);
+    dispatch(
+      setAlert({
+        open: true,
+        variant: "error",
+        message: "Something Went Wrong Please Try Again Later.",
+      })
+    );
+  }
+}
 
-  console.log(agreement);
 
   useEffect(() => {
     getData(id);
@@ -106,6 +131,62 @@ function ApprovalRequest() {
   };
 
   const [remark, setRemark] = useState("");
+
+  const [recovery,setRecovery] = useState({});
+
+
+  async function get_recovery_data (id){
+    try {
+     const recovery = await get_data_recovery(id)
+     if(recovery.status === 200){
+       console.log(recovery.data)
+       setRecovery(recovery.data.data[0])
+     }
+    } catch (error) {
+     console.log(error)
+     dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong!!"}))
+    }
+ }
+
+ //termination
+ async function handleTerminate () {
+  if (remark.length <= 0) {
+    dispatch(
+      setAlert({
+        variant: "error",
+        open: true,
+        message: "Remark Required !.",
+      })
+    );
+  } else {
+    const response = await send_to_bhu(
+      {
+        status: "Terminated By Operations",
+        op_id: login_manager_id 
+      },
+      id
+    );
+    if (response.data.success) {
+      dispatch(
+        setAlert({
+          variant: "success",
+          open: true,
+          message:"Agreement Sent to Finance For Termination."
+        })
+      );
+      navigate(-1);
+    } else {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Something went wrong! Please again later.",
+        })
+      );
+    }
+  }
+}
+
 
   async function handleSendBack() {
     if (remark.length <= 0) {
@@ -515,6 +596,134 @@ function ApprovalRequest() {
                     value={agreement[ids[0]].remark}
                   />
                 </Grid>
+              )}
+
+
+   {/* Buttons start here*/}
+   <Grid item xs={10}>
+ 
+ <Grid container>
+ <DataFieldStyle
+        field="Deposit Amount (Paid)"
+        value={recovery.depositedAmount}
+      />
+ </Grid>
+ <Grid container>
+ <DataFieldStyle
+        field="Remaining Months"
+        value={recovery.remainingMonth}
+      />
+      <DataFieldStyle
+        field="Adjustment Amount"
+        value={recovery.adjustmentAmount}
+      />
+      <DataFieldStyle
+        field="Remark"
+        value={recovery.adjustmentAmountRemark}
+      />
+ </Grid>
+
+ <Grid container>
+ <DataFieldStyle
+        field="Expenses Adjustment Amount"
+        value={recovery.expenses}
+      />
+<DataFieldStyle
+        field="Remark"
+        value={recovery.expansesRemark}
+      />
+ </Grid>
+
+ <Grid item xs={12} container >
+      <DataFieldStyle
+        field="Other Adjustments"
+        value={recovery.otherAdjustments}
+      />
+   <DataFieldStyle
+        field="Remark"
+        value={recovery.otherRemark}
+      />
+      </Grid>
+      <Grid item xs={12} container >
+      <DataFieldStyle
+        field="Total Adjustment Amount "
+        value={recovery.totalAdjustmentAmount}
+      />
+      <DataFieldStyle
+        field="Balance Deposit "
+        value={recovery.balanceDeposit}
+      />
+      </Grid>
+
+  </Grid>
+
+
+   {/* termonation */}
+   {agreement[ids[0]].status === "Terminated By Sr Manager" && (
+                <>
+                  <Grid
+                    item
+                    xs={10}
+                    sx={{ mt: 5 }}
+                    className={"textFieldWrapper"}
+                  >
+                    <Grid item xs={8}>
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
+                        variant="outlined"
+                        label="Remark *"
+                        placeholder="Remark *"
+                        value={remark}
+                        onChange={(e) => setRemark(e.target.value)}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                    <Grid
+                      container
+                      spacing={2}
+                      sx={{ justifyContent: "center" }}
+                    >
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="contained"
+                          sx={{
+                            height: "55px",
+                            borderRadius: "12px",
+                            backgroundColor: "primary",
+                            width: "100%",
+                            color: "#FFFFFF",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                            lineHeight: "20px",
+                          }}
+                          onClick={handleTerminate}
+                        >
+                         Approve And Send To Finance 
+                        </Button>
+                      </Grid>
+                      <Grid item md={6} xs={11}>
+                        <Button
+                          variant="outlined"
+                          sx={{
+                            height: "55px",
+                            borderRadius: "12px",
+                            width: "100%",
+                            textTransform: "capitalize",
+                            fontSize: "18px",
+                          }}
+                          onClick={handleSendBack}
+                        >
+                          Send Back To Manager
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </>
               )}
 
               {/* Buttons start here*/}

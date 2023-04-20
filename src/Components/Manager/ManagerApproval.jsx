@@ -22,7 +22,7 @@ import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 //download file
 import { saveAs } from "file-saver";
-import { get_agreement_id, send_to_bhu } from "../../Services/Services";
+import { get_agreement_id, get_data_recovery, send_to_bhu } from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -54,12 +54,54 @@ function ManagerApproval() {
 
   const dispatch = useDispatch();
 
-  const getData = async (id) => {
-    const agreement = await get_agreement_id(id);
-    setAgreement(agreement.data.agreement);
-    console.log(agreement.data.ids);
-    setIds(agreement.data.ids);
-  };
+  const [recovery,setRecovery] = useState({});
+
+
+  async function get_recovery_data (id){
+    try {
+     const recovery = await get_data_recovery(id)
+     if(recovery.status === 200){
+       console.log(recovery.data)
+       setRecovery(recovery.data.data[0])
+     }
+    } catch (error) {
+     console.log(error)
+     dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong!!"}))
+    }
+ }
+
+
+ 
+  async function getData (id){
+    try {
+      const agreement = await get_agreement_id(id);
+      console.log(agreement.data);
+      if (agreement.data.success) {
+        console.log(agreement.data.agreement[agreement.data.ids[0]].id)
+        get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id)
+        setAgreement(agreement.data.agreement);
+        console.log(agreement.data.ids);
+        setIds(agreement.data.ids);
+      } else {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong Please Try Again Later.",
+          })
+        );
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong Please Try Again Later.",
+        })
+      );
+    }
+  }
 
   console.log(agreement);
 
@@ -448,6 +490,64 @@ function ManagerApproval() {
                   />
                 </Grid>
               )}
+
+                {/* Buttons start here*/}
+   <Grid item xs={10}>
+ 
+ <Grid container>
+ <DataFieldStyle
+        field="Deposit Amount (Paid)"
+        value={recovery.depositedAmount}
+      />
+ </Grid>
+ <Grid container>
+ <DataFieldStyle
+        field="Remaining Months"
+        value={recovery.remainingMonth}
+      />
+      <DataFieldStyle
+        field="Adjustment Amount"
+        value={recovery.adjustmentAmount}
+      />
+      <DataFieldStyle
+        field="Remark"
+        value={recovery.adjustmentAmountRemark}
+      />
+ </Grid>
+
+ <Grid container>
+ <DataFieldStyle
+        field="Expenses Adjustment Amount"
+        value={recovery.expenses}
+      />
+<DataFieldStyle
+        field="Remark"
+        value={recovery.expansesRemark}
+      />
+ </Grid>
+
+ <Grid item xs={12} container >
+      <DataFieldStyle
+        field="Other Adjustments"
+        value={recovery.otherAdjustments}
+      />
+   <DataFieldStyle
+        field="Remark"
+        value={recovery.otherRemark}
+      />
+      </Grid>
+      <Grid item xs={12} container >
+      <DataFieldStyle
+        field="Total Adjustment Amount "
+        value={recovery.totalAdjustmentAmount}
+      />
+      <DataFieldStyle
+        field="Balance Deposit "
+        value={recovery.balanceDeposit}
+      />
+      </Grid>
+
+  </Grid>
 
               {/* Buttons start here*/}
 

@@ -263,8 +263,14 @@ function OperationsTable({ rows }) {
               cellClass.push("yellow statusCell");
             } else if (
               parms.field === "status" &&
-              (parms.row.status === "Sent Back From Sr Manager"  || parms.row.status === "Sent Back From BUH" ||
-              parms.row.status === "Sent Back From Operations" || parms.row.status === "Sent Back From Finance"
+              (parms.row.status === "Sent Back From Sr Manager"  
+              || parms.row.status === "Sent Back From BUH" 
+              || parms.row.status === "Sent Back From Operations" 
+              || parms.row.status === "Sent Back From Finance"
+              ||parms.row.status === "Terminated By Manager"
+              ||parms.row.status === "Terminated By Sr Manager"
+              ||parms.row.status === "Terminated By Operations"
+              ||parms.row.status === "Approved for Termination"             
               )
             ) {
               cellClass.push("red statusCell");
