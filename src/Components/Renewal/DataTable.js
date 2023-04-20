@@ -221,6 +221,28 @@ function DataTable({ rows, loading }) {
            </Button>
          </Grid>
         )}
+        {(e.row.status === "Approved for Terminate" ) &&(
+           <Grid item xs={6}>
+           <Button
+             variant="contained"
+             color="primary"
+             size="small"
+             style={{
+               backgroundColor: "rgb(103 185 68 / 89%)",
+               color: "white",
+               fontSize: "12px",
+               textTransform: "capitalize",
+               // width:"100%"
+             }}
+             onClick={(e) => {
+               e.stopPropagation(); // don't select this row after clicking
+               navigate(`/renewal-deposit-refund/${id}`);
+             }}
+           >
+            Edit
+           </Button>
+         </Grid>
+        )}
       </Grid>
     );
   }

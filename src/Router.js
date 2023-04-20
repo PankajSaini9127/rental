@@ -13,7 +13,7 @@ import ManagerApproval from "./Components/Manager/ManagerApproval";
 import MonthalyList from "./Components/MonthalyPayment/MonthalyList";
 import RenewalList from "./Components/Renewal/RenewalList";
 import RenewalEditAgreement from "./Components/Renewal/EditAgreement";
-// import RenewalEditAgreement from "./Components/Manager/DepositeRefund";
+import RenewalDepositeRefund from "./Components/Manager/DepositeRefund";
 
 //sr MAnager section
 import SrManagerDashboard from "./Components/SrManager/SrManagerDashboard";
@@ -121,7 +121,11 @@ function MyRouter() {
         element={isAuth && role.includes("Manager")  ? <RenewalViewPage /> : <Login />}
       />
 
-
+<Route
+        exact
+        path="/renewal-deposit-refund/:id"
+        element={isAuth && role.includes("Manager")  ? <RenewalDepositeRefund /> : <Login />}
+      />
 
 
 

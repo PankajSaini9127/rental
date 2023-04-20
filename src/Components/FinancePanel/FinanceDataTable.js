@@ -67,7 +67,25 @@ function FinanceTable({ rows, setRows }) {
            >
              UTR Number
            </Button>}
-      {(e.row.status === 'Deposited') &&
+           {/* {(e.row.status === 'Approved for Termination' ) &&
+      <Button
+             variant="contained"
+             color="primary"
+             size="small"
+             style={{
+               backgroundColor: "#62CDFF",
+               color: "white",
+               fontSize: "12px",
+               textTransform: "capitalize",
+             }}
+            //  startIcon={<EditIcon />}
+             onClick={(e) => {
+             setopen({open : true, id : id})
+             }}
+           >
+            Deposit Collect
+           </Button>} */}
+      {(e.row.status === 'Approved for Termination') &&
       <Button
              variant="contained"
              color="primary"
@@ -373,8 +391,14 @@ function FinanceTable({ rows, setRows }) {
               cellClass.push("yellow statusCell");
             } else if (
               parms.field === "status" &&
-              (parms.row.status === "Sent Back From Sr Manager"  || parms.row.status === "Sent Back From BUH" ||
-              parms.row.status === "Sent Back From Operations" || parms.row.status === "Sent Back From Finance"
+              (parms.row.status === "Sent Back From Sr Manager"  
+              ||parms.row.status === "Sent Back From BUH" 
+              ||parms.row.status === "Sent Back From Operations" 
+              ||parms.row.status === "Sent Back From Finance"
+              ||parms.row.status === "Terminated By Manager"
+              ||parms.row.status === "Terminated By Sr Manager"
+              ||parms.row.status === "Terminated By Operations"
+              ||parms.row.status === "Approved for Termination"             
               )
             ) {
               cellClass.push("red statusCell");

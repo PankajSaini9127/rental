@@ -217,6 +217,13 @@ export async function send_back_to_manager (data,id){
     return await axios.put(`${API_LIVE}/api/send-back/${id}`,data)
 }
 
+//send back to manager 
+export async function get_data_recovery (id){
+    return await axios.get(`${API_LIVE}/api/get-data-recovery/${id}`)
+}
+
+
+
 
 //send to BHU 
 export async function send_to_bhu (data,id){

@@ -6,6 +6,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+
 // MUI Components
 import {
   Box,
@@ -47,13 +49,14 @@ import {
   editAgreement,
   getBankName,
   getLocation,
-  insertAdjustmentAmount
+  insertAdjustmentAmount,
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 import PermissionAlert from "./Alert";
 import { useParams, useNavigate } from "react-router-dom";
 import { DataFieldStyle, ImageView } from "../StyleComponents/Rental";
+import { send_to_bhu } from "../../Services/Services";
 
 function EditAgreement({ history }) {
   const navigate = useNavigate();
@@ -65,7 +68,6 @@ function EditAgreement({ history }) {
   const [buh_id, setBuh_ID] = useState(null);
 
   const [finance_id, setFinance_ID] = useState(null);
-
 
   // modified by yashwant
   const [preData, setPreData] = useState({
@@ -95,7 +97,7 @@ function EditAgreement({ history }) {
   });
 
   const [recovery,setRecovery] = useState({
-    agreement_id : id,
+    agreemenet_id : id,
     remainingMonth : 0,
     depositedAmount : 0,
     adjustmentAmount : 0,
@@ -110,7 +112,7 @@ function EditAgreement({ history }) {
     try {
       let response = await getDetails(id);
 
-       console.log(response)
+      console.log(response);
       if (response.status === 200) {
         let {
           id,
@@ -149,16 +151,16 @@ function EditAgreement({ history }) {
 
         let rent = monthlyRent;
 
-        console.log(monthlyRent,lockInYear)
+        console.log(monthlyRent, lockInYear);
 
-        setRecovery(old=>({
+        setRecovery((old) => ({
           ...old,
-          depositedAmount : deposit,
-          balanceDeposit : deposit,
-          monthlyRent : monthlyRent
-        }))
+          depositedAmount: deposit,
+          balanceDeposit: deposit,
+          monthlyRent: monthlyRent,
+        }));
 
-        if(yearlyIncrement === "Percentage"){
+        if (yearlyIncrement === "Percentage") {
           setYearValue({
             year1: 0,
             year2: year2 && parseInt(((year2 - year1) / year1) * 100),
@@ -166,16 +168,16 @@ function EditAgreement({ history }) {
             year4: year4 && parseInt(((year4 - year3) / year3) * 100),
             year5: year5 && parseInt(((year5 - year4) / year4) * 100),
           });
-        }else{
+        } else {
           setYearValue({
             year1: 0,
             year2: year2 && year2 - year1,
             year3: year3 && year3 - year2,
             year4: year4 && year4 - year3,
             year5: year5 && year5 - year4,
-          })
+          });
         }
-        
+
         setPreData({
           id,
           area,
@@ -373,49 +375,59 @@ function EditAgreement({ history }) {
     }
   }
 
+  //use for set remark 
+  function handleRemarkChange (e){
+    setRecovery({
+      ...recovery,
+      [e.target.name]:e.target.value
+    })
+  }
+
   // use on Change for uncommon fields
   function handleChange(e, i) {
     let error = { state: false, message: null };
-    
-    if (!e.target.value.match(/^[0-9]*$/))
-    error = { ...error, state: true };
 
-    
+    if (!e.target.value.match(/^[0-9]*$/)) error = { ...error, state: true };
+
     if (!error.state) {
-      let adableFeilds = ["expenses","otherAdjustments","adjustmentAmount"]
-      
+      let adableFeilds = ["expenses", "otherAdjustments", "adjustmentAmount"];
+
       let sum = 0;
 
-      Object.keys(recovery).map((row)=>{
-        if(adableFeilds.includes(row) && row !== e.target.name  )
-        {
+      Object.keys(recovery).map((row) => {
+        if (adableFeilds.includes(row) && row !== e.target.name) {
           // console.log(e.target.name,row)
-          sum = sum + parseInt(recovery[row])
-        }
-        else if(adableFeilds.includes(row))
-         sum += (e.target.value.length > 0 ?  parseInt(e.target.value) : 0)
-
-      })
-      if(e.target.name === "remainingMonth")
-    {  
-      setRecovery((old) => ({
-          ...old,
-          [e.target.name] : e.target.value.length > 0 ?  parseInt(e.target.value) : 0,
-          adjustmentAmount :  old.monthlyRent * parseInt(e.target.value),
-          totalAdjustmentAmount : old.monthlyRent * parseInt(e.target.value) + recovery.otherAdjustments + recovery.expenses,
-          balanceDeposit : parseInt(old.depositedAmount) - (old.monthlyRent * parseInt(e.target.value) + recovery.otherAdjustments + recovery.expenses) 
-        }));
-      }
-      else{
+          sum = sum + parseInt(recovery[row]);
+        } else if (adableFeilds.includes(row))
+          sum += e.target.value.length > 0 ? parseInt(e.target.value) : 0;
+      });
+      if (e.target.name === "remainingMonth") {
         setRecovery((old) => ({
           ...old,
-          [e.target.name] : e.target.value.length > 0 ?  parseInt(e.target.value) : 0,
-          totalAdjustmentAmount :  sum,
-          balanceDeposit : parseInt(old.depositedAmount) - sum
+          [e.target.name]:
+            e.target.value.length > 0 ? parseInt(e.target.value) : 0,
+          adjustmentAmount: old.monthlyRent * parseInt(e.target.value),
+          totalAdjustmentAmount:
+            old.monthlyRent * parseInt(e.target.value) +
+            recovery.otherAdjustments +
+            recovery.expenses,
+          balanceDeposit:
+            parseInt(old.depositedAmount) -
+            (old.monthlyRent * parseInt(e.target.value) +
+              recovery.otherAdjustments +
+              recovery.expenses),
         }));
-      }   
+      } else {
+        setRecovery((old) => ({
+          ...old,
+          [e.target.name]:
+            e.target.value.length > 0 ? parseInt(e.target.value) : 0,
+          totalAdjustmentAmount: sum,
+          balanceDeposit: parseInt(old.depositedAmount) - sum,
+        }));
       }
     }
+  }
 
   // handle Change for common feilds
   function handleCommonChange(e, i) {
@@ -505,7 +517,7 @@ function EditAgreement({ history }) {
 
   // on form submit
 
-  const handleConfirm = ( ) => {
+  const handleConfirm = () => {
     setOpen(false);
     // //console.log(data)
     const {
@@ -558,7 +570,10 @@ function EditAgreement({ history }) {
         tenure,
         ...increment,
         landlord,
-        status: (finance_id === 0 && buh_id !== 0 )?"Sent To Operations" :  "Sent To Sr Manager",
+        status:
+          finance_id === 0 && buh_id !== 0
+            ? "Sent To Operations"
+            : "Sent To Sr Manager",
 
         remark: "",
       },
@@ -585,14 +600,12 @@ function EditAgreement({ history }) {
         setAlert({
           open: true,
           variant: "success",
-          message:  "Agrement Edited & Submited Successfully",
+          message: "Agrement Edited & Submited Successfully",
         })
       );
-      navigate('/listing')
+      navigate("/listing");
     }
   };
-
-
 
   useEffect(() => {
     // //console.log(formError)
@@ -611,8 +624,7 @@ function EditAgreement({ history }) {
       "tax_receipt",
       "cheque",
     ];
-     preData.landlord.length > 1 && field.push("noc")
-
+    preData.landlord.length > 1 && field.push("noc");
 
     // if (preData.landlord.length > 0) {
     //   preData.landlord.map((row, i) => {
@@ -714,23 +726,30 @@ function EditAgreement({ history }) {
   const [open, setOpen] = useState(false);
 
   async function handleSubmit(e) {
-    e.preventDefault()
+    e.preventDefault();
     let response = await insertAdjustmentAmount(recovery);
-    if(response.status === 200){
-      dispatch(setAlert({
-        variant : 'success',
-        open : true,
-        message : response.data.message
-      }))
+    if (response.status === 200) {
+        const updateStatus = await send_to_bhu({"status":"Terminated By Manager",renewal_status:"Sent For Termination"},recovery.agreemenet_id)
+        if(updateStatus.data.success){
+          dispatch(
+            setAlert({
+              variant: "success",
+              open: true,
+              message: response.data.message || "Sent To Sr Manager For Termination",
+            })
+          );
+        }
+      navigate(-1)
+    } else {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Something went wrong !!!",
+        })
+      );
     }
-    else{
-      dispatch(setAlert({
-        variant : 'error',
-        open : true,
-        message : "Something went wrong !!!"
-      }))
-    }
-  };
+  }
 
   //confirmation alert
 
@@ -1013,9 +1032,11 @@ function EditAgreement({ history }) {
     }
   }
 
-  function Docview ( href, name ){
-    console.log("docview")
-       return <ImageView open={true} handleClose={()=>{}} href={href} name={name} />
+  function Docview(href, name) {
+    console.log("docview");
+    return (
+      <ImageView open={true} handleClose={() => {}} href={href} name={name} />
+    );
   }
 
   return (
@@ -1045,7 +1066,21 @@ function EditAgreement({ history }) {
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Edit Agreement</MyHeader>
-{/* 
+
+          <Box className="backButton">
+              <IconButton
+                variant="contained"
+                color="primary"
+                onClick={() => navigate(-1)}
+                size={"large"}
+              >
+                <ArrowCircleLeftIcon
+                  sx={{ fontSize: "3rem" }}
+                  color="#FFFFF !important"
+                />
+              </IconButton>
+            </Box>
+          {/* 
           <Box
                           mb={2}
                           size="small"
@@ -1077,7 +1112,7 @@ function EditAgreement({ history }) {
                           </IconButton>
                         </Box> */}
 
-                      {/* <Collapse in={expand === i} timeout="auto" unmountOnExit> */}
+          {/* <Collapse in={expand === i} timeout="auto" unmountOnExit> */}
           <Grid container sx={{ justifyContent: "center" }}>
             <Grid item xs={12} md={10}>
               {/* agreement form start here */}
@@ -1217,8 +1252,7 @@ function EditAgreement({ history }) {
                     error={formError.deposit}
                     value={preData.deposit}
                     onChange={handleCommonChange}
-                                        disabled={true}
-
+                    disabled={true}
                   />
                   <TextFieldWrapper
                     label="Monthly Rental"
@@ -1229,7 +1263,6 @@ function EditAgreement({ history }) {
                     //                     disabled={true}
 
                     disabled={true}
-
                     error={formError.monthlyRent}
                     value={preData.monthlyRent}
                     onChange={handleCommonChange}
@@ -1240,8 +1273,7 @@ function EditAgreement({ history }) {
                     required={true}
                     error={formError.tenure}
                     name="tenure"
-                                        disabled={true}
-
+                    disabled={true}
                     options={[
                       "11 Month",
                       "2 Year",
@@ -1256,14 +1288,13 @@ function EditAgreement({ history }) {
                     "11 Month" ? null : (
                     <SelectComponent
                       label={"Yearly Increment"}
-                    disabled={true}
-                    required={true}
+                      disabled={true}
+                      required={true}
                       name="yearlyIncrement"
                       options={["Percentage", "Value"]}
                       value={preData.yearlyIncrement}
                       onChange={handleCommonChange}
-                                          disabled={true}
-
+                      disabled={true}
                     />
                   )}
                 </Grid>
@@ -1280,8 +1311,7 @@ function EditAgreement({ history }) {
                   increment={increment}
                   setIncrement={setIncrement}
                   monthlyRent={preData.monthlyRent || ""}
-                                      disabled={true}
-
+                  disabled={true}
                 />
 
                 {/* landlord Details start here*/}
@@ -1367,8 +1397,8 @@ function EditAgreement({ history }) {
                             maxLength={12}
                             value={preData.landlord[i].aadharNo}
                             onChange={(e) => handleChange(e, i)}
-                    disabled={true}
-                    index={i}
+                            disabled={true}
+                            index={i}
                             error={
                               formError.landlord[i] &&
                               formError.landlord[i].aadharNo
@@ -1377,8 +1407,8 @@ function EditAgreement({ history }) {
                             }
                           />
                           <TextFieldWrapper
-                    disabled={true}
-                    label="PAN Number"
+                            disabled={true}
+                            label="PAN Number"
                             placeHolder="Enter PAN No."
                             onBlur={(e) => handleOnBlur(e, i)}
                             error={
@@ -1397,8 +1427,8 @@ function EditAgreement({ history }) {
                           <TextFieldWrapper
                             label="Mobile Number"
                             placeHolder="Enter Mobile No."
-                    disabled={true}
-                    required={true}
+                            disabled={true}
+                            required={true}
                             onBlur={(e) => handleOnBlur(e, i)}
                             name="mobileNo"
                             maxLength={10}
@@ -1416,8 +1446,8 @@ function EditAgreement({ history }) {
                             label="Alternate Number"
                             // error={formError.alternteMo}
                             placeHolder="Enter Alternate No."
-                    disabled={true}
-                    name="alternateMobile"
+                            disabled={true}
+                            name="alternateMobile"
                             onBlur={(e) => handleOnBlur(e, i)}
                             maxLength={10}
                             value={preData.landlord[i].alternateMobile}
@@ -1437,8 +1467,8 @@ function EditAgreement({ history }) {
                                 ? formError.landlord[i].email
                                 : ""
                             }
-                    disabled={true}
-                    name="email"
+                            disabled={true}
+                            name="email"
                             value={preData.landlord[i].email}
                             onChange={(e) => handleChange(e, i)}
                             index={i}
@@ -1455,8 +1485,8 @@ function EditAgreement({ history }) {
                                 ? formError.landlord[i].gstNo
                                 : ""
                             }
-                    disabled={true}
-                    name="gstNo"
+                            disabled={true}
+                            name="gstNo"
                             maxLength={15}
                             value={preData.landlord[i].gstNo}
                             onChange={(e) => handleChange(e, i)}
@@ -1466,8 +1496,8 @@ function EditAgreement({ history }) {
                             label="Bank IFSC Code"
                             placeHolder="Enter IFSC Code"
                             onBlur={(e) => handleOnBlur(e, i)}
-                    disabled={true}
-                    name="ifscCode"
+                            disabled={true}
+                            name="ifscCode"
                             error={
                               formError.landlord[i] &&
                               formError.landlord[i].ifscCode
@@ -1477,7 +1507,6 @@ function EditAgreement({ history }) {
                             value={preData.landlord[i].ifscCode}
                             onChange={(e) => handleChange(e, i)}
                           />
-
 
                           <TextFieldWrapper
                             label="Bank Name"
@@ -1505,8 +1534,8 @@ function EditAgreement({ history }) {
                           <TextFieldWrapper
                             required={true}
                             label="Beneficiary Name"
-                    disabled={true}
-                    onBlur={(e) => handleOnBlur(e, i)}
+                            disabled={true}
+                            onBlur={(e) => handleOnBlur(e, i)}
                             error={
                               formError.landlord[i] &&
                               formError.landlord[i].benificiaryName
@@ -1520,8 +1549,8 @@ function EditAgreement({ history }) {
                           />
                           <TextFieldWrapper
                             label="Bank A/C Number "
-                    disabled={true}
-                    required={true}
+                            disabled={true}
+                            required={true}
                             placeHolder="Enter Account No."
                             name="accountNo"
                             error={
@@ -1622,9 +1651,8 @@ function EditAgreement({ history }) {
                               handleChange={(e) => handleChangeCommonFile(e, i)}
                               name={"aadhar_card"}
                               fileName={preData[`aadhar_card${i}`]}
-                              href={ preData.landlord[i].aadhar_card}
+                              href={preData.landlord[i].aadhar_card}
                             />
-                            
                           </Grid>
                           <Grid item xs={6}>
                             <DocumentUpload
@@ -1639,7 +1667,7 @@ function EditAgreement({ history }) {
                               fileName={preData[`pan_card${i}`]}
                               placeHolder={"Upload PAN Card"}
                               handleChange={(e) => handleChangeCommonFile(e, i)}
-                              href={ preData.landlord[i].pan_card}
+                              href={preData.landlord[i].pan_card}
                             />
                           </Grid>
                           <Grid item xs={6}>
@@ -1654,7 +1682,7 @@ function EditAgreement({ history }) {
                               handleChange={(e) => handleChangeCommonFile(e, i)}
                               name={"gst"}
                               fileName={preData[`gst${i}`]}
-                              href={ preData.landlord[i].gst}
+                              href={preData.landlord[i].gst}
                             />
                           </Grid>
                           <Grid item xs={6}>
@@ -1670,7 +1698,7 @@ function EditAgreement({ history }) {
                               fileName={preData[`cheque${i}`]}
                               placeHolder="Upload Cancel Cheque"
                               handleChange={(e) => handleChangeCommonFile(e, i)}
-                              href={ preData.landlord[i].cheque}
+                              href={preData.landlord[i].cheque}
                             />
                           </Grid>
                         </Grid>
@@ -1707,7 +1735,7 @@ function EditAgreement({ history }) {
                       fileName={preData.draft_agreement_name}
                       handleChange={handleChangeFile}
                       name={"draft_agreement"}
-                      href={ preData.draft_agreement}
+                      href={preData.draft_agreement}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1719,7 +1747,7 @@ function EditAgreement({ history }) {
                       handleChange={handleChangeFile}
                       fileName={preData.electricity_bill_name}
                       name={"electricity_bill"}
-                      href={ preData.electricity_bill}
+                      href={preData.electricity_bill}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1731,7 +1759,7 @@ function EditAgreement({ history }) {
                       fileName={preData.poa_name}
                       handleChange={handleChangeFile}
                       name={"poa"}
-                      href={ preData.poa}
+                      href={preData.poa}
                     />
                   </Grid>
                   <Grid item xs={6}>
@@ -1743,12 +1771,12 @@ function EditAgreement({ history }) {
                       handleChange={handleChangeFile}
                       fileName={preData.maintaince_bill_name}
                       name={"maintaince_bill"}
-                      href={ preData.maintaince_bill}
+                      href={preData.maintaince_bill}
                     />
                   </Grid>
                   <Grid item xs={6}>
                     <DocumentUpload
-                    disabled
+                      disabled
                       label="Upload Property Tax Receipt"
                       uploaded={preData.tax_receipt && true}
                       placeHolder={"Upload Property Tax Receipt"}
@@ -1756,130 +1784,178 @@ function EditAgreement({ history }) {
                       fileName={preData.tax_receipt_name}
                       error={formError.tax_receipt}
                       name={"tax_receipt"}
-                      href={ preData.tax_receipt}
+                      href={preData.tax_receipt}
                     />
                   </Grid>
-                  { preData.landlord.length > 1 &&
+                  {preData.landlord.length > 1 && (
                     <Grid item xs={6}>
-                    <DocumentUpload
-                      uploaded={preData.noc && true}
-                      label="Upload NOC (If Mutiple Oweners)"
-                      error={formError.noc}
-                      placeHolder="NOC"
-                      fileName={preData.noc_name}
-                      handleChange={handleChangeFile}
-                      name={"noc"}
-                      href={ preData.noc}
+                      <DocumentUpload
+                        uploaded={preData.noc && true}
+                        label="Upload NOC (If Mutiple Oweners)"
+                        error={formError.noc}
+                        placeHolder="NOC"
+                        fileName={preData.noc_name}
+                        handleChange={handleChangeFile}
+                        name={"noc"}
+                        href={preData.noc}
                       />
-                  </Grid>
-                    }
+                    </Grid>
+                  )}
                 </Grid>
 
                 {/* Document upload section end here */}
-               
+
                 {preData.remark.length > 0 && (
+                  <Grid item container xs={10} sx={{ mt: 5 }}>
+                    <DataFieldStyle field={"Remark !"} value={preData.remark} />
+                  </Grid>
+                )}
                 <Grid
-                  item
                   container
-                  xs={10}
-                  sx={{ mt: 5 }}
+                  sx={{ mt: "25px", mb: "25px" }}
+                  spacing={isSmall ? 2 : 4}
+                  component={"form"}
+                  onSubmit={handleSubmit}
+                  method="post"
                 >
-                    <DataFieldStyle
-                      field={"Remark !"}
-                      value={preData.remark}
-                    />
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="body1"
+                      color="var(--main-color)"
+                      fontSize="25px"
+                      lineHeight="28px"
+                      fontWeight="600"
+                      // my="20px"
+                    >
+                      Adjustment Form
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} container>
+                  <TextFieldWrapper
+                    label="Deposit Amount (Paid)"
+                    placeHolder="Deposit Amount"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="depositedAmount"
+                    disabled={true}
+                    value={recovery.depositedAmount}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  </Grid>
+                  
+                  <Grid item xs={12} container spacing={2}>
+                  <Grid item xs={12}>
+                            <Typography color={"var( --main-color)"}>
+                              {"Adjust Towards Rental"}
+                            </Typography>
+                          </Grid>
+                  <TextFieldWrapper
+                    label=""
+                    placeHolder="Remaining Months"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="remainingMonth"
+                    // disabled = {true}
+                    value={recovery.remainingMonth}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  <TextFieldWrapper
+                    label="Adjustment Amount"
+                    placeHolder="Adjustment Amount"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="adjustmentAmount"
+                    disabled={true}
+                    value={recovery.adjustmentAmount}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  <TextFieldWrapper
+                    label="Remark"
+                    placeHolder="Remark"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="adjustmentAmountRemark"
+                    value={recovery.adjustmentAmountRemark}
+                    onChange={(e) => handleRemarkChange(e)}
+                  />
+                  </Grid>
+                  <Grid item xs={12} container spacing={2}>
+                  <Grid item xs={12}>
+                            <Typography color={"var( --main-color)"}>
+                              {"Adjust Towards Expances"}
+                            </Typography>
+                          </Grid>
+                  <TextFieldWrapper
+                    label="Expenses"
+                    placeHolder="Adjustment Amount"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="expenses"
+                    value={recovery.expenses}
+                    onChange={(e) => handleChange(e)}
+                  />
+<TextFieldWrapper
+                    label="Remark"
+                    placeHolder="Remark"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="expansesRemark"
+                    // disabled={true}
+                    value={recovery.expansesRemark}
+                    onChange={(e) => handleRemarkChange(e)}
+                  />
+</Grid>
+
+<Grid item xs={12} container spacing={2}>
+                  <Grid item xs={12}>
+                            <Typography color={"var( --main-color)"}>
+                              {"Other Adjustments"}
+                            </Typography>
+                          </Grid>
+                  <TextFieldWrapper
+                    label="Other Adjustments"
+                    placeHolder="Other Adjustments"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="otherAdjustments"
+                    value={recovery.otherAdjustments}
+                    onChange={(e) => handleChange(e)}
+                  />
+               <TextFieldWrapper
+                    label="Remark"
+                    placeHolder="Remark"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="otherRemark"
+                    // disabled={true}
+                    value={recovery.otherRemark}
+                    onChange={(e) => handleRemarkChange(e)}
+                  />
+                  </Grid>
+                  <Grid item xs={12} container spacing={2}>
+                  <TextFieldWrapper
+                    label="Total Adjustment Amount "
+                    placeHolder="Adjustment Amount"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="totalAdjustmentAmount"
+                    value={recovery.totalAdjustmentAmount}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  <TextFieldWrapper
+                    label="Balance Deposit "
+                    placeHolder="Balance Deposit"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="balanceDeposit"
+                    disabled={true}
+                    value={recovery.balanceDeposit}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  </Grid>
+
+                  {/* <Button type = 'submit' variant = 'contained'>Save</Button> */}
                 </Grid>
-              )}
-         <Grid
-                          container
-                          sx={{ mt : '25px', mb: "25px" }}
-                          spacing={isSmall ? 2 : 4} 
-          component = {'form'} onSubmit = {handleSubmit} method = 'post' >
-
-            <Grid item xs = {12}
-            >
-
-            <Typography
-                  variant="body1"
-                  color="var(--main-color)"
-                  fontSize="25px"
-                  lineHeight="28px"
-                  fontWeight="600"
-                  // my="20px"
-                  >
-                  Adjustment Form
-                </Typography>
-                    </Grid>
-        <TextFieldWrapper
-                            label="Deposit Amount (Paid)"
-                            placeHolder="Deposit Amount"
-                            // onBlur={(e) => handleOnBlur(e, i)}
-                            // error = {errorObj.leeseName}
-                            name="depositedAmount"
-                            disabled = {true}
-                            value={recovery.depositedAmount}
-                            onChange={(e) => handleChange(e)}
-                          />
-        <TextFieldWrapper
-                            label=""
-                            placeHolder="Remaining Months"
-                            // onBlur={(e) => handleOnBlur(e, i)}
-                            // error = {errorObj.leeseName}
-                            name="remainingMonth"
-                            // disabled = {true}
-                            value={recovery.remainingMonth}
-                            onChange={(e) => handleChange(e)}
-                          />
-        <TextFieldWrapper
-                            label="Adjustment Amount"
-                            placeHolder="Adjustment Amount"
-                            // onBlur={(e) => handleOnBlur(e, i)}
-                            // error = {errorObj.leeseName}
-                            name="adjustmentAmount"
-                            disabled = {true}
-                            value={recovery.adjustmentAmount}
-                            onChange={(e) => handleChange(e)}
-                          />
-        <TextFieldWrapper
-                            label="Expenses"
-                            placeHolder="Adjustment Amount"
-                            // onBlur={(e) => handleOnBlur(e, i)}
-                            // error = {errorObj.leeseName}
-                            name="expenses"
-                            value={recovery.expenses}
-                            onChange={(e) => handleChange(e)}
-                          />
-        <TextFieldWrapper
-                            label="Other Adjustments"
-                            placeHolder="Other Adjustments"
-                            // onBlur={(e) => handleOnBlur(e, i)}
-                            // error = {errorObj.leeseName}
-                            name="otherAdjustments"
-                            value={recovery.otherAdjustments}
-                            onChange={(e) => handleChange(e)}
-                          />
-        <TextFieldWrapper
-                            label="Total Adjustment Amount "
-                            placeHolder="Adjustment Amount"
-                            // onBlur={(e) => handleOnBlur(e, i)}
-                            // error = {errorObj.leeseName}
-                            name="totalAdjustmentAmount"
-                            value={recovery.totalAdjustmentAmount}
-                            onChange={(e) => handleChange(e)}
-                          />
-        <TextFieldWrapper
-                            label="Balace Deposit "
-                            placeHolder="Balace Deposit"
-                            // onBlur={(e) => handleOnBlur(e, i)}
-                            // error = {errorObj.leeseName}
-                            name="balanceDeposit"
-                            disabled = {true}
-                            value={recovery.balanceDeposit}
-                            onChange={(e) => handleChange(e)}
-                          />
-       
-       {/* <Button type = 'submit' variant = 'contained'>Save</Button> */}
-        </Grid>
 
                 {/* Button Start from here */}
                 <Grid
@@ -1908,12 +1984,7 @@ function EditAgreement({ history }) {
                         },
                       }}
                     >
-      
-                    {(finance_id === 0 &&
-                       buh_id !== 0 ) ?
-                        "Send To Operations" :  "Send To Sr Manager"
-                        }
-
+                        Send To Sr Manager
                     </Button>
                   </Grid>
 
@@ -1949,7 +2020,6 @@ function EditAgreement({ history }) {
           </Grid>
         </Box>
       </Stack>
-       
     </>
   );
 }

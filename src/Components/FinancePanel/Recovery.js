@@ -172,9 +172,9 @@ import HamburgerMenu from "../HamburgerMenu";
     const dispatch = useDispatch();
   
    // use on Change for uncommon fields
-  function handleChange(e, i) {
+  function handleChange(e) {
     let error = { state: false, message: null };
-    
+    console.log(e.target.name)
     switch (e.target.name) {
       case "receivedAmount":
         if (!e.target.value.match(/^[0-9]*$/))
