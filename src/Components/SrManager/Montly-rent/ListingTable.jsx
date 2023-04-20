@@ -7,11 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import { get_monthlt_rent_srm, sendMonthyPaymentForword } from '../../../Services/Services';
 import { setAlert, setRefreshBox } from '../../../store/action/action';
 
+import Remark from "../../RentalPortal/Remark"
 
 
 
-
-export default function ListingTable() {
+export default function ListingTable({rows}) {
 
   const {auth,refresh} = useSelector(s=>s)
 
@@ -20,8 +20,9 @@ export default function ListingTable() {
 
     const dispatch = useDispatch()
 
-    const [agIDS,setAgIds] = useState([])
-    const [rentData,setRent] = useState({})
+    const [remarkOpen, setRemarkOpen] = useState(false);
+
+    const [remarkMSG, setRemarkMSG] = useState("");
 
     const renderDetailsButton = (e) => {
         const id = e.id;
@@ -50,31 +51,14 @@ export default function ListingTable() {
       };
     
 
-  async function fetchData(id){
-    try {
-const data = await get_monthlt_rent_srm(id)
-   if(data.data.success){
-         setAgIds(data.data.ids)
-         setRent(data.data.agreement)
-   }else{
 
-   }
+async function sendToOperations (){
 
-console.log(data)
-    } catch (error) {
-        console.log(error)
-    }
-  }    
-
-  useEffect(()=>{
-    fetchData(auth.id)
-  },[refresh])
-
-     async function sendToOperations (){
         ids.map(async (id) => {
           const send = await sendMonthyPaymentForword(id, {
             status: "Sent To Operations",
             srm_id: auth.id,
+            remark:remarkMSG
           });
           console.log(send.data.success);
           if (send.data.success) {
@@ -85,6 +69,7 @@ console.log(data)
                 message: "Payment Details Sent To Operations.",
               })
             );
+            setRemarkOpen(false)
             dispatch(setRefreshBox());
             //  navigate(-1)
           } else {
@@ -98,6 +83,8 @@ console.log(data)
           }
         });
       }
+
+    
 
       //handle check box 
       const handleSwitch = (e) => {
@@ -224,44 +211,25 @@ console.log(data)
     
       ];
 
-      const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-
-      const rows = agIDS.map((row)=>{
-        return(
-          {
-            id : rentData[row].id,
-            code:rentData[row].code,
-            checkbox:rentData[row].status,
-            status:rentData[row].status,
-            utr:rentData[row].utr_no,
-            manager:rentData[row].manager,
-            name:rentData[row].landlord_name,
-            location:rentData[row].location,
-            gst:rentData[row].gst,
-            manager:rentData[row].manager,
-            percentage:rentData[row].share,
-            month_of_rent: month [new Date(rentData[row].rent_date).getUTCMonth()] + " " + new Date(rentData[row].rent_date).getFullYear(),
-            total_month_rent:rentData[row].monthly_rent,
-            payable_amount: parseFloat(rentData[row].rent_amount).toFixed(2)
-          }
-        )
-      })
+     
+     
 
     
   return (
     <>
+    {console.log(ids)}
       {ids.length > 0 && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             variant="contained"
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
-            onClick={sendToOperations}
+            onClick={()=>setRemarkOpen(true)}
           >
             Send To Operations
           </Button>
         </Box>
       )}
-      {/* <Remark remark={remarkMSG} setRemark={setRemarkMSG} handleSend={handleSend} open={remarkOpen} handleClose={()=>setRemarkOpen(false)} /> */}
+      <Remark remark={remarkMSG} setRemark={setRemarkMSG} handleSend={sendToOperations} open={remarkOpen} handleClose={()=>setRemarkOpen(false)} />
 
       <Box
         sx={{

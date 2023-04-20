@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setRefreshBox } from "../../store/action/action";
 
 function DataTable() {
-  const [data, setData] = useState([]);
+  
 
   const [open, setOpen] = useState(false);
 
@@ -27,6 +27,7 @@ function DataTable() {
   const { auth, refresh } = useSelector((state) => state);
 
   // api call for get data
+  const [data, setData] = useState([]);
 
   const APICALL = async () => {
     setLoading(true);
@@ -65,7 +66,7 @@ function DataTable() {
     return {
       id: item.id,
       landlord_name: item.landlord_name,
-      rent_amount: parseFloat(item.rent_amount).toFixed(2),
+      rent_amount:item.gst? parseFloat((item.rent_amount/100*18)+item.rent_amount).toFixed(2) : parseFloat(item.rent_amount).toFixed(2),
       rent_date:
         month[new Date(item.rent_date).getUTCMonth()] +
         " " +
@@ -78,7 +79,7 @@ function DataTable() {
       gst: item.gst || "---",
       utr_no: item.utr_no || "---",
       status: item.status,
-      checkbox: item.status,
+      checkbox: item.gst,
     };
   });
 
@@ -301,8 +302,8 @@ function DataTable() {
       headerAlign: "center",
       renderCell: (params) => (
         <>
-          {/* {console.log(ids.includes(params.id))} */}
-          {params.formattedValue === "Pending" ? (
+          {console.log( params)}
+          {(params.formattedValue === "" && params.row.status === "Pending")? (
             <Checkbox
               onChange={handleSwitch}
               name={params.id}
@@ -483,18 +484,71 @@ function DataTable() {
     });
   }
 
+
+  function SendToSrm() {
+    ids.map(async (id) => {
+      try {
+        const send = await sendMonthyPaymentForword(id, {
+          status: "Sent To Sr Manager",
+          manager_id: auth.id,
+        });
+        console.log(send.data.success);
+        if (send.data.success) {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: "Payment Details Sent To Sr Manager.",
+            })
+          );
+          dispatch(setRefreshBox());
+          setIds([])
+          //  navigate(-1)
+        } else {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: "Something Went Wrong Please Try Again Later.",
+            })
+          );
+        }
+       } catch (error) {
+        console.log(error)
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong Please Try Again Later.",
+          })
+        );
+       }
+    });
+  }
+
+  // handleSendSRM(id)
+
   return (
     <>
       {ids.length > 0 && (
         <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             variant="contained"
-            sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
+            sx={{ textTransform: "capitalize", m: 1, mx: 2 }}
             onClick={() => {
               handleHold();
             }}
           >
             Hold
+          </Button>
+          <Button
+            variant="contained"
+            sx={{ textTransform: "capitalize", m: 1, mx: 1 }}
+            onClick={() => {
+              SendToSrm();
+            }}
+          >
+            Send To Sr Manager
           </Button>
         </Box>
       )}

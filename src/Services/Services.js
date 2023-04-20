@@ -89,6 +89,29 @@ export async function invoice_validation (invoiceNo) {
     return axios.get(`${API_LIVE}/api/get-invoice-number-validate/${invoiceNo}`)
 }
 
+//get monthly rent  serarch in sr manager 
+export async function get_search_monthly_rent_srm (id,search) {
+    console.log(search)
+    return axios.get(`${API_LIVE}/api/srmanager/get-search-srm-monthlyrent?id=${id}&search=${search}`)
+}
+// //get monthly rent  serarch in sr manager 
+// export async function get_search_monthly_rent_manager (id,search) {
+//     console.log(search)
+//     return axios.get(`${API_LIVE}/api/srmanager/get-search-monthlyrent?id=${id}&search=${search}`)
+// }
+// //get monthly rent  serarch in opertaions 
+export async function get_search_monthly_rent_operations (id,search) {
+    console.log(search)
+    return axios.get(`${API_LIVE}/api/operations/get-search-operations-monthlyrent?id=${id}&search=${search}`)
+}
+
+// //get monthly rent  serarch in sr manager 
+// export async function get_search_monthly_rent_finance (id,search) {
+//     console.log(search)
+//     return axios.get(`${API_LIVE}/api/srmanager/get-search-finance-monthlyrent?id=${id}&search=${search}`)
+// }
+
+
 export async function delete_agreement (id){
     return await axios.delete(`${API_LIVE}/api/delAgreement/${id}`)
 }

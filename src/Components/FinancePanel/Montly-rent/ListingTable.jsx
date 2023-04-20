@@ -77,7 +77,7 @@ export default function ListingTable() {
         " " +
         new Date(rentData[row].rent_date).getFullYear(),
       total_month_rent: rentData[row].monthly_rent,
-      payable_amount: parseFloat(rentData[row].rent_amount).toFixed(2),
+      payable_amount: rentData[row].gst? parseFloat((rentData[row].rent_amount/100*18)+Number(rentData[row].rent_amount)).toFixed(2) : parseFloat(rentData[row].rent_amount).toFixed(2),
       manager: rentData[row].manager_name,
       operations: rentData[row].operations_name,
       srm_name: rentData[row].srm_name,
@@ -116,7 +116,7 @@ export default function ListingTable() {
             View
           </Button>
         </Grid>
-        {e.row.status === "Approved" && (
+        {e.row.status === "Approved By Finance" && (
           <Grid item xs={6} spacing={2}>
             <Button
               variant="contained"
@@ -330,7 +330,7 @@ export default function ListingTable() {
           message: "UTR Number Added.",
         })
       );
-      navigate("/finance-monthly-rent");
+      dispatch(setRefreshBox())
     } else {
       dispatch(
         setAlert({
@@ -417,7 +417,8 @@ export default function ListingTable() {
                 parms.row.status === "Sent To BUH" ||
                 parms.row.status === "Sent To Operations" ||
                 parms.row.status === "Sent To Finance" ||
-                parms.row.status === "Hold")
+                parms.row.status === "Hold"
+                ||parms.row.status ===  "Approved By Finance")
             ) {
               cellClass.push("yellow statusCell");
             } else if (
