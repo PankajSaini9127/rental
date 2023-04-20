@@ -206,9 +206,9 @@ import HamburgerMenu from "../HamburgerMenu";
 
         <HamburgerMenu
           navigateHome={"dashboard"}
-          handleListing={() => navigate("/listing")}
-          monthlyRent={() => navigate("/monthly-payment")}
-          renewal={() => navigate(`/renewal`)}
+          handleListing={() => navigate("/finance-listing")}
+          monthlyRent={() => navigate("/finance-monthly-rent")}
+          renewal={() => navigate(`/finance-monthly-rent`)}
           monthlyBtn="true"
         />
 
@@ -224,6 +224,12 @@ import HamburgerMenu from "../HamburgerMenu";
                     xs={4}
                   >
                     <Typography sx = {{fontSize : '1.3rem' ,fontWeight : 700}} color = 'primary' variant = 'h6'>Balance Deposited :: {balance.balance}</Typography>
+                  </Grid>
+             <Grid
+                    item
+                    xs={4}
+                  >
+                    <Typography sx = {{fontSize : '1.3rem' ,fontWeight : 700}} color = 'primary' variant = 'h6'>Payable Amount :: {balance.balance-balance.total}</Typography>
                   </Grid>
              <Grid
                     item
@@ -269,6 +275,7 @@ import HamburgerMenu from "../HamburgerMenu";
                 <input type="date" 
                 name="receivedDate" 
                 value={data.receivedDate}  
+                onkeydown="return false"
                 min={disablePastDate()} 
                 className="DatePicker"   
                 onChange={(e) => handleChange(e)}
