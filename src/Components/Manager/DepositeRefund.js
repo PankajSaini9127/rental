@@ -95,7 +95,7 @@ function EditAgreement({ history }) {
   });
 
   const [recovery,setRecovery] = useState({
-    agreemenet_id : id,
+    agreement_id : id,
     remainingMonth : 0,
     depositedAmount : 0,
     adjustmentAmount : 0,

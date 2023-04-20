@@ -67,6 +67,24 @@ function FinanceTable({ rows, setRows }) {
            >
              UTR Number
            </Button>}
+      {(e.row.status === 'Deposited') &&
+      <Button
+             variant="contained"
+             color="primary"
+             size="small"
+             style={{
+               backgroundColor: "rgb(205 22 239)",
+               color: "white",
+               fontSize: "12px",
+               textTransform: "capitalize",
+             }}
+            //  startIcon={<EditIcon />}
+             onClick={(e) => {
+              navigate(`/balance_recovery/${id}`)
+             }}
+           >
+             Recovery Balance
+           </Button>}
       </Box>
     );
   };
