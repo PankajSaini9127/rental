@@ -67,7 +67,7 @@ function FinanceTable({ rows, setRows }) {
            >
              UTR Number
            </Button>}
-           {(e.row.status === 'Approved for Termination' ) &&
+           {/* {(e.row.status === 'Approved for Termination' ) &&
       <Button
              variant="contained"
              color="primary"
@@ -84,6 +84,24 @@ function FinanceTable({ rows, setRows }) {
              }}
            >
             Deposit Collect
+           </Button>} */}
+      {(e.row.status === 'Approved for Termination') &&
+      <Button
+             variant="contained"
+             color="primary"
+             size="small"
+             style={{
+               backgroundColor: "rgb(205 22 239)",
+               color: "white",
+               fontSize: "12px",
+               textTransform: "capitalize",
+             }}
+            //  startIcon={<EditIcon />}
+             onClick={(e) => {
+              navigate(`/balance_recovery/${id}`)
+             }}
+           >
+             Recovery Balance
            </Button>}
       </Box>
     );

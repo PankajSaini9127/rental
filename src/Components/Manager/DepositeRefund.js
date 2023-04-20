@@ -96,20 +96,17 @@ function EditAgreement({ history }) {
     remark: "",
   });
 
-  const [recovery, setRecovery] = useState({
-    agreemenet_id: id,
-    remainingMonth: 0,
-    depositedAmount: 0,
-    adjustmentAmount: 0,
-    expenses: 0,
-    otherAdjustments: 0,
-    totalAdjustmentAmount: 0,
-    balanceDeposit: 0,
-    monthlyRent: 0,
-    adjustmentAmountRemark:"",
-    expansesRemark:"",
-    otherRemark:""
-  });
+  const [recovery,setRecovery] = useState({
+    agreemenet_id : id,
+    remainingMonth : 0,
+    depositedAmount : 0,
+    adjustmentAmount : 0,
+    expenses : 0,
+    otherAdjustments : 0,
+    totalAdjustmentAmount : 0,
+    balanceDeposit : 0,
+    monthlyRent : 0,
+  })
 
   async function fetchData() {
     try {

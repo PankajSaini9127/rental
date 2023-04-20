@@ -289,3 +289,13 @@ export async function listMonthRent (manager_id){
 export async function insertAdjustmentAmount (data){
     return await axios.post(`${API_LIVE}/api/insertAdjustmentAmount`,data)
 }
+
+// APIs for listMonthRent
+export async function insertRecoveryLog (data){
+    return await axios.post(`${API_LIVE}/api/finance/insertRecoveryLog`,data)
+}
+
+// APIs for listMonthRent
+export async function getRecoveryLog (data){
+    return await axios.get(`${API_LIVE}/api/finance/getRecoveryLog?id=${data}`)
+}

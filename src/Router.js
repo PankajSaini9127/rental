@@ -56,6 +56,7 @@ import OperationsMonthlyPayement from "./Components/Operations/Montly-rent/Month
 import MonthalyRentView from "./Components/Operations/Montly-rent/MonthalyRentView";
 import SRMMonthlyRentView from "./Components/SrManager/Montly-rent/SRMMonthlyRentView";
 import FinanceMonthlyRentView from "./Components/FinancePanel/Montly-rent/FinanceMonthlyView";
+import Recovery from "./Components/FinancePanel/Recovery";
 import EditInvoice from "./Components/MonthalyPayment/EditInvoice";
 import ViewPage from "./Components/MonthalyPayment/ViewPage";
 import SrmRenwalList from "./Components/SrManager/Renewal/RenewalListing";
@@ -321,6 +322,10 @@ function MyRouter() {
      <Route 
      path="/finance-monthly-view/:id"
      element={isAuth && role.includes("Finance") ?<FinanceMonthlyRentView/>: <Login />}
+     />
+     <Route 
+     path="/balance_recovery/:id"
+     element={isAuth && role.includes("Finance") ?<Recovery/>: <Login />}
      />
 
       {/* Finance team end here */}
