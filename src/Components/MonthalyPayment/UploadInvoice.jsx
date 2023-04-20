@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 
 import DatePicker from "react-datepicker";
 
+import moment from "moment"
+
 import "react-datepicker/dist/react-datepicker.css";
 import { DocumentUpload } from "../StyledComponent";
 import { setAlert } from "../../store/action/action";
@@ -55,6 +57,7 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
   function onChange(e) {
 
     if(e.target.name === "invoiceDate" || e.target.name === "invoiceNo"){
+
       setValue({
         ...value,
         [e.target.name]: e.target.value,
@@ -87,6 +90,20 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
     const yyyy = today.getFullYear();
     return yyyy + "-" + mm + "-" + dd;
   };
+
+  const maxDate = () => {
+    const today = new Date();
+
+    const invoiceDate = window.document.getElementById("invoiceDate")
+
+    invoiceDate.datepicker({
+      format: 'dd/mm/yyyy',
+      autoclose:true,
+      endDate: "currentDate",
+      maxDate: today
+      })
+  };
+  
 
 const [ferror,setError] = useState(true)
 const [invoiceValidate , setInvoice] = useState(true)
@@ -254,10 +271,12 @@ const [invoiceValidate , setInvoice] = useState(true)
                 <input
                   type="date"
                   name="invoiceDate"
+                  id="invoiceDate"
                   value={value.invoiceDate}
-                  min={disablePastDate()}
+                  // min={disablePastDate()}
+                  max={moment().format("YYYY-MM-DD")}
                   className="DatePicker"
-                  onChange={(e) => onChange(e)}
+                  onChange={(e) => {onChange(e)}}
                 />
                 <Typography variant="caption" color="red" mt={1}>
                   {formError.invoiceDate}
@@ -364,7 +383,7 @@ const [invoiceValidate , setInvoice] = useState(true)
                   name="invoice"
                   handleChange={onfileChange}
                   uploaded={value.invoice && true}
-                  fileName={value.invoice}
+                  fileName={value.invoice_file_name}
                   error={formError.invoice}
                 />
               </FormControl>
