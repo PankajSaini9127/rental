@@ -26,8 +26,6 @@ function DataTable({rows}) {
 
   const { auth, refresh } = useSelector((state) => state);
 
-
-
   const [invoiceDetails, setInvoiceDetails] = useState({
     invoiceNo: "",
     invoiceDate: "",
@@ -295,7 +293,7 @@ function DataTable({rows}) {
     },
     {
       field: "gst",
-      headerName: "GST",
+      headerName: "GST Number",
       headerAlign: "center",
       flex: 1,
       minWidth: 120,
@@ -303,7 +301,7 @@ function DataTable({rows}) {
     },
     {
       field: "monthly_rent",
-      headerName: "Month Rent",
+      headerName: "Monthly Rent",
       headerAlign: "center",
       flex: 1,
       minWidth: 100,
@@ -319,7 +317,23 @@ function DataTable({rows}) {
     },
     {
       field: "rent_amount",
-      headerName: "Payable Amount",
+      headerName: "Payable Rent",
+      headerAlign: "center",
+      flex: 1,
+      minWidth: 100,
+      //  maxWidth:200
+    },
+    {
+      field: "gst_fee",
+      headerName: "GST",
+      headerAlign: "center",
+      flex: 1,
+      minWidth: 100,
+      //  maxWidth:200
+    },
+    {
+      field: "total_rent",
+      headerName: "Total Rent Payable",
       headerAlign: "center",
       flex: 1,
       minWidth: 100,
@@ -333,14 +347,14 @@ function DataTable({rows}) {
       // maxWidth:500,
       minWidth: 150,
     },
-    {
-      field: "utr_no",
-      headerName: "UTR Number",
-      headerAlign: "center",
-      flex: 1,
-      minWidth: 130,
-      // maxWidth:200
-    },
+    // {
+    //   field: "utr_no",
+    //   headerName: "UTR Number",
+    //   headerAlign: "center",
+    //   flex: 1,
+    //   minWidth: 130,
+    //   // maxWidth:200
+    // },
     {
       field: "action",
       headerName: "Action",

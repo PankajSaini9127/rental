@@ -67,7 +67,7 @@ const { auth, refresh } = useSelector((state) => state);
     return {
       id: item.id,
       landlord_name: item.landlord_name,
-      rent_amount:item.gst? parseFloat((item.rent_amount/100*18)+item.rent_amount).toFixed(2) : parseFloat(item.rent_amount).toFixed(2),
+      rent_amount:item.rent_amount,
       rent_date:
         month[new Date(item.rent_date).getUTCMonth()] +
         " " +
@@ -81,6 +81,9 @@ const { auth, refresh } = useSelector((state) => state);
       utr_no: item.utr_no || "---",
       status: item.status,
       checkbox: item.gst,
+      gst_fee:parseFloat(item.rent_amount/100*18).toFixed(2),
+      total_rent :item.gst? parseFloat((Number(item.rent_amount)/100*18)+Number(item.rent_amount)).toFixed(2) : parseFloat(item.rent_amount).toFixed(2)
+
     };
   });
 

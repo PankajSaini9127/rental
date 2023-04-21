@@ -34,6 +34,7 @@ export default function FinanceMonthlyRentView() {
     invoice_date: "",
     rent_amount: "",
     gst_amount: "",
+    gst: "",
     total_amount: "",
     invoice: "",
     status:"",
@@ -69,6 +70,7 @@ export default function FinanceMonthlyRentView() {
           invoice_date:(response.data.data[0].invoice_date),
           rent_amount: parseFloat(response.data.data[0].rent_amount).toFixed(2),
           gst_amount: response.data.data[0].gst_amount,
+          gst: response.data.data[0].gst,
           total_amount: parseFloat(
             Number(response.data.data[0].rent_amount) +
               Number(response.data.data[0].gst_amount)
@@ -176,42 +178,43 @@ export default function FinanceMonthlyRentView() {
                }
               <Grid container spacing={2}>
               
-                <TextFieldWrapper
-                  required={true}
-                  label="Invoice Number"
-                  placeHolder="Enter Invoice Number"
-                  value={preData.invoice_no}
-                  disabled={true}
-                  name="invoice_no"
-                />
-                {/* <TextFieldWrapper
-                  required={true}
-                  label="Invoice Date"
-                  placeHolder="Enter Invoice Date"
-                  value={preData.invoice_date}
-                  disabled={true}
-                  name="invoice_date"
-                /> */}
-                 <Grid item xs={6} md={4}>
+              {preData.gst.length > 0 &&<>
+                  <TextFieldWrapper
+                    required={true}
+                    label="Invoice Number"
+                    placeHolder="Enter Invoice Number"
+                    value={preData.invoice_no}
+                    // disabled={true}
+                    name="invoice_no"
+                  />
+                  {/* <TextFieldWrapper
+                    required={true}
+                    label="Invoice Date"
+                    placeHolder="Enter Invoice Date"
+                    value={preData.invoice_date}
+                    // disabled={true}
+                    onChange={(e) => handleChange(e)}
+                    name="invoice_date"
+                  /> */}
+                   <Grid item xs={6} md={4}>
               <FormControl fullWidth>
                 <input
                   type="date"
-                  name="invoiceDate"
+                  name="invoice_date"
                   value={preData.invoice_date}
                   className="DatePicker"
-                  disabled
+                  // disabled
                   style={{height:'55px'}}
+                  
                 />
               </FormControl>
             </Grid>
+              </>}
                 <TextFieldWrapper
                   required={true}
                   label="Rent Amount"
                   placeHolder="Enter Rent Amount"
-                  value={parseInt(preData.rent_amount).toLocaleString("us-Rs", {
-                    style: "currency",
-                    currency: "INR",
-                  })}
+                  value={parseInt(preData.rent_amount).toLocaleString()}
                   disabled={true}
                   name="rent_amount"
                   textAlignRight={"textAlignRight"}
@@ -222,10 +225,7 @@ export default function FinanceMonthlyRentView() {
                   required={true}
                   label="GST Amount"
                   placeHolder="Enter GST AMount"
-                  value={parseInt(preData.gst_amount).toLocaleString("us-Rs", {
-                    style: "currency",
-                    currency: "INR",
-                  })}
+                  value={parseInt(preData.gst_amount).toLocaleString()}
                   disabled={true}
                   name="gst_amount"
                   textAlignRight={"textAlignRight"}
@@ -237,26 +237,23 @@ export default function FinanceMonthlyRentView() {
                   label="Total Amount"
                   textAlignRight={"textAlignRight"}
                   placeHolder="Enter Total Amount"
-                  value={parseInt(preData.total_amount).toLocaleString("us-Rs", {
-                    style: "currency",
-                    currency: "INR",
-                  })}
+                  value={parseInt(preData.total_amount).toLocaleString()}
                   disabled={true}
                   name="total_amount"
                   // onBlur={(e) => handleOnBlur(e, i)}
                   // error={ }
                 />
-                <Grid item xs={12} container spacing={2}>
-                  <Grid item xs={4}>
-                   <DocumentUpload
-                      label="Invoice"
-                      disabled={true}
-                      placeHolder="Invoice"
+                                 {preData.gst.length > 0 &&
+                  <Grid item xs={8} container>
+                    <DocumentUpload
+                      uploaded={preData.invoice ? true : false}
+                      label="Upload Invoice"
+                      placeHolder="Upload Invoice"
                       name={"invoice"}
+                      fileName={preData.fileName}
                       href={preData.invoice}
                     />
-                    </Grid>
-                </Grid>
+                  </Grid>}
                 {
                   preData.remark.length >0 && <Grid item xs={12} container spacing={2} sx={{mt:4}}>
                   <DataFieldStyle field={"Remark"} value={preData.remark} />

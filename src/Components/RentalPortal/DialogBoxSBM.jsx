@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-
+import moment from 'moment'
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -51,7 +51,7 @@ function DialogBoxSBM({ open, handleClose, handleConfirm, value, setValue }) {
 
   const disablePastDate = () => {
     const today = new Date();
-    const dd = String(today.getDate() + 1).padStart(2, "0");
+    const dd = String(today.getDate() + -1).padStart(2, "0");
     const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
     const yyyy = today.getFullYear();
     return yyyy + "-" + mm + "-" + dd;
@@ -131,6 +131,7 @@ function DialogBoxSBM({ open, handleClose, handleConfirm, value, setValue }) {
                   name="paymentDate"
                   value={value.paymentDate}
                   min={disablePastDate()}
+                  max = {moment().format("YYYY-MM-DD")}
                   className="DatePicker"
                   onChange={(e) => onChange(e)}
                 />

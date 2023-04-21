@@ -509,7 +509,7 @@ function FinanceApproval() {
                           heading={`Landlord ${id + 1} Personal Details`}
                         />
                         <DataFieldStyle
-                          field={"Name of Lessor"}
+                          field={"name of lessor"}
                           value={agreement[ids[0]].name[id]}
                         />
                         <DataFieldStyle
@@ -641,6 +641,10 @@ function FinanceApproval() {
                       img={agreement[ids[0]].noc}
                     />
                   )}
+                   <DocumentView
+                    title={"Property Picture"}
+                    img={agreement[ids[0]].property_pic}
+                  />
                 </Grid>
               </Grid>
                 {/* document section ends here */}
@@ -666,62 +670,82 @@ function FinanceApproval() {
                 </>
               )}
 
-<Grid item xs={10}>
+{agreement[ids[0]].status === "Terminated By Manager" && <>
+              <Grid item container xs={10} sx={{ mt: 2 }}>
+                <DataFieldStyle
+                  field={"Termination Remark"}
+                  value={agreement[ids[0]].termination_remark}
+                />
+              </Grid>
+              {/* document section ends here */}
+
+              {agreement[ids[0]].remark !== null && (
+                <Grid item container xs={10} sx={{ mt: 2 }}>
+                  <DataFieldStyle
+                    field={"Remark !"}
+                    value={agreement[ids[0]].remark}
+                  />
+                </Grid>
+              )}
+
+              {/* Buttons start here*/}
+              <Grid item xs={10} sx={{ mt: 2 }}>
  
- <Grid container>
- <DataFieldStyle
-        field="Deposit Amount (Paid)"
-        value={recovery.depositedAmount}
-      />
- </Grid>
- <Grid container>
- <DataFieldStyle
-        field="Remaining Months"
-        value={recovery.remainingMonth}
-      />
-      <DataFieldStyle
-        field="Adjustment Amount"
-        value={recovery.adjustmentAmount}
-      />
-      <DataFieldStyle
-        field="Remark"
-        value={recovery.adjustmentAmountRemark}
-      />
- </Grid>
+             <Grid container sx={{ gap : '2rem'}}>
+             <DataFieldStyle
+                    field="Deposit Amount (Paid)"
+                    value={recovery.depositedAmount}
+                  />
+             </Grid>
+             <Grid container sx={{ gap : '2rem',mt: 2 }}>
+             <DataFieldStyle
+                    field="Remaining Months"
+                    value={recovery.remainingMonth}
+                  />
+                  <DataFieldStyle
+                    field="Adjustment Amount"
+                    value={recovery.adjustmentAmount}
+                  />
+                  <DataFieldStyle
+                    field="Remark"
+                    value={recovery.adjustmentAmountRemark}
+                  />
+             </Grid>
 
- <Grid container>
- <DataFieldStyle
-        field="Expenses Adjustment Amount"
-        value={recovery.expenses}
-      />
-<DataFieldStyle
-        field="Remark"
-        value={recovery.expansesRemark}
-      />
- </Grid>
+             <Grid container sx={{ gap : '2rem' ,mt: 2 }}>
+             <DataFieldStyle
+                    field="Expenses Amount"
+                    value={recovery.expenses}
+                  />
+            <DataFieldStyle
+                    field="Remark"
+                    value={recovery.expansesRemark}
+                  />
+             </Grid>
 
- <Grid item xs={12} container >
-      <DataFieldStyle
-        field="Other Adjustments"
-        value={recovery.otherAdjustments}
-      />
-   <DataFieldStyle
-        field="Remark"
-        value={recovery.otherRemark}
-      />
-      </Grid>
-      <Grid item xs={12} container >
-      <DataFieldStyle
-        field="Total Adjustment Amount "
-        value={recovery.totalAdjustmentAmount}
-      />
-      <DataFieldStyle
-        field="Balance Deposit "
-        value={recovery.balanceDeposit}
-      />
-      </Grid>
+             <Grid item xs={12} container  sx={{ gap : '2rem',mt: 2 }}>
+                  <DataFieldStyle
+                    field="Other Adjustments"
+                    value={recovery.otherAdjustments}
+                  />
+               <DataFieldStyle
+                    field="Remark"
+                    value={recovery.otherRemark}
+                  />
+                  </Grid>
+                  <Grid item xs={12} container sx={{ gap : '2rem',mt: 2 }} >
+                  <DataFieldStyle
+                    field="Total Adjustment Amount "
+                    value={recovery.totalAdjustmentAmount}
+                  />
+                  <DataFieldStyle
+                    field="Balance Deposit "
+                    value={recovery.balanceDeposit}
+                  />
+                  </Grid>
 
-  </Grid>
+              </Grid>
+              </> }
 
               {/* Buttons start here*/}
 
@@ -770,7 +794,7 @@ function FinanceApproval() {
                           }}
                           onClick={handleTerminate}
                         >
-                         Approve For Termination
+                         Accept For Termination 
                         </Button>
                       </Grid>
                       <Grid item md={6} xs={11}>

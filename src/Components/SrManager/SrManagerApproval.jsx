@@ -73,7 +73,7 @@ function SrManagerApproval() {
       const deposit_amount = await get_deposit_amount(code);
       console.log(deposit_amount);
       if (deposit_amount.data.success) {
-        setDeposit(deposit_amount.data.deposit[0].deposit);
+        setDeposit(deposit_amount.data.deposit);
       }
     } catch (error) {
       console.log(error);
@@ -193,6 +193,7 @@ function SrManagerApproval() {
               ? "Sent To BUH"
               : "Sent To Operations",
           srm_id: login_manager_id,
+          remark:remark
         },
         id
       );
@@ -580,9 +581,8 @@ function SrManagerApproval() {
 
               <Grid item md={10}>
                 <Grid container spacing={4} sx={{ mt: 1 }}>
-                  <Grid item xs={12}>
+
                     <Heading heading={"Document View/Download"} />
-                  </Grid>
                   <DocumentView
                     title={"draft agreement"}
                     img={agreement[ids[0]].draft_agreement}
@@ -610,20 +610,38 @@ function SrManagerApproval() {
                       img={agreement[ids[0]].noc}
                     />
                   )}
+                    <DocumentView
+                    title={"Property Picture"}
+                    img={agreement[ids[0]].property_pic}
+                  />
                 </Grid>
               </Grid>
 
               {/* // Landlord assets */}
-              <Grid item container xs={10} sx={{ mt: 5 }}>
+              <Grid item container xs={10} sx={{ mt: 3 }}>
                 <DataFieldStyle
                   field={"Landlord Assets"}
                   value={agreement[ids[0]].assets}
                 />
               </Grid>
               {/* document section ends here */}
+              
+              
+              
+              {/* // termination  points */}
+              {/* // Landlord assets */}
+
+              {agreement[ids[0]].status === "Terminated By Manager" && <>
+              <Grid item container xs={10} sx={{ mt: 2 }}>
+                <DataFieldStyle
+                  field={"Termination Remark"}
+                  value={agreement[ids[0]].termination_remark}
+                />
+              </Grid>
+              {/* document section ends here */}
 
               {agreement[ids[0]].remark !== null && (
-                <Grid item container xs={10} sx={{ mt: 5 }}>
+                <Grid item container xs={10} sx={{ mt: 2 }}>
                   <DataFieldStyle
                     field={"Remark !"}
                     value={agreement[ids[0]].remark}
@@ -632,15 +650,15 @@ function SrManagerApproval() {
               )}
 
               {/* Buttons start here*/}
-              <Grid item xs={10}>
+              <Grid item xs={10} sx={{ mt: 2 }}>
  
-             <Grid container>
+             <Grid container sx={{ gap : '2rem'}}>
              <DataFieldStyle
                     field="Deposit Amount (Paid)"
                     value={recovery.depositedAmount}
                   />
              </Grid>
-             <Grid container>
+             <Grid container sx={{ gap : '2rem',mt: 2 }}>
              <DataFieldStyle
                     field="Remaining Months"
                     value={recovery.remainingMonth}
@@ -655,9 +673,9 @@ function SrManagerApproval() {
                   />
              </Grid>
 
-             <Grid container>
+             <Grid container sx={{ gap : '2rem' ,mt: 2 }}>
              <DataFieldStyle
-                    field="Expenses Adjustment Amount"
+                    field="Expenses Amount"
                     value={recovery.expenses}
                   />
             <DataFieldStyle
@@ -666,7 +684,7 @@ function SrManagerApproval() {
                   />
              </Grid>
 
-             <Grid item xs={12} container >
+             <Grid item xs={12} container  sx={{ gap : '2rem',mt: 2 }}>
                   <DataFieldStyle
                     field="Other Adjustments"
                     value={recovery.otherAdjustments}
@@ -676,7 +694,7 @@ function SrManagerApproval() {
                     value={recovery.otherRemark}
                   />
                   </Grid>
-                  <Grid item xs={12} container >
+                  <Grid item xs={12} container sx={{ gap : '2rem',mt: 2 }} >
                   <DataFieldStyle
                     field="Total Adjustment Amount "
                     value={recovery.totalAdjustmentAmount}
@@ -688,6 +706,7 @@ function SrManagerApproval() {
                   </Grid>
 
               </Grid>
+              </> }
 
 
 
@@ -697,7 +716,7 @@ function SrManagerApproval() {
                   <Grid
                     item
                     xs={10}
-                    sx={{ mt: 5 }}
+                    sx={{ mt: 5 ,gap : '2rem' }}
                     className={"textFieldWrapper"}
                   >
                     <Grid item xs={8}>

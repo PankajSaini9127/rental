@@ -69,8 +69,10 @@ function EditAgreement({ history }) {
 
   const [finance_id, setFinance_ID] = useState(null);
 
-  // modified by yashwant
+
+
   const [preData, setPreData] = useState({
+    assets : '',
     landlord: [],
     area: "",
     code: "",
@@ -94,10 +96,12 @@ function EditAgreement({ history }) {
     tax_receipt: "",
     noc: "",
     remark: "",
+    file : "",
+    termination_remark : "",
   });
 
   const [recovery,setRecovery] = useState({
-    agreemenet_id : id,
+    agreement_id : id,
     remainingMonth : 0,
     depositedAmount : 0,
     adjustmentAmount : 0,
@@ -107,7 +111,13 @@ function EditAgreement({ history }) {
     balanceDeposit : 0,
     monthlyRent : 0,
   })
-
+  // modified by yashwant
+  const [agreementData, setAgreementData] = useState({
+    id : id,
+    assets: preData.assets,
+    file : preData.file,
+    termination_remark : preData.termination_remark,
+  })
   async function fetchData() {
     try {
       let response = await getDetails(id);
@@ -144,6 +154,9 @@ function EditAgreement({ history }) {
           area,
           landlord,
           remark,
+          assets,
+          file,
+          termination_remark
         } = response.data;
 
         setBuh_ID(response.data.bhu_id);
@@ -180,6 +193,7 @@ function EditAgreement({ history }) {
 
         setPreData({
           id,
+          assets,
           area,
           code,
           pincode,
@@ -203,6 +217,8 @@ function EditAgreement({ history }) {
           tenure,
           landlord,
           remark,
+          file,
+          termination_remark
         });
 
         setFormError({
@@ -348,14 +364,13 @@ function EditAgreement({ history }) {
       console.log(formError);
       setFormError((old) => ({
         ...old,
-        [e.target.name + "_name"]: "",
         [e.target.name]: "",
       }));
 
-      setPreData((old) => ({
+      setAgreementData((old) => ({
         ...old,
+        [e.target.name + "_name"] : e.target.files[0].name,
         [e.target.name]: response.data.link,
-        [e.target.name + "_name"]: e.target.files[0].name,
       }));
       dispatch(
         setAlert({
@@ -617,38 +632,16 @@ function EditAgreement({ history }) {
   // form validation
   function validate(data) {
     let field = [
-      "draft_agreement",
-      "electricity_bill",
-      "poa",
-      "maintaince_bill",
-      "tax_receipt",
-      "cheque",
+   "assets",
+   "termination_remark"
     ];
-    preData.landlord.length > 1 && field.push("noc");
 
-    // if (preData.landlord.length > 0) {
-    //   preData.landlord.map((row, i) => {
-    //     if (row.gstNo) {
-    //       field.push(
-    //         `${preData.landlord[i].leeseName + "@gst_name"}`.replace(" ", "")
-    //       );
-    //     }
-    //     field.push(
-    //       `${preData.landlord[i].leeseName + "@aadhar_card_name"}`.replace(" ", "")
-    //     );
-    //     field.push(
-    //       `${preData.landlord[i].leeseName + "@cheque_name"}`.replace(" ", "")
-    //     );
-    //     field.push(
-    //       `${preData.landlord[i].leeseName + "@pan_card_name"}`.replace(" ", "")
-    //     );
-    //   });
-    // }
+
 
     let finalCheck = field.map((row) => {
-      if (!data[row]) {
+      if (!agreementData[row]) {
         console.log(row);
-        setFormError((old) => ({ ...old, [row]: "Document required." }));
+        setFormError((old) => ({ ...old, [row]: "Field required." }));
         return true;
       } else {
         setFormError((old) => ({ ...old, [row]: "" }));
@@ -727,9 +720,24 @@ function EditAgreement({ history }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    if(!validate())
+    {
+      // dispatch(
+      //   setAlert({
+      //     variant: "warning",
+      //     open: true,
+      //     message:  "Validation Alert !!!",
+      //   }))
+      return false
+    }
+    // remove useless fields 
+    delete agreementData.file_name
+
     let response = await insertAdjustmentAmount(recovery);
+
     if (response.status === 200) {
-        const updateStatus = await send_to_bhu({"status":"Terminated By Manager",renewal_status:"Sent For Termination"},recovery.agreemenet_id)
+        const updateStatus = await send_to_bhu({"status":"Terminated By Manager",renewal_status:"Sent For Termination",...agreementData},recovery.agreement_id)
         if(updateStatus.data.success){
           dispatch(
             setAlert({
@@ -1803,6 +1811,57 @@ function EditAgreement({ history }) {
                   )}
                 </Grid>
 
+    {/* // Landlord assets */}
+    {/* <Grid item container xs={10} sx={{ mt: 5 }}>
+                <DataFieldStyle
+                  field={"Landlord Assets"}
+                  value={preData.assets}
+                />
+              </Grid> */}
+              {/* document section ends here */}
+
+
+                  <Grid container xs={10} sx={{ mt: 5 }}>
+                 
+                  <Grid item xs={12} mt = {2}>
+                  <Typography sx = {{fontSize : '1.4rem', fontWeight : 700 }} color = 'primary' >Landlord Assets</Typography>
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
+                        helperText = {preData.assets}
+                        variant="outlined"
+                        // sx = {{borderRadius : '100px'}}
+                        // label="Termination Remark"
+                        placeholder="Landlord Assets*"
+                        value={agreementData.assets}
+                        onChange={(e) => setAgreementData(old=>({...old, assets : e.target.value}))}
+                      />
+                  <Typography sx = {{color : 'red' }} variant = 'caption' >{formError.assets}</Typography>
+                      </Grid>
+
+                      <Grid item xs={12} mt = {2}>
+                      <Typography sx = {{fontSize : '1.4rem', fontWeight : 700 }} color = 'primary' >Termination Remark</Typography>
+
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
+                        variant="outlined"
+                        // sx = {{borderRadius : '100px'}}
+                        // label="Termination Remark"
+                        helperText = {preData.termination_remark}
+                        placeholder="Termination Remark*"
+                        value={agreementData.termination_remark}
+                        onChange={(e) => setAgreementData(old=>({...old, termination_remark : e.target.value}))}
+                      />
+                  <Typography variant = 'caption' sx = {{color : 'red' }}  >{formError.termination_remark}</Typography>
+                    </Grid>
+                
+                  </Grid>
+
                 {/* Document upload section end here */}
 
                 {preData.remark.length > 0 && (
@@ -1812,7 +1871,7 @@ function EditAgreement({ history }) {
                 )}
                 <Grid
                   container
-                  sx={{ mt: "25px", mb: "25px" }}
+                  sx={{ mt: "25px", mb: "25px"}}
                   spacing={isSmall ? 2 : 4}
                   component={"form"}
                   onSubmit={handleSubmit}
@@ -1827,7 +1886,7 @@ function EditAgreement({ history }) {
                       fontWeight="600"
                       // my="20px"
                     >
-                      Adjustment Form
+                       Deposit Adjustments Form
                     </Typography>
                   </Grid>
                   <Grid item xs={12} container>
@@ -1843,15 +1902,15 @@ function EditAgreement({ history }) {
                   />
                   </Grid>
                   
-                  <Grid item xs={12} container spacing={2}>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} container >
+                  <Grid item xs={12} sx = {{gap : '1rem'}}>
                             <Typography color={"var( --main-color)"}>
                               {"Adjustment Amount"}
                             </Typography>
                           </Grid>
                   <TextFieldWrapper
                     label=""
-                    placeHolder="Remaining Months"
+                    placeHolder="Number of Months"
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error = {errorObj.leeseName}
                     name="remainingMonth"
@@ -1879,7 +1938,7 @@ function EditAgreement({ history }) {
                     onChange={(e) => handleRemarkChange(e)}
                   />
                   </Grid>
-                  <Grid item xs={12} container spacing={2}>
+                  <Grid item xs={12} container spacing = {2}>
                   <Grid item xs={12}>
                             <Typography color={"var( --main-color)"}>
                               {"Adjust Towards Expances"}
@@ -1906,7 +1965,7 @@ function EditAgreement({ history }) {
                   />
 </Grid>
 
-<Grid item xs={12} container spacing={2}>
+<Grid item xs={12} container spacing = {2}>
                   <Grid item xs={12}>
                             <Typography color={"var( --main-color)"}>
                               {"Other Adjustments"}
@@ -1932,7 +1991,7 @@ function EditAgreement({ history }) {
                     onChange={(e) => handleRemarkChange(e)}
                   />
                   </Grid>
-                  <Grid item xs={12} container spacing={2}>
+                  <Grid item xs={12} container spacing = {2}>
                   <TextFieldWrapper
                     label="Total Adjustment Amount"
                     placeHolder="Adjustment Amount"
@@ -1956,6 +2015,19 @@ function EditAgreement({ history }) {
 
                   {/* <Button type = 'submit' variant = 'contained'>Save</Button> */}
                 </Grid>
+
+                <Grid item xs={12} mt = {2}>
+                  <DocumentUpload
+                      label="Upload File"
+                      uploaded={(agreementData.file !== "" && preData.file !== "") && true}
+                      error={formError.file}
+                      placeHolder={"Upload File"}
+                      handleChange={handleChangeFile}
+                      fileName={agreementData.file_name}
+                      name={"file"}
+                      href={agreementData.file || preData.file}
+                      />
+                      </Grid>
 
                 {/* Button Start from here */}
                 <Grid
@@ -2015,7 +2087,7 @@ function EditAgreement({ history }) {
                 {/* Button Ends Here */}
               </Box>
 
-              {/* agreemenet from end here */}
+              {/* agreement from end here */}
             </Grid>
           </Grid>
         </Box>

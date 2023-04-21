@@ -134,7 +134,7 @@ function EditAgreement({ history }) {
           assets,
         } = response.data;
 
-        setBuh_ID(response.data.bhu_id);
+        setBuh_ID(response.data.buh_id);
         setFinance_ID(response.data.op_id);
 
         let rent = monthlyRent;
@@ -1885,7 +1885,7 @@ function EditAgreement({ history }) {
                       }}
                       onClick={handleHold}
                     >
-                      Hold
+                      Save As Draft
                     </Button>
                   </Grid>
                 </Grid>

@@ -62,6 +62,8 @@ async function sendToOperations (){
           });
           console.log(send.data.success);
           if (send.data.success) {
+
+            setIds([])
             dispatch(
               setAlert({
                 open: true,
@@ -154,7 +156,7 @@ async function sendToOperations (){
         },
         {
           field: "gst",
-          headerName: "GST",
+          headerName: "GST Number",
           minWidth: 100,
           headerAlign: "center",
           flex: 1
@@ -181,10 +183,28 @@ async function sendToOperations (){
           headerAlign: "center",
         },
         {
-          field: "payable_amount",
-          headerName: "Payable Amount",
+          field: "rent_amount",
+          headerName: "Payable Rent",
           headerAlign: "center",
-          flex: 1
+          flex: 1,
+          minWidth: 100,
+          //  maxWidth:200
+        },
+        {
+          field: "gst_fee",
+          headerName: "GST",
+          headerAlign: "center",
+          flex: 1,
+          minWidth: 100,
+          //  maxWidth:200
+        },
+        {
+          field: "total_rent",
+          headerName: "Total Rent Payable",
+          headerAlign: "center",
+          flex: 1,
+          minWidth: 100,
+          //  maxWidth:200
         },
         {
           field: "status",
@@ -193,14 +213,14 @@ async function sendToOperations (){
           minWidth: 200,
           flex: 1
         },
-        {
-          field: "utr",
-          headerName: "UTR Number",
-          minWidth: 100,
-          headerAlign: "center",
-          flex: 1
+        // {
+        //   field: "utr",
+        //   headerName: "UTR Number",
+        //   minWidth: 100,
+        //   headerAlign: "center",
+        //   flex: 1
     
-        },
+        // },
         {
           field: "action",
           headerName: "Action",
@@ -229,7 +249,7 @@ async function sendToOperations (){
           </Button>
         </Box>
       )}
-      <Remark remark={remarkMSG} setRemark={setRemarkMSG} handleSend={sendToOperations} open={remarkOpen} handleClose={()=>setRemarkOpen(false)} />
+      <Remark remark={remarkMSG} setIds = {setIds} setRemark={setRemarkMSG} handleSend={sendToOperations} open={remarkOpen} handleClose={()=>setRemarkOpen(false)} />
 
       <Box
         sx={{

@@ -85,7 +85,7 @@ function FinanceTable({ rows, setRows }) {
            >
             Deposit Collect
            </Button>} */}
-      {(e.row.status === 'Approved for Termination') &&
+      {(e.row.status === 'Approved for Termination' || e.row.status === 'Terminated' ) &&
       <Button
              variant="contained"
              color="primary"
@@ -101,7 +101,7 @@ function FinanceTable({ rows, setRows }) {
               navigate(`/balance_recovery/${id}`)
              }}
            >
-             Recovery Balance
+            Deposit Recovery
            </Button>}
       </Box>
     );

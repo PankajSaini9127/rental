@@ -22,7 +22,7 @@ const labelStyle = {
 }  
 
 
-function Remark({ open, handleClose, handleSend,remark,setRemark }) {
+function Remark({ open, handleClose, handleSend,remark,setRemark,setIds }) {
 
     const diapatch = useDispatch()
 
@@ -33,6 +33,7 @@ function Remark({ open, handleClose, handleSend,remark,setRemark }) {
 
     function handleSubmit(){
         if(remark.length === 0){
+          setIds([])
             diapatch(setAlert({open:true,variant:"error",message:"Remark Required !"}))
         }else{
             handleSend()

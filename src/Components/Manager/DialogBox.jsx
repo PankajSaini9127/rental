@@ -105,7 +105,7 @@ const Landblord = ({ value, setValue, index }) => {
             placeHolder={"Percentage Share%"}
             name={"percentage"}
             value={
-              (value[index] && value[index].percentage && value[index].percentage <= 100)
+              (value[index] && value[index].percentage && value[index].percentage > 0 && value[index].percentage <= 100)
                 ? value[index].percentage
                 : ''
             }
@@ -120,7 +120,12 @@ const Landblord = ({ value, setValue, index }) => {
 function DialogBox({ value, setValue }) {
   const [open, setOpen] = useState(true);
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState([
+    {
+      leeseName : "",
+      percentage : 100
+    }
+  ]);
 
   const [alert,setAlert] = useState({open:false,message:""})
 
@@ -226,7 +231,7 @@ function DialogBox({ value, setValue }) {
               ""
             )}
             {
-              alert.open?<Typography textAlign={'center'} variant={'body1'} color="red" mx={2}>{alert.message}</Typography>:""
+              alert.open?<Typography textAlign={'center'} variant={'body2'} color="red" >{alert.message}</Typography>:""
             }
             
           </Grid>

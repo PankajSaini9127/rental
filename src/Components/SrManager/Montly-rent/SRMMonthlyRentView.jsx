@@ -211,10 +211,7 @@ useEffect(()=>{
                   required={true}
                   label="Rent Amount"
                   placeHolder="Enter Rent Amount"
-                  value={parseInt(preData.rent_amount).toLocaleString("us-Rs", {
-                    style: "currency",
-                    currency: "INR",
-                  })}
+                  value={parseInt(preData.rent_amount).toLocaleString()}
                   disabled={true}
                   name="rent_amount"
                   textAlignRight={"textAlignRight"}
@@ -225,10 +222,7 @@ useEffect(()=>{
                   required={true}
                   label="GST Amount"
                   placeHolder="Enter GST AMount"
-                  value={parseInt(preData.gst_amount).toLocaleString("us-Rs", {
-                    style: "currency",
-                    currency: "INR",
-                  })}
+                  value={parseInt(preData.gst_amount).toLocaleString()}
                   disabled={true}
                   name="gst_amount"
                   textAlignRight={"textAlignRight"}
@@ -239,10 +233,7 @@ useEffect(()=>{
                   required={true}
                   label="Total Amount"
                   placeHolder="Enter Total Amount"
-                  value={parseInt(preData.total_amount).toLocaleString("us-Rs", {
-                    style: "currency",
-                    currency: "INR",
-                  })}
+                  value={parseInt(preData.total_amount).toLocaleString()}
                   disabled={true}
                   name="total_amount"
                   textAlignRight={"textAlignRight"}

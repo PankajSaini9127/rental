@@ -18,7 +18,7 @@ const DataFieldStyle = ({ field, value, href, name, bold, cursor }) => {
     // "@media(max-width:900px)": { fontSize: "14px" },
   };
 
-  console.log(href)
+  // console.log(href)
   function handleClick() {
 
     saveAs(href, name);

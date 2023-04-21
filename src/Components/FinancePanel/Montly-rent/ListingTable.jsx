@@ -24,8 +24,65 @@ export default function ListingTable({rows}) {
 
   const dispatch = useDispatch();
 
- 
+  // async function fetchData(id) {
+  //   try {
+  //     const data = await get_monthlt_rent_finance(id);
+  //     if (data.data.success) {
+  //       setAgIds(data.data.ids);
+  //       setRent(data.data.agreement);
+  //       console.log(data.data.agreement);
+  //     } else {
+  //       console.log(data);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
+  // useEffect(() => {
+  //   fetchData(auth.id);
+  // }, [refresh]);
+
+  // const month = [
+  //   "January",
+  //   "February",
+  //   "March",
+  //   "April",
+  //   "May",
+  //   "June",
+  //   "July",
+  //   "August",
+  //   "September",
+  //   "October",
+  //   "November",
+  //   "December",
+  // ];
+
+  // const rows = agIDS.map((row) => {
+  //   return {
+  //     id: rentData[row].id,
+  //     code: rentData[row].code,
+  //     checkbox: rentData[row].status,
+  //     status: rentData[row].status,
+  //     utr: rentData[row].utr_no,
+  //     // srmanager:rentData[row].manager,
+  //     name: rentData[row].landlord_name,
+  //     location: rentData[row].location,
+  //     gst: rentData[row].gst,
+  //     percentage: rentData[row].share,
+  //     month_of_rent:
+  //       month[new Date(rentData[row].rent_date).getUTCMonth()] +
+  //       " " +
+  //       new Date(rentData[row].rent_date).getFullYear(),
+  //     total_month_rent: rentData[row].monthly_rent,
+  //     rent_amount: rentData[row].rent_amount ,
+  //     gst_fee : rentData[row].gst ? parseInt(rentData[row].rent_amount)/100*18 : 0 ,
+  //     total_rent : rentData[row].gst ? parseInt(rentData[row].rent_amount) + parseInt(rentData[row].rent_amount)/100*18 : parseInt(rentData[row].rent_amount),
+  //     manager: rentData[row].manager_name,
+  //     operations: rentData[row].operations_name,
+  //     srm_name: rentData[row].srm_name,
+  //   };
+  // });
 
   const renderDetailsButton = (e) => {
     const id = e.id;
@@ -189,10 +246,28 @@ export default function ListingTable({rows}) {
       headerAlign: "center",
     },
     {
-      field: "payable_amount",
-      headerName: "Payable Amount",
+      field: "rent_amount",
+      headerName: "Payable Rent",
       headerAlign: "center",
       flex: 1,
+      minWidth: 100,
+      //  maxWidth:200
+    },
+    {
+      field: "gst_fee",
+      headerName: "GST",
+      headerAlign: "center",
+      flex: 1,
+      minWidth: 100,
+      //  maxWidth:200
+    },
+    {
+      field: "total_rent",
+      headerName: "Total Rent Payable",
+      headerAlign: "center",
+      flex: 1,
+      minWidth: 100,
+      //  maxWidth:200
     },
     {
       field: "status",
@@ -201,13 +276,13 @@ export default function ListingTable({rows}) {
       width: 200,
       flex: 1,
     },
-    {
-      field: "utr",
-      headerName: "UTR Number",
-      width: 100,
-      headerAlign: "center",
-      flex: 1,
-    },
+    // {
+    //   field: "utr",
+    //   headerName: "UTR Number",
+    //   width: 100,
+    //   headerAlign: "center",
+    //   flex: 1,
+    // },
     {
       field: "action",
       headerName: "Action",
@@ -221,7 +296,7 @@ export default function ListingTable({rows}) {
   async function handleApprove() {
     ids.map(async (id) => {
       const send = await sendMonthyPaymentForword(id, {
-        status: "Approved",
+        status: "Approved By Finance",
         finance_id: auth.id,
       });
       console.log(send.data.success);
@@ -230,7 +305,7 @@ export default function ListingTable({rows}) {
           setAlert({
             open: true,
             variant: "success",
-            message: "Approved.",
+            message: "Approved",
           })
         );
         setIds([]);
