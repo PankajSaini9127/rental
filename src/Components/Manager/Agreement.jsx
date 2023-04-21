@@ -95,7 +95,7 @@ function Agreement({ history }) {
 
   const [landblord, setLandblord] = useState([1]);
 
-  const [assets,setAssets] = useState("")
+  // const [assets,setAssets] = useState("")
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -582,12 +582,16 @@ function Agreement({ history }) {
       location,
       city,
       area,
+      assets,
+      property_pic
     } = data;
 
     const { landlord } = data;
 
     APICall(
       {
+        property_pic,
+        assets,
         area,
         code,
         lockInYear,
@@ -660,6 +664,8 @@ function Agreement({ history }) {
       year3,
       year4,
       year5,
+      assets,
+      property_pic
     } = data;
     console.log(year1, year2, year3, year4, year5);
     const { landlord } = data;
@@ -694,7 +700,8 @@ function Agreement({ history }) {
         manager_id: id,
         status: "Hold",
         remark: "",
-        assets
+        assets,
+        property_pic
       },
       landlord
     );
@@ -796,6 +803,7 @@ function Agreement({ history }) {
       "poa",
       "maintaince_bill",
       "tax_receipt",
+      "property_pic"
     ];
 
     data.landlord.length > 1 && field.push("noc");
@@ -836,6 +844,8 @@ function Agreement({ history }) {
       return true;
     } else return false;
   }
+
+  // for field validations 
   function validateFields(data) {
     console.log("Validate Called");
 
@@ -852,6 +862,7 @@ function Agreement({ history }) {
       "pincode",
       "location",
       "area",
+      "assets"
     ];
 
     let dataError = [];
@@ -1218,8 +1229,8 @@ function Agreement({ history }) {
                         <Grid item xs={12}></Grid>
 
                         <TextFieldWrapper
-                          label="Name Of Lessee"
-                          placeHolder="Enter Name Of Lesses"
+                          label="Name Of Lessor"
+                          placeHolder="Enter Name Of Lessor"
                           name="leeseName"
                           disabled={true}
                           required={true}
@@ -1780,6 +1791,17 @@ function Agreement({ history }) {
                       />
                     </Grid>
                   )}
+                    <Grid item xs={6}>
+                    <DocumentUpload
+                      label="Upload Property Picture"
+                      uploaded={data.property_pic && true}
+                      fileName={data.property_pic_name}
+                      placeHolder={"Upload Property Picture"}
+                      handleChange={handleChangeFile}
+                      name={"property_pic"}
+                      error={formError.property_pic}
+                    />
+                  </Grid>
                 </Grid>
 
                 {/* Document upload section end here */}
@@ -1797,11 +1819,14 @@ function Agreement({ history }) {
                         rows={3}
                         fullWidth
                         variant="outlined"
-                        label="Remark *"
-                        placeholder="Remark *"
-                        value={assets}
-                        onChange={(e) => setAssets(e.target.value)}
+                        label="Landlord Assets *"
+                        name = "assets"
+                        placeholder="Landlord Assets *"
+                        value={data.assets || ""}
+                        onChange={handleCommonChange}
+                        // onChange={(e) => setAssets(e.target.value)}
                       />
+                      <Typography sx = {{color : 'red'}} variant = 'caption'>{formError.assets}</Typography>
                     </Grid>
                   </Grid>
 
@@ -1857,7 +1882,7 @@ function Agreement({ history }) {
                         },
                       }}
                     >
-                      Hold
+                      Save As Draft
                     </Button>
                   </Grid>
                 </Grid>

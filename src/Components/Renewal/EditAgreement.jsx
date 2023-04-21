@@ -135,7 +135,8 @@ function EditAgreement({ history }) {
           remark,
           manager_id,
           branchName,
-          assets
+          assets,
+          property_pic
         } = response.data;
 
 
@@ -161,6 +162,7 @@ function EditAgreement({ history }) {
         setPreData({
           ...preData,
           id,
+          property_pic,
           area,
           code,
           pincode,
@@ -636,11 +638,15 @@ function EditAgreement({ history }) {
       precentage,
       city,
       landlord,
-      manager_id
+      manager_id,
+      assets,
+      property_pic,
+
     } = preData;
 
     APICall(
       {
+        assets,
         pincode,
         state,
         address,
@@ -661,7 +667,8 @@ function EditAgreement({ history }) {
         maintaince_bill,
         tax_receipt,
         noc,
-        tenure,
+          property_pic,
+          tenure,
         ...increment,
         manager_id,
         // landlord,
@@ -696,6 +703,7 @@ function EditAgreement({ history }) {
     tax_receipt: "",
     noc: "",
     remark: "",
+    assets : ""
   })
 
 
@@ -786,7 +794,8 @@ console.log(partLabel)
       "poa",
       "maintaince_bill",
       "tax_receipt",
-      // "cheque",
+      "property_pic",
+
     ];
      preData.landlord.length > 1 && field.push("noc")
 
@@ -1133,6 +1142,8 @@ console.log(partLabel)
       location,
       city,
       landlord,
+      property_pic,
+
     } = preData;
     console.log(preData);
     console.log(validate(preData), validateFields(preData));
@@ -1158,6 +1169,7 @@ console.log(partLabel)
           poa,
           maintaince_bill,
           tax_receipt,
+          property_pic,
           noc,
           tenure,
           ...increment,
@@ -1944,6 +1956,19 @@ console.log(partLabel)
                       />
                   </Grid>
                     }
+
+<Grid item xs={6}>
+                    <DocumentUpload
+                      label="Property Picture"
+                      uploaded={preData.property_pic && true}
+                      placeHolder={"Upload Property Picture"}
+                      handleChange={handleChangeFile}
+                      fileName={preData.property_pic_name}
+                      error={formError.property_pic}
+                      name={"property_pic"}
+                      href={preData.property_pic}
+                    />
+                  </Grid>
                 </Grid>
 
                 {/* Document upload section end here */}
@@ -1963,11 +1988,11 @@ console.log(partLabel)
                       fullWidth
                       variant="outlined"
                       label="Landlord Assets *"
+                      helperText = {partLabel.assets}
                       placeholder="Landlord Assets *"
                       value={preData.assets}
                       name={"assets"}
                       onChange={handleCommonChange}
-                      disabled
                     />
 
                   </Grid>
@@ -2039,7 +2064,7 @@ console.log(partLabel)
                       }}
                       onClick={handleHold}
                     >
-                      Hold
+                      Save As Draft
                     </Button>
                   </Grid>
                 </Grid>

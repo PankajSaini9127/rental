@@ -66,11 +66,9 @@ function DataTable() {
     return {
       id: item.id,
       landlord_name: item.landlord_name,
-      rent_amount:item.gst? parseFloat((item.rent_amount/100*18)+item.rent_amount).toFixed(2) : parseFloat(item.rent_amount).toFixed(2),
-      rent_date:
-        month[new Date(item.rent_date).getUTCMonth()] +
-        " " +
-        new Date(item.rent_date).getFullYear(),
+      rent_amount: item.rent_amount ,
+      gst_fee : item.gst ? parseInt(item.rent_amount)/100*18 : 0 ,
+      total_rent : item.gst ? parseInt(item.rent_amount) + parseInt(item.rent_amount)/100*18 : parseInt(item.rent_amount),
       payment_date: item.payment_date || "---",
       share: item.share,
       monthly_rent: item.monthly_rent,
@@ -350,7 +348,7 @@ function DataTable() {
     },
     {
       field: "gst",
-      headerName: "GST",
+      headerName: "GST Number",
       headerAlign: "center",
       flex: 1,
       minWidth: 120,
@@ -358,7 +356,7 @@ function DataTable() {
     },
     {
       field: "monthly_rent",
-      headerName: "Month Rent",
+      headerName: "Monthly Rent",
       headerAlign: "center",
       flex: 1,
       minWidth: 100,
@@ -374,7 +372,23 @@ function DataTable() {
     },
     {
       field: "rent_amount",
-      headerName: "Payable Amount",
+      headerName: "Payable Rent",
+      headerAlign: "center",
+      flex: 1,
+      minWidth: 100,
+      //  maxWidth:200
+    },
+    {
+      field: "gst_fee",
+      headerName: "GST",
+      headerAlign: "center",
+      flex: 1,
+      minWidth: 100,
+      //  maxWidth:200
+    },
+    {
+      field: "total_rent",
+      headerName: "Total Rent Payable",
       headerAlign: "center",
       flex: 1,
       minWidth: 100,
@@ -388,14 +402,14 @@ function DataTable() {
       // maxWidth:500,
       minWidth: 150,
     },
-    {
-      field: "utr_no",
-      headerName: "UTR Number",
-      headerAlign: "center",
-      flex: 1,
-      minWidth: 130,
-      // maxWidth:200
-    },
+    // {
+    //   field: "utr_no",
+    //   headerName: "UTR Number",
+    //   headerAlign: "center",
+    //   flex: 1,
+    //   minWidth: 130,
+    //   // maxWidth:200
+    // },
     {
       field: "action",
       headerName: "Action",

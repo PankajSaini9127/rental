@@ -1859,18 +1859,7 @@ function EditAgreement({ history }) {
                       />
                   <Typography variant = 'caption' sx = {{color : 'red' }}  >{formError.termination_remark}</Typography>
                     </Grid>
-                    <Grid item xs={12} mt = {2}>
-                  <DocumentUpload
-                      label="Upload File"
-                      uploaded={(agreementData.file || preData.file) && true}
-                      error={formError.file}
-                      placeHolder={"Upload File"}
-                      handleChange={handleChangeFile}
-                      fileName={agreementData.file_name}
-                      name={"file"}
-                      href={agreementData.file || preData.file}
-                      />
-                      </Grid>
+                
                   </Grid>
 
                 {/* Document upload section end here */}
@@ -1914,14 +1903,14 @@ function EditAgreement({ history }) {
                   </Grid>
                   
                   <Grid item xs={12} container >
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sx = {{gap : '1rem'}}>
                             <Typography color={"var( --main-color)"}>
                               {"Adjust Towards Rental"}
                             </Typography>
                           </Grid>
                   <TextFieldWrapper
                     label=""
-                    placeHolder="Remaining Months"
+                    placeHolder="Number of Months"
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error = {errorObj.leeseName}
                     name="remainingMonth"
@@ -1935,7 +1924,7 @@ function EditAgreement({ history }) {
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error = {errorObj.leeseName}
                     name="adjustmentAmount"
-                    disabled={true}
+                    // disabled={true}
                     value={recovery.adjustmentAmount}
                     onChange={(e) => handleChange(e)}
                   />
@@ -2026,6 +2015,19 @@ function EditAgreement({ history }) {
 
                   {/* <Button type = 'submit' variant = 'contained'>Save</Button> */}
                 </Grid>
+
+                <Grid item xs={12} mt = {2}>
+                  <DocumentUpload
+                      label="Upload File"
+                      uploaded={(agreementData.file !== "" && preData.file !== "") && true}
+                      error={formError.file}
+                      placeHolder={"Upload File"}
+                      handleChange={handleChangeFile}
+                      fileName={agreementData.file_name}
+                      name={"file"}
+                      href={agreementData.file || preData.file}
+                      />
+                      </Grid>
 
                 {/* Button Start from here */}
                 <Grid

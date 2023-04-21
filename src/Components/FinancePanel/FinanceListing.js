@@ -38,7 +38,11 @@ function FinanceListing() {
           address: response.data.agreement[item].address,
           rentalAmount: response.data.agreement[item].monthlyRent,
           utr_number : response.data.agreement[item].utr_number,
-          checkbox: response.data.agreement[item].status
+          checkbox: response.data.agreement[item].status,
+          rent_amount: response.data.agreement[item].rent_amount ,
+          gst_fee : response.data.agreement[item].gst ? parseInt(response.data.agreement[item].rent_amount)/100*18 : 0 ,
+          total_rent : response.data.agreement[item].gst ? parseInt(response.data.agreement[item].rent_amount) + parseInt(response.data.agreement[item].rent_amount)/100*18 : parseInt(item.rent_amount),
+      
         };
       }))
     }

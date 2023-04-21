@@ -77,7 +77,9 @@ export default function ListingTable() {
         " " +
         new Date(rentData[row].rent_date).getFullYear(),
       total_month_rent: rentData[row].monthly_rent,
-      payable_amount: rentData[row].gst? parseFloat((rentData[row].rent_amount/100*18)+Number(rentData[row].rent_amount)).toFixed(2) : parseFloat(rentData[row].rent_amount).toFixed(2),
+      rent_amount: rentData[row].rent_amount ,
+      gst_fee : rentData[row].gst ? parseInt(rentData[row].rent_amount)/100*18 : 0 ,
+      total_rent : rentData[row].gst ? parseInt(rentData[row].rent_amount) + parseInt(rentData[row].rent_amount)/100*18 : parseInt(rentData[row].rent_amount),
       manager: rentData[row].manager_name,
       operations: rentData[row].operations_name,
       srm_name: rentData[row].srm_name,
@@ -246,10 +248,28 @@ export default function ListingTable() {
       headerAlign: "center",
     },
     {
-      field: "payable_amount",
-      headerName: "Payable Amount",
+      field: "rent_amount",
+      headerName: "Payable Rent",
       headerAlign: "center",
       flex: 1,
+      minWidth: 100,
+      //  maxWidth:200
+    },
+    {
+      field: "gst_fee",
+      headerName: "GST",
+      headerAlign: "center",
+      flex: 1,
+      minWidth: 100,
+      //  maxWidth:200
+    },
+    {
+      field: "total_rent",
+      headerName: "Total Rent Payable",
+      headerAlign: "center",
+      flex: 1,
+      minWidth: 100,
+      //  maxWidth:200
     },
     {
       field: "status",
@@ -258,13 +278,13 @@ export default function ListingTable() {
       width: 200,
       flex: 1,
     },
-    {
-      field: "utr",
-      headerName: "UTR Number",
-      width: 100,
-      headerAlign: "center",
-      flex: 1,
-    },
+    // {
+    //   field: "utr",
+    //   headerName: "UTR Number",
+    //   width: 100,
+    //   headerAlign: "center",
+    //   flex: 1,
+    // },
     {
       field: "action",
       headerName: "Action",
@@ -278,7 +298,7 @@ export default function ListingTable() {
   async function handleApprove() {
     ids.map(async (id) => {
       const send = await sendMonthyPaymentForword(id, {
-        status: "Approved",
+        status: "Approved By Finance",
         finance_id: auth.id,
       });
       console.log(send.data.success);
@@ -287,7 +307,7 @@ export default function ListingTable() {
           setAlert({
             open: true,
             variant: "success",
-            message: "Approved.",
+            message: "Approved",
           })
         );
         setIds([]);

@@ -473,7 +473,7 @@ function SrManagerApproval() {
                           heading={`Landlord ${id + 1} Personal Details`}
                         />
                         <DataFieldStyle
-                          field={"name of lessee"}
+                          field={"name of lessor"}
                           value={agreement[ids[0]].name[id]}
                         />
                         <DataFieldStyle
@@ -609,6 +609,10 @@ function SrManagerApproval() {
                       img={agreement[ids[0]].noc}
                     />
                   )}
+                    <DocumentView
+                    title={"Property Picture"}
+                    img={agreement[ids[0]].property_pic}
+                  />
                 </Grid>
               </Grid>
 
@@ -620,7 +624,13 @@ function SrManagerApproval() {
                 />
               </Grid>
               {/* document section ends here */}
+              
+              
+              
+              {/* // termination  points */}
               {/* // Landlord assets */}
+
+              {agreement[ids[0]].status === "Terminated By Manager" && <>
               <Grid item container xs={10} sx={{ mt: 2 }}>
                 <DataFieldStyle
                   field={"Termination Remark"}
@@ -695,6 +705,7 @@ function SrManagerApproval() {
                   </Grid>
 
               </Grid>
+              </> }
 
 
 

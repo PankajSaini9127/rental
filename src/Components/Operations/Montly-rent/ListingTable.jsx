@@ -152,10 +152,28 @@ export default function ListingTable({rows}) {
           headerAlign: "center",
         },
         {
-          field: "payable_amount",
-          headerName: "Payable Amount",
+          field: "rent_amount",
+          headerName: "Payable Rent",
           headerAlign: "center",
-          flex: 1
+          flex: 1,
+          minWidth: 100,
+          //  maxWidth:200
+        },
+        {
+          field: "gst_fee",
+          headerName: "GST",
+          headerAlign: "center",
+          flex: 1,
+          minWidth: 100,
+          //  maxWidth:200
+        },
+        {
+          field: "total_rent",
+          headerName: "Total Rent Payable",
+          headerAlign: "center",
+          flex: 1,
+          minWidth: 100,
+          //  maxWidth:200
         },
         {
           field: "status",
@@ -164,14 +182,14 @@ export default function ListingTable({rows}) {
           width: 200,
           flex: 1
         },
-        {
-          field: "utr",
-          headerName: "UTR Number",
-          width: 100,
-          headerAlign: "center",
-          flex: 1
+        // {
+        //   field: "utr",
+        //   headerName: "UTR Number",
+        //   width: 100,
+        //   headerAlign: "center",
+        //   flex: 1
     
-        },
+        // },
         {
           field: "action",
           headerName: "Action",
@@ -190,6 +208,7 @@ export default function ListingTable({rows}) {
           });
           console.log(send.data.success);
           if (send.data.success) {
+            setIds([])
             dispatch(
               setAlert({
                 open: true,

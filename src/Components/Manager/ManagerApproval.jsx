@@ -80,7 +80,7 @@ function ManagerApproval() {
         console.log(agreement.data.agreement[agreement.data.ids[0]].id)
         get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id)
         setAgreement(agreement.data.agreement);
-        console.log(agreement.data.ids);
+        console.log(agreement.data);
         setIds(agreement.data.ids);
       } else {
         dispatch(
@@ -176,13 +176,13 @@ function ManagerApproval() {
               </IconButton>
             </Box>
 
-            <Grid container sx={{ justifyContent: "center", mt: 3 }}>
+            <Grid  container sx = {{alignItems : "baseline" }} sx={{ justifyContent: "center", mt: 3 }}>
               {/* Basic Details */}
               <Grid item md={10}>
-                <Grid container>
+                <Grid  container sx = {{alignItems : "baseline" }}>
                   {agreement[ids[0]].status === "Deposited" && (
                     <>
-                      <Grid container>
+                      <Grid  container sx = {{alignItems : "baseline" }}>
                         <DataFieldStyle
                           field={"Final Agreement"}
                           href={agreement[ids[0]].final_agreement}
@@ -199,7 +199,7 @@ function ManagerApproval() {
                           value={agreement[ids[0]].rent_start_date}
                         />
                       </Grid>
-                      <Grid container sx={{ mt: 1 }}>
+                      <Grid  container sx = {{alignItems : "baseline" }} sx={{ mt: 1 }}>
                         <DataFieldStyle
                           field={"Deposit UTR Number"}
                           value={agreement[ids[0]].utr_number}
@@ -212,7 +212,7 @@ function ManagerApproval() {
                     </>
                   )}
                 </Grid>
-                <Grid container sx={{ mt: 2 }}>
+                <Grid  container sx = {{alignItems : "baseline" }} sx={{ mt: 2 }}>
                   <DataFieldStyle
                     field={"code"}
                     value={agreement[ids[0]].code}
@@ -264,8 +264,8 @@ function ManagerApproval() {
                   />
                   {agreement[ids[0]].tenure !== "11 Month" && (
                     <>
-                      <Grid container spacing={2} sx={{ mt: 4 }}>
-                        <Grid item xs={12} container>
+                      <Grid  container sx = {{alignItems : "baseline" }} spacing={2} sx={{ mt: 4 }}>
+                        <Grid item xs={12}  container sx = {{alignItems : "baseline" }}>
                           <DataFieldStyle
                             field={"yearly Increment"}
                             value={agreement[ids[0]].yearlyIncrement}
@@ -333,7 +333,7 @@ function ManagerApproval() {
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
-                      <Grid container sx={{ mt: 3 }}>
+                      <Grid  container sx = {{alignItems : "baseline" }} sx={{ mt: 3 }}>
                         {/* <Grid item xs={12}>
                           <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
@@ -343,7 +343,7 @@ function ManagerApproval() {
                           heading={`Landlord ${id + 1} Personal Details`}
                         />
                         <DataFieldStyle
-                          field={"name of lessee"}
+                          field={"name of lessor"}
                           value={agreement[ids[0]].name[id]}
                         />
                         <DataFieldStyle
@@ -396,11 +396,11 @@ function ManagerApproval() {
               {/* <Heading heading={"Bank Details"} /> */}
 
               <Grid item md={10}>
-                <Grid container>
+                <Grid  container sx = {{alignItems : "baseline" }} >
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
-                      <Grid container>
+                      <Grid  container sx = {{alignItems : "baseline" }} >
                         {/* <Grid item xs={12} sx={{ mt: 2, mb: 1 }}>
                           <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
@@ -440,7 +440,7 @@ function ManagerApproval() {
               {/* Document Section start here */}
 
               <Grid item md={10}>
-                <Grid container spacing={4} sx={{ mt: 1 }}>
+                <Grid  container sx = {{alignItems : "baseline" }} spacing={4} sx={{ mt: 1 }}>
                   <Grid item xs={12}>
                     <Heading heading={"Document View/Download"} />
                   </Grid>
@@ -465,25 +465,31 @@ function ManagerApproval() {
                     title={"Property tax receipt"}
                     img={agreement[ids[0]].tax_receipt}
                   />
-                  {agreement[ids[0]].leeseName.length > 1 && (
+                  {agreement[ids[0]].leeseName && (
                     <DocumentView
                       title={"NOC (if multiple owner)"}
                       img={agreement[ids[0]].noc}
                     />
                   )}
+                    <DocumentView
+                    title={"Property Picture"}
+                    img={agreement[ids[0]].property_pic}
+                  />
                 </Grid>
               </Grid>
               {/* // Landlord assets */}
-              <Grid item container xs={10} sx={{ mt: 5 }}>
+
+              {agreement[ids[0]].assets && (
+              <Grid item  container sx = {{alignItems : "baseline" }} xs={10} sx={{ mt: 5 }}>
                 <DataFieldStyle
                   field={"Landlord Assets"}
                   value={agreement[ids[0]].assets}
                 />
-              </Grid>
+              </Grid>)}
               {/* document section ends here */}
 
-              {agreement[ids[0]].remark.length > 0 && (
-                <Grid item container xs={10} sx={{ mt: 5 }}>
+              {agreement[ids[0]].remark && (
+                <Grid item  container sx = {{alignItems : "baseline" }} xs={10} sx={{ mt: 5 }}>
                   <DataFieldStyle
                     field={"Remark !"}
                     value={agreement[ids[0]].remark}
@@ -492,15 +498,15 @@ function ManagerApproval() {
               )}
 
                 {/* Buttons start here*/}
-   <Grid item xs={10}>
+   {/* <Grid item xs={10}>
  
- <Grid container>
+ <Grid  container sx = {{alignItems : "baseline" }}>
  <DataFieldStyle
         field="Deposit Amount (Paid)"
         value={recovery.depositedAmount}
       />
  </Grid>
- <Grid container>
+ <Grid  container sx = {{alignItems : "baseline" }}>
  <DataFieldStyle
         field="Remaining Months"
         value={recovery.remainingMonth}
@@ -515,7 +521,7 @@ function ManagerApproval() {
       />
  </Grid>
 
- <Grid container>
+ <Grid  container sx = {{alignItems : "baseline" }}>
  <DataFieldStyle
         field="Expenses Adjustment Amount"
         value={recovery.expenses}
@@ -526,7 +532,7 @@ function ManagerApproval() {
       />
  </Grid>
 
- <Grid item xs={12} container >
+ <Grid item xs={12}  container sx = {{alignItems : "baseline" }} >
       <DataFieldStyle
         field="Other Adjustments"
         value={recovery.otherAdjustments}
@@ -536,7 +542,7 @@ function ManagerApproval() {
         value={recovery.otherRemark}
       />
       </Grid>
-      <Grid item xs={12} container >
+      <Grid item xs={12}  container sx = {{alignItems : "baseline" }} >
       <DataFieldStyle
         field="Total Adjustment Amount "
         value={recovery.totalAdjustmentAmount}
@@ -547,13 +553,13 @@ function ManagerApproval() {
       />
       </Grid>
 
-  </Grid>
+  </Grid> */}
 
               {/* Buttons start here*/}
 
               {agreement[ids[0]].status === "Hold" && (
                 <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
-                  <Grid container spacing={2} sx={{ justifyContent: "center" }}>
+                  <Grid  container sx = {{alignItems : "baseline" }} spacing={2} sx={{ justifyContent: "center" }}>
                     <Grid item>
                       <Button
                         variant="contained"

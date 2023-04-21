@@ -8,6 +8,7 @@ import {
   Stack,
   TextField,
   Typography,
+  IconButton
 } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
@@ -20,6 +21,7 @@ import {
 } from "../../Services/Services";
 import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
 import { useDispatch, useSelector } from "react-redux";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 import { send_to_operations } from "../../Services/Services";
 
@@ -81,7 +83,7 @@ function SrManagerApproval() {
       );
     } else {
       const response = await send_to_operations(
-        { status: "Sent To Operations", bhu_id: srm_id, remark: sendBackMsg },
+        { status: "Sent To Operations", buh_id: srm_id, remark: sendBackMsg },
         id
       );
       if (response.data.success) {
@@ -172,6 +174,19 @@ function SrManagerApproval() {
             <Grid container sx={{ justifyContent: "center", mt: 2 }}>
               <Grid item xs={12}>
                 <MyHeader>Rental Management System</MyHeader>
+                <Box className="backButton">
+              <IconButton
+                variant="contained"
+                color="primary"
+                onClick={() => navigate(-1)}
+                size={"large"}
+              >
+                <ArrowCircleLeftIcon
+                  sx={{ fontSize: "3rem" }}
+                  color="#FFFFF !important"
+                />
+              </IconButton>
+            </Box>
               </Grid>
 
               {/* Basic Details */}

@@ -69,13 +69,9 @@ function MonthlyPayement() {
         month[new Date(rentData[row].rent_date).getUTCMonth()] +
         " " +
         new Date(rentData[row].rent_date).getFullYear(),
-      total_month_rent: rentData[row].monthly_rent,
-      payable_amount: rentData[row].gst
-        ? parseFloat(
-            (rentData[row].rent_amount / 100) * 18 +
-              Number(rentData[row].rent_amount)
-          ).toFixed(2)
-        : parseFloat(rentData[row].rent_amount).toFixed(2),
+        rent_amount: rentData[row].rent_amount ,
+        gst_fee : rentData[row].gst ? parseInt(rentData[row].rent_amount)/100*18 : 0 ,
+        total_rent : rentData[row].gst ? parseInt(rentData[row].rent_amount) + parseInt(rentData[row].rent_amount)/100*18 : parseInt(rentData[row].rent_amount),
     };
   });
 

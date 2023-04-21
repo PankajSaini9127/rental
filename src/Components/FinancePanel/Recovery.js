@@ -16,11 +16,13 @@ import {
     ,TableHead
     ,TableRow
     ,Paper
+    ,IconButton
   } from "@mui/material";
   import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
   
   import DatePicker from "react-datepicker";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
   
   import "react-datepicker/dist/react-datepicker.css";
   import { DocumentUpload, TextFieldWrapper,   MyHeader, } from "../StyledComponent";
@@ -214,7 +216,19 @@ import HamburgerMenu from "../HamburgerMenu";
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Recovery Balance</MyHeader>
-
+          <Box className="backButton">
+              <IconButton
+                variant="contained"
+                color="primary"
+                onClick={() => navigate(-1)}
+                size={"large"}
+              >
+                <ArrowCircleLeftIcon
+                  sx={{ fontSize: "3rem" }}
+                  color="#FFFFF !important"
+                />
+              </IconButton>
+            </Box>
           <Grid container pt = {3}  pr={3} pl={3}
               spacing={isSmall ? 2 : 4} 
               sx= {{justifyContent : 'center', alignItems : 'center'}}
@@ -223,19 +237,19 @@ import HamburgerMenu from "../HamburgerMenu";
                     item
                     xs={4}
                   >
-                    <Typography sx = {{fontSize : '1.3rem' ,fontWeight : 700}} color = 'primary' variant = 'h6'>Balance Deposited :: {balance.balance}</Typography>
+                    <Typography sx = {{fontSize : '1.3rem' ,fontWeight : 700}} color = 'primary' variant = 'h6'>Balance Deposit: {balance.balance}</Typography>
                   </Grid>
              <Grid
                     item
                     xs={4}
                   >
-                    <Typography sx = {{fontSize : '1.3rem' ,fontWeight : 700}} color = 'primary' variant = 'h6'>Payable Amount :: {balance.balance-balance.total}</Typography>
+                    <Typography sx = {{fontSize : '1.3rem' ,fontWeight : 700}} color = 'primary' variant = 'h6'>Receivable Amount: {balance.balance-balance.total}</Typography>
                   </Grid>
              <Grid
                     item
                     xs={4}
                   >
-                    <Typography sx = {{fontSize : '1.3rem' ,fontWeight : 700}} color = 'primary' variant = 'h6'>Total Amount Recoverd  :: {balance.total}</Typography>
+                    <Typography sx = {{fontSize : '1.3rem' ,fontWeight : 700}} color = 'primary' variant = 'h6'>Deposit Recoverd: {balance.total}</Typography>
                   </Grid>
            </Grid>
 

@@ -258,7 +258,7 @@ function DataTable({ rows, loading, check, setCheck }) {
     },
     {
       field: "name",
-      headerName: "Name",
+      headerName: "Landlord Name",
       width: 160,
       flex: 1,
       headerClassName: "dataGridHeader",

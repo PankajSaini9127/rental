@@ -45,6 +45,7 @@ export default function EditInvoice() {
   const [preData, setPredata] = useState({
     invoice_no: "",
     invoice_date: "",
+    gst : "",
     rent_amount: "",
     gst_amount: "",
     total_amount: 0,
@@ -139,6 +140,7 @@ useEffect(()=>{
           invoice_date: response.data.data[0].invoice_date,
           rent_amount: parseFloat(response.data.data[0].rent_amount).toFixed(2),
           gst_amount: response.data.data[0].gst_amount,
+          gst : response.data.data[0].gst,
           // total_amount: parseFloat(
           //   Number(response.data.data[0].rent_amount) +
           //     Number(response.data.data[0].gst_amount)
@@ -224,6 +226,8 @@ useEffect(()=>{
               {/* Basic Details */}
               <Grid item md={10}>
                 <Grid container spacing={2}>
+                  
+                {preData.gst.lenght > 0 &&<>
                   <TextFieldWrapper
                     required={true}
                     label="Invoice Number"
@@ -256,6 +260,7 @@ useEffect(()=>{
                 />
               </FormControl>
             </Grid>
+              </>}
                   {/* <TextFieldWrapper
                     required={true}
                     label="Year"
@@ -265,17 +270,15 @@ useEffect(()=>{
                     onChange={(e) => handleChange(e)}
                     name="invoice_date"
                   /> */}
+ 
                   <TextFieldWrapper
                     required={true}
                     label="Rent Amount"
                     placeHolder="Enter Rent Amount"
-                    value={parseInt(preData.rent_amount).toLocaleString("us-Rs", {
-                      style: "currency",
-                      currency: "INR",
-                    })}
+                    value={parseInt(preData.rent_amount).toLocaleString()}
                     onChange={(e) => handleChange(e)}
                     name="rent_amount"
-                    disabled={preData.status === "Sent Back From Operations"?true:false}
+                    disabled = {true}
                     textAlignRight={"textAlignRight"}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
@@ -283,11 +286,8 @@ useEffect(()=>{
                   <TextFieldWrapper
                     required={true}
                     label="GST Amount"
-                    placeHolder="Enter GST AMount"
-                    value={parseInt(preData.gst_amount).toLocaleString("us-Rs", {
-                      style: "currency",
-                      currency: "INR",
-                    })}
+                    placeHolder="Enter GST Amount"
+                    value={parseInt(preData.gst_amount).toLocaleString()}
                     onChange={(e) => handleChange(e)}
                     name="gst_amount"
                     textAlignRight={"textAlignRight"}
@@ -299,16 +299,14 @@ useEffect(()=>{
                     required={true}
                     label="Total Amount"
                     placeHolder="Enter Total Amount"
-                    value={parseInt(preData.total_amount).toLocaleString("us-Rs", {
-                      style: "currency",
-                      currency: "INR",
-                    })}
+                    value={parseInt(preData.total_amount).toLocaleString()}
                     disabled={true}
                     name="total_amount"
                     textAlignRight={"textAlignRight"}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />
+                                    {preData.gst.lenght > 0 &&
                   <Grid item xs={8} container>
                     <DocumentUpload
                       uploaded={preData.invoice ? true : false}
@@ -319,7 +317,7 @@ useEffect(()=>{
                       fileName={preData.fileName}
                       href={preData.invoice}
                     />
-                  </Grid>
+                  </Grid>}
 
                     
                   {
