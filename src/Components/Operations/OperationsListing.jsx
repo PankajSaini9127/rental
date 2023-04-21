@@ -79,6 +79,7 @@ function SrManagerListing() {
             monthlyRent={() => navigate("/opr-monthly-rent")}
             renewal={() => navigate("/opr-monthly-rent")}
             monthlyBtn="true"
+            renewalBTN="false"
           />
            <Box className="backButton">
           <IconButton

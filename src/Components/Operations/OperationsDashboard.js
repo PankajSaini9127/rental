@@ -28,6 +28,7 @@ function SrManagerDashboard() {
           monthlyRent={() => navigate("/opr-monthly-rent")}
           renewal={() => navigate("/opr-monthly-rent")}
           monthlyBtn="true"
+          renewalBTN="false"
         />
 
         {/* dashboard content */}

@@ -38,7 +38,7 @@ const fieldStyle = {
   px: 2,
   // width: "450px",
 
-  color: "rgba(16, 99, 173, 0.47)",
+  color: "rgba(16, 99, 173, 0.90)",
   "@media(max-width:900px)": { height: "46px", p: 1 },
 };
 
@@ -243,7 +243,7 @@ const [invoiceValidate , setInvoice] = useState(true)
                   InputProps={{
                     disableUnderline: true,
                     style: {
-                      color: "rgba(16, 99, 173, 0.47)",
+                      color: "rgba(16, 99, 173, 0.90)",
                       fontSize: "15px",
                     },
                   }}
@@ -296,7 +296,7 @@ const [invoiceValidate , setInvoice] = useState(true)
                   InputProps={{
                     disableUnderline: true,
                     style: {
-                      color: "rgba(16, 99, 173, 0.47)",
+                      color: "rgba(16, 99, 173, 0.90)",
                       fontSize: "15px",
                     },
                   }}
@@ -326,7 +326,7 @@ const [invoiceValidate , setInvoice] = useState(true)
                   InputProps={{
                     disableUnderline: true,
                     style: {
-                      color: "rgba(16, 99, 173, 0.47)",
+                      color: "rgba(16, 99, 173, 0.90)",
                       fontSize: "15px",
                     },
                   }}
@@ -358,7 +358,7 @@ const [invoiceValidate , setInvoice] = useState(true)
                   InputProps={{
                     disableUnderline: true,
                     style: {
-                      color: "rgba(16, 99, 173, 0.47)",
+                      color: "rgba(16, 99, 173, 0.90)",
                       fontSize: "15px",
                     },
                   }}

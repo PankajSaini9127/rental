@@ -163,7 +163,7 @@ import {
                       <Grid container sx={{ mt: 1 }}>
                         <DataFieldStyle
                           field={"Deposit UTR Number"}
-                          value={agreement[ids[0]].utr_number}
+                          value={agreement[ids[0]].utr_deposit}
                         />
                         <DataFieldStyle
                           field={"Deposit Payment Date"}

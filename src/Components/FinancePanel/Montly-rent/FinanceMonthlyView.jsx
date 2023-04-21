@@ -11,6 +11,8 @@ import {
   TextFieldWrapper,
 } from "../../StyledComponent";
 
+import moment from "moment"
+
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { useDispatch, useSelector } from "react-redux";
 import { DataFieldStyle, DocumentView } from "../../StyleComponents/Rental";
@@ -149,6 +151,7 @@ export default function FinanceMonthlyRentView() {
             monthlyRent={() => navigate("/finance-monthly-rent")}
             renewal={() => navigate("/finance-monthly-rent")}
             monthlyBtn="true"
+            renewalBTN="false"
           />
 
         <Box sx={{ flexGrow: 1 }}>
@@ -187,16 +190,19 @@ export default function FinanceMonthlyRentView() {
                     // disabled={true}
                     name="invoice_no"
                   />
-                  {/* <TextFieldWrapper
-                    required={true}
-                    label="Invoice Date"
-                    placeHolder="Enter Invoice Date"
-                    value={preData.invoice_date}
-                    // disabled={true}
-                    onChange={(e) => handleChange(e)}
-                    name="invoice_date"
-                  /> */}
-                   <Grid item xs={6} md={4}>
+                  <TextFieldWrapper
+                  required={true}
+                  label="Invoice Date"
+                  placeHolder="Invoice Date"
+                  // value={preData.invoice_date}
+                  value={moment(preData.invoice_date).format("DD/MM/YYYY")}
+                  disabled={true}
+                  // name="rent_amount"
+                  // textAlignRight={"textAlignRight"}
+                  // onBlur={(e) => handleOnBlur(e, i)}
+                  // error={ }
+                />
+                   {/* <Grid item xs={6} md={4}>
               <FormControl fullWidth>
                 <input
                   type="date"
@@ -208,7 +214,7 @@ export default function FinanceMonthlyRentView() {
                   
                 />
               </FormControl>
-            </Grid>
+            </Grid> */}
               </>}
                 <TextFieldWrapper
                   required={true}

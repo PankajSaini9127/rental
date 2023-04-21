@@ -18,6 +18,8 @@ import { setAlert, setRefreshBox } from "../../../store/action/action";
 import { DataFieldStyle, DocumentView } from "../../StyleComponents/Rental";
 import { SensorDoor } from "@mui/icons-material";
 
+import moment from "moment"
+
 export default function SRMMonthlyRentView() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -195,7 +197,7 @@ useEffect(()=>{
                   disabled={true}
                   name="invoice_date"
                 /> */}
-                <Grid item xs={6} md={4}>
+                {/* <Grid item xs={6} md={4}>
               <FormControl fullWidth>
                 <input
                   type="date"
@@ -206,7 +208,19 @@ useEffect(()=>{
                   style={{height:'55px'}}
                 />
               </FormControl>
-            </Grid>
+            </Grid> */}
+            <TextFieldWrapper
+                  required={true}
+                  label="Invoice Date"
+                  placeHolder="Invoice Date"
+                  // value={preData.invoice_date}
+                  value={moment(preData.invoice_date).format("DD/MM/YYYY")}
+                  disabled={true}
+                  // name="rent_amount"
+                  // textAlignRight={"textAlignRight"}
+                  // onBlur={(e) => handleOnBlur(e, i)}
+                  // error={ }
+                />
                 <TextFieldWrapper
                   required={true}
                   label="Rent Amount"

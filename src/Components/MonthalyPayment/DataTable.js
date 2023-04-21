@@ -317,7 +317,7 @@ function DataTable({rows}) {
     },
     {
       field: "rent_amount",
-      headerName: "Payable Rent",
+      headerName: "Monthly Rent",
       headerAlign: "center",
       flex: 1,
       minWidth: 100,

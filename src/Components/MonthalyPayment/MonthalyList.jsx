@@ -67,7 +67,7 @@ const { auth, refresh } = useSelector((state) => state);
     return {
       id: item.id,
       landlord_name: item.landlord_name,
-      rent_amount:item.rent_amount,
+      rent_amount:parseFloat(item.rent_amount).toFixed(2),
       rent_date:
         month[new Date(item.rent_date).getUTCMonth()] +
         " " +

@@ -207,12 +207,13 @@ function handleChange(e) {
       {/* <HamburgerMenu navigateTo={"listing"} /> */}
 
       <HamburgerMenu
-        navigateHome={"dashboard"}
-        handleListing={() => navigate("/finance-listing")}
-        monthlyRent={() => navigate("/finance-monthly-rent")}
-        renewal={() => navigate(`/finance-monthly-rent`)}
-        monthlyBtn="true"
-      />
+            navigateHome={"finance-dashboard"}
+            handleListing={() => navigate("/finance-listing")}
+            monthlyRent={() => navigate("/finance-monthly-rent")}
+            renewal={() => navigate("/finance-monthly-rent")}
+            monthlyBtn="true"
+            renewalBTN="false"
+          />
 
       <Box sx={{ flexGrow: 1 }}>
         <MyHeader>Recovery Balance</MyHeader>

@@ -66,7 +66,7 @@ function MonthlyPayement() {
       manager: rentData[row].manager,
       name: rentData[row].landlord_name,
       location: rentData[row].location,
-      gst: rentData[row].gst,
+      gst: rentData[row].gst?rentData[row].gst:"---",
       manager: rentData[row].manager,
       percentage: rentData[row].share,
       month_of_rent:
@@ -76,6 +76,7 @@ function MonthlyPayement() {
         rent_amount: rentData[row].rent_amount ,
         gst_fee : rentData[row].gst ? parseInt(rentData[row].rent_amount)/100*18 : 0 ,
         total_rent : rentData[row].gst ? parseInt(rentData[row].rent_amount) + parseInt(rentData[row].rent_amount)/100*18 : parseInt(rentData[row].rent_amount),
+        total_month_rent:  rentData[row].monthly_rent
     };
   });
 

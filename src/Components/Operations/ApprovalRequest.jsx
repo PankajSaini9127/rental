@@ -250,6 +250,7 @@ async function getData (id){
           monthlyRent={() => navigate("/opr-monthly-rent")}
           renewal={() => navigate("/opr-monthly-rent")}
           monthlyBtn="true"
+          renewalBTN="false"
           />
 
           <Box sx={{ flexGrow: 1 }}>

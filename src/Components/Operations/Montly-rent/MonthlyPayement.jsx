@@ -54,7 +54,7 @@ function OperationsMonthlyPayement() {
             utr:rentData[row].utr_no,
             name:rentData[row].landlord_name,
             location:rentData[row].location,
-            gst:rentData[row].gst,
+            gst: rentData[row].gst?rentData[row].gst:"---",
             percentage:rentData[row].share,
             month_of_rent: month [new Date(rentData[row].rent_date).getUTCMonth()] + " " + new Date(rentData[row].rent_date).getFullYear(),
             total_month_rent:rentData[row].monthly_rent,
@@ -91,6 +91,7 @@ function OperationsMonthlyPayement() {
           monthlyRent={() => navigate("/opr-monthly-rent")}
           renewal={() => navigate("/opr-monthly-rent")}
           monthlyBtn="true"
+          renewalBTN="false"
         />
         <Box className="backButton">
           <IconButton

@@ -8,6 +8,8 @@ import { get_monthlt_rent_finance, get_search_monthly_rent_finance } from '../..
 import { useSelector } from 'react-redux'
 import { Box } from '@mui/system'
 
+
+
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 function FinanceMonthlyPayement() {
@@ -73,12 +75,17 @@ function FinanceMonthlyPayement() {
           " " +
           new Date(rentData[row].rent_date).getFullYear(),
         total_month_rent: rentData[row].monthly_rent,
-        payable_amount: rentData[row].gst? parseFloat((rentData[row].rent_amount/100*18)+Number(rentData[row].rent_amount)).toFixed(2) : parseFloat(rentData[row].rent_amount).toFixed(2),
+        rent_amount:parseFloat(rentData[row].rent_amount).toFixed(2),
         manager: rentData[row].manager_name,
         operations: rentData[row].operations_name,
         srm_name: rentData[row].srm_name,
+        gst_fee: rentData[row].gst?parseFloat( (Number(rentData[row].rent_amount)/100)*18).toFixed(2):0,
+      total_rent : rentData[row].gst? parseFloat((Number( rentData[row].rent_amount)/100*18)+Number(rentData[row].rent_amount)).toFixed(2) : parseFloat(rentData[row].rent_amount).toFixed(2)
       };
     });
+
+
+
 
     async function SearchAPi(id,searchValue){
       const search = await get_search_monthly_rent_finance(id,searchValue)
@@ -105,6 +112,7 @@ function FinanceMonthlyPayement() {
             monthlyRent={() => navigate("/finance-monthly-rent")}
             renewal={() => navigate("/finance-monthly-rent")}
             monthlyBtn="true"
+            renewalBTN="false"
           />
            <Box className="backButton">
           <IconButton

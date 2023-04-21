@@ -85,6 +85,7 @@ function FinanceListing() {
             monthlyRent={() => navigate("/finance-monthly-rent")}
             renewal={() => navigate("/finance-monthly-rent")}
             monthlyBtn="true"
+            renewalBTN="false"
           />
            <Box className="backButton">
           <IconButton
