@@ -73,8 +73,9 @@ function SrManagerApproval() {
       const deposit_amount = await get_deposit_amount(code);
       console.log(deposit_amount);
       if (deposit_amount.data.success) {
-        setDeposit(deposit_amount.data.deposit);
+        setDeposit(deposit_amount.data.deposit[0].deposit);
       }
+      
     } catch (error) {
       console.log(error);
       dispatch(
@@ -187,7 +188,7 @@ function SrManagerApproval() {
       const response = await send_to_bhu(
         {
           status:
-            agreement[ids[0]].op_id === 0 ||
+            // agreement[ids[0]].op_id === 0 ||
             (agreement[ids[0]].op_id === null &&
               agreement[ids[0]].deposit - deposit !== 0)
               ? "Sent To BUH"
@@ -631,7 +632,7 @@ function SrManagerApproval() {
               {/* // termination  points */}
               {/* // Landlord assets */}
 
-              {agreement[ids[0]].status === "Terminated By Manager" && <>
+              {(agreement[ids[0]].status === "Terminated By Manager" ||agreement[ids[0]].status === "Terminated" )&& <>
               <Grid item container xs={10} sx={{ mt: 2 }}>
                 <DataFieldStyle
                   field={"Termination Remark"}
@@ -785,7 +786,7 @@ function SrManagerApproval() {
 
 
       {/* termonation */}
-      {agreement[ids[0]].status === "Terminated By Manager" && (
+      {agreement[ids[0]].status === "Terminated By Manager"  && (
                 <>
                   <Grid
                     item

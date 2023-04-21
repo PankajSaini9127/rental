@@ -316,7 +316,8 @@ export default function MonthalyRentView() {
                     placeHolder="Enter Invoice Number"
                     value={preData.invoice_no}
                     // disabled={true}
-                    onChange={(e) => handleChange(e)}
+                    // onChange={(e) => handleChange(e)}
+                    disabled={true}
                     name="invoice_no"
                   />
                   <TextFieldWrapper
@@ -399,6 +400,7 @@ export default function MonthalyRentView() {
                       name={"invoice"}
                       fileName={preData.fileName}
                       href={preData.invoice}
+                      disabled={true}
                     />
                   </Grid>}
 

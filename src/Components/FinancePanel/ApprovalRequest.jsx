@@ -671,7 +671,7 @@ function FinanceApproval() {
                 </>
               )}
 
-{agreement[ids[0]].status === "Terminated By Manager" && <>
+{(agreement[ids[0]].status === "Terminated By Operations" ) && <>
               <Grid item container xs={10} sx={{ mt: 2 }}>
                 <DataFieldStyle
                   field={"Termination Remark"}

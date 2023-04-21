@@ -1265,15 +1265,16 @@ function EditAgreement({ history }) {
                     error={formError.deposit}
                     value={preData.deposit}
                     onChange={handleCommonChange}
-                    disabled={buh_id !== 0 || buh_id === null ? true : false}
+                    disabled={( buh_id !== null) ? true : false}
                   />
+                  {/* {console.log(buh_id !== 0 , buh_id !== null)} */}
                   <TextFieldWrapper
                     label="Monthly Rental"
                     placeHolder="Enter Rental"
                     required={true}
                     name="monthlyRent"
                     textAlignRight={"textAlignRight"}
-                    disabled={buh_id !== 0 || buh_id === null ? true : false}
+                    disabled={( buh_id !== null) ? true : false}
                     error={formError.monthlyRent}
                     value={preData.monthlyRent}
                     onChange={handleCommonChange}
@@ -1284,7 +1285,7 @@ function EditAgreement({ history }) {
                     required={true}
                     error={formError.tenure}
                     name="tenure"
-                    disabled={buh_id !== 0 || buh_id === null ? true : false}
+                    disabled={( buh_id !== null) ? true : false}
                     options={[
                       "11 Month",
                       "2 Year",
@@ -1304,7 +1305,7 @@ function EditAgreement({ history }) {
                       options={["Percentage", "Value"]}
                       value={preData.yearlyIncrement}
                       onChange={handleCommonChange}
-                      disabled={buh_id !== 0 || buh_id === null ? true : false}
+                      disabled={( buh_id !== null) ? true : false}
                     />
                   )}
                 </Grid>
@@ -1321,7 +1322,7 @@ function EditAgreement({ history }) {
                   increment={increment}
                   setIncrement={setIncrement}
                   monthlyRent={preData.monthlyRent || ""}
-                  disabled={buh_id !== 0 || buh_id === null ? true : false}
+                  disabled={( buh_id !== null) ? true : false}
                 />
 
                 {/* landlord Details start here*/}
