@@ -12,79 +12,77 @@ import { setAlert, setRefreshBox } from "../../../store/action/action";
 import DialogBoxSBM from "../../RentalPortal/DialogBoxSBM";
 
 
-export default function ListingTable() {
+export default function ListingTable({rows}) {
   const [utr, setUtr] = useState({ utr: "", paymentDate: "" });
   const [ids, setIds] = useState([]);
   const navigate = useNavigate();
 
   const [open, setopen] = useState({open:false});
 
-  const [agIDS, setAgIds] = useState([]);
-  const [rentData, setRent] = useState({});
 
   const { auth, refresh } = useSelector((s) => s);
 
   const dispatch = useDispatch();
 
-  async function fetchData(id) {
-    try {
-      const data = await get_monthlt_rent_finance(id);
-      if (data.data.success) {
-        setAgIds(data.data.ids);
-        setRent(data.data.agreement);
-        console.log(data.data.agreement);
-      } else {
-        console.log(data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
+  // async function fetchData(id) {
+  //   try {
+  //     const data = await get_monthlt_rent_finance(id);
+  //     if (data.data.success) {
+  //       setAgIds(data.data.ids);
+  //       setRent(data.data.agreement);
+  //       console.log(data.data.agreement);
+  //     } else {
+  //       console.log(data);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
-  useEffect(() => {
-    fetchData(auth.id);
-  }, [refresh]);
+  // useEffect(() => {
+  //   fetchData(auth.id);
+  // }, [refresh]);
 
-  const month = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
+  // const month = [
+  //   "January",
+  //   "February",
+  //   "March",
+  //   "April",
+  //   "May",
+  //   "June",
+  //   "July",
+  //   "August",
+  //   "September",
+  //   "October",
+  //   "November",
+  //   "December",
+  // ];
 
-  const rows = agIDS.map((row) => {
-    return {
-      id: rentData[row].id,
-      code: rentData[row].code,
-      checkbox: rentData[row].status,
-      status: rentData[row].status,
-      utr: rentData[row].utr_no,
-      // srmanager:rentData[row].manager,
-      name: rentData[row].landlord_name,
-      location: rentData[row].location,
-      gst: rentData[row].gst,
-      percentage: rentData[row].share,
-      month_of_rent:
-        month[new Date(rentData[row].rent_date).getUTCMonth()] +
-        " " +
-        new Date(rentData[row].rent_date).getFullYear(),
-      total_month_rent: rentData[row].monthly_rent,
-      rent_amount: rentData[row].rent_amount ,
-      gst_fee : rentData[row].gst ? parseInt(rentData[row].rent_amount)/100*18 : 0 ,
-      total_rent : rentData[row].gst ? parseInt(rentData[row].rent_amount) + parseInt(rentData[row].rent_amount)/100*18 : parseInt(rentData[row].rent_amount),
-      manager: rentData[row].manager_name,
-      operations: rentData[row].operations_name,
-      srm_name: rentData[row].srm_name,
-    };
-  });
+  // const rows = agIDS.map((row) => {
+  //   return {
+  //     id: rentData[row].id,
+  //     code: rentData[row].code,
+  //     checkbox: rentData[row].status,
+  //     status: rentData[row].status,
+  //     utr: rentData[row].utr_no,
+  //     // srmanager:rentData[row].manager,
+  //     name: rentData[row].landlord_name,
+  //     location: rentData[row].location,
+  //     gst: rentData[row].gst,
+  //     percentage: rentData[row].share,
+  //     month_of_rent:
+  //       month[new Date(rentData[row].rent_date).getUTCMonth()] +
+  //       " " +
+  //       new Date(rentData[row].rent_date).getFullYear(),
+  //     total_month_rent: rentData[row].monthly_rent,
+  //     rent_amount: rentData[row].rent_amount ,
+  //     gst_fee : rentData[row].gst ? parseInt(rentData[row].rent_amount)/100*18 : 0 ,
+  //     total_rent : rentData[row].gst ? parseInt(rentData[row].rent_amount) + parseInt(rentData[row].rent_amount)/100*18 : parseInt(rentData[row].rent_amount),
+  //     manager: rentData[row].manager_name,
+  //     operations: rentData[row].operations_name,
+  //     srm_name: rentData[row].srm_name,
+  //   };
+  // });
 
   const renderDetailsButton = (e) => {
     const id = e.id;

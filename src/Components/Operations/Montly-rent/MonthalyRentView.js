@@ -31,6 +31,8 @@ import { setAlert, setRefreshBox } from "../../../store/action/action";
 import { CloseFullscreen } from "@mui/icons-material";
 import { DataFieldStyle } from "../../StyleComponents/Rental";
 
+import moment from "moment"
+
 export default function MonthalyRentView() {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -274,6 +276,7 @@ export default function MonthalyRentView() {
           monthlyRent={() => navigate("/opr-monthly-rent")}
           renewal={() => navigate("/opr-monthly-rent")}
           monthlyBtn="true"
+          renewalBTN="false"
         />
 
         <Box sx={{ flexGrow: 1 }}>
@@ -306,7 +309,7 @@ export default function MonthalyRentView() {
                   </Grid>
                }
                 <Grid container spacing={2}>
-                {preData.gst.lenght > 0 &&<>
+                {(preData.gst !== null || preData.gst !== "") &&<>
                   <TextFieldWrapper
                     required={true}
                     label="Invoice Number"
@@ -316,16 +319,19 @@ export default function MonthalyRentView() {
                     onChange={(e) => handleChange(e)}
                     name="invoice_no"
                   />
-                  {/* <TextFieldWrapper
-                    required={true}
-                    label="Invoice Date"
-                    placeHolder="Enter Invoice Date"
-                    value={preData.invoice_date}
-                    // disabled={true}
-                    onChange={(e) => handleChange(e)}
-                    name="invoice_date"
-                  /> */}
-                   <Grid item xs={6} md={4}>
+                  <TextFieldWrapper
+                  required={true}
+                  label="Invoice Date"
+                  placeHolder="Invoice Date"
+                  // value={preData.invoice_date}
+                  value={moment(preData.invoice_date).format("DD/MM/YYYY")}
+                  disabled={true}
+                  // name="rent_amount"
+                  // textAlignRight={"textAlignRight"}
+                  // onBlur={(e) => handleOnBlur(e, i)}
+                  // error={ }
+                />
+                   {/* <Grid item xs={6} md={4}>
               <FormControl fullWidth>
                 <input
                   type="date"
@@ -338,7 +344,7 @@ export default function MonthalyRentView() {
                   
                 />
               </FormControl>
-            </Grid>
+            </Grid> */}
               </>}
                   {/* <TextFieldWrapper
                     required={true}
@@ -383,7 +389,7 @@ export default function MonthalyRentView() {
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />
-                    {preData.gst.lenght > 0 &&
+                    {(preData.gst !== null || preData.gst !== "") &&
                   <Grid item xs={8} container>
                     <DocumentUpload
                       uploaded={preData.invoice ? true : false}

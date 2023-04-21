@@ -4,10 +4,13 @@ import DataTable from "./DataTable";
 
 import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
-import { Stack } from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
 import { get_agreements, get_search_manager } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Box } from "@mui/system";
+
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 
 function Listing() {
@@ -100,6 +103,21 @@ function handleSerachChange (e){
           renewal={() => navigate(`/renewal`)}
           monthlyBtn='true'
         />
+
+<Box className="backButton">
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => navigate(-1)}
+            size={"large"}
+          >
+            <ArrowCircleLeftIcon
+              sx={{ fontSize: "3rem" }}
+              color="#FFFFF !important"
+            />
+          </IconButton>
+        </Box>
+
 
         <ListingComponent
           title1={'Rental Management System'}

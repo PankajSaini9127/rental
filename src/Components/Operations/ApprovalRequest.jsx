@@ -250,6 +250,7 @@ async function getData (id){
           monthlyRent={() => navigate("/opr-monthly-rent")}
           renewal={() => navigate("/opr-monthly-rent")}
           monthlyBtn="true"
+          renewalBTN="false"
           />
 
           <Box sx={{ flexGrow: 1 }}>
@@ -439,7 +440,7 @@ async function getData (id){
                         </Grid> */}
                         <Heading heading={`Landlord ${id + 1} Personal Details`} />
                         <DataFieldStyle
-                          field={"name of lessor"}
+                          field={"Name of Lessor"}
                           value={agreement[ids[0]].name[id]}
                         />
                         <DataFieldStyle

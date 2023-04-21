@@ -18,6 +18,7 @@ function HamburgerMenu({
   monthlyRent,
   renewal,
   monthlyBtn,
+  renewalBTN
 }) {
   const [expand, setExpand] = useState(false);
 
@@ -84,7 +85,10 @@ function HamburgerMenu({
               {monthlyBtn && (
                 <>
                   <NavItem Vector={Vector2} onClick={monthlyRent} />
-                  <NavItem Vector={Vector3} onClick={renewal} />
+                  {
+                    !renewalBTN&&<NavItem Vector={Vector3} onClick={renewal} />
+                  }
+                  
                 </>
               )}
               <NavItem Vector={VectorLogout} onClick={logout} />

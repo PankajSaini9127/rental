@@ -263,7 +263,7 @@ function FinanceTable({ rows, setRows }) {
 
 
   const handleConfirm = async (e) => {
-    // console.log(setRows);
+    console.log(utr);
    
     const response = await ApprovedByFinance(
       {

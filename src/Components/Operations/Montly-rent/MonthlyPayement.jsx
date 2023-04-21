@@ -1,4 +1,4 @@
-import { Stack } from '@mui/material'
+import { IconButton, Stack } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import HamburgerMenu from '../../HamburgerMenu'
 import { useNavigate } from 'react-router-dom'
@@ -6,6 +6,9 @@ import ListingComponent from '../../StyleComponents/ListingComponent'
 import ListingTable from './ListingTable'
 import { get_monthlt_rent_opr, get_search_monthly_rent_operations } from '../../../Services/Services'
 import { useSelector } from 'react-redux'
+
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import { Box } from '@mui/system'
 
 function OperationsMonthlyPayement() {
     const navigate = useNavigate()
@@ -51,7 +54,7 @@ function OperationsMonthlyPayement() {
             utr:rentData[row].utr_no,
             name:rentData[row].landlord_name,
             location:rentData[row].location,
-            gst:rentData[row].gst,
+            gst: rentData[row].gst?rentData[row].gst:"---",
             percentage:rentData[row].share,
             month_of_rent: month [new Date(rentData[row].rent_date).getUTCMonth()] + " " + new Date(rentData[row].rent_date).getFullYear(),
             total_month_rent:rentData[row].monthly_rent,
@@ -88,7 +91,21 @@ function OperationsMonthlyPayement() {
           monthlyRent={() => navigate("/opr-monthly-rent")}
           renewal={() => navigate("/opr-monthly-rent")}
           monthlyBtn="true"
+          renewalBTN="false"
         />
+        <Box className="backButton">
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => navigate(-1)}
+            size={"large"}
+          >
+            <ArrowCircleLeftIcon
+              sx={{ fontSize: "3rem" }}
+              color="#FFFFF !important"
+            />
+          </IconButton>
+        </Box>
         <ListingComponent
           title1="Rental Management System"
           title="Monthly Payment"

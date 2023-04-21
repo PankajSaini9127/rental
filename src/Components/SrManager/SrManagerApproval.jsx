@@ -193,6 +193,7 @@ function SrManagerApproval() {
               ? "Sent To BUH"
               : "Sent To Operations",
           srm_id: login_manager_id,
+          remark:remark
         },
         id
       );
@@ -473,7 +474,7 @@ function SrManagerApproval() {
                           heading={`Landlord ${id + 1} Personal Details`}
                         />
                         <DataFieldStyle
-                          field={"name of lessor"}
+                          field={"Name of Lessor"}
                           value={agreement[ids[0]].name[id]}
                         />
                         <DataFieldStyle

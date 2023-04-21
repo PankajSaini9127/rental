@@ -1388,8 +1388,8 @@ function EditAgreement({ history }) {
                           </Grid>
 
                           <TextFieldWrapper
-                            label="Name Of Lesse"
-                            placeHolder="Enter Name Of Lesse"
+                            label="Name of Lessor"
+                            placeHolder="Enter Name of Lessor"
                             required={true}
                             disabled={true}
                             onBlur={(e) => handleOnBlur(e, i)}

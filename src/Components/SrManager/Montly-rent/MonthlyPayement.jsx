@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import HamburgerMenu from "../../HamburgerMenu";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,10 @@ import ListingComponent from "../../StyleComponents/ListingComponent";
 import ListingTable from "./ListingTable";
 import { get_monthlt_rent_srm, get_search_monthly_rent_srm } from "../../../Services/Services";
 import { useSelector } from "react-redux";
+
+
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import { Box } from "@mui/system";
 
 function MonthlyPayement() {
   const navigate = useNavigate();
@@ -62,7 +66,7 @@ function MonthlyPayement() {
       manager: rentData[row].manager,
       name: rentData[row].landlord_name,
       location: rentData[row].location,
-      gst: rentData[row].gst,
+      gst: rentData[row].gst?rentData[row].gst:"---",
       manager: rentData[row].manager,
       percentage: rentData[row].share,
       month_of_rent:
@@ -72,6 +76,7 @@ function MonthlyPayement() {
         rent_amount: rentData[row].rent_amount ,
         gst_fee : rentData[row].gst ? parseInt(rentData[row].rent_amount)/100*18 : 0 ,
         total_rent : rentData[row].gst ? parseInt(rentData[row].rent_amount) + parseInt(rentData[row].rent_amount)/100*18 : parseInt(rentData[row].rent_amount),
+        total_month_rent:  rentData[row].monthly_rent
     };
   });
 
@@ -99,6 +104,19 @@ function MonthlyPayement() {
           renewal={() => navigate("/srm-renewal-list")}
           monthlyBtn="true"
         />
+        <Box className="backButton">
+            <IconButton 
+              variant="contained"
+              color="primary"
+              onClick={() => navigate(-1)}
+              size={"large"}
+            >
+              <ArrowCircleLeftIcon
+                sx={{ fontSize: "3rem" }}
+                color="#FFFFF !important"
+              />
+            </IconButton>
+          </Box>
         <ListingComponent
           title1="Rental Management System"
           title="Monthly Payment"

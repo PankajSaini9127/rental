@@ -6,6 +6,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 
+  import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+
 // MUI Components
 import {
   Box,
@@ -1211,6 +1213,19 @@ console.log(partLabel)
           renewal={() => navigate(`/renewal`)}
           monthlyBtn="true"
         />
+         <Box className="backButton">
+            <IconButton 
+              variant="contained"
+              color="primary"
+              onClick={() => navigate(-1)}
+              size={"large"}
+            >
+              <ArrowCircleLeftIcon
+                sx={{ fontSize: "3rem" }}
+                color="#FFFFF !important"
+              />
+            </IconButton>
+          </Box>
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Edit Agreement</MyHeader>

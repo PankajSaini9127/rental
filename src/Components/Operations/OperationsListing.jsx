@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Box, IconButton, Stack } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,6 +11,8 @@ import {
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import OperationsTable from "./OperationsTable";
+
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 const options = ["New Agreement", "Monthly Payment", "Rental"];
 
@@ -77,7 +79,21 @@ function SrManagerListing() {
             monthlyRent={() => navigate("/opr-monthly-rent")}
             renewal={() => navigate("/opr-monthly-rent")}
             monthlyBtn="true"
+            renewalBTN="false"
           />
+           <Box className="backButton">
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => navigate(-1)}
+            size={"large"}
+          >
+            <ArrowCircleLeftIcon
+              sx={{ fontSize: "3rem" }}
+              color="#FFFFF !important"
+            />
+          </IconButton>
+        </Box>
           <ListingComponent
             title1={'Rental Management System'}
             title="Rental Agreement"
