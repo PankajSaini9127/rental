@@ -104,7 +104,7 @@ function MonthlyPayement() {
           renewal={() => navigate("/srm-renewal-list")}
           monthlyBtn="true"
         />
-        <Box className="backButton">
+        <Box className="backButton" sx={{zIndex:222}}>
             <IconButton 
               variant="contained"
               color="primary"

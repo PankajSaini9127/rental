@@ -300,6 +300,7 @@ const [invoiceValidate , setInvoice] = useState(true)
                       fontSize: "15px",
                     },
                   }}
+                  disabled
                   value={parseInt(value.rentAmount).toFixed(2)}
                   // helperText ={formError.rentAmount || ""}
                   fullWidth
@@ -330,6 +331,7 @@ const [invoiceValidate , setInvoice] = useState(true)
                       fontSize: "15px",
                     },
                   }}
+                  disabled
                   inputProps={{ maxLength: 22 }}
                   value={parseInt(value.gstAmount).toFixed(2)}
                   className={"textAlignRight"}

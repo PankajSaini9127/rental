@@ -181,7 +181,7 @@ export default function FinanceMonthlyRentView() {
                }
               <Grid container spacing={2}>
               
-              {preData.gst.length > 0 &&<>
+              {preData.gst !== null &&<>
                   <TextFieldWrapper
                     required={true}
                     label="Invoice Number"
@@ -249,7 +249,7 @@ export default function FinanceMonthlyRentView() {
                   // onBlur={(e) => handleOnBlur(e, i)}
                   // error={ }
                 />
-                                 {preData.gst.length > 0 &&
+         {preData.gst !== null &&
                   <Grid item xs={8} container>
                     <DocumentUpload
                       uploaded={preData.invoice ? true : false}

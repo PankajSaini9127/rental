@@ -605,7 +605,7 @@ async function getData (id){
 
 
    {/* Buttons start here*/}
-   {agreement[ids[0]].status === "Terminated By Manager" && <>
+   {agreement[ids[0]].status === "Terminated By Sr Manager" && <>
               <Grid item container xs={10} sx={{ mt: 2 }}>
                 <DataFieldStyle
                   field={"Termination Remark"}

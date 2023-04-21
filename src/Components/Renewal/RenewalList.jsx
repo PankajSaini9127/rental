@@ -97,7 +97,7 @@ return {
           renewal={() => navigate(`/renewal`)}
           monthlyBtn='true'
         />
-       <Box className="backButton">
+       <Box className="backButton"  sx={{zIndex:222}}>
             <IconButton 
               variant="contained"
               color="primary"
