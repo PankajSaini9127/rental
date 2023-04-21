@@ -93,7 +93,7 @@ function OperationsMonthlyPayement() {
           monthlyBtn="true"
           renewalBTN="false"
         />
-        <Box className="backButton">
+        <Box className="backButton" sx={{zIndex:222}}>
           <IconButton
             variant="contained"
             color="primary"
