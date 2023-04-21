@@ -17,7 +17,7 @@ import UploadInvoice from "./UploadInvoice";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setRefreshBox } from "../../store/action/action";
 
-function DataTable() {
+function DataTable({rows}) {
   
 
   const [open, setOpen] = useState(false);
@@ -26,62 +26,7 @@ function DataTable() {
 
   const { auth, refresh } = useSelector((state) => state);
 
-  // api call for get data
-  const [data, setData] = useState([]);
 
-  const APICALL = async () => {
-    setLoading(true);
-    setData([]);
-    const result = await listMonthRent(auth.id);
-    console.log(result);
-    if (result.status === 200) {
-      //   const data = result.data.data.reverse();
-      setData(result.data);
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    APICALL();
-  }, [refresh]);
-
-  const month = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  const row = data.map((item, index) => {
-    // console.log(item.rent_date)
-
-    return {
-      id: item.id,
-      landlord_name: item.landlord_name,
-      rent_amount:item.gst? parseFloat((item.rent_amount/100*18)+item.rent_amount).toFixed(2) : parseFloat(item.rent_amount).toFixed(2),
-      rent_date:
-        month[new Date(item.rent_date).getUTCMonth()] +
-        " " +
-        new Date(item.rent_date).getFullYear(),
-      payment_date: item.payment_date || "---",
-      share: item.share,
-      monthly_rent: item.monthly_rent,
-      code: item.code,
-      location: item.location,
-      gst: item.gst || "---",
-      utr_no: item.utr_no || "---",
-      status: item.status,
-      checkbox: item.gst,
-    };
-  });
 
   const [invoiceDetails, setInvoiceDetails] = useState({
     invoiceNo: "",
@@ -596,7 +541,7 @@ function DataTable() {
         }}
       >
         <DataGrid
-          rows={row}
+          rows={rows}
           columns={columns}
           pageSize={6}
           rowsPerPageOptions={[6]}

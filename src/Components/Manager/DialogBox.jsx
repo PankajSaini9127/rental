@@ -133,10 +133,10 @@ function DialogBox({ value, setValue }) {
     percentage += Number(item.percentage)
     )
    if(percentage > 100){
-    setAlert({open:true,message:"Percentage Share Not Be Bigger Then 100 %"})
+    setAlert({open:true,message:"Sum Of Percentage Share Must Be Equal To 100 %"})
    }else
    if(percentage < 100){
-    setAlert({open:true,message:"Percentage Share Should Be 100 %"})
+    setAlert({open:true,message:"Sum Of Percentage Share Must Be Equal To 100 %"})
    }
    else{
     console.log(data)

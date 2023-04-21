@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Grid,
+  IconButton,
   Link,
   Snackbar,
   Stack,
@@ -26,6 +27,7 @@ import { send_to_operations } from "../../Services/Services";
 //download file
 import { setAlert } from "../../store/action/action";
 
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 const Heading = ({ heading }) => {
   return (
@@ -167,7 +169,19 @@ function SrManagerApproval() {
           // renewal={() => navigate("/buh-monthly-rent")}
           // monthlyBtn="true"
         />
-
+<Box className="backButton">
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => navigate(-1)}
+            size={"large"}
+          >
+            <ArrowCircleLeftIcon
+              sx={{ fontSize: "3rem" }}
+              color="#FFFFF !important"
+            />
+          </IconButton>
+        </Box>
           <Box sx={{ flexGrow: 1 }}>
             <Grid container sx={{ justifyContent: "center", mt: 2 }}>
               <Grid item xs={12}>

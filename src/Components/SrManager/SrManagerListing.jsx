@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
@@ -10,6 +10,9 @@ import {
   get_srm_agreements,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
+import { Box } from "@mui/system";
+
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 const options = ["New Agreement", "Monthly Payment", "Rental"];
 
@@ -79,6 +82,19 @@ function SrManagerListing() {
           renewal={() => navigate("/srm-renewal-list")}
           monthlyBtn="true"
         />
+        <Box className="backButton">
+            <IconButton 
+              variant="contained"
+              color="primary"
+              onClick={() => navigate(-1)}
+              size={"large"}
+            >
+              <ArrowCircleLeftIcon
+                sx={{ fontSize: "3rem" }}
+                color="#FFFFF !important"
+              />
+            </IconButton>
+          </Box>
         <ListingComponent
           title1="Rental Management System"
           title="Rental Agreement"

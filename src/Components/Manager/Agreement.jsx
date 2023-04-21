@@ -1218,8 +1218,8 @@ function Agreement({ history }) {
                         <Grid item xs={12}></Grid>
 
                         <TextFieldWrapper
-                          label="Name Of Lessee"
-                          placeHolder="Enter Name Of Lesses"
+                          label="Name of Lessor"
+                          placeHolder="Enter Name of Lessor"
                           name="leeseName"
                           disabled={true}
                           required={true}
@@ -1797,9 +1797,10 @@ function Agreement({ history }) {
                         rows={3}
                         fullWidth
                         variant="outlined"
-                        label="Remark *"
-                        placeholder="Remark *"
+                        label="Landlord Assets*"
+                        placeholder="Landlord Assets"
                         value={assets}
+                        required
                         onChange={(e) => setAssets(e.target.value)}
                       />
                     </Grid>

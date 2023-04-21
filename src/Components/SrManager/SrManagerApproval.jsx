@@ -473,7 +473,7 @@ function SrManagerApproval() {
                           heading={`Landlord ${id + 1} Personal Details`}
                         />
                         <DataFieldStyle
-                          field={"name of lessee"}
+                          field={"Name of Lessor"}
                           value={agreement[ids[0]].name[id]}
                         />
                         <DataFieldStyle

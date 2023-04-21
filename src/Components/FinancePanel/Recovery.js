@@ -15,7 +15,8 @@ import {
     ,TableContainer
     ,TableHead
     ,TableRow
-    ,Paper
+    ,Paper,
+    IconButton
   } from "@mui/material";
   import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -29,6 +30,8 @@ import { useParams, useNavigate } from "react-router-dom";
   import { invoice_validation, uploadDoc, insertRecoveryLog, getRecoveryLog, send_to_bhu } from "../../Services/Services";
   import { Try } from "@mui/icons-material";
 import HamburgerMenu from "../HamburgerMenu";
+
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
   
   const labelStyle = {
     fontSize: "20px",
@@ -211,6 +214,19 @@ import HamburgerMenu from "../HamburgerMenu";
           renewal={() => navigate(`/renewal`)}
           monthlyBtn="true"
         />
+         <Box className="backButton">
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={() => navigate(-1)}
+            size={"large"}
+          >
+            <ArrowCircleLeftIcon
+              sx={{ fontSize: "3rem" }}
+              color="#FFFFF !important"
+            />
+          </IconButton>
+        </Box>
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Recovery Balance</MyHeader>

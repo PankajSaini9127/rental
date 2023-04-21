@@ -1378,8 +1378,8 @@ function EditAgreement({ history }) {
                           </Grid>
 
                           <TextFieldWrapper
-                            label="Name Of Lesse"
-                            placeHolder="Enter Name Of Lesse"
+                            label="Name of Lessor"
+                            placeHolder="Enter Name of Lessor"
                             required={true}
                             disabled={true}
                             onBlur={(e) => handleOnBlur(e, i)}
@@ -1846,7 +1846,7 @@ function EditAgreement({ history }) {
                   <Grid item xs={12} container spacing={2}>
                   <Grid item xs={12}>
                             <Typography color={"var( --main-color)"}>
-                              {"Adjust Towards Rental"}
+                              {"Adjustment Amount"}
                             </Typography>
                           </Grid>
                   <TextFieldWrapper
@@ -1865,7 +1865,7 @@ function EditAgreement({ history }) {
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error = {errorObj.leeseName}
                     name="adjustmentAmount"
-                    disabled={true}
+                    // disabled={true}
                     value={recovery.adjustmentAmount}
                     onChange={(e) => handleChange(e)}
                   />
@@ -1934,7 +1934,7 @@ function EditAgreement({ history }) {
                   </Grid>
                   <Grid item xs={12} container spacing={2}>
                   <TextFieldWrapper
-                    label="Total Adjustment Amount "
+                    label="Total Adjustment Amount"
                     placeHolder="Adjustment Amount"
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error = {errorObj.leeseName}

@@ -1,12 +1,13 @@
 import React, {  useEffect, useState } from "react";
 import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
-import { Stack } from "@mui/material";
+import { IconButton, Stack } from "@mui/material";
 import DataTable from "./DataTable";
 import { useNavigate } from "react-router-dom";
-import { listMonthRent } from "../../Services/Services";
+import { get_search_monthly_rent_manager, listMonthRent } from "../../Services/Services";
 import { useSelector } from "react-redux";
-
+import { Box } from "@mui/system";
+import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 // const options = ["New Agreement","Monthly Payment","Rental"]
 
 
@@ -17,6 +18,10 @@ export default function MonthalyList() {
     setSelect(e.target.value);
   };
 const navigate = useNavigate();
+
+  //search
+  const [searchValue,setsearchValue] =useState('');
+
 
 
 const { auth, refresh } = useSelector((state) => state);
@@ -57,7 +62,7 @@ const { auth, refresh } = useSelector((state) => state);
   ];
 
   const row = data.map((item, index) => {
-    // console.log(item.rent_date)
+    console.log(parseFloat((item.rent_amount/100*18)+item.rent_amount).toFixed(2))
 
     return {
       id: item.id,
@@ -79,11 +84,21 @@ const { auth, refresh } = useSelector((state) => state);
     };
   });
 
-  // async function SearchAPi(id,searchValue){
-  //   const search = await get_search_monthly_rent_srm(id,searchValue)
-  //   setAgIds(search.data.ids)
-  //   setRent(search.data.agreement)
-  // } 
+  async function SearchAPi(id,searchValue){
+    const search = await get_search_monthly_rent_manager(id,searchValue)
+    setData(search.data)
+    // setAgIds(search.data.ids)
+    // setRent(search.data.agreement)
+  } 
+
+
+  function handleSerachChange (e){
+    
+    setsearchValue(e.target.value)
+    SearchAPi(auth.id,searchValue)
+
+    console.log(searchValue)
+  }
 
   return (
     <>
@@ -96,6 +111,20 @@ const { auth, refresh } = useSelector((state) => state);
           monthlyBtn='true'
         />
 
+<Box className="backButton">
+            <IconButton
+              variant="contained"
+              color="primary"
+              onClick={() => navigate(-1)}
+              size={"large"}
+            >
+              <ArrowCircleLeftIcon
+                sx={{ fontSize: "3rem" }}
+                color="#FFFFF !important"
+              />
+            </IconButton>
+          </Box>
+
       <ListingComponent
         title1={'Rental Management System'}
         title={'Monthly Payment'}
@@ -104,7 +133,10 @@ const { auth, refresh } = useSelector((state) => state);
         Table={DataTable}
         onChange={handleChange}
         dropDown={false}
-        // rows={row}
+        rows={row}
+        searchValue={searchValue}
+        // setsearchValue={setsearchValue}
+        handleSerachChange={handleSerachChange}
       />
     </Stack>
   </>
