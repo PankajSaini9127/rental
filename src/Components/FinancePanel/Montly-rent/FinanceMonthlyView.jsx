@@ -101,7 +101,13 @@ export default function FinanceMonthlyRentView() {
 
   async function handleSubmit(e) {
     try {
-      const send = await sendMonthyPaymentForword(id,{status:"Approved By Finance",finance_id: auth.id,remark:remark})
+      const send = await sendMonthyPaymentForword(id,
+        {
+        status:"Approved By Finance",
+        finance_id: auth.id,
+        remark:remark,
+        update_at: new Date()
+        })
       // console.log(send.data.success)
      if(send.data.success){
       dispatch(setAlert({open:true,variant:"success",message:"Approved Successfully."}))

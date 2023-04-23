@@ -324,3 +324,14 @@ export async function insertRecoveryLog (data){
 export async function getRecoveryLog (data){
     return await axios.get(`${API_LIVE}/api/finance/getRecoveryLog?id=${data}`)
 }
+
+
+//get modification date
+export async function getModifyDate (id){
+    return await axios.get(`${API_LIVE}/api/get-modify-date?id=${id}`)
+}
+
+//get modification date
+export async function getPaymentModifyDate (id){
+    return await axios.get(`${API_LIVE}/api/get-payment-modify-date?id=${id}`)
+}

@@ -9,7 +9,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import DownloadIcon from "@mui/icons-material/Download";
 import { useState } from "react";
 
-const DataFieldStyle = ({ field, value, href, name, bold, cursor }) => {
+const DataFieldStyle = ({ field, value, href, name, bold, cursor,partLabel }) => {
   const [open, setOpen] = useState(false);
   const typographyStyle = {
     textTransform: "capitalize",
@@ -62,6 +62,9 @@ const DataFieldStyle = ({ field, value, href, name, bold, cursor }) => {
             <DownloadIcon color={"primary"} onClick={handleClick} />
           </Box >
         )}
+         <span style = {{color:"#0164AE"}}>
+          {partLabel}
+        </span>
       </Stack>
     </Grid>
   );

@@ -27,18 +27,8 @@ import { useState } from "react";
     fontWeight: "600",
     "@media(max-width:900px)": { fontSize: "10px" },
   };
-  
-  const fieldStyle = {
-    border: "1px solid var(--main-color)",
-    borderRadius: "20px",
-    //   height: "50px",
-    p: 1,
-    px: 2,
-    // width: "450px",
-  
-    color: "rgba(16, 99, 173, 0.47)",
-    "@media(max-width:900px)": { height: "46px", p: 1 },
-  };
+ 
+
   
   function FinalAgreement({
     open,
@@ -46,6 +36,7 @@ import { useState } from "react";
     handleConfirm1,
     value,
     setValue,
+    modifyDate
   }) {
 
     const [formError,setError] = useState({final_agreement:'',agreement_date:""})
@@ -100,13 +91,31 @@ import { useState } from "react";
   
   
     const disablePastDate = () => {
-      const today = new Date();
+      const today = new Date(modifyDate);
       const dd = String(today.getDate() + 0).padStart(2, "0");
       const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
       const yyyy = today.getFullYear();
+      console.log(yyyy + "-" + mm + "-" + dd)
       return yyyy + "-" + mm + "-" + dd;
   };
 
+  const disableRentStartDate = () => {
+    const today = new Date(value.agreement_date);
+    const dd = String(today.getDate() + 0).padStart(2, "0");
+    const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+    const yyyy = today.getFullYear();
+    console.log(yyyy + "-" + mm + "-" + dd)
+    return yyyy + "-" + mm + "-" + dd;
+};
+
+function handleClose(){
+  setOpen(false)
+  setValue({
+    agreement_date: "",
+    final_agreement: "",
+    rent_start_date: "",
+  })
+}
 
 
 function validate(){
@@ -130,7 +139,7 @@ function validate(){
       <>
         <Dialog
           open={open}
-          onClose={()=>setOpen(false)}
+          onClose={handleClose}
           PaperProps={{
             style: { borderRadius: 18 },
           }}
@@ -181,9 +190,10 @@ function validate(){
                 <input type="date" 
                 name="rent_start_date" 
                 value={value.rent_start_date}  
-                min={disablePastDate()} 
-                className="DatePicker"   
-                onChange={onChange}
+                min={disableRentStartDate()} 
+                disabled={value.agreement_date === ""&& true}
+                className="DatePicker"  
+                onChange={(e)=>{onChange(e);}}
                 // error={formError.date && true}
                  />
                 <Typography variant = 'caption' sx = {{color : 'red'}}>{formError.rent_start_date}</Typography>
@@ -220,7 +230,7 @@ function validate(){
                   borderRadius: "15px",
                   textTransform: "capitalize",
                 }}
-                onClick={()=>setOpen(false)}
+                onClick={handleClose}
               >
                 Close
               </Button>
