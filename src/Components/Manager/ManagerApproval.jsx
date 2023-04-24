@@ -111,7 +111,7 @@ function ManagerApproval() {
 
   const handleSubmit = async (e) => {
     const response = await send_to_bhu(
-      { status: "Sent To Sr Manager", manager_id: login_manager_id },
+      { status: "Sent To Sr Manager", manager_id: login_manager_id,modify_date: new Date() },
       id
     );
     if (response.data.success) {
@@ -176,7 +176,7 @@ function ManagerApproval() {
               </IconButton>
             </Box>
 
-            <Grid  container sx = {{alignItems : "baseline" }} sx={{ justifyContent: "center", mt: 3 }}>
+            <Grid  container sx = {{alignItems : "baseline" ,justifyContent: "center", mt: 3 }} >
               {/* Basic Details */}
               <Grid item md={10}>
                 <Grid  container sx = {{alignItems : "baseline" }}>
@@ -199,7 +199,7 @@ function ManagerApproval() {
                           value={agreement[ids[0]].rent_start_date}
                         />
                       </Grid>
-                      <Grid  container sx = {{alignItems : "baseline" }} sx={{ mt: 1 }}>
+                      <Grid  container sx = {{alignItems : "baseline",mt: 1 }} >
                         <DataFieldStyle
                           field={"Deposit UTR Number"}
                           value={agreement[ids[0]].utr_number}
@@ -212,7 +212,7 @@ function ManagerApproval() {
                     </>
                   )}
                 </Grid>
-                <Grid  container sx = {{alignItems : "baseline" }} sx={{ mt: 2 }}>
+                <Grid  container sx = {{alignItems : "baseline",mt: 2 }}>
                   <DataFieldStyle
                     field={"code"}
                     value={agreement[ids[0]].code}
@@ -333,7 +333,7 @@ function ManagerApproval() {
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
-                      <Grid  container sx = {{alignItems : "baseline" }} sx={{ mt: 3 }}>
+                      <Grid  container sx = {{alignItems : "baseline",mt: 3  }} >
                         {/* <Grid item xs={12}>
                           <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
@@ -410,6 +410,7 @@ function ManagerApproval() {
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement[ids[0]].bankName[id]}
+                          partLabel={agreement[ids[0]].branchName[id]}
                         />
                         <DataFieldStyle
                           field={"beneficiary name"}
@@ -440,7 +441,7 @@ function ManagerApproval() {
               {/* Document Section start here */}
 
               <Grid item md={10}>
-                <Grid  container sx = {{alignItems : "baseline" }} spacing={4} sx={{ mt: 1 }}>
+                <Grid  container spacing={4} sx= {{alignItems : "baseline", mt: 1  }}  >
                   <Grid item xs={12}>
                     <Heading heading={"Document View/Download"} />
                   </Grid>
@@ -480,7 +481,7 @@ function ManagerApproval() {
               {/* // Landlord assets */}
 
               {agreement[ids[0]].assets && (
-              <Grid item  container sx = {{alignItems : "baseline" }} xs={10} sx={{ mt: 5 }}>
+              <Grid item  container sx = {{alignItems : "baseline",mt: 5  }} xs={10} >
                 <DataFieldStyle
                   field={"Landlord Assets"}
                   value={agreement[ids[0]].assets}
@@ -489,7 +490,7 @@ function ManagerApproval() {
               {/* document section ends here */}
 
               {agreement[ids[0]].remark && (
-                <Grid item  container sx = {{alignItems : "baseline" }} xs={10} sx={{ mt: 5 }}>
+                <Grid item  container sx = {{alignItems : "baseline",mt: 5  }} xs={10} >
                   <DataFieldStyle
                     field={"Remark !"}
                     value={agreement[ids[0]].remark}

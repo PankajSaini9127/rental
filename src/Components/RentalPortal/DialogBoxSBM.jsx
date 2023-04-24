@@ -35,8 +35,9 @@ const fieldStyle = {
   "@media(max-width:900px)": { height: "46px", p: 1 },
 };
 
-function DialogBoxSBM({ open, handleClose, handleConfirm, value, setValue }) {
+function DialogBoxSBM({ open, handleClose, handleConfirm, value, setValue ,modifyDate}) {
   const [formError, setFormError] = useState({ ute: "", paymentDate: "" });
+
 
   function onChange(e) {
     setFormError({
@@ -49,11 +50,14 @@ function DialogBoxSBM({ open, handleClose, handleConfirm, value, setValue }) {
     });
   }
 
+  console.log(modifyDate)
+
   const disablePastDate = () => {
-    const today = new Date();
-    const dd = String(today.getDate() + -1).padStart(2, "0");
+    const today = new Date(modifyDate);
+    const dd = String(today.getDate()).padStart(2, "0");
     const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
     const yyyy = today.getFullYear();
+    console.log(yyyy + "-" + mm + "-" + dd)
     return yyyy + "-" + mm + "-" + dd;
   };
 

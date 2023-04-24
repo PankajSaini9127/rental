@@ -103,7 +103,8 @@ function FinanceApproval() {
       {
         status: "Approved for Termination",
         finance_id:auth.id,
-        renewal_status:"Approved Termination"
+        renewal_status:"Approved Termination",
+        modify_date: new Date()
       },
       id
     );
@@ -200,6 +201,7 @@ function FinanceApproval() {
         {
           status: "Sent Back From Finance",
           remark: remark,
+          modify_date: new Date()
         },
         id
       );
@@ -232,6 +234,7 @@ function FinanceApproval() {
         finance_id: login_manager_id,
         utr_number: utr.utr,
         payment_date: utr.paymentDate,
+        modify_date: new Date()
       },
       id
     );
@@ -255,17 +258,20 @@ function FinanceApproval() {
     }
   };
 
-  // console.log(agreement[ids[0]].deposit - deposit === 0 )
+  console.log(new Date())
 
   async function handleSubmit() {
+    console.log(remark)
     // console.log(agreement[ids[0]].deposit-deposit === 0 ? "Deposited" : "Approved")
+    if(remark.length > 0){
     const response = await ApprovedByFinance(
       {
         status:
-          agreement[ids[0]].deposit - deposit === 0 ? "Deposited" : "Approved",
+        agreement[ids[0]].deposit - deposit === 0 ? "Deposited" : "Approved",
         finance_id: "",
         utr_number: "",
         payment_date: "",
+        modify_date: new Date()
       },
       id
     );
@@ -287,6 +293,9 @@ function FinanceApproval() {
         })
       );
     }
+  }else{
+    dispatch(setAlert({open:true,variant:"error",message:"Remark Required !"}))
+  }
   }
 
   function getIncrement(rent, value, type) {
@@ -581,6 +590,7 @@ function FinanceApproval() {
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement[ids[0]].bankName[id]}
+                          
                         />
                         <DataFieldStyle
                           field={"beneficiary name"}
@@ -597,14 +607,13 @@ function FinanceApproval() {
                         <DataFieldStyle
                           field={"bank IFSC code"}
                           value={agreement[ids[0]].ifscCode[id]}
+                          partLabel={agreement[ids[0]].branchName[id]}
                         />
                       </Grid>
                     )
                   )}
                 </Grid>
               </Grid>
-
-              {/* Bank Details Ends here */}
 
               {/* Bank Details Ends here */}
 
@@ -623,10 +632,6 @@ function FinanceApproval() {
                     title={"electricity bill"}
                     img={agreement[ids[0]].electricity_bill}
                   />
-                  {/* <DocumentView
-                    title={"Cancel bank cheque"}
-                    img={agreement[ids[0]].cheque}
-                  /> */}
                   <DocumentView
                     title={"maintaince bill"}
                     img={agreement[ids[0]].maintaince_bill}
@@ -656,20 +661,6 @@ function FinanceApproval() {
                   />  
                   </Grid>
 
-              {agreement[ids[0]].remark.length > 0 && (
-                <>
-                 
-
-                  <Grid item container xs={10} sx={{ mt: 5 }} spacing={3}>
-                    <Grid item xs={8}>
-                      <DataFieldStyle
-                        field={"Remark !"}
-                        value={agreement[ids[0]].remark}
-                      />
-                    </Grid>
-                  </Grid>
-                </>
-              )}
 
 {(agreement[ids[0]].status === "Terminated By Operations" ) && <>
               <Grid item container xs={10} sx={{ mt: 2 }}>

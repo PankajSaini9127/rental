@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Checkbox } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { send_to_operations } from "../../Services/Services";
+import { getModifyDate, send_to_operations } from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
 import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
 import {
@@ -23,6 +23,8 @@ function FinanceTable({ rows, setRows }) {
 
   const { auth } = useSelector((s) => s);
   const srm_id = auth.id;
+
+  const [modifyDate,setModifyDate] = useState("")
 
   const dispatch = useDispatch();
 
@@ -62,7 +64,8 @@ function FinanceTable({ rows, setRows }) {
              }}
             //  startIcon={<EditIcon />}
              onClick={(e) => {
-             setopen({open : true, id : id})
+            
+              getUpdateDate(id)
              }}
            >
              UTR Number
@@ -106,6 +109,7 @@ function FinanceTable({ rows, setRows }) {
       </Box>
     );
   };
+
   const handleSwitch = (e) => {
     console.log(ids.includes(e.target.name));
     console.log(ids);
@@ -127,7 +131,7 @@ function FinanceTable({ rows, setRows }) {
       headerAlign: "center",
       renderCell: (params) => (
         <>
-          {console.log(params)}
+          {/* {console.log(params)} */}
           {params.formattedValue === "Sent To Finance Team" ? (
             <Checkbox
               onChange={handleSwitch}
@@ -226,9 +230,20 @@ function FinanceTable({ rows, setRows }) {
     },
   ];
 
-  // const onRowsSelectionHandler = (ids) => {
-  //     setIds(ids)
-  //   };
+
+ async function getUpdateDate (id){
+  try {
+    const response = await getModifyDate(id)
+    console.log(response)
+    if(response.status === 200){
+      setModifyDate(response.data.modify_date)
+      setopen({open : true, id : id})
+    }
+  } catch (error) {
+    console.log(error)
+    dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+  }
+ }
 
   const [remarkOpen,setRemarkOpen] = useState(false)
 
@@ -311,10 +326,11 @@ function FinanceTable({ rows, setRows }) {
     <>
         <DialogBoxSBM
             open={open.open}
-            handleClose={() => setopen({...open,open : false})}
+            handleClose={() => {setopen({...open,open : false});setUtr({ utr: "", paymentDate: "" })}}
             handleConfirm={handleConfirm}
             value={utr}
             setValue={setUtr}
+            modifyDate={modifyDate}
           />
 
       {ids.length > 0 && (

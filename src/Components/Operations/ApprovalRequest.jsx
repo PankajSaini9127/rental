@@ -517,6 +517,7 @@ async function getData (id){
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement[ids[0]].bankName[id]}
+                          
                         />
                         <DataFieldStyle
                           field={"beneficiary name"}
@@ -533,6 +534,7 @@ async function getData (id){
                         <DataFieldStyle
                           field={"bank IFSC code"}
                           value={agreement[ids[0]].ifscCode[id]}
+                          partLabel={agreement[ids[0]].branchName[id]}
                         />
                       </Grid>
                     )
