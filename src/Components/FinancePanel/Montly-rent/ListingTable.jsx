@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import {
+  getPaymentModifyDate,
   get_monthlt_rent_finance,
   sendMonthyPaymentForword,
 } from "../../../Services/Services";
@@ -24,78 +25,34 @@ export default function ListingTable({rows}) {
 
   const dispatch = useDispatch();
 
-  // async function fetchData(id) {
-  //   try {
-  //     const data = await get_monthlt_rent_finance(id);
-  //     if (data.data.success) {
-  //       setAgIds(data.data.ids);
-  //       setRent(data.data.agreement);
-  //       console.log(data.data.agreement);
-  //     } else {
-  //       console.log(data);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
+  const [modifyDate,setModifyDate] = useState("")
 
-  // useEffect(() => {
-  //   fetchData(auth.id);
-  // }, [refresh]);
-
-  // const month = [
-  //   "January",
-  //   "February",
-  //   "March",
-  //   "April",
-  //   "May",
-  //   "June",
-  //   "July",
-  //   "August",
-  //   "September",
-  //   "October",
-  //   "November",
-  //   "December",
-  // ];
-
-  // const rows = agIDS.map((row) => {
-  //   return {
-  //     id: rentData[row].id,
-  //     code: rentData[row].code,
-  //     checkbox: rentData[row].status,
-  //     status: rentData[row].status,
-  //     utr: rentData[row].utr_no,
-  //     // srmanager:rentData[row].manager,
-  //     name: rentData[row].landlord_name,
-  //     location: rentData[row].location,
-  //     gst: rentData[row].gst,
-  //     percentage: rentData[row].share,
-  //     month_of_rent:
-  //       month[new Date(rentData[row].rent_date).getUTCMonth()] +
-  //       " " +
-  //       new Date(rentData[row].rent_date).getFullYear(),
-  //     total_month_rent: rentData[row].monthly_rent,
-  //     rent_amount: rentData[row].rent_amount ,
-  //     gst_fee : rentData[row].gst ? parseInt(rentData[row].rent_amount)/100*18 : 0 ,
-  //     total_rent : rentData[row].gst ? parseInt(rentData[row].rent_amount) + parseInt(rentData[row].rent_amount)/100*18 : parseInt(rentData[row].rent_amount),
-  //     manager: rentData[row].manager_name,
-  //     operations: rentData[row].operations_name,
-  //     srm_name: rentData[row].srm_name,
-  //   };
-  // });
+  async function getUpdateDate (id){
+    try {
+      const response = await getPaymentModifyDate(id)
+      console.log(response)
+      if(response.status === 200){
+        setModifyDate(response.data.modify_date)
+        setopen({open : true, id : id})
+      }
+    } catch (error) {
+      console.log(error)
+      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+    }
+   }
 
   const renderDetailsButton = (e) => {
     const id = e.id;
 
     return (
       <Grid container>
-        <DialogBoxSBM
+        {/* <DialogBoxSBM
             open={open.open}
             handleClose={() => setopen({...open,open : false})}
             handleConfirm={handleConfirm}
             value={utr}
             setValue={setUtr}
-          />
+          /> */}
         <Grid item xs={6} spacing={2}>
           <Button
             variant="contained"
@@ -132,7 +89,7 @@ export default function ListingTable({rows}) {
               onClick={(e) => {
                 e.stopPropagation(); // don't select this row after clicking
                 // navigate(`/finance-monthly-view/${id}`);
-                setopen({open : true, id : id})
+                getUpdateDate(id)
               }}
             >
              UTR Number
@@ -333,6 +290,7 @@ export default function ListingTable({rows}) {
         status: "Paid",
         utr_number: utr.utr,
         payment_date: utr.paymentDate,
+        modify_date:new Date()
       }
       
     );
@@ -381,6 +339,7 @@ export default function ListingTable({rows}) {
             handleConfirm={handleConfirm}
             value={utr}
             setValue={setUtr}
+            modifyDate={modifyDate}
           />
 
       <Box

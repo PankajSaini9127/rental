@@ -611,6 +611,7 @@ function EditAgreement({ history }) {
 
     APICall(
       {
+        modify_date: new Date(),
         assets,
         pincode,
         state,
@@ -1053,6 +1054,7 @@ function EditAgreement({ history }) {
     if (validate(preData) && validateFields(preData)) {
       APICall(
         {
+          modify_date: new Date(),
           pincode,
           state,
           address,

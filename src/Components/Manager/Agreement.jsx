@@ -590,6 +590,7 @@ function Agreement({ history }) {
 
     APICall(
       {
+        modify_date: new Date(),
         property_pic,
         assets,
         area,
@@ -671,6 +672,7 @@ function Agreement({ history }) {
     const { landlord } = data;
     APICall(
       {
+        modify_date: new Date(),
         area,
         code,
         lockInYear,

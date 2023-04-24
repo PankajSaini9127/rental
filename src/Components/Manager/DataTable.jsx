@@ -13,6 +13,7 @@ import PermissionAlert from "./Alert";
 import {
   add_monthly_rent,
   delete_agreement,
+  getModifyDate,
   get_agreements,
   get_landlord_id,
   get_monthaly_rent,
@@ -176,7 +177,8 @@ function DataTable({ rows, loading, check, setCheck }) {
                   e.stopPropagation(); // don't select this row after clicking
                  
                   setSelectID(id);
-                  setopen(true);
+                  
+                  getUpdateDate(id)
                 }}
               >
                 Final Agreement
@@ -446,6 +448,22 @@ catch (error) {
     });
   };
 
+  const [modifyDate,setModifyDate] = useState("")
+
+  async function getUpdateDate (id){
+    try {
+      const response = await getModifyDate(id)
+      console.log(response)
+      if(response.status === 200){
+        setModifyDate(response.data.modify_date)
+        setopen(true);
+      }
+    } catch (error) {
+      console.log(error)
+      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+    }
+   }
+
   return (
     <>
       {ids.length > 0 && (
@@ -473,6 +491,7 @@ catch (error) {
         handleConfirm1={AgreementFinal}
         value={final_agreement}
         setValue={setFinalAgreement}
+        modifyDate={modifyDate}
       />
 
       <Snackbar

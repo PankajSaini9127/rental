@@ -551,6 +551,7 @@ function SrManagerApproval() {
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement[ids[0]].bankName[id]}
+                         
                         />
                         <DataFieldStyle
                           field={"beneficiary name"}
@@ -566,6 +567,7 @@ function SrManagerApproval() {
                         />
                         <DataFieldStyle
                           field={"bank IFSC code"}
+                          partLabel={agreement[ids[0]].branchName[id]}
                           value={agreement[ids[0]].ifscCode[id]}
                         />
                       </Grid>
