@@ -335,3 +335,31 @@ export async function getModifyDate (id){
 export async function getPaymentModifyDate (id){
     return await axios.get(`${API_LIVE}/api/get-payment-modify-date?id=${id}`)
 }
+
+
+// APIs for MIS Reports
+export function excelDownload(url, excelName, startDate, endDate) {
+    //   console.log(`${API_LIVE}/api/${url}`);
+    const requestBody = {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    };
+  
+    fetch(
+      `${API_LIVE}/api/${url}?startDate=${startDate}&endDate=${endDate}`,
+      requestBody
+    )
+      .then((response) => response.blob())
+      .then((result) => {
+        // console.log(result);
+        var data = new Blob([result], { type: "text/xlsx" });
+        var csvURL = window.URL.createObjectURL(data);
+        var tempLink = document.createElement("a");
+        tempLink.href = csvURL;
+        tempLink.setAttribute(
+          "download",
+          `${excelName}-${startDate}-${endDate}.xlsx`
+        );
+        tempLink.click();
+      });
+  }

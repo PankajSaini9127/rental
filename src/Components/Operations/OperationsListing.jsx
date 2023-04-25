@@ -57,7 +57,7 @@ function SrManagerListing() {
 
 
   function handleSerachChange(e){
-    SearchAPi(login_operations_id, searchValue);
+    SearchAPi(login_operations_id, e.target.value);
     setsearchValue(e.target.value)
   }
 

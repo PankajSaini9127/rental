@@ -730,7 +730,7 @@ async function getData (id){
                           }}
                           onClick={handleTerminate}
                         >
-                         Approve And Send To Finance 
+                          Send To Finance 
                         </Button>
                       </Grid>
                       <Grid item md={6} xs={11}>
@@ -798,7 +798,7 @@ async function getData (id){
                           }}
                           onClick={handleSubmit}
                         >
-                          Approve And Send To Finance
+                           Send To Finance
                         </Button>
                       </Grid>
                       <Grid item md={6} xs={11}>

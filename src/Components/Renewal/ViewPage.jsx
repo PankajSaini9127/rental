@@ -466,7 +466,7 @@ import {
                           }}
                           onClick={handleSubmit}
                         >
-                          Approve And Send to Sr Manager
+                           Send to Sr Manager
                         </Button>
                       </Grid>
                     </Grid>

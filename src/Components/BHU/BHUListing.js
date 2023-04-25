@@ -59,7 +59,7 @@ function SrManagerListing() {
   }
 
   function handleSerachChange(e){
-    SearchAPi(login_bhu_id, searchValue);
+    SearchAPi(login_bhu_id, e.target.value);
     setsearchValue(e.target.value)
   }
   const {refresh} = useSelector(s=>s)

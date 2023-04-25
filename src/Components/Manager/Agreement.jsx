@@ -525,12 +525,12 @@ function Agreement({ history }) {
       case "noticePeriod":
         if (!e.target.value.match(/^[0-9]*$/))
           error = { state: true, message: "Value must be Correct" };
-        else e.target.value = e.target.value.toLocaleString("hi");
+        else e.target.value = e.target.value.toLocaleString();
         break;
       case "area":
         if (!e.target.value.match(/^[0-9]*$/))
           error = { state: true, message: "Value must be Correct" };
-        else e.target.value = e.target.value.toLocaleString("hi");
+        else e.target.value = e.target.value.toLocaleString();
         break;
       case "monthlyRent":
         if (!e.target.value.match(/^[0-9]*$/))
@@ -1476,7 +1476,7 @@ function Agreement({ history }) {
                   fontWeight="600"
                   my="20px"
                 >
-                  Upload Document
+                  Upload Document *
                 </Typography>
                 {landblord.map((_, i) => (
                   <>
@@ -1713,7 +1713,7 @@ function Agreement({ history }) {
                     fontWeight="600"
                     my="20px"
                   >
-                    Upload Document
+                    Upload Document *
                   </Typography>
                 ) : (
                   ""

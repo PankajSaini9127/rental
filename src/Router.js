@@ -61,6 +61,11 @@ import EditInvoice from "./Components/MonthalyPayment/EditInvoice";
 import ViewPage from "./Components/MonthalyPayment/ViewPage";
 import SrmRenwalList from "./Components/SrManager/Renewal/RenewalListing";
 import RenewalViewPage from "./Components/Renewal/ViewPage";
+import RentalPropertyDumpReport from "./Components/SuperAdmin/RentalPropertyDumpReport";
+import RentalPaymentMIS from "./Components/SuperAdmin/RentalPaymentMIS";
+import RentalOnboardingAllStatus from "./Components/SuperAdmin/RentalOnboardingAllStatus";
+import RentalOnboardingDeposited from "./Components/SuperAdmin/RentalOnboardingDeposited";
+import RentPaidSchedule from "./Components/SuperAdmin/RentPaidSchedule";
 
 function MyRouter() {
   const history = useNavigate();
@@ -72,7 +77,6 @@ function MyRouter() {
   return (
     <Routes>
       <Route exact path="/" element={<Login />} />
-
       <Route
         exact
         path="/dashboard"
@@ -81,150 +85,206 @@ function MyRouter() {
       <Route
         exact
         path="/newAgreement"
-        history = {history}
+        history={history}
         element={isAuth && role.includes("Manager") ? <Agreement /> : <Login />}
       />
       <Route
         exact
         path="/editAgreement/:id"
         history={history}
-        element={isAuth && role.includes("Manager")  ? <EditAgreement /> : <Login />}
+        element={
+          isAuth && role.includes("Manager") ? <EditAgreement /> : <Login />
+        }
       />
       <Route
         exact
         path="/listing"
-        element={isAuth && role.includes("Manager")  ? <Listing /> : <Login />}
+        element={isAuth && role.includes("Manager") ? <Listing /> : <Login />}
       />
       <Route
         exact
         path="/monthly-payment"
-        element={isAuth && role.includes("Manager")  ? <MonthalyList /> : <Login />}
+        element={
+          isAuth && role.includes("Manager") ? <MonthalyList /> : <Login />
+        }
       />
       <Route
         exact
         path="/monthly-payment-edit/:id"
-        element={isAuth && role.includes("Manager")  ? <EditInvoice /> : <Login />}
+        element={
+          isAuth && role.includes("Manager") ? <EditInvoice /> : <Login />
+        }
       />
-       <Route
+      <Route
         exact
         path="/monthly-payment-view/:id"
-        element={isAuth && role.includes("Manager")  ? <ViewPage /> : <Login />}
+        element={isAuth && role.includes("Manager") ? <ViewPage /> : <Login />}
       />
       <Route
         exact
         path="/renewal-edit-agreement/:id"
-        element={isAuth && role.includes("Manager")  ? <RenewalEditAgreement /> : <Login />}
+        element={
+          isAuth && role.includes("Manager") ? (
+            <RenewalEditAgreement />
+          ) : (
+            <Login />
+          )
+        }
       />
-<Route
+      <Route
         exact
         path="/renewal-view-agreement/:id"
-        element={isAuth && role.includes("Manager")  ? <RenewalViewPage /> : <Login />}
+        element={
+          isAuth && role.includes("Manager") ? <RenewalViewPage /> : <Login />
+        }
       />
-
-<Route
+      <Route
         exact
         path="/renewal-deposit-refund/:id"
-        element={isAuth && role.includes("Manager")  ? <RenewalDepositeRefund /> : <Login />}
+        element={
+          isAuth && role.includes("Manager") ? (
+            <RenewalDepositeRefund />
+          ) : (
+            <Login />
+          )
+        }
       />
-
-
-
-
-
       <Route
         exact
         path="/renewal"
-        element={isAuth && role.includes("Manager")  ? <RenewalList /> : <Login />}
+        element={
+          isAuth && role.includes("Manager") ? <RenewalList /> : <Login />
+        }
       />
       <Route
         exact
         path="/managerApproval/:id"
-        element={isAuth && role.includes("Manager")  ? <ManagerApproval /> : <Login />}
+        element={
+          isAuth && role.includes("Manager") ? <ManagerApproval /> : <Login />
+        }
       />
-
       {/* Sr Manager */}
-
       <Route
         exact
         path="/srManagerDashboard"
         element={
-          isAuth && role.includes("Senior_Manager") ? <SrManagerDashboard /> : <Login />
+          isAuth && role.includes("Senior_Manager") ? (
+            <SrManagerDashboard />
+          ) : (
+            <Login />
+          )
         }
       />
       <Route
         exact
         path="/srManagerListing"
         element={
-          isAuth && role.includes("Senior_Manager") ? <SrManagerListing /> : <Login />
+          isAuth && role.includes("Senior_Manager") ? (
+            <SrManagerListing />
+          ) : (
+            <Login />
+          )
         }
       />
       <Route
         exact
         path="/srManagerApproval/:id"
         element={
-          isAuth && role.includes("Senior_Manager") ? <SrManagerApproval /> : <Login />
+          isAuth && role.includes("Senior_Manager") ? (
+            <SrManagerApproval />
+          ) : (
+            <Login />
+          )
         }
       />
       <Route
         exact
         path="/srm-monthly-rent"
         element={
-          isAuth && role.includes("Senior_Manager") ? <MonthlyPayement /> : <Login />
+          isAuth && role.includes("Senior_Manager") ? (
+            <MonthlyPayement />
+          ) : (
+            <Login />
+          )
         }
       />
       <Route
         exact
         path="/srm-monthly-view/:id"
         element={
-          isAuth && role.includes("Senior_Manager") ? <SRMMonthlyRentView /> : <Login />
+          isAuth && role.includes("Senior_Manager") ? (
+            <SRMMonthlyRentView />
+          ) : (
+            <Login />
+          )
         }
       />
-
-       //SRM Renewal Listing     
-       <Route
+      //SRM Renewal Listing
+      <Route
         exact
         path="/srm-renewal-list"
         element={
-          isAuth && role.includes("Senior_Manager") ? <SrmRenwalList /> : <Login />
+          isAuth && role.includes("Senior_Manager") ? (
+            <SrmRenwalList />
+          ) : (
+            <Login />
+          )
         }
       />
-
-
       {/* Operations Section */}
-
       <Route
         exact
         path="/operationsDashboard"
         element={
-          isAuth && role.includes("Operations") ? <OperationsDashboard /> : <Login />
+          isAuth && role.includes("Operations") ? (
+            <OperationsDashboard />
+          ) : (
+            <Login />
+          )
         }
       />
       <Route
         exact
         path="/operationsListing"
         element={
-          isAuth && role.includes("Operations") ? <OperationsListing /> : <Login />
+          isAuth && role.includes("Operations") ? (
+            <OperationsListing />
+          ) : (
+            <Login />
+          )
         }
       />
       <Route
         exact
         path="/operations-approval/:id"
         element={
-          isAuth && role.includes("Operations") ? <ApprovalRequest /> : <Login />
+          isAuth && role.includes("Operations") ? (
+            <ApprovalRequest />
+          ) : (
+            <Login />
+          )
         }
       />
       <Route
         exact
         path="/opr-monthly-rent"
         element={
-          isAuth && role.includes("Operations") ? <OperationsMonthlyPayement /> : <Login />
+          isAuth && role.includes("Operations") ? (
+            <OperationsMonthlyPayement />
+          ) : (
+            <Login />
+          )
         }
       />
-<Route
+      <Route
         exact
         path="/opr-monthly-view/:id"
         element={
-          isAuth && role.includes("Operations") ? <MonthalyRentView /> : <Login />
+          isAuth && role.includes("Operations") ? (
+            <MonthalyRentView />
+          ) : (
+            <Login />
+          )
         }
       />
       {/* BHU Section */}
@@ -243,17 +303,20 @@ function MyRouter() {
         path="/BHUapproval/:id"
         element={isAuth && role.includes("BUH") ? <BHUapproval /> : <Login />}
       />
-
       {/* Admin Section */}
       <Route
         exact
         path="/userDashboard"
-        element={isAuth && role.includes("Admin") ? <UserDashboard /> : <Login />}
+        element={
+          isAuth && role.includes("Admin") ? <UserDashboard /> : <Login />
+        }
       />
       <Route
         exact
         path="/userManagement"
-        element={isAuth && role.includes("Admin") ? <UserManagement /> : <Login />}
+        element={
+          isAuth && role.includes("Admin") ? <UserManagement /> : <Login />
+        }
       />
       <Route
         exact
@@ -265,73 +328,152 @@ function MyRouter() {
         path="/editUser/:id"
         element={isAuth && role.includes("Admin") ? <EditUser /> : <Login />}
       />
-
       {/* super Admin */}
-
       <Route
         exact
         path="/super-admin-dashboard"
         element={
-          isAuth && role.includes("Super Admin") ? <SuperAdminDashboard /> : <Login />
+          isAuth && role.includes("Super Admin") ? (
+            <SuperAdminDashboard />
+          ) : (
+            <Login />
+          )
         }
       />
-
       <Route
         exact
         path="/super-admin-newuser"
         element={
-          isAuth && role.includes("Super Admin") ? <SuperAdminNewUser /> : <Login />
+          isAuth && role.includes("Super Admin") ? (
+            <SuperAdminNewUser />
+          ) : (
+            <Login />
+          )
         }
       />
-
       <Route
         exact
         path="/super-admin-listing"
         element={
-          isAuth && role.includes("Super Admin") ? <SuperAdminListing /> : <Login />
+          isAuth && role.includes("Super Admin") ? (
+            <SuperAdminListing />
+          ) : (
+            <Login />
+          )
         }
       />
       <Route
         exact
         path="/super-admin-edit/:id"
         element={
-          isAuth && role.includes("Super Admin") ? <SuperAdminUserEdit /> : <Login />
+          isAuth && role.includes("Super Admin") ? (
+            <SuperAdminUserEdit />
+          ) : (
+            <Login />
+          )
         }
       />
-
+      <Route
+        exact
+        path="/rental-property-dump-report"
+        element={
+          isAuth && role.includes("Super Admin") ? (
+            <RentalPropertyDumpReport />
+          ) : (
+            <Login />
+          )
+        }
+      />
+      <Route
+        exact
+        path="/rental-payment-mis"
+        element={
+          isAuth && role.includes("Super Admin") ? (
+            <RentalPaymentMIS />
+          ) : (
+            <Login />
+          )
+        }
+      />
+      <Route
+        exact
+        path="/rental-onboarding-all-status"
+        element={
+          isAuth && role.includes("Super Admin") ? (
+            <RentalOnboardingAllStatus />
+          ) : (
+            <Login />
+          )
+        }
+      />
+      <Route
+        exact
+        path="/rental-onboarding-deposited"
+        element={
+          isAuth && role.includes("Super Admin") ? (
+            <RentalOnboardingDeposited />
+          ) : (
+            <Login />
+          )
+        }
+      />
+      <Route
+        exact
+        path="/rent-paid-schedule"
+        element={
+          isAuth && role.includes("Super Admin") ? (
+            <RentPaidSchedule />
+          ) : (
+            <Login />
+          )
+        }
+      />
       {/*Super Admin Ends Here */}
-
       {/* Finance team start here */}
-
-     <Route 
-     path="/finance-dashboard"
-     element={isAuth && role.includes("Finance") ?<FinanceDashboard/> : <Login />}
-     />
-     <Route 
-     path="/finance-listing"
-     element={isAuth && role.includes("Finance") ?<FinanceListing/>: <Login />}
-     />
-     <Route 
-     path="/finance-approval/:id"
-     element={isAuth && role.includes("Finance") ?<FinanceApproval/>: <Login />}
-     />
-     <Route 
-     path="/finance-monthly-rent"
-     element={isAuth && role.includes("Finance") ?<FinanceMonthlyPayement/>: <Login />}
-     />
-     <Route 
-     path="/finance-monthly-view/:id"
-     element={isAuth && role.includes("Finance") ?<FinanceMonthlyRentView/>: <Login />}
-     />
-     <Route 
-     path="/balance_recovery/:id"
-     element={isAuth && role.includes("Finance") ?<Recovery/>: <Login />}
-     />
-
+      <Route
+        path="/finance-dashboard"
+        element={
+          isAuth && role.includes("Finance") ? <FinanceDashboard /> : <Login />
+        }
+      />
+      <Route
+        path="/finance-listing"
+        element={
+          isAuth && role.includes("Finance") ? <FinanceListing /> : <Login />
+        }
+      />
+      <Route
+        path="/finance-approval/:id"
+        element={
+          isAuth && role.includes("Finance") ? <FinanceApproval /> : <Login />
+        }
+      />
+      <Route
+        path="/finance-monthly-rent"
+        element={
+          isAuth && role.includes("Finance") ? (
+            <FinanceMonthlyPayement />
+          ) : (
+            <Login />
+          )
+        }
+      />
+      <Route
+        path="/finance-monthly-view/:id"
+        element={
+          isAuth && role.includes("Finance") ? (
+            <FinanceMonthlyRentView />
+          ) : (
+            <Login />
+          )
+        }
+      />
+      <Route
+        path="/balance_recovery/:id"
+        element={isAuth && role.includes("Finance") ? <Recovery /> : <Login />}
+      />
       {/* Finance team end here */}
-
       {/* passowrd section Reset */}
-
       <Route
         path={"/resetPassword"}
         element={<ForgotPassword history={history} />}

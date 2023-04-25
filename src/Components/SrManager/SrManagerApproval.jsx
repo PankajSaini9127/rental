@@ -73,7 +73,7 @@ function SrManagerApproval() {
       const deposit_amount = await get_deposit_amount(code);
       console.log(deposit_amount);
       if (deposit_amount.data.success) {
-        setDeposit(deposit_amount.data.deposit[0].deposit);
+        setDeposit(deposit_amount.data.deposit);
       }
       
     } catch (error) {
@@ -81,7 +81,7 @@ function SrManagerApproval() {
       dispatch(
         setAlert({
           open: true,
-          variant: "success",
+          variant: "error",
           message: "Something Went Wrong Please Try Again Later.",
         })
       );
@@ -762,8 +762,8 @@ function SrManagerApproval() {
                           {agreement[ids[0]].op_id === 0 ||
                           (agreement[ids[0]].op_id === null &&
                             agreement[ids[0]].deposit - deposit !== 0)
-                            ? "Approve And Send to BUH"
-                            : "Approve And Send To Operations"}
+                            ? " Send to BUH"
+                            : " Send To Operations"}
                         </Button>
                       </Grid>
                       <Grid item md={6} xs={11}>
@@ -832,7 +832,7 @@ function SrManagerApproval() {
                           }}
                           onClick={handleTerminate}
                         >
-                         Approve And Send To Operations 
+                          Send To Operations 
                         </Button>
                       </Grid>
                       <Grid item md={6} xs={11}>

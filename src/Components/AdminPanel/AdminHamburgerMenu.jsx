@@ -4,6 +4,7 @@ import React, { useState } from "react";
 //icons hero section
 import Logo from "../../assest/pic/Dashboard/logo1 2.png";
 import Dashboard from "../../assest/pic/Dashboard/chart.png";
+import MIS from "../../assest/pic/Dashboard/mis.png";
 
 import "../../assest/CSS/hamburgerMenu.css";
 import { useNavigate } from "react-router-dom";
@@ -55,6 +56,68 @@ function AdminHamburgerMenu({navigateListing,navigateHome}) {
             }}
             onClick={() => navigate(navigateHome)}
             />
+            <br/>
+
+  {/* MiS */}
+  <Box
+            sx={{
+              background: `url(${MIS})`,
+              backgroundSize: "cover",
+              height: "45px",
+              width: "45px",
+              cursor:'pointer'
+            }}
+            onClick={() => navigate('/rental-property-dump-report')}
+            />
+            <br/>
+
+          <Box
+            sx={{
+              background: `url(${MIS})`,
+              backgroundSize: "cover",
+              height: "45px",
+              width: "45px",
+              cursor:'pointer'
+            }}
+            onClick={() => navigate("/rental-payment-mis")}
+            />
+            <br/>
+
+          <Box
+            sx={{
+              background: `url(${MIS})`,
+              backgroundSize: "cover",
+              height: "45px",
+              width: "45px",
+              cursor:'pointer'
+            }}
+            onClick={() => navigate("/rental-onboarding-all-status")}
+            />
+            <br/>
+
+          <Box
+            sx={{
+              background: `url(${MIS})`,
+              backgroundSize: "cover",
+              height: "45px",
+              width: "45px",
+              cursor:'pointer'
+            }}
+            onClick={() => navigate("/rental-onboarding-deposited")}
+            />
+            <br/>
+          <Box
+            sx={{
+              background: `url(${MIS})`,
+              backgroundSize: "cover",
+              height: "45px",
+              width: "45px",
+              cursor:'pointer'
+            }}
+            onClick={() => navigate("/rent-paid-schedule")}
+            />
+           {/* MiS END*/}
+
           </Box>
 
 

@@ -63,7 +63,7 @@ function FinanceListing() {
   }
 
   function handleSerachChange(e){
-    SearchAPi(finance_ID, searchValue);
+    SearchAPi(finance_ID, e.target.value);
     setsearchValue(e.target.value)
   }
 

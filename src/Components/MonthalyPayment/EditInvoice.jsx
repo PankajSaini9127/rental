@@ -377,7 +377,7 @@ useEffect(()=>{
                           }}
                           onClick={handleSubmit}
                         >
-                         {preData.status === "Sent Back From Operations"? "Approve And Send To Operations":"Approve And Send To Sr Manager"}
+                         {preData.status === "Sent Back From Operations"? " Send To Operations":" Send To Sr Manager"}
                         </Button>
                       </Grid>
                     </Grid>

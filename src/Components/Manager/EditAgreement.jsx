@@ -265,7 +265,7 @@ function EditAgreement({ history }) {
     year5: 0,
   });
 
-  // upload document
+  // Upload Document *
   async function handleChangeCommonFile(e, i) {
     const FD = new FormData();
     console.log(e.target.files[0]);
@@ -313,7 +313,7 @@ function EditAgreement({ history }) {
       );
     }
   }
-  // upload document
+  // Upload Document *
   async function handleChangeFile(e) {
     const FD = new FormData();
     console.log(e.target.files[0]);
@@ -522,12 +522,12 @@ function EditAgreement({ history }) {
       case "noticePeriod":
         if (!e.target.value.match(/^[0-9]*$/))
           error = { state: true, message: "Value must be Correct" };
-        else e.target.value = e.target.value.toLocaleString("hi");
+        else e.target.value = e.target.value.toLocaleString();
         break;
       case "area":
         if (!e.target.value.match(/^[0-9]*$/))
           error = { state: true, message: "Value must be Correct" };
-        else e.target.value = e.target.value.toLocaleString("hi");
+        else e.target.value = e.target.value.toLocaleString();
         break;
       case "monthlyRent":
         if (!e.target.value.match(/^[0-9]*$/))
@@ -1584,7 +1584,7 @@ function EditAgreement({ history }) {
                   fontWeight="600"
                   my="20px"
                 >
-                  Upload Document
+                  Upload Document *
                 </Typography>
 
                 {preData.landlord.length > 0 &&
@@ -1610,7 +1610,7 @@ function EditAgreement({ history }) {
                             {preData.landlord.length > 0
                               ? preData.landlord[i].leeseName
                               : ""}{" "}
-                            Upload Document
+                            Upload Document *
                           </Typography>
                           <IconButton
                             onClick={() =>
@@ -1719,7 +1719,7 @@ function EditAgreement({ history }) {
                     fontWeight="600"
                     my="20px"
                   >
-                    Upload Document
+                    Upload Document *
                   </Typography>
                 ) : (
                   ""

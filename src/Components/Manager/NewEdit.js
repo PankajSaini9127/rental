@@ -456,7 +456,7 @@ function EditAgreement({ history }) {
       case "noticePeriod":
         if (!e.target.value.match(/^[0-9]*$/))
           error = { state: true, message: "Value must be Correct" };
-        else e.target.value = e.target.value.toLocaleString("hi");
+        else e.target.value = e.target.value.toLocaleString();
         break;
       case "monthlyRent":
         if (!e.target.value.match(/^[0-9]*$/))

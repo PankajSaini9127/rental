@@ -410,7 +410,6 @@ function ManagerApproval() {
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement[ids[0]].bankName[id]}
-                          partLabel={agreement[ids[0]].branchName[id]}
                         />
                         <DataFieldStyle
                           field={"beneficiary name"}
@@ -427,6 +426,7 @@ function ManagerApproval() {
                         <DataFieldStyle
                           field={"Bank IFSC"}
                           value={agreement[ids[0]].ifscCode[id]}
+                          partLabel={agreement[ids[0]].branchName[id]}
                         />
                       </Grid>
                     )
@@ -575,7 +575,7 @@ function ManagerApproval() {
                         }}
                         onClick={handleSubmit}
                       >
-                        Approve And Send to Sr Manager
+                         Send to Sr Manager
                       </Button>
                     </Grid>
                   </Grid>

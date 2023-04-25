@@ -554,12 +554,12 @@ function EditAgreement({ history }) {
       case "noticePeriod":
         if (!e.target.value.match(/^[0-9]*$/))
           error = { state: true, message: "Value must be Correct" };
-        else e.target.value = e.target.value.toLocaleString("hi");
+        else e.target.value = e.target.value.toLocaleString();
         break;
       case "area":
         if (!e.target.value.match(/^[0-9]*$/))
           error = { state: true, message: "Value must be Correct" };
-        else e.target.value = e.target.value.toLocaleString("hi");
+        else e.target.value = e.target.value.toLocaleString();
         break;
       case "monthlyRent":
         if (!e.target.value.match(/^[0-9]*$/))
@@ -1228,7 +1228,7 @@ console.log(partLabel)
           </Box>
 
         <Box sx={{ flexGrow: 1 }}>
-          <MyHeader>Edit Agreement</MyHeader>
+          <MyHeader>Old Agreement</MyHeader>
 
           <Grid container sx={{ justifyContent: "center" }}>
             <Grid item xs={12} md={10}>

@@ -89,7 +89,7 @@ const row = data.map((item) => {
 const navigate =useNavigate()
 
 function handleSerachChange (e){
-  SearchAPi(searchValue)
+  SearchAPi(e.target.value)
   setsearchValue(e.target.value)
 }
 

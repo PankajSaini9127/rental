@@ -316,7 +316,7 @@ useEffect(()=>{
                         }}
                         onClick={handleSubmit}
                       >
-                        Approve And Send To Operations
+                         Send To Operations
                       </Button>
                     </Grid>
                     <Grid item md={6} xs={11}>

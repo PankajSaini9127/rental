@@ -134,7 +134,7 @@ function FinanceApproval() {
       const deposit_amount = await get_deposit_amount(code);
       console.log(deposit_amount);
       if (deposit_amount.data.success) {
-        setDeposit(deposit_amount.data.deposit[0].deposit);
+        setDeposit(deposit_amount.data.deposit);
       } else {
         setDeposit(0);
       }
@@ -755,6 +755,7 @@ function FinanceApproval() {
                         type="text"
                         multiline
                         rows={3}
+                        required
                         fullWidth
                         variant="outlined"
                         label="Remark *"
