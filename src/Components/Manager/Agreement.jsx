@@ -1372,7 +1372,7 @@ function Agreement({ history }) {
                           onChange={(e) => handleChange(e, i)}
                         />
                         <TextFieldWrapper
-                          label="Bank IFSC Code"
+                          label="Bank IFSC"
                           placeHolder="Enter IFSC Code"
                           name="ifscCode"
                           maxLength={11}

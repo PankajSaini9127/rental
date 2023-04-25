@@ -425,7 +425,7 @@ function ManagerApproval() {
                           cursor={true}
                         />
                         <DataFieldStyle
-                          field={"bank IFSC code"}
+                          field={"Bank IFSC"}
                           value={agreement[ids[0]].ifscCode[id]}
                         />
                       </Grid>

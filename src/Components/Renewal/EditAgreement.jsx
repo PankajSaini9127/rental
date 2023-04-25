@@ -1655,7 +1655,7 @@ console.log(partLabel)
                           />
                           <TextFieldWrapper
                             required={true}
-                            label="Bank IFSC Code"
+                            label="Bank IFSC"
                             placeHolder="Enter IFSC Code"
                             onBlur={(e) => handleOnBlur(e, i)}
                             name="ifscCode"
@@ -1667,7 +1667,7 @@ console.log(partLabel)
                                 : ""
                             }
                             partLabel={
-                              "Old Bank IFSC Code :"+ partLabel.landlord[i].ifscCode
+                              "Old Bank IFSC :"+ partLabel.landlord[i].ifscCode
                             }
                             value={preData.landlord[i].ifscCode}
                             onChange={(e) => handleChange(e, i)}

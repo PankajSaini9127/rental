@@ -1500,7 +1500,7 @@ function EditAgreement({ history }) {
                           />
                           <TextFieldWrapper
                             required={true}
-                            label="Bank IFSC Code"
+                            label="Bank IFSC"
                             placeHolder="Enter IFSC Code"
                             onBlur={(e) => handleOnBlur(e, i)}
                             name="ifscCode"

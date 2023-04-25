@@ -566,7 +566,7 @@ function SrManagerApproval() {
                           cursor={true}
                         />
                         <DataFieldStyle
-                          field={"bank IFSC code"}
+                          field={"Bank IFSC"}
                           partLabel={agreement[ids[0]].branchName[id]}
                           value={agreement[ids[0]].ifscCode[id]}
                         />

@@ -21,7 +21,7 @@ const agreementSchema = Yup.object({
      bankName: Yup.string().min(5).required("Please Enter Bank Name"),
      benificiaryName: Yup.string().min(3).required("Please Enter Benificiary Name"),
      accountNo: Yup.number().min(10).required("Please Enter Account Number"),
-     ifscCode: Yup.string().min(6).required("Please Enter Bank Ifsc Code"),
+     ifscCode: Yup.string().min(6).required("Please Enter Bank IFSC"),
 })
 
 
