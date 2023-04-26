@@ -1260,7 +1260,6 @@ function EditAgreement({ history }) {
                     error={formError.deposit}
                     value={preData.deposit}
                     onChange={handleCommonChange}
-                    disabled={true}
                   />
                   <TextFieldWrapper
                     label="Monthly Rental"
@@ -1302,7 +1301,6 @@ function EditAgreement({ history }) {
                       options={["Percentage", "Value"]}
                       value={preData.yearlyIncrement}
                       onChange={handleCommonChange}
-                      disabled={true}
                     />
                   )}
                 </Grid>
@@ -1556,7 +1554,7 @@ function EditAgreement({ history }) {
                             onChange={(e) => handleChange(e, i)}
                           />
                           <TextFieldWrapper
-                            label="Bank A/C Number "
+                            label="Bank A/c Number "
                             disabled={true}
                             required={true}
                             placeHolder="Enter Account No."

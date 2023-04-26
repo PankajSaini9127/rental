@@ -1562,7 +1562,7 @@ function EditAgreement({ history }) {
                             onChange={(e) => handleChange(e, i)}
                           />
                           <TextFieldWrapper
-                            label="Bank A/C Number "
+                            label="Bank A/c Number "
                             required={true}
                             placeHolder="Enter Account No."
                             name="accountNo"

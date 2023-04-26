@@ -1448,7 +1448,7 @@ function Agreement({ history }) {
                         />
 
                         <TextFieldWrapper
-                          label="Bank A/C Number "
+                          label="Bank A/c Number "
                           placeHolder="Enter Account No."
                           name="accountNo"
                           maxLength={17}

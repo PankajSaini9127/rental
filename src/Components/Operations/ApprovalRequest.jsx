@@ -533,7 +533,7 @@ async function getData (id){
                           value={agreement[ids[0]].benificiaryName[id]}
                         />
                         <DataFieldStyle
-                          field={"bank A/C number"}
+                          field={"bank A/c number"}
                           value={agreement[ids[0]].accountNo[id]}
                           href={agreement[ids[0]].cheque[id]}
                           name={"cheque"}
