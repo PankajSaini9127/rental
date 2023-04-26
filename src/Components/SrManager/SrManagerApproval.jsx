@@ -175,8 +175,6 @@ function SrManagerApproval() {
     }
   }
 
-  console.log(agreement[ids[0]].op_id ,
-    agreement[ids[0]].deposit , deposit )
 
   const handleSubmit = async (e) => {
     if (remark.length <= 0) {
@@ -570,7 +568,7 @@ function SrManagerApproval() {
                           value={agreement[ids[0]].benificiaryName[id]}
                         />
                         <DataFieldStyle
-                          field={"bank A/C number"}
+                          field={"bank A/c number"}
                           value={agreement[ids[0]].accountNo[id]}
                           href={agreement[ids[0]].cheque[id]}
                           name={"cheque"}
