@@ -54,16 +54,17 @@ function ManagerTable({ rows }) {
     }
   };
 
+
   const columns = [
     {
       field: "checkbox",
       width: 20,
+
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: (params) => (
         <>
-          {console.log(params)}
           {params.formattedValue === "Sent To BUH" ? (
             <Checkbox
               onChange={handleSwitch}
@@ -77,77 +78,124 @@ function ManagerTable({ rows }) {
       ),
     },
     {
-      field: "code",
-      headerName: "Code",
-      width: 100,
+      field: "initiateDate",
+      headerName: "Initiate Date",
+      minWidth: 90,
+      flex: 1,
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+    },
+    {
+      field: "type",
+      headerName: "Type",
+      minWidth: 90,
+      flex: 1,
+      type: "number",
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
+      field: "code",
+      headerName: "Code",
+      minWidth: 90,
+      flex: 1,
+      type: "number",
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
     },
     {
       field: "name",
-      headerName: "Name",
-      width: 160,
+      headerName: "Landlord Name",
+      minWidth: 160,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
     },
     {
       field: "location",
       headerName: "Location",
-      width: 130,
+      minWidth: 160,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
     },
     {
+      field: "address",
+      headerName: "Address",
+      minWidth: 160,
+      flex: 1,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
+      field: "city",
+      headerName: "City",
+      minWidth: 160,
+      flex: 1,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+
+    {
+      field: "state",
+      headerName: "State",
+      minWidth: 200,
+      flex: 1,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+{
       field: "manager",
       headerName: "Manager",
-      width: 130,
+      minWidth: 160,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+       flex:1
     },
     {
-      field: "sr_manager",
-      headerName: "Sr Manager",
-      width: 130,
+          field: "sr_manager",
+          headerName: "Sr Manager",
+          minWidth: 130,
+          headerClassName: "dataGridHeader",
+          headerAlign: "center",
+          flex:1
+        },
+    {
+      field: "deposit",
+      headerName: "Deposit Amount",
+      minWidth: 200,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
     },
     {
       field: "rentalAmount",
-      headerName: "Rental Amount",
-      width: 120,
+      headerName: "Rent Amount",
+      minWidth: 200,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
     },
     {
       field: "status",
       headerName: "Status",
-      width: 190,
+      minWidth: 200,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
     },
     {
       field: "view",
       headerName: "View",
-      width: 130,
+      minWidth: 150,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: renderDetailsButton,
-      flex:1
-    },
+    }
   ];
-
-  // const onRowsSelectionHandler = (ids) => {
-  //     setIds(ids)
-  //   };
-
+  
   const [remarkOpen,setRemarkOpen] = useState(false)
 
   const [remarkMSG,setRemarkMSG] = useState("")

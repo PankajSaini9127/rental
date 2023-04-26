@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 import { Box } from "@mui/system";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import moment from "moment";
 
 const options = ["New Agreement", "Monthly Payment", "Rental"];
 
@@ -44,8 +45,16 @@ function SrManagerListing() {
       manager: data.agreement[item].manager_name,
       rentalAmount: data.agreement[item].monthlyRent,
       sr_manager: data.agreement[item].sr_manager,
+      deposit:parseFloat( data.agreement[item].deposit).toFixed(2),
+  state: data.agreement[item].state,
+  city:data.agreement[item].city,
+  address: data.agreement[item].address,
+  initiateDate : moment(data.agreement[item].time).format('DD-MM-YYYY'),
+  type:"---"
     };
   });
+
+  
 
   const [searchValue, setsearchValue] = useState("");
 

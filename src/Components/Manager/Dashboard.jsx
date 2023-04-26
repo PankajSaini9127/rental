@@ -54,7 +54,10 @@ function Dashboard() {
         />
 
         {/* dashboard content */}
+        {/* <ManagerHome/> */}
         <Grid container sx={{ justifyContent: "center" }}>
+          {/* ??manager home */}
+
           <Grid
             item
             xs={12}

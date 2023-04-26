@@ -27,7 +27,7 @@ import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import "react-datepicker/dist/react-datepicker.css";
 import { DocumentUpload, TextFieldWrapper,   MyHeader, } from "../StyledComponent";
 import { setAlert } from "../../store/action/action";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { invoice_validation, uploadDoc, insertRecoveryLog, getRecoveryLog, send_to_bhu } from "../../Services/Services";
 import { Try } from "@mui/icons-material";
 import HamburgerMenu from "../HamburgerMenu";
@@ -61,7 +61,8 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
   const navigate = useNavigate()
   const {id} = useParams();
   const theme = useTheme();
-
+  
+  const {auth} = useSelector(s=>s)
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(()=>{
@@ -216,7 +217,17 @@ function handleChange(e) {
           />
 
       <Box sx={{ flexGrow: 1 }}>
-        <MyHeader>Recovery Balance</MyHeader>
+        {/* <MyHeader>Recovery Balance</MyHeader> */}
+        <Grid
+            item
+            xs={12}
+            sx={{ justifyContent: "space-between", display: "flex" }}
+          >
+            <MyHeader>Rental Management System</MyHeader>
+            <Typography mt="15px" mr="15px" fontWeight="600">
+              Welcome {auth.name}
+            </Typography>
+          </Grid>
         <Box className="backButton">
             <IconButton
               variant="contained"

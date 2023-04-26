@@ -333,7 +333,16 @@ function FinanceApproval() {
           />
 
           <Box sx={{ flexGrow: 1 }}>
+          <Grid
+            item
+            xs={12}
+            sx={{ justifyContent: "space-between", display: "flex" }}
+          >
             <MyHeader>Rental Management System</MyHeader>
+            <Typography mt="15px" mr="15px" fontWeight="600">
+              Welcome {auth.name}
+            </Typography>
+          </Grid>
             <Box className="backButton">
               <IconButton
                 variant="contained"
@@ -597,7 +606,7 @@ function FinanceApproval() {
                           value={agreement[ids[0]].benificiaryName[id]}
                         />
                         <DataFieldStyle
-                          field={"bank A/C number"}
+                          field={"bank A/c number"}
                           value={agreement[ids[0]].accountNo[id]}
                           href={agreement[ids[0]].cheque[id]}
                           name={"cheque"}

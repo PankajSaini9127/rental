@@ -44,7 +44,8 @@ export default function SrmRenwalList() {
         city:agreements[row].city,
         deposit:agreements[row].deposit,
         expiry_date:"---",
-        expiry_day:"---"
+        expiry_day:"---",
+        address:agreements[row].address
       }
     })
  

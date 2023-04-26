@@ -58,7 +58,7 @@ import { DataFieldStyle, ImageView } from "../StyleComponents/Rental";
 
 function EditAgreement({ history }) {
   const navigate = useNavigate();
-  const { landloard } = useSelector((state) => state);
+  const { landloard, auth } = useSelector((state) => state);
   const dispatch = useDispatch();
   const [agreement, setAgreement] = useState([]);
   const { id } = useParams();
@@ -1133,7 +1133,16 @@ function EditAgreement({ history }) {
         </Box>
 
         <Box sx={{ flexGrow: 1 }}>
-          <MyHeader>Edit Agreement</MyHeader>
+          <Grid
+            item
+            xs={12}
+            sx={{ justifyContent: "space-between", display: "flex" }}
+          >
+            <MyHeader>Rental Management System</MyHeader>
+            <Typography mt="15px" mr="15px" fontWeight="600">
+              Welcome {auth.name}
+            </Typography>
+          </Grid>
 
           <Grid container sx={{ justifyContent: "center" }}>
             <Grid item xs={12} md={10}>
@@ -1553,7 +1562,7 @@ function EditAgreement({ history }) {
                             onChange={(e) => handleChange(e, i)}
                           />
                           <TextFieldWrapper
-                            label="Bank A/C Number "
+                            label="Bank A/c Number "
                             required={true}
                             placeHolder="Enter Account No."
                             name="accountNo"

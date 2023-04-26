@@ -122,16 +122,19 @@ function FinanceTable({ rows, setRows }) {
     }
   };
 
+
+
+
   const columns = [
     {
       field: "checkbox",
       width: 20,
+
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: (params) => (
         <>
-          {/* {console.log(params)} */}
           {params.formattedValue === "Sent To Finance Team" ? (
             <Checkbox
               onChange={handleSwitch}
@@ -145,89 +148,114 @@ function FinanceTable({ rows, setRows }) {
       ),
     },
     {
-      field: "code",
-      headerName: "Code",
-      width: 100,
+      field: "initiateDate",
+      headerName: "Initiate Date",
+      minWidth: 110,
+      flex: 1,
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
+    },
+    {
+      field: "type",
+      headerName: "Type",
+      minWidth: 90,
+      flex: 1,
+      type: "number",
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
+      field: "code",
+      headerName: "Code",
+      minWidth: 90,
+      flex: 1,
+      type: "number",
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
     },
     {
       field: "name",
-      headerName: "Name",
-      width: 160,
+      headerName: "Landlord Name",
+      minWidth: 160,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
     },
     {
       field: "location",
       headerName: "Location",
-      width: 130,
+      minWidth: 160,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      flex:1
     },
-    // {
-    //   field: "manager",
-    //   headerName: "Manager",
-    //   width: 130,
-    //   headerClassName: "dataGridHeader",
-    //   headerAlign: "center",
-    //   flex:1
-    // },
-    // {
-    //   field: "sr_manager",
-    //   headerName: "Sr Manager",
-    //   width: 130,
-    //   headerClassName: "dataGridHeader",
-    //   headerAlign: "center",
-    //   flex:1
-    // },
     {
       field: "address",
       headerName: "Address",
-      width: 180,
+      minWidth: 160,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      // flex:1
+    },
+    {
+      field: "city",
+      headerName: "City",
+      minWidth: 160,
+      flex: 1,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
     },
 
     {
-      field: "rentalAmount",
-      headerName: "Rental Amount",
-      width: 120,
+      field: "state",
+      headerName: "State",
+      minWidth: 200,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      // flex:1
+    },
+{
+      field: "buh",
+      headerName: "BUH",
+      minWidth: 160,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+       flex:1
+    },
+    {
+      field: "deposit",
+      headerName: "Deposit Amount",
+      minWidth: 200,
+      flex: 1,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
+      field: "rentalAmount",
+      headerName: "Rent Amount",
+      minWidth: 200,
+      flex: 1,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
     },
     {
       field: "status",
       headerName: "Status",
-      width: 190,
+      minWidth: 200,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-      // flex:1
     },
-    // {
-    //   field: "view",
-    //   headerName: "View",
-    //   width: 130,
-    //   headerClassName: "dataGridHeader",
-    //   headerAlign: "center",
-    //   renderCell: renderDetailsButton,
-    //   flex:1
-    // },
     {
-      field: "action",
-      headerName: "Action",
-      width: 250,
+      field: "view",
+      headerName: "View",
+      minWidth: 150,
+      flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: renderDetailsButton,
-      // flex:1
-    },
+    }
   ];
 
 

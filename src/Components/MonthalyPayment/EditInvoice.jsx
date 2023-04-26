@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Grid, IconButton, TextField } from "@mui/material";
+import { Box, Button, FormControl, Grid, IconButton, TextField, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -207,7 +207,16 @@ useEffect(()=>{
         />
 
         <Box sx={{ flexGrow: 1 }}>
-          <MyHeader>Rental Management System</MyHeader>
+        <Grid
+            item
+            xs={12}
+            sx={{ justifyContent: "space-between", display: "flex" }}
+          >
+            <MyHeader>Rental Management System</MyHeader>
+            <Typography mt="15px" mr="15px" fontWeight="600">
+              Welcome {auth.name}
+            </Typography>
+          </Grid>
           <Box className="backButton">
             <IconButton
               variant="contained"

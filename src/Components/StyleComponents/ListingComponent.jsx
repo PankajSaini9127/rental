@@ -17,6 +17,7 @@ import { MyHeader } from "../StyledComponent";
 import SearchIcon from "@mui/icons-material/Search";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function ListingComponent({
   title,
@@ -41,11 +42,21 @@ function ListingComponent({
 
   const navigate = useNavigate()
 
+  const {auth} = useSelector(s=>s)
  
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <MyHeader>{title1?title1:title}</MyHeader>
+      <Grid
+            item
+            xs={12}
+            sx={{ justifyContent: "space-between", display: "flex" }}
+          >
+            <MyHeader>{title1?title1:title}</MyHeader>
+            <Typography mt="15px" mr="15px" fontWeight="600">
+              Welcome {auth.name}
+            </Typography>
+          </Grid>
       <Divider />
       <Grid
         container

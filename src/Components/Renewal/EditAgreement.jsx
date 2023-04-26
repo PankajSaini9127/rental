@@ -60,7 +60,7 @@ import { DataFieldStyle, ImageView } from "../StyleComponents/Rental";
 
 function EditAgreement({ history }) {
   const navigate = useNavigate();
-  const { landloard } = useSelector((state) => state);
+  const { landloard ,auth} = useSelector((state) => state);
   const dispatch = useDispatch();
   const [agreement, setAgreement] = useState([]);
   const { id } = useParams();
@@ -1227,8 +1227,16 @@ console.log(partLabel)
             </IconButton>
           </Box>
 
-        <Box sx={{ flexGrow: 1 }}>
-          <MyHeader>Old Agreement</MyHeader>
+        <Box sx={{ flexGrow: 1 }}><Grid
+            item
+            xs={12}
+            sx={{ justifyContent: "space-between", display: "flex" }}
+          >
+            <MyHeader>Rental Management System</MyHeader>
+            <Typography mt="15px" mr="15px" fontWeight="600">
+              Welcome {auth.name}
+            </Typography>
+          </Grid>
 
           <Grid container sx={{ justifyContent: "center" }}>
             <Grid item xs={12} md={10}>
