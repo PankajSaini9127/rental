@@ -161,7 +161,16 @@ function ManagerApproval() {
           />
 
           <Box sx={{ flexGrow: 1 }}>
+            <Grid
+            item
+            xs={12}
+            sx={{ justifyContent: "space-between", display: "flex" }}
+          >
             <MyHeader>Rental Management System</MyHeader>
+            <Typography mt="15px" mr="15px" fontWeight="600">
+              Welcome {auth.name}
+            </Typography>
+          </Grid>
             <Box className="backButton">
               <IconButton
                 variant="contained"
@@ -264,7 +273,7 @@ function ManagerApproval() {
                   />
                   {agreement[ids[0]].tenure !== "11 Month" && (
                     <>
-                      <Grid  container sx = {{alignItems : "baseline" }} spacing={2} sx={{ mt: 4 }}>
+                      <Grid  container sx = {{alignItems : "baseline",mt: 4  }} spacing={2}>
                         <Grid item xs={12}  container sx = {{alignItems : "baseline" }}>
                           <DataFieldStyle
                             field={"yearly Increment"}
@@ -560,7 +569,7 @@ function ManagerApproval() {
 
               {agreement[ids[0]].status === "Hold" && (
                 <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
-                  <Grid  container sx = {{alignItems : "baseline" }} spacing={2} sx={{ justifyContent: "center" }}>
+                  <Grid  container spacing={2} sx={{ alignItems : "baseline",justifyContent: "center" }}>
                     <Grid item>
                       <Button
                         variant="contained"

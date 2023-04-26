@@ -257,23 +257,29 @@ function DialogBox({ value, setValue }) {
               ""
             )}
           </Grid>
-          
-          </Grid>
-            </Box>
-            <Button
+          <Grid item md={3}>
+          <Button
                 variant="outlined"
                 
                 sx={{
-                  height: "30px",
+                  height: "40px",
+                  width: "100%",
                   borderRadius: "10px",
                   fontSize: "16px",
                   lineHeight: "32px",
                   textTransform: "capitalize",
+                  ml:1,
+                  borderRadius: "20px",
                 }}
                 onClick={()=>navigate(-1)}
               >
                Close
               </Button>
+          </Grid>
+          
+          </Grid>
+            </Box>
+            
         </Grid>
       </Dialog>
     </>

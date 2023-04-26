@@ -186,7 +186,16 @@ function SrManagerApproval() {
           <Box sx={{ flexGrow: 1 }}>
             <Grid container sx={{ justifyContent: "center", mt: 2 }}>
               <Grid item xs={12}>
-                <MyHeader>Rental Management System</MyHeader>
+              <Grid
+            item
+            xs={12}
+            sx={{ justifyContent: "space-between", display: "flex" }}
+          >
+            <MyHeader>Rental Management System</MyHeader>
+            <Typography mt="15px" mr="15px" fontWeight="600">
+              Welcome {auth.name}
+            </Typography>
+          </Grid>
                 <Box className="backButton">
               <IconButton
                 variant="contained"

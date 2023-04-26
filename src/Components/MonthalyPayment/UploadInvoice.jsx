@@ -152,14 +152,18 @@ const [invoiceValidate , setInvoice] = useState(true)
     setFormError(error)
    }
   
-   if(Object.keys(formError).length === 0 && !ferror && !invoiceValidate){
-    handleConfirm()
-  }
+  
 }else{
   handleConfirm()
 }
 
   }
+
+  useEffect(()=>{
+    if(Object.keys(formError).length === 0 && !ferror && !invoiceValidate){
+      handleConfirm()
+    }
+  },[formError,ferror,invoiceValidate])
 
   function handleSubmit(e) {
     e.preventDefault();

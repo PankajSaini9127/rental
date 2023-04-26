@@ -99,7 +99,7 @@ function DataTable({ rows, loading }) {
                 color: "white",
                 fontSize: "12px",
                 textTransform: "capitalize",
-                // width:"100%"
+                // minWidth:"100%"
               }}
               onClick={async (e) => {
                 e.stopPropagation(); // don't select this row after clicking
@@ -263,10 +263,14 @@ function DataTable({ rows, loading }) {
     }
   };
 
+  // Code | Landlord Name | Location | Address Line | City |
+  //  State | Deposit Amount | Rent Amount | Agreement Expiry Date | No of days 
+  //  for Expiry | Status | Action
+
   const columns = [
     {
       field: "checkbox",
-      width: 20,
+      minWidth: 30,
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -288,7 +292,7 @@ function DataTable({ rows, loading }) {
     {
       field: "code",
       headerName: "Code",
-      width: 130,
+      minWidth: 130,
       type: "number",
       headerClassName: "dataGridHeader",
       headerAlign: "center",
@@ -297,15 +301,24 @@ function DataTable({ rows, loading }) {
     {
       field: "name",
       headerName: " Landlord Name",
-      width: 230,
+      minWidth: 230,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      flex: 1,
+    },
+    
+    {
+      field: "location",
+      headerName: "Location",
+      minWidth: 230,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex: 1,
     },
     {
-      field: "location",
-      headerName: "Location",
-      width: 230,
+      field: "address",
+      headerName: "Address",
+      minWidth: 230,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex: 1,
@@ -313,7 +326,7 @@ function DataTable({ rows, loading }) {
     {
       field: "city",
       headerName: "City",
-      width: 230,
+      minWidth: 230,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex: 1,
@@ -321,7 +334,7 @@ function DataTable({ rows, loading }) {
     {
       field: "state",
       headerName: "State",
-      width: 230,
+      minWidth: 230,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex: 1,
@@ -329,7 +342,7 @@ function DataTable({ rows, loading }) {
     {
       field: "deposit",
       headerName: "Deposit Amount",
-      width: 230,
+      minWidth: 230,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex: 1,
@@ -337,15 +350,7 @@ function DataTable({ rows, loading }) {
     {
       field: "rentalAmount",
       headerName: "Rent Amount",
-      width: 200,
-      headerClassName: "dataGridHeader",
-      headerAlign: "center",
-      flex: 1,
-    },
-    {
-      field: "expiry_date",
-      headerName: "Agreement Expiry Date",
-      width: 230,
+      minWidth: 200,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex: 1,
@@ -353,11 +358,20 @@ function DataTable({ rows, loading }) {
     {
       field:"expiry_day" ,
       headerName:"Day In Expire" ,
-      width: 230,
+      minWidth: 230,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       flex: 1,
     },
+    {
+      field: "expiry_date",
+      headerName: "Agreement Expiry Date",
+      minWidth: 230,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+      flex: 1,
+    },
+    
     {
       field: "status",
       headerName: "Status",

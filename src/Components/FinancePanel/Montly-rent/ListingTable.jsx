@@ -290,7 +290,7 @@ export default function ListingTable({rows}) {
         status: "Paid",
         utr_number: utr.utr,
         payment_date: utr.paymentDate,
-        modify_date:new Date()
+        update_at:new Date()
       }
       
     );

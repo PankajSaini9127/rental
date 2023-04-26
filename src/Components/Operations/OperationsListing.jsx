@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import OperationsTable from "./OperationsTable";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import moment from "moment";
 
 const options = ["New Agreement", "Monthly Payment", "Rental"];
 
@@ -42,6 +43,13 @@ function SrManagerListing() {
       location: data.agreement[item].location,
       address: data.agreement[item].address,
       rentalAmount: data.agreement[item].monthlyRent,
+      deposit:parseFloat( data.agreement[item].deposit).toFixed(2),
+      state: data.agreement[item].state,
+      manager: data.agreement[item].manager_name,
+      sr_manager: data.agreement[item].Sr_name,
+      city:data.agreement[item].city,
+      initiateDate : moment(data.agreement[item].time).format('DD-MM-YYYY'),
+      type:"---"
     };
   });
 

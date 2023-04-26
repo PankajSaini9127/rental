@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import moment from "moment";
 
 
 function Listing() {
@@ -67,7 +68,7 @@ function Listing() {
  
 
 const row = data.map((item) => {
-  console.log(agreement[item].rent_start_date)
+  console.log(agreement[item])
     
     return {
       id: agreement[item].agreement_id,
@@ -75,10 +76,18 @@ const row = data.map((item) => {
       code: agreement[item].code,
       name: agreement[item].name,
       location: agreement[item].location,
-      rentalAmount: agreement[item].monthlyRent,
+      rent_amount: agreement[item].monthlyRent,
       checkbox: agreement[item].status,
       utr_number: agreement[item].utr_number,
-      rent_date : agreement[item].rent_start_date
+      rent_date : agreement[item].rent_start_date,
+      initiateDate : moment(agreement[item].time).format('DD-MM-YYYY'),
+      type: "---",
+      address: agreement[item].address,
+      city: agreement[item].city,
+      state: agreement[item].state,
+      deposit:parseFloat( agreement[item].deposit).toFixed(2),
+      
+
     };
   });
 

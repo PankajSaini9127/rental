@@ -175,6 +175,9 @@ function SrManagerApproval() {
     }
   }
 
+  console.log(agreement[ids[0]].op_id ,
+    agreement[ids[0]].deposit , deposit )
+
   const handleSubmit = async (e) => {
     if (remark.length <= 0) {
       dispatch(
@@ -188,7 +191,7 @@ function SrManagerApproval() {
       const response = await send_to_bhu(
         {
           status:
-            // agreement[ids[0]].op_id === 0 ||
+            agreement[ids[0]].op_id === 0 ||
             (agreement[ids[0]].op_id === null &&
               agreement[ids[0]].deposit - deposit !== 0)
               ? "Sent To BUH"
@@ -289,7 +292,16 @@ function SrManagerApproval() {
             monthlyBtn="true"
           />
           <Box sx={{ flexGrow: 1 }}>
+          <Grid
+            item
+            xs={12}
+            sx={{ justifyContent: "space-between", display: "flex" }}
+          >
             <MyHeader>Rental Management System</MyHeader>
+            <Typography mt="15px" mr="15px" fontWeight="600">
+              Welcome {auth.name}
+            </Typography>
+          </Grid>
             <Box className="backButton">
               <IconButton
                 variant="contained"
@@ -759,8 +771,8 @@ function SrManagerApproval() {
                           onClick={handleSubmit}
                         >
                           {console.log(agreement[ids[0]].deposit - deposit)}
-                          {agreement[ids[0]].op_id === 0 ||
-                          (agreement[ids[0]].op_id === null &&
+                          {((agreement[ids[0]].op_id === 0 ||
+                          agreement[ids[0]].op_id === null) &&
                             agreement[ids[0]].deposit - deposit !== 0)
                             ? " Send to BUH"
                             : " Send To Operations"}

@@ -24,6 +24,8 @@ import {
   
   function ViewPage() {
 
+    const {auth} = useSelector(s=>s)
+
     const { id } = useParams();
     
     console.log(id)
@@ -103,9 +105,16 @@ import {
           </Box>
             <Box sx={{ flexGrow: 1 }}>
               <Grid container sx={{ justifyContent: "center", mt: 2 }}>
-                <Grid item xs={12}>
-                  <MyHeader>Rental Management System</MyHeader>
-                </Grid>
+              <Grid
+            item
+            xs={12}
+            sx={{ justifyContent: "space-between", display: "flex" }}
+          >
+            <MyHeader>Rental Management System</MyHeader>
+            <Typography mt="15px" mr="15px" fontWeight="600">
+              Welcome {auth.name}
+            </Typography>
+          </Grid>
   
                 {/* Basic Details */}
                 <Grid item md={10} sx={{ mt: 2 }}>
