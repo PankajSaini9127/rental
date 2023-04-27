@@ -689,6 +689,12 @@ async function getData (id){
                     value={recovery.balanceDeposit}
                   />
                   </Grid>
+                  <Grid item xs={12}>
+                  <DocumentView
+                    title={"Termination File"}
+                    img={agreement[ids[0]].file}
+                  />
+                  </Grid>
 
               </Grid>
               </> }

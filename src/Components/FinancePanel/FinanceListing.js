@@ -7,6 +7,7 @@ import ListingComponent from "../StyleComponents/ListingComponent";
 import {
   get_search_srmanager,
   get_finance_agreements,
+  get_search_finance_agreements,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import FinanceTable from "./FinanceDataTable";
@@ -51,7 +52,8 @@ useEffect(()=>{
     buh:data.agreement[item].buh,
     city:data.agreement[item].city,
     initiateDate : moment(data.agreement[item].time).format('DD-MM-YYYY'),
-    type:"---"
+    type:"---",
+    utr_number :data.agreement[item].utr_number
 
     };
   }))
@@ -60,10 +62,8 @@ useEffect(()=>{
 
   //search
   async function SearchAPi(id, searchValue) {
-    if (searchValue) {
-      const search = await get_search_srmanager(id, searchValue);
+      const search = await get_search_finance_agreements(id, searchValue);
       setData(search.data);
-    }
   }
 
   function handleSerachChange(e){
@@ -91,19 +91,6 @@ useEffect(()=>{
             monthlyBtn="true"
             renewalBTN="false"
           />
-           <Box className="backButton" sx={{zIndex:222}}>
-          <IconButton
-            variant="contained"
-            color="primary"
-            onClick={() => navigate(-1)}
-            size={"large"}
-          >
-            <ArrowCircleLeftIcon
-              sx={{ fontSize: "3rem" }}
-              color="#FFFFF !important"
-            />
-          </IconButton>
-        </Box>
           <ListingComponent
             title1={"Rental Management System"}
             title="Rental Agreement"

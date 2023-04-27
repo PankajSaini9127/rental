@@ -437,7 +437,8 @@ function DataTable({ rows, loading }) {
             } else if (
               parms.field === "status" &&
               (parms.row.status === "Pending For Renewal" ||
-                parms.row.status === "Sent To Sr Manager For Renewal")
+                parms.row.status === "Sent To Sr Manager For Renewal"||
+                parms.row.status === "Sent For Termination")
             ) {
               cellClass.push("yellow statusCell");
             } else if (

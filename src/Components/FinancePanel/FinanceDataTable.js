@@ -249,8 +249,8 @@ function FinanceTable({ rows, setRows }) {
     },
     {
       field: "view",
-      headerName: "View",
-      minWidth: 150,
+      headerName: "Action",
+      minWidth: 250,
       flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",

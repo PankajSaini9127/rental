@@ -8,6 +8,7 @@ import ListingComponent from "../StyleComponents/ListingComponent";
 import {
   get_search_srmanager,
   get_Operations_agreements,
+  get_search_agreement_operation,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import OperationsTable from "./OperationsTable";
@@ -24,6 +25,7 @@ function SrManagerListing() {
 
   const [data, setData] = useState({ ids: [] });
 
+
   const getData = async (id) => {
     const response = await get_Operations_agreements(id);
     console.log(response.data)
@@ -31,6 +33,34 @@ function SrManagerListing() {
   };
 
   console.log(data)
+
+ 
+
+  const [searchValue, setsearchValue] = useState("");
+
+  //search
+  async function SearchAPi(id, searchValue) {
+    const search = await get_search_agreement_operation(id, searchValue);
+    console.log("search")
+      console.log(search)
+      setData(search.data);
+  
+  }
+
+
+  function handleSerachChange(e){
+    SearchAPi(login_operations_id, e.target.value);
+    setsearchValue(e.target.value)
+  }
+
+
+
+  useEffect(() => {
+    getData(login_operations_id);
+  }, []);
+
+  const navigate = useNavigate();
+
 
   const rows = data.ids.map((item) => {
     return {
@@ -52,30 +82,6 @@ function SrManagerListing() {
       type:"---"
     };
   });
-
-  const [searchValue, setsearchValue] = useState("");
-
-  //search
-  async function SearchAPi(id, searchValue) {
-    if (searchValue) {
-      const search = await get_search_srmanager(id, searchValue);
-      setData(search.data);
-    }
-  }
-
-
-  function handleSerachChange(e){
-    SearchAPi(login_operations_id, e.target.value);
-    setsearchValue(e.target.value)
-  }
-
-
-
-  useEffect(() => {
-    getData(login_operations_id);
-  }, []);
-
-  const navigate = useNavigate();
 
   return (
     <>

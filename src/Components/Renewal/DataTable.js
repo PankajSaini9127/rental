@@ -437,7 +437,8 @@ function DataTable({ rows, loading }) {
             if (
               parms.field === "status" &&
               (parms.row.status === "Approved for Renewal"||
-              parms.row.status === "Approved for Terminate")
+              parms.row.status === "Approved for Terminate" || 
+              parms.row.status === "Sent For Termination")
             ) {
               cellClass.push("green statusCell");
             } else if (

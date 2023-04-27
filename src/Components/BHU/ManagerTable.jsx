@@ -31,7 +31,7 @@ function ManagerTable({ rows }) {
           color: "white",
           fontSize: "12px",
           textTransform: "capitalize",
-          // width:"100%"
+          // minWidth:"300%"
         }}
         onClick={(e) => {
           e.stopPropagation(); // don't select this row after clicking
@@ -58,7 +58,7 @@ function ManagerTable({ rows }) {
   const columns = [
     {
       field: "checkbox",
-      width: 20,
+      minWidth: 30,
 
       type: "number",
       headerClassName: "dataGridHeader",
@@ -80,7 +80,7 @@ function ManagerTable({ rows }) {
     {
       field: "initiateDate",
       headerName: "Initiate Date",
-      minWidth: 90,
+      minWidth: 110,
       flex: 1,
       type: "number",
       headerClassName: "dataGridHeader",
@@ -98,7 +98,7 @@ function ManagerTable({ rows }) {
     {
       field: "code",
       headerName: "Code",
-      minWidth: 90,
+      minWidth: 130,
       flex: 1,
       type: "number",
       headerClassName: "dataGridHeader",
@@ -123,7 +123,7 @@ function ManagerTable({ rows }) {
     {
       field: "address",
       headerName: "Address",
-      minWidth: 160,
+      minWidth: 120,
       flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",

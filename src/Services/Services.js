@@ -78,6 +78,12 @@ export async function get_agreement_id (id) {
     return axios.post(`${API_LIVE}/api/agreement/${id}`)
 }   
 
+
+//get agreement in buh
+export async function get_agreement_buh_id (id) {
+    return axios.get(`${API_LIVE}/api/BHU/get-agreement-one/${id}`)
+} 
+
 //get monthly rent details by code
 export async function get_agreement_code (id) {
     return axios.get(`${API_LIVE}/api/get-monthly-rent-by-code/${id}`)
@@ -265,6 +271,11 @@ export async function get_BHU_agreements(data){
     return await axios.get(`${API_LIVE}/api/BHU/get-agreement/${data}`)
 }
 
+
+export async function get_search_Agrteement_buh(id,data){
+    return await axios.get(`${API_LIVE}/api/BHU/search/${id}?search=${data}`)
+}
+
 //send to BHU 
 export async function send_to_operations (data,id){
     return await axios.put(`${API_LIVE}/api/BHU/updateAgreement/${id}`,data)
@@ -278,7 +289,12 @@ export async function get_Operations_agreements(data){
 
 //operations 
 export async function get_agreement_operation (id){
-    axios.get(`${config.API_LIVE}/api/operations/getagreement/${id}`)
+    return await axios.get(`${config.API_LIVE}/api/operations/getagreement/${id}`)
+}
+
+//operations 
+export async function get_search_agreement_operation (id,data){
+    return await axios.get(`${config.API_LIVE}/api/operations/search/${id}?search=${data}`)
 }
 
 // search state and city based on  Pin code
@@ -293,6 +309,11 @@ export async function getLocation (pincode){
 
 export async function get_finance_agreements(data){
     return await axios.get(`${API_LIVE}/api/finance/get-agreement/${data}`)
+}
+
+// finance search
+export async function get_search_finance_agreements(id,search){
+    return await axios.get(`${API_LIVE}/api/finance/search/${id}?search=${search}`)
 }
 
 export async function ApprovedByFinance (data,id){
