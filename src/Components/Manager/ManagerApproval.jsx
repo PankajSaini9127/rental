@@ -489,11 +489,20 @@ function ManagerApproval() {
               </Grid>
               {/* // Landlord assets */}
 
+              {agreement[ids[0]].renewal_status === "Sent Forr Termination"&&
+              <Grid item  container sx = {{alignItems : "baseline",mt: 5  }} xs={10} >
+              <DataFieldStyle
+                field={"Landlord Assets"}
+                value={agreement[ids[0]].assets}
+              />
+            </Grid>
+             }
+
               {agreement[ids[0]].assets && (
               <Grid item  container sx = {{alignItems : "baseline",mt: 5  }} xs={10} >
-                <DataFieldStyle
-                  field={"Landlord Assets"}
-                  value={agreement[ids[0]].assets}
+                <DocumentView
+                  title={"Termination File"}
+                  img={agreement[ids[0]].file}
                 />
               </Grid>)}
               {/* document section ends here */}
@@ -502,69 +511,13 @@ function ManagerApproval() {
                 <Grid item  container sx = {{alignItems : "baseline",mt: 5  }} xs={10} >
                   <DataFieldStyle
                     field={"Remark !"}
-                    value={agreement[ids[0]].remark}
+                    href={agreement[ids[0]].remark}
                   />
                 </Grid>
               )}
 
                 {/* Buttons start here*/}
-   {/* <Grid item xs={10}>
- 
- <Grid  container sx = {{alignItems : "baseline" }}>
- <DataFieldStyle
-        field="Deposit Amount (Paid)"
-        value={recovery.depositedAmount}
-      />
- </Grid>
- <Grid  container sx = {{alignItems : "baseline" }}>
- <DataFieldStyle
-        field="Remaining Months"
-        value={recovery.remainingMonth}
-      />
-      <DataFieldStyle
-        field="Adjustment Amount"
-        value={recovery.adjustmentAmount}
-      />
-      <DataFieldStyle
-        field="Remark"
-        value={recovery.adjustmentAmountRemark}
-      />
- </Grid>
-
- <Grid  container sx = {{alignItems : "baseline" }}>
- <DataFieldStyle
-        field="Expenses Adjustment Amount"
-        value={recovery.expenses}
-      />
-<DataFieldStyle
-        field="Remark"
-        value={recovery.expansesRemark}
-      />
- </Grid>
-
- <Grid item xs={12}  container sx = {{alignItems : "baseline" }} >
-      <DataFieldStyle
-        field="Other Adjustments"
-        value={recovery.otherAdjustments}
-      />
-   <DataFieldStyle
-        field="Remark"
-        value={recovery.otherRemark}
-      />
-      </Grid>
-      <Grid item xs={12}  container sx = {{alignItems : "baseline" }} >
-      <DataFieldStyle
-        field="Total Adjustment Amount "
-        value={recovery.totalAdjustmentAmount}
-      />
-      <DataFieldStyle
-        field="Balance Deposit "
-        value={recovery.balanceDeposit}
-      />
-      </Grid>
-
-  </Grid> */}
-
+   
               {/* Buttons start here*/}
 
               {agreement[ids[0]].status === "Hold" && (

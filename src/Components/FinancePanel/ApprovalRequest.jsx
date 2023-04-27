@@ -744,6 +744,12 @@ function FinanceApproval() {
                     value={recovery.balanceDeposit}
                   />
                   </Grid>
+                  <Grid item xs={12}>
+                  <DocumentView
+                    title={"Termination File"}
+                    img={agreement[ids[0]].file}
+                  />
+                  </Grid>
 
               </Grid>
               </> }
@@ -767,7 +773,7 @@ function FinanceApproval() {
                         required
                         fullWidth
                         variant="outlined"
-                        label="Remark *"
+                        label="Remark "
                         placeholder="Remark *"
                         value={remark}
                         onChange={(e) => setRemark(e.target.value)}

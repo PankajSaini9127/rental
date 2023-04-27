@@ -135,7 +135,7 @@ async function sendToOperations (){
         },
         {
           field: "month_of_rent",
-          headerName: "Rent Date",
+          headerName: "Rent Month",
           headerAlign: "center",
           flex: 1
         },

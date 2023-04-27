@@ -269,7 +269,7 @@ function DataTable({rows}) {
     },
     {
       field: "rent_date",
-      headerName: "Rent Date",
+      headerName: "Rent Month",
       headerAlign: "center",
       flex: 1,
       minWidth: 100,

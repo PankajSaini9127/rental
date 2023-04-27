@@ -181,7 +181,7 @@ function DataTable({ rows, loading, check, setCheck }) {
                   getUpdateDate(id)
                 }}
               >
-                Final Agreement
+               Upload Final Agreement
               </Button>
             </Grid>
           </Grid>

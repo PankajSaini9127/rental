@@ -96,7 +96,7 @@ export default function ListingTable({rows}) {
         },
         {
           field: "month_of_rent",
-          headerName: "Rent Date",
+          headerName: "Rent Month",
           headerAlign: "center",
           flex: 1
         },

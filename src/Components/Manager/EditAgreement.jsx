@@ -1291,12 +1291,27 @@ function EditAgreement({ history }) {
                     onChange={handleCommonChange}
                   />
 
+<TextFieldWrapper
+                    label="Agreement Tenure"
+                    placeHolder="Tenure In Months"
+                    name="tenure"
+                    notationVal="Month's"
+                    textAlignRight={"textAlignRight"}
+                    error={formError.tenure}
+                    required={true}
+                    value={preData.tenure || ""}
+                    onChange={handleCommonChange}
+                    index={i}
+                    maxLength={3}
+                    disabled={( buh_id !== null) ? true : false}
+                  />
+{/* 
                   <SelectComponent
                     label={"Agreement Tenure"}
                     required={true}
                     error={formError.tenure}
                     name="tenure"
-                    disabled={( buh_id !== null) ? true : false}
+                    
                     options={[
                       "11 Month",
                       "2 Year",
@@ -1306,9 +1321,8 @@ function EditAgreement({ history }) {
                     ]}
                     value={preData.tenure || ""}
                     onChange={handleCommonChange}
-                  />
-                  {preData.tenure === "" ? null : preData.tenure ===
-                    "11 Month" ? null : (
+                  /> */}
+                  {preData.tenure === "" ? null : preData.tenure <=12 ? null : (
                     <SelectComponent
                       label={"Yearly Increment"}
                       required={true}
@@ -1815,13 +1829,6 @@ function EditAgreement({ history }) {
                   )}
                 </Grid>
 
-                {/* Document upload section end here */}
-
-                {preData.remark.length > 0 && (
-                  <Grid item container xs={10} sx={{ mt: 5 }}>
-                    <DataFieldStyle field={"Remark !"} value={preData.remark} />
-                  </Grid>
-                )}
 
                 <Grid
                   item
@@ -1844,6 +1851,14 @@ function EditAgreement({ history }) {
                     />
                   </Grid>
                 </Grid>
+                {/* Document upload section end here */}
+
+                {preData.remark.length > 0 && (
+                  <Grid item container xs={10} sx={{ mt: 5 }}>
+                    <DataFieldStyle field={"Remark !"} value={preData.remark} />
+                  </Grid>
+                )}
+
 
                 {/* Button Start from here */}
                 <Grid

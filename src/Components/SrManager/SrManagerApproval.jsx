@@ -643,16 +643,6 @@ function SrManagerApproval() {
               
               {/* // termination  points */}
               {/* // Landlord assets */}
-
-              {(agreement[ids[0]].status === "Terminated By Manager" ||agreement[ids[0]].status === "Terminated" )&& <>
-              <Grid item container xs={10} sx={{ mt: 2 }}>
-                <DataFieldStyle
-                  field={"Termination Remark"}
-                  value={agreement[ids[0]].termination_remark}
-                />
-              </Grid>
-              {/* document section ends here */}
-
               {agreement[ids[0]].remark !== null && (
                 <Grid item container xs={10} sx={{ mt: 2 }}>
                   <DataFieldStyle
@@ -661,6 +651,15 @@ function SrManagerApproval() {
                   />
                 </Grid>
               )}
+
+              {(agreement[ids[0]].status === "Terminated By Manager" ||agreement[ids[0]].status === "Terminated" ||agreement[ids[0]].renewal_status === "Sent For Termination" )&& <>
+              <Grid item container xs={10} sx={{ mt: 2 }}>
+                <DataFieldStyle
+                  field={"Termination Remark"}
+                  value={agreement[ids[0]].termination_remark}
+                />
+              </Grid>
+              {/* document section ends here */}
 
               {/* Buttons start here*/}
               <Grid item xs={10} sx={{ mt: 2 }}>
@@ -715,6 +714,12 @@ function SrManagerApproval() {
                   <DataFieldStyle
                     field="Balance Deposit "
                     value={recovery.balanceDeposit}
+                  />
+                  </Grid>
+                  <Grid item xs={12}>
+                  <DocumentView
+                    title={"Termination File"}
+                    img={agreement[ids[0]].file}
                   />
                   </Grid>
 

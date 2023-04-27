@@ -539,6 +539,10 @@ function Agreement({ history }) {
       case "deposit":
         if (!e.target.value.match(/^[0-9]*$/)) error = { state: true };
         break;
+        case "tenure":
+        if (!e.target.value.match(/^[0-9]*$/))
+          error = { state: true, message: "Value must be Correct" };
+        break;
       default:
         break;
     }
@@ -1142,8 +1146,20 @@ function Agreement({ history }) {
                     value={data.monthlyRent}
                     onChange={handleCommonChange}
                   />
-
-                  <SelectComponent
+                     <TextFieldWrapper
+                    label="Agreement Tenure"
+                    placeHolder="Tenure In Months"
+                    name="tenure"
+                    notationVal="Month's"
+                    textAlignRight={"textAlignRight"}
+                    error={formError.tenure}
+                    required={true}
+                    value={data.tenure}
+                    onChange={handleCommonChange}
+                    index={i}
+                    maxLength={3}
+                  />
+                  {/* <SelectComponent
                     label={"Agreement Tenure*"}
                     required={true}
                     name="tenure"
@@ -1157,9 +1173,9 @@ function Agreement({ history }) {
                     ]}
                     value={data.tenure}
                     onChange={handleCommonChange}
-                  />
-                  {data.tenure === "" ? null : data.tenure ===
-                    "11 Month" ? null : (
+                  /> */}
+
+                  {data.tenure === "" ? null : data.tenure  <= 12 ? null : (
                     <SelectComponent
                       label={"Yearly Increment"}
                       required={true}

@@ -121,7 +121,7 @@ if(value === "Percentage"){
    total5 = total4 + parseInt(yearValue.year5);
 }
 useEffect(()=>{
-  if(tenure === "11 month")
+  if(tenure <= 12)
   {
     setIncrement({
       year1:0,
@@ -173,7 +173,7 @@ function handleChange (e){
 
     return (
       <>
-      {tenure === "11 Month"? null:
+      {tenure <= 12 ? null:
         value === "Percentage"?
       <Grid
         container
@@ -202,7 +202,7 @@ function handleChange (e){
 
         />
       {
-          tenure === "3 Year" || tenure === "4 Year" || tenure === "5 Year"?
+          tenure > 24 || tenure > 36 || tenure > 48?
           <>
         <IncrementType
           Year="Year 3"
@@ -218,7 +218,7 @@ function handleChange (e){
         :null
         }
         {
-          tenure === "4 Year" || tenure === "5 Year"?
+          tenure > 36 || tenure > 48?
           <>
         <IncrementType
           Year="Year 4"
@@ -234,7 +234,7 @@ function handleChange (e){
         :null
         }
         {
-          tenure === "5 Year"?
+          tenure > 48?
           <>
         <IncrementType
           Year="Year 5"
@@ -278,7 +278,7 @@ function handleChange (e){
         />
 
          {
-          tenure === "3 Year" || tenure === "4 Year" || tenure === "5 Year"?
+           tenure > 24 || tenure > 36 || tenure > 48?
           <>
         <IncrementType
           Year="Year 3"
@@ -294,7 +294,7 @@ function handleChange (e){
         :null
         }
         {
-          tenure === "4 Year" || tenure === "5 Year"?
+          tenure > 36 || tenure > 48?
           <>
         <IncrementType
           Year="Year 4"
@@ -310,7 +310,7 @@ function handleChange (e){
         :null
         }
         {
-          tenure === "5 Year"?
+          tenure > 48?
           <>
         <IncrementType
           Year="Year 5"

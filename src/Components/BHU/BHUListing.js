@@ -9,6 +9,7 @@ import ManagerTable from "./ManagerTable";
 import {
   get_search_srmanager,
   get_BHU_agreements,
+  get_search_Agrteement_buh,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import { Box } from "@mui/system";
@@ -61,7 +62,7 @@ function SrManagerListing() {
   //search
   async function SearchAPi(id, searchValue) {
     if (searchValue) {
-      const search = await get_search_srmanager(id, searchValue);
+      const search = await get_search_Agrteement_buh(id, searchValue);
       // setAgreement(search.data.agreement)
       setData(search.data);
     }
@@ -90,19 +91,6 @@ function SrManagerListing() {
           // renewal={() => navigate("/buh-monthly-rent")}
           // monthlyBtn="true"
         />
-        <Box className="backButton"  sx={{zIndex:222}}>
-          <IconButton
-            variant="contained"
-            color="primary"
-            onClick={() => navigate(-1)}
-            size={"large"}
-          >
-            <ArrowCircleLeftIcon
-              sx={{ fontSize: "3rem" }}
-              color="#FFFFF !important"
-            />
-          </IconButton>
-        </Box>
           <ListingComponent
             title="Rental Agreement"
             title1={"Rental Management System"}
