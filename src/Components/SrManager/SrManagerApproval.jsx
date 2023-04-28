@@ -353,6 +353,21 @@ function SrManagerApproval() {
                     </Grid>
                   </>
                 )}
+
+                {agreement[ids[0]].site_visit_date !== null &&(
+                    <>
+                    <Grid container>
+                      <DataFieldStyle
+                        field={"Site Visit date"}
+                        value={agreement[ids[0]].site_visit_date}
+                      />
+                      <DataFieldStyle
+                        field={"Site Visit Remark"}
+                        value={agreement[ids[0]].site_visit_remark}
+                      />
+                    </Grid>
+                  </>
+                )}
                 <Grid container sx={{ mt: 2 }}>
                   <DataFieldStyle
                     field={"code"}

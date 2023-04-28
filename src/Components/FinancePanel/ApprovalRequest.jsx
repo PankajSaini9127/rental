@@ -72,62 +72,67 @@ function FinanceApproval() {
 
   console.log(deposit);
 
-  const [recovery,setRecovery] = useState({});
+  const [recovery, setRecovery] = useState({});
 
-
-  async function get_recovery_data (id){
+  async function get_recovery_data(id) {
     try {
-     const recovery = await get_data_recovery(id)
-     if(recovery.status === 200){
-       console.log(recovery.data)
-       setRecovery(recovery.data.data[0])
-     }
+      const recovery = await get_data_recovery(id);
+      if (recovery.status === 200) {
+        console.log(recovery.data);
+        setRecovery(recovery.data.data[0]);
+      }
     } catch (error) {
-     console.log(error)
-     dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong!!"}))
-    }
- }
-
- //termination
- async function handleTerminate () {
-  if (remark.length <= 0) {
-    dispatch(
-      setAlert({
-        variant: "error",
-        open: true,
-        message: "Remark Required !.",
-      })
-    );
-  } else {
-    const response = await send_to_bhu(
-      {
-        status: "Approved for Termination",
-        finance_id:auth.id,
-        renewal_status:"Approved Termination",
-        modify_date: new Date()
-      },
-      id
-    );
-    if (response.data.success) {
+      console.log(error);
       dispatch(
         setAlert({
-          variant: "success",
           open: true,
-          message:"Agreement Approved For Termination."
-        })
-      );
-      navigate(-1);
-    } else {
-      dispatch(
-        setAlert({
           variant: "error",
-          open: true,
-          message: "Something went wrong! Please again later.",
+          message: "Something Went Wrong!!",
         })
       );
     }
   }
-}
+
+  //termination
+  async function handleTerminate() {
+    if (remark.length <= 0) {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Remark Required !.",
+        })
+      );
+    } else {
+      const response = await send_to_bhu(
+        {
+          status: "Approved for Termination",
+          finance_id: auth.id,
+          renewal_status: "Approved Termination",
+          modify_date: new Date(),
+        },
+        id
+      );
+      if (response.data.success) {
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Agreement Approved For Termination.",
+          })
+        );
+        navigate(-1);
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          })
+        );
+      }
+    }
+  }
 
   async function get_deposit(code) {
     try {
@@ -158,7 +163,7 @@ function FinanceApproval() {
         setAgreement(agreement.data.agreement);
         console.log(agreement.data.ids);
         setIds(agreement.data.ids);
-        get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id)
+        get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id);
         get_deposit(agreement.data.agreement[agreement.data.ids[0]].code);
       } else {
         dispatch(
@@ -201,7 +206,7 @@ function FinanceApproval() {
         {
           status: "Sent Back From Finance",
           remark: remark,
-          modify_date: new Date()
+          modify_date: new Date(),
         },
         id
       );
@@ -234,7 +239,7 @@ function FinanceApproval() {
         finance_id: login_manager_id,
         utr_number: utr.utr,
         payment_date: utr.paymentDate,
-        modify_date: new Date()
+        modify_date: new Date(),
       },
       id
     );
@@ -258,44 +263,48 @@ function FinanceApproval() {
     }
   };
 
-  console.log(new Date())
+  console.log(new Date());
 
   async function handleSubmit() {
-    console.log(remark)
+    console.log(remark);
     // console.log(agreement[ids[0]].deposit-deposit === 0 ? "Deposited" : "Approved")
-    if(remark.length > 0){
-    const response = await ApprovedByFinance(
-      {
-        status:
-        agreement[ids[0]].deposit - deposit === 0 ? "Deposited" : "Approved",
-        finance_id: "",
-        utr_number: "",
-        payment_date: "",
-        modify_date: new Date()
-      },
-      id
-    );
-    if (response.data.success) {
-      dispatch(
-        setAlert({
-          variant: "success",
-          open: true,
-          message: "Agreement Approved.",
-        })
+    if (remark.length > 0) {
+      const response = await ApprovedByFinance(
+        {
+          status:
+            agreement[ids[0]].deposit - deposit === 0
+              ? "Deposited"
+              : "Approved",
+          finance_id: "",
+          utr_number: "",
+          payment_date: "",
+          modify_date: new Date(),
+        },
+        id
       );
-      navigate("/finance-listing");
+      if (response.data.success) {
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Agreement Approved.",
+          })
+        );
+        navigate("/finance-listing");
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          })
+        );
+      }
     } else {
       dispatch(
-        setAlert({
-          variant: "error",
-          open: true,
-          message: "Something went wrong! Please again later.",
-        })
+        setAlert({ open: true, variant: "error", message: "Remark Required !" })
       );
     }
-  }else{
-    dispatch(setAlert({open:true,variant:"error",message:"Remark Required !"}))
-  }
   }
 
   function getIncrement(rent, value, type) {
@@ -333,16 +342,16 @@ function FinanceApproval() {
           />
 
           <Box sx={{ flexGrow: 1 }}>
-          <Grid
-            item
-            xs={12}
-            sx={{ justifyContent: "space-between", display: "flex" }}
-          >
-            <MyHeader>Rental Management System</MyHeader>
-            <Typography mt="15px" mr="15px" fontWeight="600">
-              Welcome {auth.name}
-            </Typography>
-          </Grid>
+            <Grid
+              item
+              xs={12}
+              sx={{ justifyContent: "space-between", display: "flex" }}
+            >
+              <MyHeader>Rental Management System</MyHeader>
+              <Typography mt="15px" mr="15px" fontWeight="600">
+                Welcome {auth.name}
+              </Typography>
+            </Grid>
             <Box className="backButton">
               <IconButton
                 variant="contained"
@@ -396,6 +405,22 @@ function FinanceApproval() {
                     </Grid>
                   </>
                 )}
+
+                {agreement[ids[0]].site_visit_date !== null && (
+                  <>
+                    <Grid container sx={{ alignItems: "baseline" }}>
+                      <DataFieldStyle
+                        field={"Site Visit date"}
+                        value={agreement[ids[0]].site_visit_date}
+                      />
+                      <DataFieldStyle
+                        field={"Site Visit Remark"}
+                        value={agreement[ids[0]].site_visit_remark}
+                      />
+                    </Grid>
+                  </>
+                )}
+                
                 <Grid container sx={{ mt: 2 }}>
                   <DataFieldStyle
                     field={"code"}
@@ -599,7 +624,6 @@ function FinanceApproval() {
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement[ids[0]].bankName[id]}
-                          
                         />
                         <DataFieldStyle
                           field={"beneficiary name"}
@@ -656,108 +680,107 @@ function FinanceApproval() {
                       img={agreement[ids[0]].noc}
                     />
                   )}
-                   <DocumentView
+                  <DocumentView
                     title={"Property Picture"}
                     img={agreement[ids[0]].property_pic}
                   />
                 </Grid>
               </Grid>
-                {/* document section ends here */}
+              {/* document section ends here */}
               <Grid item container xs={10} sx={{ mt: 5 }}>
-                  <DataFieldStyle
-                    field={"Landlord Assets"}
-                    value={agreement[ids[0]].assets}
-                  />  
-                  </Grid>
-
-
-{(agreement[ids[0]].status === "Terminated By Operations" ) && <>
-              <Grid item container xs={10} sx={{ mt: 2 }}>
                 <DataFieldStyle
-                  field={"Termination Remark"}
-                  value={agreement[ids[0]].termination_remark}
+                  field={"Landlord Assets"}
+                  value={agreement[ids[0]].assets}
                 />
               </Grid>
-              {/* document section ends here */}
 
-              {agreement[ids[0]].remark !== null && (
-                <Grid item container xs={10} sx={{ mt: 2 }}>
-                  <DataFieldStyle
-                    field={"Remark !"}
-                    value={agreement[ids[0]].remark}
-                  />
-                </Grid>
+              {agreement[ids[0]].status === "Terminated By Operations" && (
+                <>
+                  <Grid item container xs={10} sx={{ mt: 2 }}>
+                    <DataFieldStyle
+                      field={"Termination Remark"}
+                      value={agreement[ids[0]].termination_remark}
+                    />
+                  </Grid>
+                  {/* document section ends here */}
+
+                  {agreement[ids[0]].remark !== null && (
+                    <Grid item container xs={10} sx={{ mt: 2 }}>
+                      <DataFieldStyle
+                        field={"Remark !"}
+                        value={agreement[ids[0]].remark}
+                      />
+                    </Grid>
+                  )}
+
+                  {/* Buttons start here*/}
+                  <Grid item xs={10} sx={{ mt: 2 }}>
+                    <Grid container sx={{ gap: "2rem" }}>
+                      <DataFieldStyle
+                        field="Deposit Amount (Paid)"
+                        value={recovery.depositedAmount}
+                      />
+                    </Grid>
+                    <Grid container sx={{ gap: "2rem", mt: 2 }}>
+                      <DataFieldStyle
+                        field="Remaining Months"
+                        value={recovery.remainingMonth}
+                      />
+                      <DataFieldStyle
+                        field="Adjustment Amount"
+                        value={recovery.adjustmentAmount}
+                      />
+                      <DataFieldStyle
+                        field="Remark"
+                        value={recovery.adjustmentAmountRemark}
+                      />
+                    </Grid>
+
+                    <Grid container sx={{ gap: "2rem", mt: 2 }}>
+                      <DataFieldStyle
+                        field="Expenses Amount"
+                        value={recovery.expenses}
+                      />
+                      <DataFieldStyle
+                        field="Remark"
+                        value={recovery.expansesRemark}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} container sx={{ gap: "2rem", mt: 2 }}>
+                      <DataFieldStyle
+                        field="Other Adjustments"
+                        value={recovery.otherAdjustments}
+                      />
+                      <DataFieldStyle
+                        field="Remark"
+                        value={recovery.otherRemark}
+                      />
+                    </Grid>
+                    <Grid item xs={12} container sx={{ gap: "2rem", mt: 2 }}>
+                      <DataFieldStyle
+                        field="Total Adjustment Amount "
+                        value={recovery.totalAdjustmentAmount}
+                      />
+                      <DataFieldStyle
+                        field="Balance Deposit "
+                        value={recovery.balanceDeposit}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <DocumentView
+                        title={"Termination File"}
+                        img={agreement[ids[0]].file}
+                      />
+                    </Grid>
+                  </Grid>
+                </>
               )}
 
               {/* Buttons start here*/}
-              <Grid item xs={10} sx={{ mt: 2 }}>
- 
-             <Grid container sx={{ gap : '2rem'}}>
-             <DataFieldStyle
-                    field="Deposit Amount (Paid)"
-                    value={recovery.depositedAmount}
-                  />
-             </Grid>
-             <Grid container sx={{ gap : '2rem',mt: 2 }}>
-             <DataFieldStyle
-                    field="Remaining Months"
-                    value={recovery.remainingMonth}
-                  />
-                  <DataFieldStyle
-                    field="Adjustment Amount"
-                    value={recovery.adjustmentAmount}
-                  />
-                  <DataFieldStyle
-                    field="Remark"
-                    value={recovery.adjustmentAmountRemark}
-                  />
-             </Grid>
 
-             <Grid container sx={{ gap : '2rem' ,mt: 2 }}>
-             <DataFieldStyle
-                    field="Expenses Amount"
-                    value={recovery.expenses}
-                  />
-            <DataFieldStyle
-                    field="Remark"
-                    value={recovery.expansesRemark}
-                  />
-             </Grid>
-
-             <Grid item xs={12} container  sx={{ gap : '2rem',mt: 2 }}>
-                  <DataFieldStyle
-                    field="Other Adjustments"
-                    value={recovery.otherAdjustments}
-                  />
-               <DataFieldStyle
-                    field="Remark"
-                    value={recovery.otherRemark}
-                  />
-                  </Grid>
-                  <Grid item xs={12} container sx={{ gap : '2rem',mt: 2 }} >
-                  <DataFieldStyle
-                    field="Total Adjustment Amount "
-                    value={recovery.totalAdjustmentAmount}
-                  />
-                  <DataFieldStyle
-                    field="Balance Deposit "
-                    value={recovery.balanceDeposit}
-                  />
-                  </Grid>
-                  <Grid item xs={12}>
-                  <DocumentView
-                    title={"Termination File"}
-                    img={agreement[ids[0]].file}
-                  />
-                  </Grid>
-
-              </Grid>
-              </> }
-
-              {/* Buttons start here*/}
-
-                {/* termination */}
-   {agreement[ids[0]].status === "Terminated By Operations" && (
+              {/* termination */}
+              {agreement[ids[0]].status === "Terminated By Operations" && (
                 <>
                   <Grid
                     item
@@ -802,7 +825,7 @@ function FinanceApproval() {
                           }}
                           onClick={handleTerminate}
                         >
-                         Accept For Termination 
+                          Accept For Termination
                         </Button>
                       </Grid>
                       <Grid item md={6} xs={11}>

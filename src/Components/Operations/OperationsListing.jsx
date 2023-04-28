@@ -95,19 +95,7 @@ function SrManagerListing() {
             monthlyBtn="true"
             renewalBTN="false"
           />
-           <Box className="backButton" sx={{zIndex:222}}>
-          <IconButton
-            variant="contained"
-            color="primary"
-            onClick={() => navigate(-1)}
-            size={"large"}
-          >
-            <ArrowCircleLeftIcon
-              sx={{ fontSize: "3rem" }}
-              color="#FFFFF !important"
-            />
-          </IconButton>
-        </Box>
+          
           <ListingComponent
             title1={'Rental Management System'}
             title="Rental Agreement"

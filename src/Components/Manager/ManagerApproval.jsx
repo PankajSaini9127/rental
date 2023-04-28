@@ -220,7 +220,23 @@ function ManagerApproval() {
                       </Grid>
                     </>
                   )}
+
+{agreement[ids[0]].site_visit_date !== null &&(
+                    <>
+                    <Grid container sx = {{alignItems : "baseline" }}>
+                      <DataFieldStyle
+                        field={"Site Visit date"}
+                        value={agreement[ids[0]].site_visit_date}
+                      />
+                      <DataFieldStyle
+                        field={"Site Visit Remark"}
+                        value={agreement[ids[0]].site_visit_remark}
+                      />
+                    </Grid>
+                  </>
+                )}
                 </Grid>
+
                 <Grid  container sx = {{alignItems : "baseline",mt: 2 }}>
                   <DataFieldStyle
                     field={"code"}
@@ -236,7 +252,7 @@ function ManagerApproval() {
                     value={agreement[ids[0]].city}
                   />
                   <DataFieldStyle
-                    field={"location"}
+                    field={"location"}  
                     value={agreement[ids[0]].location}
                   />
                   <DataFieldStyle
@@ -244,7 +260,7 @@ function ManagerApproval() {
                     value={agreement[ids[0]].pincode}
                   />
                   <DataFieldStyle
-                    field={"address"}
+                    field={"address"}  
                     value={agreement[ids[0]].address}
                   />
                   <DataFieldStyle

@@ -1,0 +1,192 @@
+import {
+    Box,
+    Button,
+    Dialog,
+    DialogActions,
+    FormControl,
+    FormLabel,
+    Grid,
+    TextField,
+    Typography,
+  } from "@mui/material";
+  import { useState } from "react";
+  import moment from 'moment'
+  import DatePicker from "react-datepicker";
+  
+  import "react-datepicker/dist/react-datepicker.css";
+  
+  const labelStyle = {
+    fontSize: "20px",
+    lineHeight: "30px",
+    color: "var(--main-color)",
+    fontWeight: "600",
+    "@media(max-width:900px)": { fontSize: "10px" },
+  };
+  
+  const fieldStyle = {
+    border: "1px solid var(--main-color)",
+    borderRadius: "20px",
+    //   height: "50px",
+    p: 1,
+    px: 2,
+    // width: "450px",
+  
+    color: "rgba(16, 99, 173, 0.47)",
+    "@media(max-width:900px)": { height: "46px", p: 1 },
+  };
+  
+  function SiteVisitDatePopUp({ open, handleClose, handleConfirm, value, setValue ,modifyDate}) {
+    const [formError, setFormError] = useState({ site_visit_date: "", site_visit_remark: "" });
+  
+  
+    function onChange(e) {
+      setFormError({
+        ...formError,
+       [e.target.name]:""
+      })
+      setValue({
+        ...value,
+        [e.target.name]: e.target.value,
+      });
+    }
+  
+    console.log(modifyDate)
+  
+    const disablePastDate = () => {
+      const today = new Date(modifyDate);
+      const dd = String(today.getDate()).padStart(2, "0");
+      const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+      const yyyy = today.getFullYear();
+      console.log(yyyy + "-" + mm + "-" + dd)
+      return yyyy + "-" + mm + "-" + dd;
+    };
+  
+    function validate(e) {
+      console.log(e)
+      let error = {};
+      console.log(e.target.name)
+      if ((value.site_visit_date === "")) {
+        error.utr = "Please Site Visit Date.";
+        setFormError(error);
+        return false;
+      } else if ((value.site_visit_remark === "")) {
+        error.site_visit_remark = "Please Select Payment Date.";
+        setFormError(error);
+        return false;
+      }
+      handleConfirm()
+    }
+  
+    function handleSubmit(e){
+      e.preventDefault()
+      validate(e)
+     
+    }
+  
+    return (
+      <>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
+            style: { borderRadius: 18 },
+          }}
+        >
+          <Box sx={{ pt: 5, px: 2, pb: 2 }}>
+            <Grid container>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <FormLabel>
+                    <Typography variant="body1" sx={labelStyle}>
+                      Site Visit Date
+                    </Typography>
+                  </FormLabel>
+                  <input
+                    type="date"
+                    name="site_visit_date"
+                    value={value.site_visit_date}
+                    min={disablePastDate()}
+                    max = {moment().format("YYYY-MM-DD")}
+                    className="DatePicker"
+                    onChange={(e) => onChange(e)}
+                  />
+                  <Typography variant="body1" color="red" mt={1}>
+                    {formError.site_visit_date}
+                  </Typography>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <FormLabel>
+                    <Typography variant="body1" sx={labelStyle}>
+                      Site Visit Remark
+                    </Typography>
+                  </FormLabel>
+                  <TextField
+                    variant="standard"
+                    onChange={(e) => onChange(e)}
+                    InputProps={{
+                      disableUnderline: true,
+                      style: {
+                        color: "rgba(16, 99, 173, 0.47)",
+                        fontSize: "15px",
+                      }
+                    }}
+                   inputProps={{maxLength: 22}}
+                    value={value.site_visit_remark}
+                    fullWidth
+                    name="site_visit_remark"
+                    sx={fieldStyle}
+                    placeholder="Enter Site Remark"
+                  />
+                  
+                  <Typography variant="body1" color="red" mt={1}>
+                    {formError.site_visit_remark}
+                  </Typography>
+                </FormControl>
+              </Grid>
+              {/* <MyTextfield /> */}
+            </Grid>
+  
+            <DialogActions sx={{ mt: 2 }}>
+              <Grid container spacing={3}>
+                <Grid item xs={6}>
+                  <Button
+                    fullWidth
+                    variant="outlined"
+                    sx={{
+                      height: 45,
+                      borderRadius: "15px",
+                      textTransform: "capitalize",
+                    }}
+                    onClick={handleClose}
+                  >
+                    Close
+                  </Button>
+                </Grid>
+  
+                <Grid item xs={6}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      height: 45,
+                      color: "#FFFFFF",
+                      borderRadius: "15px",
+                      textTransform: "capitalize",
+                    }}
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                </Grid>
+              </Grid>
+            </DialogActions>
+          </Box>
+        </Dialog>
+      </>
+    );
+  }
+  
+  export default SiteVisitDatePopUp;
+  
