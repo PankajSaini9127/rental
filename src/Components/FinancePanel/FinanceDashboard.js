@@ -45,6 +45,7 @@ function FinanceDashboard() {
     <>
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
         <HamburgerMenu
+          misReports= {["/rent-paid-schedule"]}
           navigateHome={"finance-dashboard"}
           handleListing={() => navigate("/finance-listing")}
           monthlyRent={() => navigate("/finance-monthly-rent")}

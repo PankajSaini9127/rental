@@ -12,13 +12,18 @@ import React, { useState } from "react";
 import { MyHeader } from "../StyledComponent";
 import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
 import { excelDownload, getMisReports } from "../../Services/Services";
+import { useSelector } from "react-redux";
+import HamburgerMenu from "../HamburgerMenu";
+import { Navigate } from "react-router-dom";
 
 const RentPaidSchedule = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
   console.log({ startDate, endDate });
+  const { auth } = useSelector((s) => s);
 
+  const { role, isAuth } = auth;
   const labelStyle = {
     fontSize: "20px",
     lineHeight: "30px",
@@ -38,10 +43,19 @@ const RentPaidSchedule = () => {
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        <AdminHamburgerMenu
+      { role.includes("Super Admin") ?  <AdminHamburgerMenu
           navigateListing={"/super-admin-listing"}
           navigateHome={"/super-admin-dashboard"}
-        />
+        /> :    <HamburgerMenu
+        misReports= {["/rent-paid-schedule"]}
+        navigateHome={"finance-dashboard"}
+        handleListing={() => Navigate("/finance-listing")}
+        monthlyRent={() => Navigate("/finance-monthly-rent")}
+        renewal={() => Navigate("/finance-monthly-rent")}
+        monthlyBtn="true"
+        renewalBTN="false"
+      />}
+
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid

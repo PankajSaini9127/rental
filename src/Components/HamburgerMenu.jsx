@@ -5,15 +5,16 @@ import React, { useState } from "react";
 import Logo from "../assest/pic/Dashboard/logo1 2.png";
 
 import "../assest/CSS/hamburgerMenu.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Vector1, Vector2, Vector3, VectorLogout, VectorUser } from "./Vector";
 import { NavExpand, NavItem } from "./StyleComponents/HamburgerStyled";
-
+import MIS from "../assest/pic/Dashboard/mis.png";
 import Dashboard from "../assest/pic/Dashboard/chart.png";
 import { useDispatch, useSelector } from "react-redux";
 
 function HamburgerMenu({
   handleListing,
+  misReports,
   navigateHome,
   monthlyRent,
   renewal,
@@ -68,6 +69,19 @@ function HamburgerMenu({
               onClick={() => navigate(`/${navigateHome}`)}
             />
           </Box>
+          {misReports && misReports.map(row=><Box sx={{ display: "grid", placeItems: "center", width: "89px" }}>
+            <Box
+              component={Link}
+              sx={{
+                background: `url(${MIS})`,
+                backgroundSize: "cover",
+                height: "45px",
+                width: "45px",
+                cursor: "pointer",
+              }}
+              to={`${row}`}
+            />
+          </Box>)}
 
           {!expand ? (
             <>

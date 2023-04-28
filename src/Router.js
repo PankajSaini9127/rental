@@ -377,7 +377,7 @@ function MyRouter() {
         exact
         path="/rental-property-dump-report"
         element={
-          isAuth && role.includes("Super Admin") ? (
+          isAuth && role.includes("Operations") ? (
             <RentalPropertyDumpReport />
           ) : (
             <Login />
@@ -388,7 +388,7 @@ function MyRouter() {
         exact
         path="/rental-payment-mis"
         element={
-          isAuth && role.includes("Super Admin") ? (
+          isAuth && role.includes("Operations") ? (
             <RentalPaymentMIS />
           ) : (
             <Login />
@@ -399,7 +399,7 @@ function MyRouter() {
         exact
         path="/rental-onboarding-all-status"
         element={
-          isAuth && role.includes("Super Admin") ? (
+          isAuth && role.includes("Operations") ? (
             <RentalOnboardingAllStatus />
           ) : (
             <Login />
@@ -410,7 +410,7 @@ function MyRouter() {
         exact
         path="/rental-onboarding-deposited"
         element={
-          isAuth && role.includes("Super Admin") ? (
+          isAuth && role.includes("Operations") ? (
             <RentalOnboardingDeposited />
           ) : (
             <Login />
@@ -421,7 +421,7 @@ function MyRouter() {
         exact
         path="/rent-paid-schedule"
         element={
-          isAuth && role.includes("Super Admin") ? (
+          isAuth && role.includes("Finance") ? (
             <RentPaidSchedule />
           ) : (
             <Login />

@@ -12,13 +12,18 @@ import React, { useState } from "react";
 import { MyHeader } from "../StyledComponent";
 import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
 import { excelDownload } from "../../Services/Services";
+import { useSelector } from "react-redux";
+import HamburgerMenu from "../HamburgerMenu";
+import { Navigate } from "react-router-dom";
 
 const RentalPropertyDumpReport = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
-  console.log({ startDate, endDate });
+  // console.log({ startDate, endDate });
+  const { auth } = useSelector((s) => s);
 
+  const { role, isAuth } = auth;
   const labelStyle = {
     fontSize: "20px",
     lineHeight: "30px",
@@ -38,10 +43,19 @@ const RentalPropertyDumpReport = () => {
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        <AdminHamburgerMenu
+      { role.includes("Super Admin") ?  <AdminHamburgerMenu
           navigateListing={"/super-admin-listing"}
           navigateHome={"/super-admin-dashboard"}
-        />
+        />:  <HamburgerMenu
+        navigateHome={"operationsDashboard"}
+        handleListing={() => Navigate("/operationsListing")}
+        monthlyRent={() => Navigate("/opr-monthly-rent")}
+        renewal={() => Navigate("/opr-monthly-rent")}
+        monthlyBtn="true"
+        renewalBTN="false"
+        misReports= {['rental-property-dump-report','/rental-payment-mis','/rental-onboarding-all-status','/rental-onboarding-deposited']} 
+
+      />}
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid

@@ -52,6 +52,8 @@ function SrManagerDashboard() {
           renewal={() => navigate("/opr-monthly-rent")}
           monthlyBtn="true"
           renewalBTN="false"
+          misReports= {['/rental-payment-mis','/rental-property-dump-report','/rental-onboarding-all-status','/rental-onboarding-deposited']} 
+
         />
 
         {/* dashboard content */}
