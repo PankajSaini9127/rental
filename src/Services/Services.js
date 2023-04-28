@@ -124,8 +124,31 @@ export async function delete_agreement (id){
     return await axios.delete(`${API_LIVE}/api/delAgreement/${id}`)
 }
 
+
+//manager dashboard data
 export async function getMetaData (){
      return await axios.get(`${API_LIVE}/api/dashboard/get-meta`)
+}
+
+
+// srmanager dashboard data
+export async function getMetaData_SRM (id){
+    return await axios.get(`${API_LIVE}/api/srmanager/dashboard/get-meta/${id}`)
+}
+
+// buh dashboard data
+export async function getMetaData_BUH (id){
+    return await axios.get(`${API_LIVE}/api/BHU/dashboard/get-meta/${id}`)
+}
+
+// operations dashboard data
+export async function getMetaData_operations (id){
+    return await axios.get(`${API_LIVE}/api/operations/dashboard/get-meta/${id}`)
+}
+
+// buh dashboard data
+export async function getMetaData_finance (id){
+    return await axios.get(`${API_LIVE}/api/finance/dashboard/get-meta/${id}`)
 }
 
 

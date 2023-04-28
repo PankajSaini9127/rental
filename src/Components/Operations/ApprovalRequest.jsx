@@ -39,7 +39,7 @@ const Heading = ({ heading }) => {
         fontSize={"20px"}
         color={"primary"}
         fontWeight={"600"}
-        sx={{textDecoration:"underline"}}
+        sx={{ textDecoration: "underline" }}
       >
         {heading}
       </Typography>
@@ -58,18 +58,27 @@ function ApprovalRequest() {
 
   const dispatch = useDispatch();
 
- 
-async function getData (id){
-  try {
-    const agreement = await get_agreement_id(id);
-    console.log(agreement.data);
-    if (agreement.data.success) {
-      console.log(agreement.data.agreement[agreement.data.ids[0]].id)
-      get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id)
-      setAgreement(agreement.data.agreement);
-      console.log(agreement.data.ids);
-      setIds(agreement.data.ids);
-    } else {
+  async function getData(id) {
+    try {
+      const agreement = await get_agreement_id(id);
+      console.log(agreement.data);
+      if (agreement.data.success) {
+        console.log(agreement.data.agreement[agreement.data.ids[0]].id);
+        get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id);
+        setAgreement(agreement.data.agreement);
+        console.log(agreement.data.ids);
+        setIds(agreement.data.ids);
+      } else {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong Please Try Again Later.",
+          })
+        );
+      }
+    } catch (error) {
+      console.log(error);
       dispatch(
         setAlert({
           open: true,
@@ -78,18 +87,7 @@ async function getData (id){
         })
       );
     }
-  } catch (error) {
-    console.log(error);
-    dispatch(
-      setAlert({
-        open: true,
-        variant: "error",
-        message: "Something Went Wrong Please Try Again Later.",
-      })
-    );
   }
-}
-
 
   useEffect(() => {
     getData(id);
@@ -132,61 +130,65 @@ async function getData (id){
 
   const [remark, setRemark] = useState("");
 
-  const [recovery,setRecovery] = useState({});
+  const [recovery, setRecovery] = useState({});
 
-
-  async function get_recovery_data (id){
+  async function get_recovery_data(id) {
     try {
-     const recovery = await get_data_recovery(id)
-     if(recovery.status === 200){
-       console.log(recovery.data)
-       setRecovery(recovery.data.data[0])
-     }
+      const recovery = await get_data_recovery(id);
+      if (recovery.status === 200) {
+        console.log(recovery.data);
+        setRecovery(recovery.data.data[0]);
+      }
     } catch (error) {
-     console.log(error)
-     dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong!!"}))
-    }
- }
-
- //termination
- async function handleTerminate () {
-  if (remark.length <= 0) {
-    dispatch(
-      setAlert({
-        variant: "error",
-        open: true,
-        message: "Remark Required !.",
-      })
-    );
-  } else {
-    const response = await send_to_bhu(
-      {
-        status: "Terminated By Operations",
-        op_id: login_manager_id 
-      },
-      id
-    );
-    if (response.data.success) {
+      console.log(error);
       dispatch(
         setAlert({
-          variant: "success",
           open: true,
-          message:"Agreement Sent to Finance For Termination."
-        })
-      );
-      navigate(-1);
-    } else {
-      dispatch(
-        setAlert({
           variant: "error",
-          open: true,
-          message: "Something went wrong! Please again later.",
+          message: "Something Went Wrong!!",
         })
       );
     }
   }
-}
 
+  //termination
+  async function handleTerminate() {
+    if (remark.length <= 0) {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Remark Required !.",
+        })
+      );
+    } else {
+      const response = await send_to_bhu(
+        {
+          status: "Terminated By Operations",
+          op_id: login_manager_id,
+        },
+        id
+      );
+      if (response.data.success) {
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Agreement Sent to Finance For Termination.",
+          })
+        );
+        navigate(-1);
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something went wrong! Please again later.",
+          })
+        );
+      }
+    }
+  }
 
   async function handleSendBack() {
     if (remark.length <= 0) {
@@ -247,23 +249,23 @@ async function getData (id){
           <HamburgerMenu
             navigateHome={"operationsDashboard"}
             handleListing={() => navigate("/operationsListing")}
-          monthlyRent={() => navigate("/opr-monthly-rent")}
-          renewal={() => navigate("/opr-monthly-rent")}
-          monthlyBtn="true"
-          renewalBTN="false"
+            monthlyRent={() => navigate("/opr-monthly-rent")}
+            renewal={() => navigate("/opr-monthly-rent")}
+            monthlyBtn="true"
+            renewalBTN="false"
           />
 
           <Box sx={{ flexGrow: 1 }}>
-          <Grid
-            item
-            xs={12}
-            sx={{ justifyContent: "space-between", display: "flex" }}
-          >
-            <MyHeader>Rental Management System</MyHeader>
-            <Typography mt="15px" mr="15px" fontWeight="600">
-              Welcome {auth.name}
-            </Typography>
-          </Grid>
+            <Grid
+              item
+              xs={12}
+              sx={{ justifyContent: "space-between", display: "flex" }}
+            >
+              <MyHeader>Rental Management System</MyHeader>
+              <Typography mt="15px" mr="15px" fontWeight="600">
+                Welcome {auth.name}
+              </Typography>
+            </Grid>
             <Box className="backButton">
               <IconButton
                 variant="contained"
@@ -286,9 +288,9 @@ async function getData (id){
               ></Grid>
               {/* Basic Details */}
               <Grid item md={10}>
-              {agreement[ids[0]].status === "Deposited" && (
+                {agreement[ids[0]].status === "Deposited" && (
                   <>
-                    <Grid container >
+                    <Grid container>
                       <DataFieldStyle
                         field={"Final Agreement"}
                         href={agreement[ids[0]].final_agreement}
@@ -317,6 +319,21 @@ async function getData (id){
                     </Grid>
                   </>
                 )}
+
+                {agreement[ids[0]].site_visit_date !== null && (
+                  <>
+                    <Grid container sx={{ alignItems: "baseline" }}>
+                      <DataFieldStyle
+                        field={"Site Visit date"}
+                        value={agreement[ids[0]].site_visit_date}
+                      />
+                      <DataFieldStyle
+                        field={"Site Visit Remark"}
+                        value={agreement[ids[0]].site_visit_remark}
+                      />
+                    </Grid>
+                  </>
+                )}
                 <Grid container sx={{ mt: 1 }}>
                   <DataFieldStyle
                     field={"code"}
@@ -327,7 +344,7 @@ async function getData (id){
                     field={"state"}
                     value={agreement[ids[0]].state}
                   />
-                  
+
                   <DataFieldStyle
                     field={"city"}
                     value={agreement[ids[0]].city}
@@ -336,7 +353,7 @@ async function getData (id){
                     field={"location"}
                     value={agreement[ids[0]].location}
                   />
-                  
+
                   <DataFieldStyle
                     field={"pincode"}
                     value={agreement[ids[0]].pincode}
@@ -371,13 +388,12 @@ async function getData (id){
                   />
                   {agreement[ids[0]].tenure !== "11 Month" && (
                     <>
-                      
                       <Grid container spacing={1} sx={{ mt: 6 }}>
                         <Grid item xs={12} container>
-                        <DataFieldStyle
-                        field={"yearly Increment"}
-                        value={agreement[ids[0]].yearlyIncrement}
-                      />
+                          <DataFieldStyle
+                            field={"yearly Increment"}
+                            value={agreement[ids[0]].yearlyIncrement}
+                          />
                         </Grid>
                         <YearField
                           year={"Year 1"}
@@ -447,7 +463,9 @@ async function getData (id){
                             Landlord {id + 1} Details
                           </Typography>
                         </Grid> */}
-                        <Heading heading={`Landlord ${id + 1} Personal Details`} />
+                        <Heading
+                          heading={`Landlord ${id + 1} Personal Details`}
+                        />
                         <DataFieldStyle
                           field={"Name of Lessor"}
                           value={agreement[ids[0]].name[id]}
@@ -521,12 +539,11 @@ async function getData (id){
                             Landlord {id + 1} Details
                           </Typography>
                         </Grid> */}
-                        <Heading heading={`Landlord ${id + 1} Bank Details`} /> 
-                        
+                        <Heading heading={`Landlord ${id + 1} Bank Details`} />
+
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement[ids[0]].bankName[id]}
-                          
                         />
                         <DataFieldStyle
                           field={"beneficiary name"}
@@ -556,11 +573,11 @@ async function getData (id){
               {/* Bank Details Ends here */}
 
               {/* Document Section start here */}
-             
+
               <Grid item md={10}>
                 <Grid container spacing={4} sx={{ mt: 1 }}>
                   <Grid item xs={12}>
-                  <Heading heading={"Document View/Download"} />
+                    <Heading heading={"Document View/Download"} />
                   </Grid>
                   <DocumentView
                     title={"draft agreement"}
@@ -599,11 +616,11 @@ async function getData (id){
               {/* document section ends here */}
 
               <Grid item container xs={10} sx={{ mt: 5 }}>
-                  <DataFieldStyle
-                    field={"Landlord Assets"}
-                    value={agreement[ids[0]].assets}
-                  />
-                </Grid>
+                <DataFieldStyle
+                  field={"Landlord Assets"}
+                  value={agreement[ids[0]].assets}
+                />
+              </Grid>
 
               {agreement[ids[0]].remark.length > 0 && (
                 <Grid item xs={10}>
@@ -614,94 +631,92 @@ async function getData (id){
                 </Grid>
               )}
 
+              {/* Buttons start here*/}
+              {agreement[ids[0]].status === "Terminated By Sr Manager" && (
+                <>
+                  <Grid item container xs={10} sx={{ mt: 2 }}>
+                    <DataFieldStyle
+                      field={"Termination Remark"}
+                      value={agreement[ids[0]].termination_remark}
+                    />
+                  </Grid>
+                  {/* document section ends here */}
 
-   {/* Buttons start here*/}
-   {agreement[ids[0]].status === "Terminated By Sr Manager" && <>
-              <Grid item container xs={10} sx={{ mt: 2 }}>
-                <DataFieldStyle
-                  field={"Termination Remark"}
-                  value={agreement[ids[0]].termination_remark}
-                />
-              </Grid>
-              {/* document section ends here */}
+                  {agreement[ids[0]].remark !== null && (
+                    <Grid item container xs={10} sx={{ mt: 2 }}>
+                      <DataFieldStyle
+                        field={"Remark !"}
+                        value={agreement[ids[0]].remark}
+                      />
+                    </Grid>
+                  )}
 
-              {agreement[ids[0]].remark !== null && (
-                <Grid item container xs={10} sx={{ mt: 2 }}>
-                  <DataFieldStyle
-                    field={"Remark !"}
-                    value={agreement[ids[0]].remark}
-                  />
-                </Grid>
+                  {/* Buttons start here*/}
+                  <Grid item xs={10} sx={{ mt: 2 }}>
+                    <Grid container sx={{ gap: "2rem" }}>
+                      <DataFieldStyle
+                        field="Deposit Amount (Paid)"
+                        value={recovery.depositedAmount}
+                      />
+                    </Grid>
+                    <Grid container sx={{ gap: "2rem", mt: 2 }}>
+                      <DataFieldStyle
+                        field="Remaining Months"
+                        value={recovery.remainingMonth}
+                      />
+                      <DataFieldStyle
+                        field="Adjustment Amount"
+                        value={recovery.adjustmentAmount}
+                      />
+                      <DataFieldStyle
+                        field="Remark"
+                        value={recovery.adjustmentAmountRemark}
+                      />
+                    </Grid>
+
+                    <Grid container sx={{ gap: "2rem", mt: 2 }}>
+                      <DataFieldStyle
+                        field="Expenses Amount"
+                        value={recovery.expenses}
+                      />
+                      <DataFieldStyle
+                        field="Remark"
+                        value={recovery.expansesRemark}
+                      />
+                    </Grid>
+
+                    <Grid item xs={12} container sx={{ gap: "2rem", mt: 2 }}>
+                      <DataFieldStyle
+                        field="Other Adjustments"
+                        value={recovery.otherAdjustments}
+                      />
+                      <DataFieldStyle
+                        field="Remark"
+                        value={recovery.otherRemark}
+                      />
+                    </Grid>
+                    <Grid item xs={12} container sx={{ gap: "2rem", mt: 2 }}>
+                      <DataFieldStyle
+                        field="Total Adjustment Amount "
+                        value={recovery.totalAdjustmentAmount}
+                      />
+                      <DataFieldStyle
+                        field="Balance Deposit "
+                        value={recovery.balanceDeposit}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <DocumentView
+                        title={"Termination File"}
+                        img={agreement[ids[0]].file}
+                      />
+                    </Grid>
+                  </Grid>
+                </>
               )}
 
-              {/* Buttons start here*/}
-              <Grid item xs={10} sx={{ mt: 2 }}>
- 
-             <Grid container sx={{ gap : '2rem'}}>
-             <DataFieldStyle
-                    field="Deposit Amount (Paid)"
-                    value={recovery.depositedAmount}
-                  />
-             </Grid>
-             <Grid container sx={{ gap : '2rem',mt: 2 }}>
-             <DataFieldStyle
-                    field="Remaining Months"
-                    value={recovery.remainingMonth}
-                  />
-                  <DataFieldStyle
-                    field="Adjustment Amount"
-                    value={recovery.adjustmentAmount}
-                  />
-                  <DataFieldStyle
-                    field="Remark"
-                    value={recovery.adjustmentAmountRemark}
-                  />
-             </Grid>
-
-             <Grid container sx={{ gap : '2rem' ,mt: 2 }}>
-             <DataFieldStyle
-                    field="Expenses Amount"
-                    value={recovery.expenses}
-                  />
-            <DataFieldStyle
-                    field="Remark"
-                    value={recovery.expansesRemark}
-                  />
-             </Grid>
-
-             <Grid item xs={12} container  sx={{ gap : '2rem',mt: 2 }}>
-                  <DataFieldStyle
-                    field="Other Adjustments"
-                    value={recovery.otherAdjustments}
-                  />
-               <DataFieldStyle
-                    field="Remark"
-                    value={recovery.otherRemark}
-                  />
-                  </Grid>
-                  <Grid item xs={12} container sx={{ gap : '2rem',mt: 2 }} >
-                  <DataFieldStyle
-                    field="Total Adjustment Amount "
-                    value={recovery.totalAdjustmentAmount}
-                  />
-                  <DataFieldStyle
-                    field="Balance Deposit "
-                    value={recovery.balanceDeposit}
-                  />
-                  </Grid>
-                  <Grid item xs={12}>
-                  <DocumentView
-                    title={"Termination File"}
-                    img={agreement[ids[0]].file}
-                  />
-                  </Grid>
-
-              </Grid>
-              </> }
-
-
-   {/* termonation */}
-   {agreement[ids[0]].status === "Terminated By Sr Manager" && (
+              {/* termonation */}
+              {agreement[ids[0]].status === "Terminated By Sr Manager" && (
                 <>
                   <Grid
                     item
@@ -745,7 +760,7 @@ async function getData (id){
                           }}
                           onClick={handleTerminate}
                         >
-                          Send To Finance 
+                          Send To Finance
                         </Button>
                       </Grid>
                       <Grid item md={6} xs={11}>
@@ -809,11 +824,11 @@ async function getData (id){
                             color: "#FFFFFF",
                             textTransform: "capitalize",
                             fontSize: "18px",
-                            lineHeight:"20px"
+                            lineHeight: "20px",
                           }}
                           onClick={handleSubmit}
                         >
-                           Send To Finance
+                          Send To Finance
                         </Button>
                       </Grid>
                       <Grid item md={6} xs={11}>

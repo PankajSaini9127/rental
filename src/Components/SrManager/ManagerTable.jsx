@@ -1,11 +1,13 @@
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Box, Button, Checkbox } from "@mui/material";
+import { Box, Button, Checkbox, Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { send_to_bhu } from "../../Services/Services";
 import Remark from "../RentalPortal/Remark";
 import { setAlert, setRefreshBox } from "../../store/action/action";
+import SiteVisitDate from "./SiteVisitDate";
+import SiteVisitDatePopUp from "./SiteVisitDate";
 
 function ManagerTable({ rows }) {
   const navigate = useNavigate();
@@ -14,7 +16,16 @@ function ManagerTable({ rows }) {
 
   const { auth } = useSelector((s) => s);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
+  const [SiteVisitDate, setSiteVisit] = useState({ open: false });
+
+  const [sitevisitData, setSiteVisitData] = useState({
+    site_visit_remark: "",
+    site_visit_date: "",
+  });
+
+  console.log(SiteVisitDate);
 
   const srm_id = auth.id;
 
@@ -22,24 +33,50 @@ function ManagerTable({ rows }) {
     const id = e.id;
 
     return (
-      <Button
-        variant="contained"
-        color="primary"
-        size="small"
-        style={{
-          backgroundColor: "rgb(103 185 68 / 89%)",
-          color: "white",
-          fontSize: "12px",
-          textTransform: "capitalize",
-          // minWidth:"100%"
-        }}
-        onClick={(e) => {
-          e.stopPropagation(); // don't select this row after clicking
-          navigate(`/srManagerApproval/${id}`);
-        }}
-      >
-        View
-      </Button>
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            style={{
+              backgroundColor: "rgb(103 185 68 / 89%)",
+              color: "white",
+              fontSize: "12px",
+              textTransform: "capitalize",
+              // minWidth:"100%"
+            }}
+            onClick={(e) => {
+              e.stopPropagation(); // don't select this row after clicking
+              navigate(`/srManagerApproval/${id}`);
+            }}
+          >
+            View
+          </Button>
+        </Grid>
+        {(e.row.status === "Sent To Sr Manager" && e.row.sitevisit === null)&& (
+          <Grid item xs={6}>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              style={{
+                backgroundColor: "rgb(103 185 68 / 89%)",
+                color: "white",
+                fontSize: "12px",
+                textTransform: "capitalize",
+                // minWidth:"100%"
+              }}
+              onClick={(e) => {
+                e.stopPropagation(); // don't select this row after clicking
+                setSiteVisit({ open: true, id: id });
+              }}
+            >
+              Site Visit Date
+            </Button>
+          </Grid>
+        )}
+      </Grid>
     );
   };
   const handleSwitch = (e) => {
@@ -54,9 +91,6 @@ function ManagerTable({ rows }) {
     }
   };
 
-
-
-
   const columns = [
     {
       field: "checkbox",
@@ -67,8 +101,8 @@ function ManagerTable({ rows }) {
       headerAlign: "center",
       renderCell: (params) => (
         <>
-          {(params.formattedValue === "Sent Sr Manager" ||
-          params.formattedValue === "Sent To Sr Manager")? (
+          {params.formattedValue === "Sent Sr Manager" ||
+          params.formattedValue === "Sent To Sr Manager" ? (
             <Checkbox
               onChange={handleSwitch}
               name={params.id}
@@ -148,13 +182,13 @@ function ManagerTable({ rows }) {
       headerClassName: "dataGridHeader",
       headerAlign: "center",
     },
-{
+    {
       field: "manager",
       headerName: "Manager",
       minWidth: 160,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
-       flex:1
+      flex: 1,
     },
     {
       field: "deposit",
@@ -183,32 +217,73 @@ function ManagerTable({ rows }) {
     {
       field: "view",
       headerName: "View",
-      minWidth: 150,
+      minWidth: 230,
       flex: 1,
       headerClassName: "dataGridHeader",
       headerAlign: "center",
       renderCell: renderDetailsButton,
-    }
+    },
   ];
-  const [remarkOpen,setRemarkOpen] = useState(false)
+  const [remarkOpen, setRemarkOpen] = useState(false);
 
-  const [remarkMSG,setRemarkMSG] = useState("")
-
-
-
+  const [remarkMSG, setRemarkMSG] = useState("");
 
   function handleSend() {
     ids.map(async (id) => {
-      const response = await send_to_bhu({ status: "Sent To BUH", srm_id ,remark:remarkMSG}, id);
-      if(response.data.success){
-        setIds([])
-        setRemarkOpen(false)
-        dispatch(setRefreshBox())
-        dispatch(setAlert({variant:"success",open:true,message:"Agreement Sent To BUH."}));
-      }else{
-        dispatch(setAlert({variant:"error",open:true,message:"Something Went Wrong ! Please Try Again."}))
-      };
+      const response = await send_to_bhu(
+        { status: "Sent To BUH", srm_id, remark: remarkMSG },
+        id
+      );
+      if (response.data.success) {
+        setIds([]);
+        setRemarkOpen(false);
+        dispatch(setRefreshBox());
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message: "Agreement Sent To BUH.",
+          })
+        );
+      } else {
+        dispatch(
+          setAlert({
+            variant: "error",
+            open: true,
+            message: "Something Went Wrong ! Please Try Again.",
+          })
+        );
+      }
     });
+  }
+
+  async function handleSiteVisit (){
+    const response = await send_to_bhu(
+      sitevisitData,
+      SiteVisitDate.id
+    );
+    if (response.data.success) {
+      setIds([]);
+      setRemarkOpen(false);
+      dispatch(setRefreshBox());
+      dispatch(
+        setAlert({
+          variant: "success",
+          open: true,
+          message: "Site Visit Date Uploaded.",
+        })
+      );
+      setSiteVisit({open:false})
+
+    } else {
+      dispatch(
+        setAlert({
+          variant: "error",
+          open: true,
+          message: "Something Went Wrong ! Please Try Again.",
+        })
+      );
+    }
   }
 
   return (
@@ -218,13 +293,30 @@ function ManagerTable({ rows }) {
           <Button
             variant="contained"
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
-            onClick={()=>setRemarkOpen(true)}
+            onClick={() => setRemarkOpen(true)}
           >
             Send To BUH
           </Button>
         </Box>
       )}
-      <Remark remark={remarkMSG} setRemark={setRemarkMSG} handleSend={handleSend} open={remarkOpen} handleClose={()=>setRemarkOpen(false)} />
+      <Remark
+        remark={remarkMSG}
+        setRemark={setRemarkMSG}
+        handleSend={handleSend}
+        open={remarkOpen}
+        handleClose={() => setRemarkOpen(false)}
+      />
+
+      <SiteVisitDatePopUp
+        open={SiteVisitDate.open}
+        handleClose={() => {
+          setSiteVisit({ open: false });
+          setSiteVisitData({ site_visit_remark: "", site_visit_date: "" });
+        }}
+        value={sitevisitData}
+        setValue={setSiteVisitData}
+        handleConfirm={handleSiteVisit}
+      />
 
       <Box
         sx={{
@@ -272,7 +364,8 @@ function ManagerTable({ rows }) {
             let cellClass = [];
             if (
               parms.field === "status" &&
-              (parms.row.status === "Approved" || parms.row.status === "Deposited")
+              (parms.row.status === "Approved" ||
+                parms.row.status === "Deposited")
             ) {
               cellClass.push("green statusCell");
             } else if (
@@ -280,22 +373,20 @@ function ManagerTable({ rows }) {
               (parms.row.status === "Sent To Sr Manager" ||
                 parms.row.status === "Sent To BUH" ||
                 parms.row.status === "Sent To Operations" ||
-                parms.row.status === "Sent To Finance Team" || 
-                parms.row.status === "Hold"
-                )
+                parms.row.status === "Sent To Finance Team" ||
+                parms.row.status === "Hold")
             ) {
               cellClass.push("yellow statusCell");
             } else if (
               parms.field === "status" &&
-              (parms.row.status === "Sent Back From Sr Manager"  
-              || parms.row.status === "Sent Back From BUH" 
-              || parms.row.status === "Sent Back From Operations" 
-              || parms.row.status === "Sent Back From Finance"
-              ||parms.row.status === "Terminated By Manager"
-              ||parms.row.status === "Terminated By Sr Manager"
-              ||parms.row.status === "Terminated By Operations"
-              ||parms.row.status === "Approved for Termination"             
-              )
+              (parms.row.status === "Sent Back From Sr Manager" ||
+                parms.row.status === "Sent Back From BUH" ||
+                parms.row.status === "Sent Back From Operations" ||
+                parms.row.status === "Sent Back From Finance" ||
+                parms.row.status === "Terminated By Manager" ||
+                parms.row.status === "Terminated By Sr Manager" ||
+                parms.row.status === "Terminated By Operations" ||
+                parms.row.status === "Approved for Termination")
             ) {
               cellClass.push("red statusCell");
             }

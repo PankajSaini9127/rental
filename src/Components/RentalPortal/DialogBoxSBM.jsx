@@ -36,7 +36,7 @@ const fieldStyle = {
 };
 
 function DialogBoxSBM({ open, handleClose, handleConfirm, value, setValue ,modifyDate}) {
-  const [formError, setFormError] = useState({ ute: "", paymentDate: "" });
+  const [formError, setFormError] = useState({ utr: "", paymentDate: "" });
 
 
   function onChange(e) {

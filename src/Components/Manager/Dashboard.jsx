@@ -16,7 +16,6 @@ function Dashboard() {
     totalAgreement: 0,
     Pending: 0,
     Approved: 0,
-    Rejected: 0,
     Renewal: 0,
   });
 
@@ -38,7 +37,6 @@ function Dashboard() {
     { service: "Total Agreement", value: meta.totalAgreement },
     { service: "Pending Approval", value: meta.Pending },
     { service: "Approved Agreement", value: meta.Approved },
-    { service: "Rejected Agreements", value: meta.Rejected },
     { service: "Renewal Agreements", value: meta.Renewal },
   ];
 

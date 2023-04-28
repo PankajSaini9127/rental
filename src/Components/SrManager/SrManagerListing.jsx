@@ -53,7 +53,8 @@ function SrManagerListing() {
       city:data.agreement[item].city,
       address: data.agreement[item].address,
       initiateDate : moment(data.agreement[item].time).format('DD-MM-YYYY'),
-      type:"---"
+      type:"---",
+      sitevisit:data.agreement[item].site_visit_date
     };
   });
 
@@ -91,19 +92,6 @@ function SrManagerListing() {
           renewal={() => navigate("/srm-renewal-list")}
           monthlyBtn="true"
         />
-        <Box className="backButton"  sx={{zIndex:222}}>
-            <IconButton 
-              variant="contained"
-              color="primary"
-              onClick={() => navigate(-1)}
-              size={"large"}
-            >
-              <ArrowCircleLeftIcon
-                sx={{ fontSize: "3rem" }}
-                color="#FFFFF !important"
-              />
-            </IconButton>
-          </Box>
         <ListingComponent
           title1="Rental Management System"
           title="Rental Agreement"
