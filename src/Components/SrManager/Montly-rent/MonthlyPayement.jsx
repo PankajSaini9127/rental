@@ -1,18 +1,21 @@
 import { IconButton, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import HamburgerMenu from "../../HamburgerMenu";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ListingComponent from "../../StyleComponents/ListingComponent";
 import ListingTable from "./ListingTable";
-import { get_monthlt_rent_srm, get_search_monthly_rent_srm } from "../../../Services/Services";
+import { get_monthlt_rent_srm, get_monthlt_rent_srm_paid, get_search_monthly_rent_srm } from "../../../Services/Services";
 import { useSelector } from "react-redux";
 
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { Box } from "@mui/system";
+import SRMHamburger from "../SRMHAmburger";
 
 function MonthlyPayement() {
   const navigate = useNavigate();
+
+  const {type} = useParams()
 
   const { auth, refresh } = useSelector((s) => s);
 
@@ -37,9 +40,29 @@ function MonthlyPayement() {
     }
   }
 
+  async function fetchDataPaid(id) {
+    try {
+      const data = await get_monthlt_rent_srm_paid(id);
+      if (data.data.success) {
+        setAgIds(data.data.ids);
+        setRent(data.data.agreement);
+      } else {
+      }
+
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
-    fetchData(auth.id);
-  }, [refresh]);
+    if(type === "in-process"){
+      fetchData(auth.id);
+    }else if (type === "paid"){
+      fetchDataPaid(auth.id)
+    }
+   
+  }, [refresh,type]);
 
   const month = [
     "January",
@@ -97,13 +120,14 @@ function MonthlyPayement() {
   return (
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-        <HamburgerMenu
+        {/* <HamburgerMenu
           handleListing={() => navigate("/srManagerListing")}
           navigateHome={"srManagerDashboard"}
           monthlyRent={() => navigate("/srm-monthly-rent")}
           renewal={() => navigate("/srm-renewal-list")}
           monthlyBtn="true"
-        />
+        /> */}
+        <SRMHamburger />
         <Box className="backButton" sx={{zIndex:222}}>
             <IconButton 
               variant="contained"

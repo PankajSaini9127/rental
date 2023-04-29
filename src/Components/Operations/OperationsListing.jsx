@@ -9,17 +9,21 @@ import {
   get_search_srmanager,
   get_Operations_agreements,
   get_search_agreement_operation,
+  get_Operations_agreements_approved,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import OperationsTable from "./OperationsTable";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import moment from "moment";
+import OperationsHamburger from "./OperationsHamburger";
 
 const options = ["New Agreement", "Monthly Payment", "Rental"];
 
 function SrManagerListing() {
-  const { auth } = useSelector((state) => state);
+  const { auth,refresh } = useSelector((state) => state);
+
+  const {type} = useParams()
 
   const login_operations_id = auth.id;
 
@@ -31,6 +35,16 @@ function SrManagerListing() {
     console.log(response.data)
     setData(response.data );
   };
+
+  async function get_approved_agreements (id){
+    try {
+      const response = await get_Operations_agreements_approved(id);
+    console.log(response.data)
+    setData(response.data );
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   console.log(data)
 
@@ -54,10 +68,14 @@ function SrManagerListing() {
   }
 
 
-
   useEffect(() => {
-    getData(login_operations_id);
-  }, []);
+    if(type === "in-procces-ag"){
+      getData(login_operations_id);
+    }else if(type === "approved-ag"){
+      get_approved_agreements(login_operations_id)
+    }
+    
+  }, [refresh,type]);
 
   const navigate = useNavigate();
 
@@ -87,15 +105,7 @@ function SrManagerListing() {
     <>
       {/* {data.success && ( */}
         <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-          <HamburgerMenu
-            navigateHome={"operationsDashboard"}
-            handleListing={() => navigate("/operationsListing")}
-            monthlyRent={() => navigate("/opr-monthly-rent")}
-            renewal={() => navigate("/opr-monthly-rent")}
-            monthlyBtn="true"
-            renewalBTN="false"
-          />
-          
+             <OperationsHamburger/>
           <ListingComponent
             title1={'Rental Management System'}
             title="Rental Agreement"

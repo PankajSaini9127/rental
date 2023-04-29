@@ -25,6 +25,7 @@ import { saveAs } from "file-saver";
 import {
   ApprovedByFinance,
   get_agreement_id,
+  get_agreement_id_finance,
   get_data_recovery,
   get_deposit_amount,
   send_back_to_manager,
@@ -33,6 +34,7 @@ import {
 import { setAlert } from "../../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
 import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
+import FinanceHamburger from "./FinanceHamburger";
 
 const Heading = ({ heading }) => {
   return (
@@ -157,14 +159,14 @@ function FinanceApproval() {
 
   const getData = async (id) => {
     try {
-      const agreement = await get_agreement_id(id);
+      const agreement = await get_agreement_id_finance(id);
       console.log(agreement.data);
       if (agreement.data.success) {
-        setAgreement(agreement.data.agreement);
-        console.log(agreement.data.ids);
-        setIds(agreement.data.ids);
-        get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id);
-        get_deposit(agreement.data.agreement[agreement.data.ids[0]].code);
+        setAgreement(agreement.data.agreement[0]);
+        // console.log(agreement.data.ids);
+        // setIds(agreement.data.ids);
+        // get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id);
+        // get_deposit(agreement.data.agreement[agreement.data.ids[0]].code);
       } else {
         dispatch(
           setAlert({
@@ -241,7 +243,7 @@ function FinanceApproval() {
         payment_date: utr.paymentDate,
         modify_date: new Date(),
       },
-      id
+      
     );
     if (response.data.success) {
       dispatch(
@@ -267,20 +269,18 @@ function FinanceApproval() {
 
   async function handleSubmit() {
     console.log(remark);
-    // console.log(agreement[ids[0]].deposit-deposit === 0 ? "Deposited" : "Approved")
+    // console.log(agreement.deposit-deposit === 0 ? "Deposited" : "Approved")
     if (remark.length > 0) {
       const response = await ApprovedByFinance(
         {
           status:
-            agreement[ids[0]].deposit - deposit === 0
+            agreement.deposit - deposit === 0
               ? "Deposited"
               : "Approved",
           finance_id: "",
-          utr_number: "",
-          payment_date: "",
           modify_date: new Date(),
         },
-        id
+        agreement.agreement_id
       );
       if (response.data.success) {
         dispatch(
@@ -321,7 +321,6 @@ function FinanceApproval() {
 
   return (
     <>
-      {ids && ids.length > 0 && (
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
           {/* <a id="button"></a> */}
           <DialogBoxSBM
@@ -332,15 +331,15 @@ function FinanceApproval() {
             setValue={setUtr}
           />
 
-          <HamburgerMenu
+          {/* <HamburgerMenu
             navigateHome={"finance-dashboard"}
             handleListing={() => navigate("/finance-listing")}
             monthlyRent={() => navigate("/finance-monthly-rent")}
             renewal={() => navigate("/finance-monthly-rent")}
             monthlyBtn="true"
             renewalBTN="false"
-          />
-
+          /> */}
+          <FinanceHamburger />
           <Box sx={{ flexGrow: 1 }}>
             <Grid
               item
@@ -367,172 +366,168 @@ function FinanceApproval() {
             </Box>
 
             <Grid container sx={{ justifyContent: "center", mt: 3 }}>
-              <Grid
-                item
-                xs={12}
-                sx={{ justifyContent: "flex-end", display: "flex" }}
-              ></Grid>
+            
               {/* Basic Details */}
               <Grid item md={10}>
-                {agreement[ids[0]].status === "Deposited" && (
+                {agreement.status === "Deposited" && (
                   <>
                     <Grid container>
                       <DataFieldStyle
                         field={"Final Agreement"}
-                        href={agreement[ids[0]].final_agreement}
+                        href={agreement.final_agreement}
                         name={"Final Agreement"}
                         bold={true}
                         cursor={true}
                       />
                       <DataFieldStyle
                         field={"Final Agreement Date"}
-                        value={agreement[ids[0]].final_agreement_date}
+                        value={agreement.final_agreement_date}
                       />
                       <DataFieldStyle
                         field={"Monthly Rent Start Date"}
-                        value={agreement[ids[0]].rent_start_date}
+                        value={agreement.rent_start_date}
                       />
                     </Grid>
                     <Grid container sx={{ mt: 1 }}>
                       <DataFieldStyle
                         field={"Deposit UTR Number"}
-                        value={agreement[ids[0]].utr_number}
+                        value={agreement.utr_number}
                       />
                       <DataFieldStyle
                         field={"Deposit Payment Date"}
-                        value={agreement[ids[0]].rent_start_date}
+                        value={agreement.rent_start_date}
                       />
                     </Grid>
                   </>
                 )}
 
-                {agreement[ids[0]].site_visit_date !== null && (
+                {agreement.site_visit_date !== null && (
                   <>
                     <Grid container sx={{ alignItems: "baseline" }}>
                       <DataFieldStyle
                         field={"Site Visit date"}
-                        value={agreement[ids[0]].site_visit_date}
+                        value={agreement.site_visit_date}
                       />
                       <DataFieldStyle
                         field={"Site Visit Remark"}
-                        value={agreement[ids[0]].site_visit_remark}
+                        value={agreement.site_visit_remark}
                       />
                     </Grid>
                   </>
                 )}
-                
+
                 <Grid container sx={{ mt: 2 }}>
                   <DataFieldStyle
                     field={"code"}
-                    value={agreement[ids[0]].code}
+                    value={agreement.code}
                   />
 
                   <DataFieldStyle
                     field={"state"}
-                    value={agreement[ids[0]].state}
+                    value={agreement.state}
                   />
                   <DataFieldStyle
                     field={"city"}
-                    value={agreement[ids[0]].city}
+                    value={agreement.city}
                   />
                   <DataFieldStyle
                     field={"location"}
-                    value={agreement[ids[0]].location}
+                    value={agreement.location}
                   />
 
                   <DataFieldStyle
                     field={"pincode"}
-                    value={agreement[ids[0]].pincode}
+                    value={agreement.pincode}
                   />
                   <DataFieldStyle
                     field={"address"}
-                    value={agreement[ids[0]].address}
+                    value={agreement.address}
                   />
                   <DataFieldStyle
                     field={"area"}
-                    value={agreement[ids[0]].area + " sq. ft"}
+                    value={agreement.area + " sq. ft"}
                   />
                   <DataFieldStyle
                     field={"lock in Month"}
-                    value={agreement[ids[0]].lockInYear}
+                    value={agreement.lockInYear}
                   />
                   <DataFieldStyle
                     field={"notice period in month"}
-                    value={agreement[ids[0]].noticePeriod}
+                    value={agreement.noticePeriod}
                   />
                   <DataFieldStyle
                     field={"deposit"}
-                    value={agreement[ids[0]].deposit}
+                    value={agreement.deposit}
                   />
                   <DataFieldStyle
                     field={"monthly rental"}
-                    value={agreement[ids[0]].monthlyRent}
+                    value={agreement.monthlyRent}
                   />
                   <DataFieldStyle
                     field={"tenure"}
-                    value={agreement[ids[0]].tenure}
+                    value={agreement.tenure}
                   />
-                  {agreement[ids[0]].tenure !== "11 Month" && (
+                  {agreement.tenure !== "11 Month" && (
                     <>
                       <Grid container sx={{ mt: 6 }}>
                         <Grid item xs={12} sx={{ mb: 1 }}>
                           <DataFieldStyle
                             field={"yearly Increment"}
-                            value={agreement[ids[0]].yearlyIncrement}
+                            value={agreement.yearlyIncrement}
                           />
                         </Grid>
                         <YearField
                           year={"Year 1"}
-                          incrementType={agreement[ids[0]].yearlyIncrement}
+                          incrementType={agreement.yearlyIncrement}
                           Increment={0}
-                          amount={agreement[ids[0]].year1}
+                          amount={agreement.year1}
                         />
                         <YearField
                           year={"Year 2"}
-                          incrementType={agreement[ids[0]].yearlyIncrement}
-                          amount={agreement[ids[0]].year2}
+                          incrementType={agreement.yearlyIncrement}
+                          amount={agreement.year2}
                           Increment={getIncrement(
-                            agreement[ids[0]].year1,
-                            agreement[ids[0]].year2,
-                            agreement[ids[0]].yearlyIncrement
+                            agreement.year1,
+                            agreement.year2,
+                            agreement.yearlyIncrement
                           )}
                         />
-                        {(agreement[ids[0]].tenure === "3 Year" ||
-                          agreement[ids[0]].tenure === "4 Year" ||
-                          agreement[ids[0]].tenure === "5 Year") && (
+                        {(agreement.tenure === "3 Year" ||
+                          agreement.tenure === "4 Year" ||
+                          agreement.tenure === "5 Year") && (
                           <YearField
                             year={"Year 3"}
-                            incrementType={agreement[ids[0]].yearlyIncrement}
-                            amount={agreement[ids[0]].year3}
+                            incrementType={agreement.yearlyIncrement}
+                            amount={agreement.year3}
                             Increment={getIncrement(
-                              agreement[ids[0]].year2,
-                              agreement[ids[0]].year3,
-                              agreement[ids[0]].yearlyIncrement
+                              agreement.year2,
+                              agreement.year3,
+                              agreement.yearlyIncrement
                             )}
                           />
                         )}
-                        {(agreement[ids[0]].tenure === "4 Year" ||
-                          agreement[ids[0]].tenure === "5 Year") && (
+                        {(agreement.tenure === "4 Year" ||
+                          agreement.tenure === "5 Year") && (
                           <YearField
                             year={"Year 4"}
-                            incrementType={agreement[ids[0]].yearlyIncrement}
-                            amount={agreement[ids[0]].year4}
+                            incrementType={agreement.yearlyIncrement}
+                            amount={agreement.year4}
                             Increment={getIncrement(
-                              agreement[ids[0]].year3,
-                              agreement[ids[0]].year4,
-                              agreement[ids[0]].yearlyIncrement
+                              agreement.year3,
+                              agreement.year4,
+                              agreement.yearlyIncrement
                             )}
                           />
                         )}
-                        {agreement[ids[0]].tenure === "5 Year" && (
+                        {agreement.tenure === "5 Year" && (
                           <YearField
                             year={"Year 5"}
-                            incrementType={agreement[ids[0]].yearlyIncrement}
-                            amount={agreement[ids[0]].year5}
+                            incrementType={agreement.yearlyIncrement}
+                            amount={agreement.year5}
                             Increment={getIncrement(
-                              agreement[ids[0]].year4,
-                              agreement[ids[0]].year5,
-                              agreement[ids[0]].yearlyIncrement
+                              agreement.year4,
+                              agreement.year5,
+                              agreement.yearlyIncrement
                             )}
                           />
                         )}
@@ -540,9 +535,7 @@ function FinanceApproval() {
                     </>
                   )}
 
-                  {Array.from(
-                    { length: agreement[ids[0]].leeseName.length },
-                    (row, id) => (
+                  
                       <Grid container sx={{ mt: 3 }}>
                         {/* <Grid item xs={12}>
                           <Typography variant="body1" fontWeight="600">
@@ -550,40 +543,40 @@ function FinanceApproval() {
                           </Typography>
                         </Grid> */}
                         <Heading
-                          heading={`Landlord ${id + 1} Personal Details`}
+                          heading={`Landlord Personal Details`}
                         />
                         <DataFieldStyle
                           field={"name of lessor"}
-                          value={agreement[ids[0]].name[id]}
+                          value={agreement.name}
                         />
                         <DataFieldStyle
                           field={"aadhaar number"}
-                          value={agreement[ids[0]].aadharNo[id]}
-                          href={agreement[ids[0]].aadhar_card[id]}
+                          value={agreement.aadharNo}
+                          href={agreement.aadhar_card}
                           name={"AadharCard"}
                           bold={true}
                           cursor={true}
                         />
                         <DataFieldStyle
                           field={"PAN number"}
-                          value={agreement[ids[0]].panNo[id]}
-                          href={agreement[ids[0]].pan_card[id]}
+                          value={agreement.panNo}
+                          href={agreement.pan_card}
                           name={"pan_certicate"}
                           bold={true}
                           cursor={true}
                         />
                         <DataFieldStyle
                           field={"GST number"}
-                          value={agreement[ids[0]].gstNo[id]}
-                          href={agreement[ids[0]].gst[id]}
+                          value={agreement.gstNo}
+                          href={agreement.gst}
                           name={"gst"}
                           bold={true}
                           cursor={true}
                         />
                         {/* <DataFieldStyle
                           field={"Cancel Cheque"}
-                          value={agreement[ids[0]].accountNo[id]}
-                          href={agreement[ids[0]].cheque[id]}
+                          value={agreement.accountNo}
+                          href={agreement.cheque}
                           name={"cheque"}
                           bold={true}
                           cursor={true}
@@ -591,23 +584,21 @@ function FinanceApproval() {
 
                         <DataFieldStyle
                           field={"mobile number"}
-                          value={agreement[ids[0]].mobileNo[id]}
+                          value={agreement.mobileNo}
                         />
                         <DataFieldStyle
                           field={"alternate mobile"}
-                          value={agreement[ids[0]].alternateMobile[id]}
+                          value={agreement.alternateMobile}
                         />
                         <DataFieldStyle
                           field={"email"}
-                          value={agreement[ids[0]].email[id]}
+                          value={agreement.email}
                         />
                         <DataFieldStyle
                           field={"Percentage Share"}
-                          value={`${agreement[ids[0]].percentage[id]}%`}
+                          value={`${agreement.percentage}%`}
                         />
                       </Grid>
-                    )
-                  )}
                 </Grid>
               </Grid>
 
@@ -616,35 +607,30 @@ function FinanceApproval() {
 
               <Grid item md={10}>
                 <Grid container>
-                  {Array.from(
-                    { length: agreement[ids[0]].leeseName.length },
-                    (row, id) => (
                       <Grid container>
                         <Heading heading={`Landlord ${id + 1} Bank Details`} />
                         <DataFieldStyle
                           field={"bank name"}
-                          value={agreement[ids[0]].bankName[id]}
+                          value={agreement.bankName}
                         />
                         <DataFieldStyle
                           field={"beneficiary name"}
-                          value={agreement[ids[0]].benificiaryName[id]}
+                          value={agreement.benificiaryName}
                         />
                         <DataFieldStyle
                           field={"bank A/c number"}
-                          value={agreement[ids[0]].accountNo[id]}
-                          href={agreement[ids[0]].cheque[id]}
+                          value={agreement.accountNo}
+                          href={agreement.cheque}
                           name={"cheque"}
                           bold={true}
                           cursor={true}
                         />
                         <DataFieldStyle
                           field={"Bank IFSC"}
-                          value={agreement[ids[0]].ifscCode[id]}
-                          partLabel={agreement[ids[0]].branchName[id]}
+                          value={agreement.ifscCode}
+                          partLabel={agreement.branchName}
                         />
                       </Grid>
-                    )
-                  )}
                 </Grid>
               </Grid>
 
@@ -659,30 +645,30 @@ function FinanceApproval() {
                   </Grid>
                   <DocumentView
                     title={"draft agreement"}
-                    img={agreement[ids[0]].draft_agreement}
+                    img={agreement.draft_agreement}
                   />
                   <DocumentView
                     title={"electricity bill"}
-                    img={agreement[ids[0]].electricity_bill}
+                    img={agreement.electricity_bill}
                   />
                   <DocumentView
                     title={"maintaince bill"}
-                    img={agreement[ids[0]].maintaince_bill}
+                    img={agreement.maintaince_bill}
                   />
-                  <DocumentView title={"POA"} img={agreement[ids[0]].poa} />
+                  <DocumentView title={"POA"} img={agreement.poa} />
                   <DocumentView
                     title={"Property tax receipt"}
-                    img={agreement[ids[0]].tax_receipt}
+                    img={agreement.tax_receipt}
                   />
-                  {agreement[ids[0]].leeseName.length > 1 && (
+                  {/* {agreement.leeseName.length > 1 && (
                     <DocumentView
                       title={"NOC (if multiple owner)"}
-                      img={agreement[ids[0]].noc}
+                      img={agreement.noc}
                     />
-                  )}
+                  )} */}
                   <DocumentView
                     title={"Property Picture"}
-                    img={agreement[ids[0]].property_pic}
+                    img={agreement.property_pic}
                   />
                 </Grid>
               </Grid>
@@ -690,25 +676,25 @@ function FinanceApproval() {
               <Grid item container xs={10} sx={{ mt: 5 }}>
                 <DataFieldStyle
                   field={"Landlord Assets"}
-                  value={agreement[ids[0]].assets}
+                  value={agreement.assets}
                 />
               </Grid>
 
-              {agreement[ids[0]].status === "Terminated By Operations" && (
+              {agreement.status === "Terminated By Operations" && (
                 <>
                   <Grid item container xs={10} sx={{ mt: 2 }}>
                     <DataFieldStyle
                       field={"Termination Remark"}
-                      value={agreement[ids[0]].termination_remark}
+                      value={agreement.termination_remark}
                     />
                   </Grid>
                   {/* document section ends here */}
 
-                  {agreement[ids[0]].remark !== null && (
+                  {agreement.remark !== null && (
                     <Grid item container xs={10} sx={{ mt: 2 }}>
                       <DataFieldStyle
                         field={"Remark !"}
-                        value={agreement[ids[0]].remark}
+                        value={agreement.remark}
                       />
                     </Grid>
                   )}
@@ -770,7 +756,7 @@ function FinanceApproval() {
                     <Grid item xs={12}>
                       <DocumentView
                         title={"Termination File"}
-                        img={agreement[ids[0]].file}
+                        img={agreement.file}
                       />
                     </Grid>
                   </Grid>
@@ -780,7 +766,7 @@ function FinanceApproval() {
               {/* Buttons start here*/}
 
               {/* termination */}
-              {agreement[ids[0]].status === "Terminated By Operations" && (
+              {agreement.status === "Terminated By Operations" && (
                 <>
                   <Grid
                     item
@@ -848,7 +834,7 @@ function FinanceApproval() {
                 </>
               )}
 
-              {agreement[ids[0]].status === "Sent To Finance Team" && (
+              {agreement.status === "Sent To Finance Team" && (
                 <>
                   <Grid
                     item
@@ -919,7 +905,6 @@ function FinanceApproval() {
             </Grid>
           </Box>
         </Stack>
-      )}
     </>
   );
 }

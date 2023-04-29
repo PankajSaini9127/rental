@@ -10,17 +10,21 @@ import {
   get_search_srmanager,
   get_BHU_agreements,
   get_search_Agrteement_buh,
+  get_BHU_agreements_approved
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import { Box } from "@mui/system";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import moment from "moment";
+import BUH_Hamburger from "./BUH_Hamburger";
 
 const options = ["New Agreement", "Monthly Payment", "Rental"];
 
 function SrManagerListing() {
   const { auth } = useSelector((state) => state);
+
+  const {type} = useParams()
 
   const login_bhu_id = auth.id;
 
@@ -31,6 +35,17 @@ function SrManagerListing() {
     console.log(response);
     setData(response.data);
   };
+
+
+  async function get_approved_agreements (id){
+    try {
+      const response = await get_BHU_agreements_approved(id);
+    console.log(response);
+    setData(response.data);
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   console.log(data.ids);
   const rows = data.ids.map((item) => {
@@ -75,8 +90,13 @@ function SrManagerListing() {
   const {refresh} = useSelector(s=>s)
 
   useEffect(() => {
-    getData(login_bhu_id);
-  }, [refresh]);
+    if(type === "in-procces-ag"){
+      getData(login_bhu_id);
+    }else if(type === "approved-ag"){
+      get_approved_agreements(login_bhu_id)
+    }
+    
+  }, [refresh,type]);
 
   const navigate = useNavigate();
 
@@ -84,13 +104,14 @@ function SrManagerListing() {
     <>
       {data.success && (
         <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-          <HamburgerMenu
+          {/* <HamburgerMenu
           navigateHome={"BHUDashboard"}
           handleListing={() => navigate("/BHUListing")}
           // monthlyRent={() => navigate("/buh-monthly-rent")}
           // renewal={() => navigate("/buh-monthly-rent")}
           // monthlyBtn="true"
-        />
+        /> */}
+        <BUH_Hamburger/>
           <ListingComponent
             title="Rental Agreement"
             title1={"Rental Management System"}

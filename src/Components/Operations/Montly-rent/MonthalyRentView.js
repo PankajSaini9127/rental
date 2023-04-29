@@ -32,7 +32,8 @@ import { setAlert, setRefreshBox } from "../../../store/action/action";
 import { CloseFullscreen } from "@mui/icons-material";
 import { DataFieldStyle } from "../../StyleComponents/Rental";
 
-import moment from "moment"
+import moment from "moment";
+import OperationsHamburger from "../OperationsHamburger";
 
 export default function MonthalyRentView() {
   const navigate = useNavigate();
@@ -58,14 +59,14 @@ export default function MonthalyRentView() {
     invoice_no: "",
     invoice_date: "",
     rent_amount: "",
-    gst : "",
+    gst: "",
     gst_amount: "",
     total_amount: 0,
     invoice: "",
     fileName: "",
     status: "",
-    remark:"",
-    paymentDate:""
+    remark: "",
+    paymentDate: "",
   });
 
   function getTotal() {
@@ -160,10 +161,13 @@ export default function MonthalyRentView() {
             month[new Date(response.data.data[0].rent_date).getUTCMonth()] +
             " " +
             new Date(response.data.data[0].rent_date).getFullYear(),
-          remark:  response.data.data[0].remark,
-          paymentDate:new Date(response.data.data[0].payment_date).getDate() +" "+
-          month[new Date(response.data.data[0].rent_date).getUTCMonth()]+ " "+
-          new Date(response.data.data[0].payment_date).getFullYear()
+          remark: response.data.data[0].remark,
+          paymentDate:
+            new Date(response.data.data[0].payment_date).getDate() +
+            " " +
+            month[new Date(response.data.data[0].rent_date).getUTCMonth()] +
+            " " +
+            new Date(response.data.data[0].payment_date).getFullYear(),
         });
       }
     } catch (error) {
@@ -176,53 +180,14 @@ export default function MonthalyRentView() {
   }, []);
 
   async function handleSubmit(e) {
-    if(remark.length >0){
-    const send = await sendMonthyPaymentForword(id, {
-      status: "Sent To Finance",
-      op_id: auth.id,
-      rent_amount: preData.rent_amount,
-      gst_amount: preData.gst_amount,
-      invoice: preData.invoice,
-      remark:remark
-    });
-    console.log(send.data.success);
-    if (send.data.success) {
-      dispatch(
-        setAlert({
-          open: true,
-          variant: "success",
-          message: "Payment Details Send To Finance Successfully.",
-        })
-      );
-      dispatch(setRefreshBox());
-      navigate(-1);
-    } else {
-      dispatch(
-        setAlert({
-          open: true,
-          variant: "error",
-          message: "Something Went Wrong Please Try Again Later.",
-        })
-      );
-    }
-  }else{
-    dispatch(
-      setAlert({
-        open: true,
-        variant: "error",
-        message: "Remark Required.",
-      })
-    )
-  }
-    // console.log(send)
-  }
-
-  async function handleSendBack() {
-    if(remark.length > 0){
-    try {
+    if (remark.length > 0) {
       const send = await sendMonthyPaymentForword(id, {
-        status: "Sent Back From Operations",
-        remark : remark
+        status: "Sent To Finance",
+        op_id: auth.id,
+        rent_amount: preData.rent_amount,
+        gst_amount: preData.gst_amount,
+        invoice: preData.invoice,
+        remark: remark,
       });
       console.log(send.data.success);
       if (send.data.success) {
@@ -230,9 +195,10 @@ export default function MonthalyRentView() {
           setAlert({
             open: true,
             variant: "success",
-            message: "Sent Back To Manager Successfully.",
+            message: "Payment Details Send To Finance Successfully.",
           })
         );
+        dispatch(setRefreshBox());
         navigate(-1);
       } else {
         dispatch(
@@ -243,25 +209,63 @@ export default function MonthalyRentView() {
           })
         );
       }
-    } catch (error) {
-      console.log(error);
+    } else {
       dispatch(
         setAlert({
           open: true,
           variant: "error",
-          message: "Something Went Wrong Please Try Again Later.",
+          message: "Remark Required.",
         })
       );
     }
-  }else{
-    dispatch(
-      setAlert({
-        open: true,
-        variant: "error",
-        message: "Remark Required.",
-      })
-    )
+    // console.log(send)
   }
+
+  async function handleSendBack() {
+    if (remark.length > 0) {
+      try {
+        const send = await sendMonthyPaymentForword(id, {
+          status: "Sent Back From Operations",
+          remark: remark,
+        });
+        console.log(send.data.success);
+        if (send.data.success) {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: "Sent Back To Manager Successfully.",
+            })
+          );
+          navigate(-1);
+        } else {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: "Something Went Wrong Please Try Again Later.",
+            })
+          );
+        }
+      } catch (error) {
+        console.log(error);
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong Please Try Again Later.",
+          })
+        );
+      }
+    } else {
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Remark Required.",
+        })
+      );
+    }
   }
 
   console.log(preData);
@@ -271,17 +275,19 @@ export default function MonthalyRentView() {
       <Stack sx={{ flexDirection: "row", mb: 4 }}>
         {/* <a id="button"></a> */}
 
-        <HamburgerMenu
+        {/* <HamburgerMenu
           navigateHome={"operationsDashboard"}
           handleListing={() => navigate("/operationsListing")}
           monthlyRent={() => navigate("/opr-monthly-rent")}
           renewal={() => navigate("/opr-monthly-rent")}
           monthlyBtn="true"
           renewalBTN="false"
-        />
+        /> */}
+
+        <OperationsHamburger />
 
         <Box sx={{ flexGrow: 1 }}>
-        <Grid
+          <Grid
             item
             xs={12}
             sx={{ justifyContent: "space-between", display: "flex" }}
@@ -313,36 +319,42 @@ export default function MonthalyRentView() {
                     value={preData.dateMonth}
                   />
                 </Grid>
-                { preData.status === "Paid" &&
-                <Grid container spacing={2} sx={{mb:2}}>
-           <DataFieldStyle field={"Payment Date"} value={preData.paymentDate}/>
+                {preData.status === "Paid" && (
+                  <Grid container spacing={2} sx={{ mb: 2 }}>
+                    <DataFieldStyle
+                      field={"Payment Date"}
+                      value={preData.paymentDate}
+                    />
                   </Grid>
-               }
+                )}
                 <Grid container spacing={2}>
-                {(preData.gst !== null || preData.gst !== "") &&<>
-                  <TextFieldWrapper
-                    required={true}
-                    label="Invoice Number"
-                    placeHolder="Enter Invoice Number"
-                    value={preData.invoice_no}
-                    // disabled={true}
-                    // onChange={(e) => handleChange(e)}
-                    disabled={true}
-                    name="invoice_no"
-                  />
-                  <TextFieldWrapper
-                  required={true}
-                  label="Invoice Date"
-                  placeHolder="Invoice Date"
-                  // value={preData.invoice_date}
-                  value={moment(preData.invoice_date).format("DD/MM/YYYY")}
-                  disabled={true}
-                  // name="rent_amount"
-                  // textAlignRight={"textAlignRight"}
-                  // onBlur={(e) => handleOnBlur(e, i)}
-                  // error={ }
-                />
-                   {/* <Grid item xs={6} md={4}>
+                  {(preData.gst !== null || preData.gst !== "") && (
+                    <>
+                      <TextFieldWrapper
+                        required={true}
+                        label="Invoice Number"
+                        placeHolder="Enter Invoice Number"
+                        value={preData.invoice_no}
+                        // disabled={true}
+                        // onChange={(e) => handleChange(e)}
+                        disabled={true}
+                        name="invoice_no"
+                      />
+                      <TextFieldWrapper
+                        required={true}
+                        label="Invoice Date"
+                        placeHolder="Invoice Date"
+                        // value={preData.invoice_date}
+                        value={moment(preData.invoice_date).format(
+                          "DD/MM/YYYY"
+                        )}
+                        disabled={true}
+                        // name="rent_amount"
+                        // textAlignRight={"textAlignRight"}
+                        // onBlur={(e) => handleOnBlur(e, i)}
+                        // error={ }
+                      />
+                      {/* <Grid item xs={6} md={4}>
               <FormControl fullWidth>
                 <input
                   type="date"
@@ -356,7 +368,8 @@ export default function MonthalyRentView() {
                 />
               </FormControl>
             </Grid> */}
-              </>}
+                    </>
+                  )}
                   {/* <TextFieldWrapper
                     required={true}
                     label="Year"
@@ -400,25 +413,26 @@ export default function MonthalyRentView() {
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />
-                    {(preData.gst !== null || preData.gst !== "") &&
-                  <Grid item xs={8} container>
-                    <DocumentUpload
-                      uploaded={preData.invoice ? true : false}
-                      label="Upload Invoice"
-                      placeHolder="Upload Invoice"
-                      handleChange={(e) => handleChangeFile(e)}
-                      name={"invoice"}
-                      fileName={preData.fileName}
-                      href={preData.invoice}
-                      disabled={true}
-                    />
-                  </Grid>}
+                  {(preData.gst !== null || preData.gst !== "") && (
+                    <Grid item xs={8} container>
+                      <DocumentUpload
+                        uploaded={preData.invoice ? true : false}
+                        label="Upload Invoice"
+                        placeHolder="Upload Invoice"
+                        handleChange={(e) => handleChangeFile(e)}
+                        name={"invoice"}
+                        fileName={preData.fileName}
+                        href={preData.invoice}
+                        disabled={true}
+                      />
+                    </Grid>
+                  )}
 
-                  {
-                  preData.remark.length >0 && <Grid item xs={12} container spacing={2} sx={{mt:4}}>
-                  <DataFieldStyle field={"Remark"} value={preData.remark} />
-                </Grid>
-                }
+                  {preData.remark.length > 0 && (
+                    <Grid item xs={12} container spacing={2} sx={{ mt: 4 }}>
+                      <DataFieldStyle field={"Remark"} value={preData.remark} />
+                    </Grid>
+                  )}
                 </Grid>
               </Grid>
 
@@ -427,25 +441,25 @@ export default function MonthalyRentView() {
               {preData.status === "Sent To Operations" && (
                 <>
                   <Grid
-                  item
-                  xs={10}
-                  sx={{ mt: 5 }}
-                  className={"textFieldWrapper"}
-                >
-                  <Grid item xs={8}>
-                    <TextField
-                      type="text"
-                      multiline
-                      rows={3}
-                      fullWidth
-                      variant="outlined"
-                      label="Remark *"
-                      placeholder="Remark *"
-                      value={remark}
-                      onChange={(e) => setRemark(e.target.value)}
-                    />
+                    item
+                    xs={10}
+                    sx={{ mt: 5 }}
+                    className={"textFieldWrapper"}
+                  >
+                    <Grid item xs={8}>
+                      <TextField
+                        type="text"
+                        multiline
+                        rows={3}
+                        fullWidth
+                        variant="outlined"
+                        label="Remark *"
+                        placeholder="Remark *"
+                        value={remark}
+                        onChange={(e) => setRemark(e.target.value)}
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
                   <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
                     <Grid
                       container

@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Checkbox } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getModifyDate, send_to_operations } from "../../Services/Services";
+import { Add_utr_datails, getModifyDate, send_to_operations } from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
 import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
 import {
@@ -30,7 +30,7 @@ function FinanceTable({ rows, setRows }) {
 
   const renderDetailsButton = (e) => {
     const id = e.id;
-
+    const modify_date = e.row.modify_date
     return (
       <Box sx = {{display : "flex", gap : '1rem', width : "100%"}}>
       <Button
@@ -51,7 +51,7 @@ function FinanceTable({ rows, setRows }) {
       >
         View
       </Button>
-      {(e.row.status === 'Approved' &&  e.row.utr_number === '') &&
+      {(e.row.status === 'Approved' &&  e.row.utr_number === null) &&
       <Button
              variant="contained"
              color="primary"
@@ -64,30 +64,12 @@ function FinanceTable({ rows, setRows }) {
              }}
             //  startIcon={<EditIcon />}
              onClick={(e) => {
-            
-              getUpdateDate(id)
+               setModifyDate(modify_date)
+               setopen({open : true, id : id})
              }}
            >
              UTR Number
            </Button>}
-           {/* {(e.row.status === 'Approved for Termination' ) &&
-      <Button
-             variant="contained"
-             color="primary"
-             size="small"
-             style={{
-               backgroundColor: "#62CDFF",
-               color: "white",
-               fontSize: "12px",
-               textTransform: "capitalize",
-             }}
-            //  startIcon={<EditIcon />}
-             onClick={(e) => {
-             setopen({open : true, id : id})
-             }}
-           >
-            Deposit Collect
-           </Button>} */}
       {(e.row.status === 'Approved for Termination' || e.row.status === 'Terminated' ) &&
       <Button
              variant="contained"
@@ -259,19 +241,6 @@ function FinanceTable({ rows, setRows }) {
   ];
 
 
- async function getUpdateDate (id){
-  try {
-    const response = await getModifyDate(id)
-    console.log(response)
-    if(response.status === 200){
-      setModifyDate(response.data.modify_date)
-      setopen({open : true, id : id})
-    }
-  } catch (error) {
-    console.log(error)
-    dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
-  }
- }
 
   const [remarkOpen,setRemarkOpen] = useState(false)
 
@@ -308,10 +277,8 @@ function FinanceTable({ rows, setRows }) {
   const handleConfirm = async (e) => {
     console.log(utr);
    
-    const response = await ApprovedByFinance(
+    const response = await Add_utr_datails(
       {
-        status: "Approved",
-        finance_id: srm_id,
         utr_number: utr.utr,
         payment_date: utr.paymentDate,
       },
@@ -349,7 +316,7 @@ function FinanceTable({ rows, setRows }) {
       );
     }
   };
-
+  console.log(rows)
   return (
     <>
         <DialogBoxSBM

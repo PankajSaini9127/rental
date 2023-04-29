@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { Box } from "@mui/system";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import FinanceHamburger from "../FinanceHamburger";
 
 function FinanceMonthlyPayement() {
   const navigate = useNavigate();
@@ -107,14 +108,15 @@ function FinanceMonthlyPayement() {
   return (
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-        <HamburgerMenu
+        {/* <HamburgerMenu
           navigateHome={"finance-dashboard"}
           handleListing={() => navigate("/finance-listing")}
           monthlyRent={() => navigate("/finance-monthly-rent")}
           renewal={() => navigate("/finance-monthly-rent")}
           monthlyBtn="true"
           renewalBTN="false"
-        />
+        /> */}
+        <FinanceHamburger />
         <ListingComponent
           title1="Rental Management System"
           title="Monthly Payment"

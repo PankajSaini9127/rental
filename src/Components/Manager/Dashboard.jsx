@@ -9,6 +9,7 @@ import HamburgerMenu from "../HamburgerMenu";
 import { DashboardItem, MyHeader } from "../StyledComponent";
 import { getMetaData } from "../../Services/Services";
 import { useSelector } from "react-redux";
+import HamburgerManager from "./HamburgerManager";
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -43,14 +44,14 @@ function Dashboard() {
   return (
     <>
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-        <HamburgerMenu
+        {/* <HamburgerMenu
           navigateHome={"dashboard"}
           handleListing={() => navigate("/listing")}
           monthlyRent={() => navigate("/monthly-payment")}
           renewal={() => navigate(`/renewal`)}
           monthlyBtn="true"
-        />
-
+        /> */}
+<HamburgerManager/>
         {/* dashboard content */}
         {/* <ManagerHome/> */}
         <Grid container sx={{ justifyContent: "center" }}>

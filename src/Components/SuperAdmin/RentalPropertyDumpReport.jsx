@@ -15,6 +15,7 @@ import { excelDownload } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import HamburgerMenu from "../HamburgerMenu";
 import { Navigate } from "react-router-dom";
+import OperationsHamburger from "../Operations/OperationsHamburger";
 
 const RentalPropertyDumpReport = () => {
   const [startDate, setStartDate] = useState("");
@@ -46,16 +47,7 @@ const RentalPropertyDumpReport = () => {
       { role.includes("Super Admin") ?  <AdminHamburgerMenu
           navigateListing={"/super-admin-listing"}
           navigateHome={"/super-admin-dashboard"}
-        />:  <HamburgerMenu
-        navigateHome={"operationsDashboard"}
-        handleListing={() => Navigate("/operationsListing")}
-        monthlyRent={() => Navigate("/opr-monthly-rent")}
-        renewal={() => Navigate("/opr-monthly-rent")}
-        monthlyBtn="true"
-        renewalBTN="false"
-        misReports= {['rental-property-dump-report','/rental-payment-mis','/rental-onboarding-all-status','/rental-onboarding-deposited']} 
-
-      />}
+        />:     <OperationsHamburger/>}
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid

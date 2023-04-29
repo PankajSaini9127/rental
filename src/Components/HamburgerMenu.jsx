@@ -1,4 +1,14 @@
-import { Box, Grid, Stack } from "@mui/material";
+import {
+  Box,
+  Collapse,
+  Grid,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Stack,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 
 //icons hero section
@@ -12,6 +22,8 @@ import MIS from "../assest/pic/Dashboard/mis.png";
 import Dashboard from "../assest/pic/Dashboard/chart.png";
 import { useDispatch, useSelector } from "react-redux";
 
+
+
 function HamburgerMenu({
   handleListing,
   misReports,
@@ -19,8 +31,11 @@ function HamburgerMenu({
   monthlyRent,
   renewal,
   monthlyBtn,
-  renewalBTN
+  monthly,
+  agreements
 }) {
+
+  console.log(agreements)
   const [expand, setExpand] = useState(false);
 
   const { auth } = useSelector((s) => s);
@@ -28,6 +43,8 @@ function HamburgerMenu({
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+
+  const [collapse, setCollaps] = useState("");
 
   // logout function
   function logout() {
@@ -42,10 +59,7 @@ function HamburgerMenu({
       <Grid
         sx={{ ml: "10px" }}
         className={expand ? "HeroSectionMenu" : ""}
-        // onMouseEnter={() => setExpand(true)}
-        // onMouseLeave={() => {
-        //   setExpand(false);
-        // }}
+        onBlur={() => setExpand(false)}
       >
         <Stack sx={{ flexDirection: "column" }} spacing={2}>
           <Box
@@ -69,69 +83,152 @@ function HamburgerMenu({
               onClick={() => navigate(`/${navigateHome}`)}
             />
           </Box>
-          {misReports && misReports.map(row=><Box sx={{ display: "grid", placeItems: "center", width: "89px" }}>
-            <Box
-              component={Link}
-              sx={{
-                background: `url(${MIS})`,
-                backgroundSize: "cover",
-                height: "45px",
-                width: "45px",
-                cursor: "pointer",
-              }}
-              to={`${row}`}
-            />
-          </Box>)}
+          {/* {misReports &&
+            misReports.map((row) => (
+              <Box
+                sx={{ display: "grid", placeItems: "center", width: "89px" }}
+              >
+                <Box
+                  component={Link}
+                  sx={{
+                    background: `url(${MIS})`,
+                    backgroundSize: "cover",
+                    height: "45px",
+                    width: "45px",
+                    cursor: "pointer",
+                  }}
+                  to={`${row}`}
+                />
+              </Box>
+            ))} */}
 
           {!expand ? (
             <>
               {auth.role.includes("Admin") && (
                 <NavItem
                   Vector={VectorUser}
-                  onClick={() => navigate("/userManagement")}
+                  onClick={() => setExpand(!expand)}
+
+                  // onClick={() => navigate("/userManagement")}
                 />
               )}
-              {(auth.role.includes("Manager") || auth.role.includes("BUH") || auth.role.includes("Senior_Manager") ||
-                auth.role.includes("Operations") || auth.role.includes("Finance"))&& (
-                  <NavItem Vector={Vector1} onClick={handleListing} />
-                )}
+              {(auth.role.includes("Manager") ||
+                auth.role.includes("BUH") ||
+                auth.role.includes("Senior_Manager") ||
+                auth.role.includes("Operations") ||
+                auth.role.includes("Finance")) && (
+                <NavItem Vector={Vector1} onClick={() => setExpand(!expand)} />
+              )}
 
               {monthlyBtn && (
                 <>
-                  <NavItem Vector={Vector2} onClick={monthlyRent} />
-                  {
-                    !renewalBTN&&<NavItem Vector={Vector3} onClick={renewal} />
-                  }
-                  
+                  <NavItem
+                    Vector={Vector2}
+                    onClick={() => setExpand(!expand)}
+                  />
                 </>
               )}
+               {misReports &&
+              <NavItem Vector={Vector1}  onClick={() => setExpand(!expand)} />
+               }
               <NavItem Vector={VectorLogout} onClick={logout} />
             </>
           ) : (
             <Stack container spacing={2}>
               {/* onclick */}
-              <NavExpand
-                msg="Users"
-                Vector={VectorUser}
-                NavItem={NavItem}
-                onClick={() => navigate(`/userDashboard`)}
-              />
+              {auth.role.includes("Admin") && (
+                <NavExpand
+                  msg="Users"
+                  Vector={VectorUser}
+                  NavItem={NavItem}
+                  onClick={() => navigate(`/userDashboard`)}
+                />
+              )}
 
               <NavExpand
                 msg="New Agreement"
-                onClick={handleListing}
+                // onClick={handleListing}
                 Vector={Vector1}
+                onClick={() => setCollaps("Agreement")}
               />
+              <Collapse
+                in={collapse === "Agreement"}
+                timeout="auto"
+                unmountOnExit
+              >
+                <List>
+                  {
+                    agreements.map(row=>(
+                      <ListItem disablePadding>
+                      <ListItemButton onClick={()=>navigate(`${row.navigateTo}`)}>
+                        <ListItemText
+                          primary={row.text}
+                          sx={{ color: "primary" }}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                    ))
+                  }
+                </List>
+              </Collapse>
               {monthlyBtn && (
                 <>
                   <NavExpand
                     msg="Monthly Payments"
-                    onClick={monthlyRent}
+                    // onClick={monthlyRent}
+                    onClick={() => setCollaps("Monthly Payment")}
                     Vector={Vector2}
                   />
-                  <NavExpand msg="Renewal" Vector={Vector3} onClick={renewal} />
+
+                  <Collapse
+                    in={collapse === "Monthly Payment"}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <List>
+                      {monthly.map((row, i) => (
+                        <ListItem disablePadding>
+                          <ListItemButton onClick={()=>navigate(row.navigateTo)}>
+                            <ListItemText
+                              primary={row.text}
+                              sx={{ color: "primary" }}
+                            />
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
                 </>
               )}
+
+{misReports &&<>
+              <NavExpand
+                msg="MIS Report"
+                // onClick={handleListing}
+                Vector={Vector1}
+                onClick={() => setCollaps("MIS")}
+              />
+              <Collapse
+                in={collapse === "MIS"}
+                timeout="auto"
+                unmountOnExit
+              >
+                <List>
+                  {
+                    misReports.map(row=>(
+                      <ListItem disablePadding>
+                      <ListItemButton onClick={()=>navigate(`${row.navigateTo}`)}>
+                        <ListItemText
+                          primary={row.text}
+                          sx={{ color: "primary" }}
+                        />
+                      </ListItemButton>
+                    </ListItem>
+                    ))
+                  }
+                </List>
+              </Collapse>
+</>}
 
               <NavExpand msg="Logout" Vector={VectorLogout} onClick={logout} />
             </Stack>
@@ -143,3 +240,8 @@ function HamburgerMenu({
 }
 
 export default HamburgerMenu;
+
+// HamburgerMenu.defaultProps = {
+//   monthly: [],
+//   agreements:[]
+// }

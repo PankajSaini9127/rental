@@ -7,6 +7,7 @@ import HamburgerMenu from "../HamburgerMenu";
 import { DashboardItem, MyHeader } from "../StyledComponent";
 import { useSelector } from "react-redux";
 import { getMetaData_BUH } from "../../Services/Services";
+import BUH_Hamburger from "./BUH_Hamburger";
 
 const data = [
   { service: "Total Approval Pending", value: 10 },
@@ -26,7 +27,7 @@ function SrManagerDashboard() {
     Pending: 0,
     Approved: 0,
     Renewal: 0,
-    Send_Back:0
+    Send_Back: 0,
   });
 
   const data = [
@@ -36,7 +37,6 @@ function SrManagerDashboard() {
     { service: "Renewal Agreements", value: meta.Renewal },
     { service: "Send Back Agreements", value: meta.Send_Back },
   ];
-
 
   async function getMetaDatas(id) {
     const metaData = await getMetaData_BUH(id);
@@ -53,14 +53,14 @@ function SrManagerDashboard() {
   return (
     <>
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-        <HamburgerMenu
+        {/* <HamburgerMenu
           navigateHome={"BHUDashboard"}
           handleListing={() => navigate("/BHUListing")}
           // monthlyRent={() => navigate("/buh-monthly-rent")}
           // renewal={() => navigate("/buh-monthly-rent")}
           // monthlyBtn="true"
-        />
-
+        /> */}
+        <BUH_Hamburger />
 
         {/* dashboard content */}
         <Grid container sx={{ justifyContent: "center" }}>

@@ -6,11 +6,9 @@ import HamburgerMenu from "../HamburgerMenu";
 import { DashboardItem, MyHeader } from "../StyledComponent";
 import { useSelector } from "react-redux";
 import { getMetaData_SRM } from "../../Services/Services";
-
-
+import SRMHamburger from "./SRMHAmburger";
 
 function SrManagerDashboard() {
-
   const navigate = useNavigate();
   const { auth } = useSelector((s) => s);
 
@@ -19,7 +17,7 @@ function SrManagerDashboard() {
     Pending: 0,
     Approved: 0,
     Renewal: 0,
-    Send_Back:0
+    Send_Back: 0,
   });
 
   const data = [
@@ -29,7 +27,6 @@ function SrManagerDashboard() {
     { service: "Renewal Agreements", value: meta.Renewal },
     { service: "Send Back Agreements", value: meta.Send_Back },
   ];
-
 
   async function getMetaDatas(id) {
     const metaData = await getMetaData_SRM(id);
@@ -46,13 +43,15 @@ function SrManagerDashboard() {
   return (
     <>
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-        <HamburgerMenu
+        {/* <HamburgerMenu
           handleListing={() => navigate("/srManagerListing")}
           navigateHome={"srManagerDashboard"}
           monthlyRent={() => navigate("/srm-monthly-rent")}
           renewal={() => navigate("/srm-renewal-list")}
           monthlyBtn="true"
-        />
+        /> */}
+
+        <SRMHamburger />
         <Grid container sx={{ justifyContent: "center" }}>
           <Grid
             item

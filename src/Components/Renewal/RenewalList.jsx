@@ -10,6 +10,7 @@ import { get_renewal, get_search_renewal } from "../../Services/Services";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { Box } from "@mui/system";
+import HamburgerManager from "../Manager/HamburgerManager";
 
 export default function RenewalList() {
   const navigate = useNavigate();
@@ -85,14 +86,14 @@ export default function RenewalList() {
   return (
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-        <HamburgerMenu
+        {/* <HamburgerMenu
           navigateHome={"dashboard"}
           handleListing={() => navigate("/listing")}
           monthlyRent={() => navigate("/monthly-payment")}
           renewal={() => navigate(`/renewal`)}
           monthlyBtn="true"
-        />
-
+        /> */}
+<HamburgerManager/>
         <ListingComponent
           title1={"Rental Management System"}
           title={"Renewal"}

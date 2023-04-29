@@ -5,7 +5,6 @@ import {
   Grid,
   IconButton,
   Link,
-  Snackbar,
   Stack,
   TextField,
   Typography,
@@ -28,6 +27,7 @@ import { send_to_operations } from "../../Services/Services";
 
 //download file
 import { setAlert } from "../../store/action/action";
+import BUH_Hamburger from "./BUH_Hamburger";
 
 // import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
@@ -96,7 +96,7 @@ function SrManagerApproval() {
             message: "Approved And Sent To Operations",
           })
         );
-        navigate("/BHUListing");
+        navigate(-1);
       } else {
         dispatch(
           setAlert({
@@ -135,7 +135,7 @@ function SrManagerApproval() {
             message: "Send back For Rectification",
           })
         );
-        navigate("/BHUListing");
+        navigate(-1);
       } else {
         dispatch(
           setAlert({
@@ -163,13 +163,14 @@ function SrManagerApproval() {
   return (
     <>
       <Stack sx={{ flexDirection: "row", mb: 4 }}>
-        <HamburgerMenu
+        {/* <HamburgerMenu
           navigateHome={"BHUDashboard"}
           handleListing={() => navigate("/BHUListing")}
           // monthlyRent={() => navigate("/buh-monthly-rent")}
           // renewal={() => navigate("/buh-monthly-rent")}
           // monthlyBtn="true"
-        />
+        /> */}
+        <BUH_Hamburger />
         <Box className="backButton">
           <IconButton
             variant="contained"

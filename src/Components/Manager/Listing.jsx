@@ -5,20 +5,23 @@ import DataTable from "./DataTable";
 import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
 import { IconButton, Stack } from "@mui/material";
-import { get_agreements, get_search_manager } from "../../Services/Services";
+import { get_agreements, get_approved_agreements, get_search_manager } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Box } from "@mui/system";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import moment from "moment";
+import HamburgerManager from "./HamburgerManager";
 
 
 function Listing() {
   const [Select, setSelect] = useState("New Agreement");
   const [data, setData] = useState([]);
 
- 
+ const {params} = useParams()
+
+ console.log(params)
   
  const {refresh,auth} = useSelector(s=>s)
 
@@ -33,11 +36,34 @@ function Listing() {
   const [check,setCheck] = useState([])
 
 
-  async function APICALL (){
+  // for in precess agreements
+  async function APICALL (id){
     try {
       setLoading(true);
     setData([]);
-    const result = await get_agreements(auth.id);
+    const result = await get_agreements(id);
+
+    if (result.status === 200) {
+      const data = result.data.ids;
+      setAgreement(result.data.agreement);
+      setData(data);
+     
+      setLoading(false);
+    }
+    } catch (error) {
+      console.log(error)
+    }
+    
+  };
+
+  // for in precess agreements
+  async function get_approved_agreemnt (id){
+    try {
+      setLoading(true);
+    setData([]);
+    const result = await get_approved_agreements(id);
+
+    console.log(result)
 
     if (result.status === 200) {
       const data = result.data.ids;
@@ -53,6 +79,7 @@ function Listing() {
   };
   
   
+  
  //search
  const [searchValue,setsearchValue] =useState('');
 
@@ -64,7 +91,14 @@ function Listing() {
  } 
 
 
+ useEffect(() => {
+  if(params === "in-procces-ag"){
+    APICALL(auth.id);
+  }else if(params === "approved-ag"){
+    get_approved_agreemnt(auth.id)
+  }
 
+}, [refresh,params]); 
  
 
 const row = data.map((item) => {
@@ -91,9 +125,7 @@ const row = data.map((item) => {
     };
   });
 
-  useEffect(() => {
-    APICALL();
-  }, [refresh]); 
+
 
 const navigate =useNavigate()
 
@@ -105,14 +137,15 @@ function handleSerachChange (e){
  return (
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-      <HamburgerMenu
+      {/* <HamburgerMenu
           navigateHome={"dashboard"}
           handleListing={()=>navigate('/listing')}
           monthlyRent={() => navigate("/monthly-payment")}
           renewal={() => navigate(`/renewal`)}
           monthlyBtn='true'
-        />
+        /> */}
 
+<HamburgerManager/>
 
         <ListingComponent
           title1={'Rental Management System'}

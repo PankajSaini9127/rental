@@ -15,6 +15,7 @@ import FinanceTable from "./FinanceDataTable";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { Box } from "@mui/system";
 import moment from "moment";
+import FinanceHamburger from "./FinanceHamburger";
 
 const options = ["New Agreement", "Monthly Payment", "Rental"];
 
@@ -24,37 +25,39 @@ function FinanceListing() {
   const finance_ID = auth.id;
   const [rows,setRows] = useState([])
 
-  const [data, setData] = useState({ ids: [] });
+  const [data, setData] = useState([]);
 
   const getData = async (id) => {
     const response = await get_finance_agreements(id);
     if(response.status === 200)
     {
-      setData(response.data );
+      // console.log(response.data)
+      setData(response.data.agreement);
     
     }
   };
 
 useEffect(()=>{
-  setRows(data.ids.map((item) => {
+  setRows(data.map((item) => {
+    console.log(item.utr_number)
     return {
-      checkbox: data.agreement[item].status,
-    i: data.agreement[item].id,
-    id: data.agreement[item].agreement_id,
-    status: data.agreement[item].status,
-    code: data.agreement[item].code,
-    name: data.agreement[item].name,
-    location: data.agreement[item].location,
-    address: data.agreement[item].address,
-    rentalAmount: data.agreement[item].monthlyRent,
-    deposit:parseFloat( data.agreement[item].deposit).toFixed(2),
-    state: data.agreement[item].state,
-    buh:data.agreement[item].buh,
-    city:data.agreement[item].city,
-    initiateDate : moment(data.agreement[item].time).format('DD-MM-YYYY'),
+      checkbox: item.status,
+      id: item.landlords,
+    i: item.id,
+    status: item.status,
+    code: item.code,
+    name: item.name,
+    location: item.location,
+    address: item.address,
+    rentalAmount: item.monthlyRent,
+    deposit:parseFloat( item.deposit).toFixed(2),
+    state: item.state,
+    buh:item.buh,
+    city:item.city,
+    initiateDate : moment(item.time).format('DD-MM-YYYY'),
     type:"---",
-    utr_number :data.agreement[item].utr_number
-
+    utr_number :item.utr_number,
+    modify_date:item.modify_date
     };
   }))
 },[data])
@@ -83,14 +86,15 @@ useEffect(()=>{
     <>
       {/* {data.success && ( */}
         <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-          <HamburgerMenu
+          {/* <HamburgerMenu
             navigateHome={"finance-dashboard"}
             handleListing={() => navigate("/finance-listing")}
             monthlyRent={() => navigate("/finance-monthly-rent")}
             renewal={() => navigate("/finance-monthly-rent")}
             monthlyBtn="true"
             renewalBTN="false"
-          />
+          /> */}
+          <FinanceHamburger />
           <ListingComponent
             title1={"Rental Management System"}
             title="Rental Agreement"
