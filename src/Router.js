@@ -98,12 +98,12 @@ function MyRouter() {
       />
       <Route
         exact
-        path="/listing"
+        path="/listing/:params"
         element={isAuth && role.includes("Manager") ? <Listing /> : <Login />}
       />
       <Route
         exact
-        path="/monthly-payment"
+        path="/monthly-payment/:type"
         element={
           isAuth && role.includes("Manager") ? <MonthalyList /> : <Login />
         }
@@ -177,7 +177,7 @@ function MyRouter() {
       />
       <Route
         exact
-        path="/srManagerListing"
+        path="/srManagerListing/:type"
         element={
           isAuth && role.includes("Senior_Manager") ? (
             <SrManagerListing />
@@ -199,7 +199,7 @@ function MyRouter() {
       />
       <Route
         exact
-        path="/srm-monthly-rent"
+        path="/srm-monthly-rent/:type"
         element={
           isAuth && role.includes("Senior_Manager") ? (
             <MonthlyPayement />
@@ -219,7 +219,6 @@ function MyRouter() {
           )
         }
       />
-      //SRM Renewal Listing
       <Route
         exact
         path="/srm-renewal-list"
@@ -245,7 +244,7 @@ function MyRouter() {
       />
       <Route
         exact
-        path="/operationsListing"
+        path="/operationsListing/:type"
         element={
           isAuth && role.includes("Operations") ? (
             <OperationsListing />
@@ -267,7 +266,7 @@ function MyRouter() {
       />
       <Route
         exact
-        path="/opr-monthly-rent"
+        path="/opr-monthly-rent/:type"
         element={
           isAuth && role.includes("Operations") ? (
             <OperationsMonthlyPayement />
@@ -290,7 +289,7 @@ function MyRouter() {
       {/* BHU Section */}
       <Route
         exact
-        path="/BHUListing"
+        path="/BHUListing/:type"
         element={isAuth && role.includes("BUH") ? <BHUListing /> : <Login />}
       />
       <Route
@@ -373,6 +372,8 @@ function MyRouter() {
           )
         }
       />
+
+      {/* mis  */}
       <Route
         exact
         path="/rental-property-dump-report"
@@ -437,7 +438,7 @@ function MyRouter() {
         }
       />
       <Route
-        path="/finance-listing"
+        path="/finance-listing/:type"
         element={
           isAuth && role.includes("Finance") ? <FinanceListing /> : <Login />
         }
@@ -449,7 +450,7 @@ function MyRouter() {
         }
       />
       <Route
-        path="/finance-monthly-rent"
+        path="/finance-monthly-rent/:type"
         element={
           isAuth && role.includes("Finance") ? (
             <FinanceMonthlyPayement />

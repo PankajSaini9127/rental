@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Box, Button, Checkbox } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { send_to_operations } from "../../Services/Services";
-import { setAlert } from "../../store/action/action";
+import { setAlert, setRefreshBox } from "../../store/action/action";
 import Remark from "../RentalPortal/Remark";
 
 function ManagerTable({ rows }) {
@@ -14,7 +14,7 @@ function ManagerTable({ rows }) {
 
   const { auth } = useSelector((s) => s);
 
-  const srm_id = auth.id;
+  const Buh_id = auth.id;
 
   const dispatch = useDispatch();
 
@@ -203,7 +203,7 @@ function ManagerTable({ rows }) {
   function handleSelect() {
     ids.map(async (id) => {
       const response = await send_to_operations(
-        { status: "Sent To Operations", bhu_id:srm_id ,remark:remarkMSG},
+        { status: "Sent To Operations", buh_id:Buh_id ,remark:remarkMSG},
         id
       );
       if (response.data.success) {
@@ -215,6 +215,8 @@ function ManagerTable({ rows }) {
           })
         );
         setRemarkOpen(false)
+        setIds([])
+        dispatch(setRefreshBox())
       } else {
         dispatch(
           setAlert({

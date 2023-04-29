@@ -20,6 +20,7 @@ import {
   //download file
   import { setAlert } from "../../store/action/action";
   import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import HamburgerManager from "../Manager/HamburgerManager";
   
   
   function ViewPage() {
@@ -83,13 +84,16 @@ import {
       <>
         {ids.length > 0 && (
           <Stack sx={{ flexDirection: "row", mb: 4 }}>
-             <HamburgerMenu
+             {/* <HamburgerMenu
       navigateHome={'dashboard'}
           handleListing={()=>navigate('/listing')}
           monthlyRent={() => navigate("/monthly-payment")}
           renewal={() => navigate(`/renewal`)}
           monthlyBtn='true'
-        />
+        /> */}
+
+<HamburgerManager/>
+
        <Box className="backButton">
             <IconButton 
               variant="contained"

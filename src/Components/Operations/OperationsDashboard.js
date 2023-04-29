@@ -7,6 +7,7 @@ import HamburgerMenu from "../HamburgerMenu";
 import { DashboardItem, MyHeader } from "../StyledComponent";
 import { useSelector } from "react-redux";
 import { getMetaData_operations } from "../../Services/Services";
+import OperationsHamburger from "./OperationsHamburger";
 
 
 function SrManagerDashboard() {
@@ -45,7 +46,7 @@ function SrManagerDashboard() {
   return (
     <>
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-        <HamburgerMenu
+        {/* <HamburgerMenu
           navigateHome={"operationsDashboard"}
           handleListing={() => navigate("/operationsListing")}
           monthlyRent={() => navigate("/opr-monthly-rent")}
@@ -54,7 +55,9 @@ function SrManagerDashboard() {
           renewalBTN="false"
           misReports= {['/rental-payment-mis','/rental-property-dump-report','/rental-onboarding-all-status','/rental-onboarding-deposited']} 
 
-        />
+        /> */}
+
+         <OperationsHamburger/>
 
         {/* dashboard content */}
         <Grid container sx={{ justifyContent: "center" }}>

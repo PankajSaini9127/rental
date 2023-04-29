@@ -31,6 +31,7 @@ import {
 import { setAlert } from "../../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
 import { get_deposit_amount } from "../../Services/Services";
+import SRMHamburger from "./SRMHAmburger";
 
 const Heading = ({ heading }) => {
   return (
@@ -162,7 +163,7 @@ function SrManagerApproval() {
             message: "Send back From Sr Manager",
           })
         );
-        navigate("/srManagerListing");
+        navigate(-1);
       } else {
         dispatch(
           setAlert({
@@ -212,7 +213,7 @@ function SrManagerApproval() {
                 : "Agreement Sent To Operations ",
           })
         );
-        navigate("/srManagerListing");
+        navigate(-1);
       } else {
         dispatch(
           setAlert({
@@ -250,7 +251,7 @@ function SrManagerApproval() {
             message:"Agreement Sent to Operations For Termination."
           })
         );
-        navigate("/srManagerListing");
+        navigate(-1);
       } else {
         dispatch(
           setAlert({
@@ -282,13 +283,15 @@ function SrManagerApproval() {
           {/* <a id="button"></a> */}
           {console.log(agreement[ids[0]].op_id)};
           {/* <h1>555</h1> */}
-          <HamburgerMenu
+          {/* <HamburgerMenu
             handleListing={() => navigate("/srManagerListing")}
             navigateHome={"srManagerDashboard"}
             monthlyRent={() => navigate("/srm-monthly-rent")}
             renewal={() => navigate("/srm-renewal-list")}
             monthlyBtn="true"
-          />
+          /> */}
+
+          <SRMHamburger/>
           <Box sx={{ flexGrow: 1 }}>
           <Grid
             item
@@ -338,16 +341,6 @@ function SrManagerApproval() {
                       />
                       <DataFieldStyle
                         field={"Monthly Rent Start Date"}
-                        value={agreement[ids[0]].rent_start_date}
-                      />
-                    </Grid>
-                    <Grid container sx={{ mt: 1 }}>
-                      <DataFieldStyle
-                        field={"Deposit UTR Number"}
-                        value={agreement[ids[0]].utr_number}
-                      />
-                      <DataFieldStyle
-                        field={"Deposit Payment Date"}
                         value={agreement[ids[0]].rent_start_date}
                       />
                     </Grid>
@@ -490,6 +483,7 @@ function SrManagerApproval() {
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
+                      <>
                       <Grid container sx={{ mt: 3 }}>
                         {/* <Grid item xs={12}>
                           <Typography variant="body1" fontWeight="600">
@@ -553,6 +547,17 @@ function SrManagerApproval() {
                           value={`${agreement[ids[0]].percentage[id]}%`}
                         />
                       </Grid>
+                       <Grid  container sx = {{alignItems : "baseline",mt: 1 }} >
+                       <DataFieldStyle
+                         field={"Deposit UTR Number"}
+                         value={agreement[ids[0]].utr_number[id]}
+                       />
+                       <DataFieldStyle
+                         field={"Deposit Payment Date"}
+                         value={agreement[ids[0]].payment_date[id]}
+                       />
+                     </Grid>
+                     </>
                     )
                   )}
                 </Grid>

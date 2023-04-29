@@ -12,6 +12,7 @@ import { setAlert } from "../../../store/action/action";
 import { Box } from "@mui/system";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import SRMHamburger from "../SRMHAmburger";
 
 
 
@@ -96,13 +97,14 @@ const navigate = useNavigate()
   return (
     <>
     <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-    <HamburgerMenu
+    {/* <HamburgerMenu
           handleListing={() => navigate("/srManagerListing")}
           navigateHome={"srManagerDashboard"}
           monthlyRent={() => navigate("/srm-monthly-rent")}
           renewal={() => navigate("/srm-renewal-list")}
           monthlyBtn="true"
-        />
+        /> */}
+        <SRMHamburger />
 <Box className="backButton"  sx={{zIndex:222}}>
             <IconButton 
               variant="contained"

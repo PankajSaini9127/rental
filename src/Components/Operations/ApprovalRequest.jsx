@@ -30,6 +30,7 @@ import {
 } from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
+import OperationsHamburger from "./OperationsHamburger";
 
 const Heading = ({ heading }) => {
   return (
@@ -246,14 +247,16 @@ function ApprovalRequest() {
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
           {/* <a id="button"></a> */}
 
-          <HamburgerMenu
+          {/* <HamburgerMenu
             navigateHome={"operationsDashboard"}
             handleListing={() => navigate("/operationsListing")}
             monthlyRent={() => navigate("/opr-monthly-rent")}
             renewal={() => navigate("/opr-monthly-rent")}
             monthlyBtn="true"
             renewalBTN="false"
-          />
+          /> */}
+
+            <OperationsHamburger/>
 
           <Box sx={{ flexGrow: 1 }}>
             <Grid
@@ -307,7 +310,7 @@ function ApprovalRequest() {
                         value={agreement[ids[0]].rent_start_date}
                       />
                     </Grid>
-                    <Grid container sx={{ mt: 1 }}>
+                    {/* <Grid container sx={{ mt: 1 }}>
                       <DataFieldStyle
                         field={"Deposit UTR Number"}
                         value={agreement[ids[0]].utr_number}
@@ -316,7 +319,7 @@ function ApprovalRequest() {
                         field={"Deposit Payment Date"}
                         value={agreement[ids[0]].rent_start_date}
                       />
-                    </Grid>
+                    </Grid> */}
                   </>
                 )}
 
@@ -457,6 +460,7 @@ function ApprovalRequest() {
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
+                      <>
                       <Grid container sx={{ mt: 3 }}>
                         {/* <Grid item xs={12}>
                           <Typography variant="body1" fontWeight="600">
@@ -520,6 +524,17 @@ function ApprovalRequest() {
                           value={`${agreement[ids[0]].percentage[id]}%`}
                         />
                       </Grid>
+                      <Grid  container sx = {{alignItems : "baseline",mt: 1 }} >
+                      <DataFieldStyle
+                        field={"Deposit UTR Number"}
+                        value={agreement[ids[0]].utr_number[id]}
+                      />
+                      <DataFieldStyle
+                        field={"Deposit Payment Date"}
+                        value={agreement[ids[0]].payment_date[id]}
+                      />
+                    </Grid>
+                    </>
                     )
                   )}
                 </Grid>

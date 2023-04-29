@@ -1,17 +1,18 @@
 import React, {  useEffect, useState } from "react";
-import HamburgerMenu from "../HamburgerMenu";
 import ListingComponent from "../StyleComponents/ListingComponent";
-import { IconButton, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import DataTable from "./DataTable";
-import { useNavigate } from "react-router-dom";
-import { get_search_monthly_rent_manager, listMonthRent } from "../../Services/Services";
+import { useNavigate, useParams } from "react-router-dom";
+import { get_paid_monthly_payment, get_search_monthly_rent_manager, listMonthRent } from "../../Services/Services";
 import { useSelector } from "react-redux";
-import { Box } from "@mui/system";
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
+import HamburgerManager from "../Manager/HamburgerManager";
 // const options = ["New Agreement","Monthly Payment","Rental"]
 
 
 export default function MonthalyList() {
+
+  const {type} = useParams();
+
     const [Select, setSelect] = useState("New Agreement");
 
   const handleChange = (e) => {
@@ -42,9 +43,27 @@ const { auth, refresh } = useSelector((state) => state);
     }
   };
 
+  //get monthly payment paid
+  const get_monthly_payment_paid = async () => {
+    setLoading(true);
+    setData([]);
+    const result = await get_paid_monthly_payment(auth.id);
+    console.log(result);
+    if (result.status === 200) {
+      //   const data = result.data.data.reverse();
+      setData(result.data);
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    APICALL();
-  }, [refresh]);
+    if(type === "in-process"){
+      APICALL();
+    }else if(type=== "paid"){
+      get_monthly_payment_paid()
+    }
+    
+  }, [refresh,type]);
 
   const month = [
     "January",
@@ -106,14 +125,14 @@ const { auth, refresh } = useSelector((state) => state);
   return (
     <>
     <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-    <HamburgerMenu
+    {/* <HamburgerMenu
       navigateHome={'dashboard'}
           handleListing={()=>navigate('/listing')}
           monthlyRent={() => navigate("/monthly-payment")}
           renewal={() => navigate(`/renewal`)}
           monthlyBtn='true'
-        />
-
+        /> */}
+<HamburgerManager/>
 
       <ListingComponent
         title1={'Rental Management System'}

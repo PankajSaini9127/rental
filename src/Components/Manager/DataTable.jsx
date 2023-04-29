@@ -48,7 +48,7 @@ function DataTable({ rows, loading, check, setCheck }) {
     message: "",
   });
 
-  const [data,setData] = useState([])
+  const [data, setData] = useState([]);
 
   //altet close
   const handleClose = () => {
@@ -83,7 +83,13 @@ function DataTable({ rows, loading, check, setCheck }) {
   const renderDetailsButton = (e) => {
     const id = e.id;
 
-    // console.log(e.row);
+    // console.log();
+    let utr_count = 0;
+   e.row.utr_number.map(item=>{
+      if(item === null)  utr_count += 1 
+    })
+
+    console.log(utr_count)
 
     return (
       <>
@@ -159,7 +165,8 @@ function DataTable({ rows, loading, check, setCheck }) {
             </Grid>
           </Grid>
         )}
-        {(e.row.status === "Approved" && e.row.utr_number !== "" || e.row.status === "Deposited" && e.row.rent_date === null) && (
+        {((e.row.status === "Approved" &&    utr_count === 0) ||
+          (e.row.status === "Deposited" && e.row.rent_date === null)) && (
           <Grid container>
             <Grid item md={6} sx={{ color: "white !important" }}>
               <Button
@@ -175,13 +182,13 @@ function DataTable({ rows, loading, check, setCheck }) {
                 //  startIcon={<EditIcon />}
                 onClick={(e) => {
                   e.stopPropagation(); // don't select this row after clicking
-                 
+
                   setSelectID(id);
-                  
-                  getUpdateDate(id)
+
+                  getUpdateDate(id);
                 }}
               >
-               Upload Final Agreement
+                Upload Final Agreement
               </Button>
             </Grid>
           </Grid>
@@ -226,7 +233,6 @@ function DataTable({ rows, loading, check, setCheck }) {
       setIds([...ids, e.target.name]);
     }
   };
-
 
   // Initiate Date | Type | Code | Landlord Name | Location | Address Line | City | State | Deposit Amount | Rent Amount | Status | View | Action
 
@@ -376,8 +382,6 @@ function DataTable({ rows, loading, check, setCheck }) {
     setDeleteAlert({ open: false, id: "" });
   };
 
-
-
   async function AgreementFinal() {
     try {
       const response = await send_to_bhu(
@@ -390,72 +394,67 @@ function DataTable({ rows, loading, check, setCheck }) {
         selectID
       );
 
-
-      console.log(response)
+      console.log(response);
       if (response.status === 200) {
+        const monthCalculation = await get_monthaly_rent(selectID);
+        if (monthCalculation.status === 200) {
+          setData(monthCalculation.data.monthly_rent);
 
-        const monthCalculation = await get_monthaly_rent(selectID)
-        if(monthCalculation.status === 200){
-        setData(monthCalculation.data.monthly_rent)
-        
- 
-     
-    // const result = await get_landlord_id(selectID)
-    // // console.log(result)
-    // if(result.data.success){
-    //   // setLandlord(result.data.landlords_id)
-    //   console.log(result.data.landlords_id)
+          // const result = await get_landlord_id(selectID)
+          // // console.log(result)
+          // if(result.data.success){
+          //   // setLandlord(result.data.landlords_id)
+          //   console.log(result.data.landlords_id)
 
-      Promise.allSettled(monthCalculation.data.monthly_rent.map(async(row,index)=>{
-            return await add_monthly_rent({
-              rent_amount : row.rent_amount,
-              rent_date :row.rent_date,
-              landlord_name :row.landlord_name,
-              share :row.share,
-              monthly_rent :row.monthly_rent,
-              code : row.code,
-              location : row.location,
-              gst : row.gst,
-              utr_no : row.utr_no,
-              status : "Pending",
-              manager_id: auth.id
+          Promise.allSettled(
+            monthCalculation.data.monthly_rent.map(async (row, index) => {
+              return await add_monthly_rent({
+                rent_amount: row.rent_amount,
+                rent_date: row.rent_date,
+                landlord_name: row.landlord_name,
+                share: row.share,
+                monthly_rent: row.monthly_rent,
+                code: row.code,
+                location: row.location,
+                gst: row.gst,
+                utr_no: row.utr_no,
+                status: "Pending",
+                manager_id: auth.id,
+              });
             })
-      }))
-      .then((response)=>{
-        console.log(response)
-        setFinalAgreement({
-          agreement_date: "",
-          final_agreement: "",
-          rent_start_date: "",
-        });
-      
-        dispatch(
-          setAlert({
-            variant: "success",
-            open: true,
-            message: "Final Agreement Submitted Successfully.",
-          })
-        );
-        setopen(false);
-        dispatch(setRefreshBox());
-      })
-      .catch((err)=>{
-        console.log(err)
-        dispatch(
-          setAlert({
-            variant: "error",
-            open: true,
-            message: "Something went wrong! Please again later.",
-          }))
-      })
-    }
-    }
+          )
+            .then((response) => {
+              console.log(response);
+              setFinalAgreement({
+                agreement_date: "",
+                final_agreement: "",
+                rent_start_date: "",
+              });
 
-
-       
-      } 
-catch (error) {
-  console.log(error)
+              dispatch(
+                setAlert({
+                  variant: "success",
+                  open: true,
+                  message: "Final Agreement Submitted Successfully.",
+                })
+              );
+              setopen(false);
+              dispatch(setRefreshBox());
+            })
+            .catch((err) => {
+              console.log(err);
+              dispatch(
+                setAlert({
+                  variant: "error",
+                  open: true,
+                  message: "Something went wrong! Please again later.",
+                })
+              );
+            });
+        }
+      }
+    } catch (error) {
+      console.log(error);
       dispatch(
         setAlert({
           variant: "error",
@@ -502,21 +501,27 @@ catch (error) {
     });
   };
 
-  const [modifyDate,setModifyDate] = useState("")
+  const [modifyDate, setModifyDate] = useState("");
 
-  async function getUpdateDate (id){
+  async function getUpdateDate(id) {
     try {
-      const response = await getModifyDate(id)
-      console.log(response)
-      if(response.status === 200){
-        setModifyDate(response.data.modify_date)
+      const response = await getModifyDate(id);
+      console.log(response);
+      if (response.status === 200) {
+        setModifyDate(response.data.modify_date);
         setopen(true);
       }
     } catch (error) {
-      console.log(error)
-      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong Please Try Again Later.",
+        })
+      );
     }
-   }
+  }
 
   return (
     <>
@@ -630,15 +635,14 @@ catch (error) {
               cellClass.push("yellow statusCell");
             } else if (
               parms.field === "status" &&
-              (parms.row.status === "Sent Back From Sr Manager"  
-              || parms.row.status === "Sent Back From BUH" 
-              || parms.row.status === "Sent Back From Operations" 
-              || parms.row.status === "Sent Back From Finance"
-              ||parms.row.status === "Terminated By Manager"
-              ||parms.row.status === "Terminated By Sr Manager"
-              ||parms.row.status === "Terminated By Operations"
-              ||parms.row.status === "Approved for Termination"             
-              )
+              (parms.row.status === "Sent Back From Sr Manager" ||
+                parms.row.status === "Sent Back From BUH" ||
+                parms.row.status === "Sent Back From Operations" ||
+                parms.row.status === "Sent Back From Finance" ||
+                parms.row.status === "Terminated By Manager" ||
+                parms.row.status === "Terminated By Sr Manager" ||
+                parms.row.status === "Terminated By Operations" ||
+                parms.row.status === "Approved for Termination")
             ) {
               cellClass.push("red statusCell");
             }

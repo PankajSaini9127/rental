@@ -1,4 +1,12 @@
-import { Box, Button, FormControl, Grid, IconButton, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Stack } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,13 +19,17 @@ import {
   TextFieldWrapper,
 } from "../../StyledComponent";
 
-import moment from "moment"
+import moment from "moment";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { useDispatch, useSelector } from "react-redux";
 import { DataFieldStyle, DocumentView } from "../../StyleComponents/Rental";
 import { setAlert, setRefreshBox } from "../../../store/action/action";
-import { get_rent_data_ID, sendMonthyPaymentForword } from "../../../Services/Services";
+import {
+  get_rent_data_ID,
+  sendMonthyPaymentForword,
+} from "../../../Services/Services";
+import FinanceHamburger from "../FinanceHamburger";
 
 export default function FinanceMonthlyRentView() {
   const navigate = useNavigate();
@@ -25,11 +37,11 @@ export default function FinanceMonthlyRentView() {
 
   console.log(id);
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const [remark, setRemark] = useState("");
 
-  const {auth} = useSelector(s=>s)
+  const { auth } = useSelector((s) => s);
 
   const [preData, setPredata] = useState({
     invoice_no: "",
@@ -39,10 +51,10 @@ export default function FinanceMonthlyRentView() {
     gst: "",
     total_amount: "",
     invoice: "",
-    status:"",
-    dateMonth:"",
-    remark:"",
-    paymentDate:""
+    status: "",
+    dateMonth: "",
+    remark: "",
+    paymentDate: "",
   });
 
   const month = [
@@ -69,7 +81,7 @@ export default function FinanceMonthlyRentView() {
         setPredata({
           invoice: response.data.data[0].invoice,
           invoice_no: response.data.data[0].invoice_number,
-          invoice_date:(response.data.data[0].invoice_date),
+          invoice_date: response.data.data[0].invoice_date,
           rent_amount: parseFloat(response.data.data[0].rent_amount).toFixed(2),
           gst_amount: response.data.data[0].gst_amount,
           gst: response.data.data[0].gst,
@@ -78,13 +90,17 @@ export default function FinanceMonthlyRentView() {
               Number(response.data.data[0].gst_amount)
           ).toFixed(2),
           status: response.data.data[0].status,
-          dateMonth: month[new Date(response.data.data[0].rent_date).getUTCMonth()] +
-          " " +
-          new Date(response.data.data[0].rent_date).getFullYear(),
+          dateMonth:
+            month[new Date(response.data.data[0].rent_date).getUTCMonth()] +
+            " " +
+            new Date(response.data.data[0].rent_date).getFullYear(),
           remark: response.data.data[0].remark,
-          paymentDate:new Date(response.data.data[0].payment_date).getDate() +" "+
-          month[new Date(response.data.data[0].rent_date).getUTCMonth()]+ " "+
-          new Date(response.data.data[0].payment_date).getFullYear()
+          paymentDate:
+            new Date(response.data.data[0].payment_date).getDate() +
+            " " +
+            month[new Date(response.data.data[0].rent_date).getUTCMonth()] +
+            " " +
+            new Date(response.data.data[0].payment_date).getFullYear(),
         });
       }
     } catch (error) {
@@ -96,72 +112,111 @@ export default function FinanceMonthlyRentView() {
     fetchData(id);
   }, []);
 
-  const today = new Date()
-  console.log(today)
+  const today = new Date();
+  console.log(today);
 
   async function handleSubmit(e) {
     try {
-      const send = await sendMonthyPaymentForword(id,
-        {
-        status:"Approved By Finance",
+      const send = await sendMonthyPaymentForword(id, {
+        status: "Approved By Finance",
         finance_id: auth.id,
-        remark:remark,
-        update_at: new Date()
-        })
+        remark: remark,
+        update_at: new Date(),
+      });
       // console.log(send.data.success)
-     if(send.data.success){
-      dispatch(setAlert({open:true,variant:"success",message:"Approved Successfully."}))
-      dispatch(setRefreshBox())
-       navigate(-1)
-     }else{
-      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
-     }
+      if (send.data.success) {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "success",
+            message: "Approved Successfully.",
+          })
+        );
+        dispatch(setRefreshBox());
+        navigate(-1);
+      } else {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong Please Try Again Later.",
+          })
+        );
+      }
     } catch (error) {
-      console.log(error)
-      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+      console.log(error);
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong Please Try Again Later.",
+        })
+      );
     }
-  
+
     // console.log(send)
   }
 
   async function handleSendBack() {
-    if(remark.length >0){
-    try {
-      const send = await sendMonthyPaymentForword(id,{status:"Sent Back From Finance",remark})
-      console.log(send.data.success)
-     if(send.data.success){
-      dispatch(setAlert({open:true,variant:"success",message:"Sent Back To Manager Successfully."}))
-      dispatch(setRefreshBox())
-       navigate(-1)
-     }else{
-      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
-     }
-    } catch (error) {
-      console.log(error)
-      dispatch(setAlert({open:true,variant:"error",message:"Something Went Wrong Please Try Again Later."}))
+    if (remark.length > 0) {
+      try {
+        const send = await sendMonthyPaymentForword(id, {
+          status: "Sent Back From Finance",
+          remark,
+        });
+        console.log(send.data.success);
+        if (send.data.success) {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "success",
+              message: "Sent Back To Manager Successfully.",
+            })
+          );
+          dispatch(setRefreshBox());
+          navigate(-1);
+        } else {
+          dispatch(
+            setAlert({
+              open: true,
+              variant: "error",
+              message: "Something Went Wrong Please Try Again Later.",
+            })
+          );
+        }
+      } catch (error) {
+        console.log(error);
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Something Went Wrong Please Try Again Later.",
+          })
+        );
+      }
+    } else {
+      dispatch(
+        setAlert({ open: true, variant: "error", message: "Remark Required !" })
+      );
     }
-  }else{
-    dispatch(setAlert({open:true,variant:"error",message:"Remark Required !"}))
   }
-      
-    }
 
   return (
     <>
       <Stack sx={{ flexDirection: "row", mb: 4 }}>
         {/* <a id="button"></a> */}
 
-        <HamburgerMenu
+        {/* <HamburgerMenu
             navigateHome={"finance-dashboard"}
             handleListing={() => navigate("/finance-listing")}
             monthlyRent={() => navigate("/finance-monthly-rent")}
             renewal={() => navigate("/finance-monthly-rent")}
             monthlyBtn="true"
             renewalBTN="false"
-          />
-
+          /> */}
+        <FinanceHamburger />
         <Box sx={{ flexGrow: 1 }}>
-        <Grid
+          <Grid
             item
             xs={12}
             sx={{ justifyContent: "space-between", display: "flex" }}
@@ -186,38 +241,44 @@ export default function FinanceMonthlyRentView() {
           </Box>
           <Grid container sx={{ justifyContent: "center", mt: 3 }}>
             <Grid item md={10}>
-              <Grid container spacing={2} sx={{mb:2}}>
-                <DataFieldStyle field={"Rent Month"} value={preData.dateMonth}/>
-              </Grid>
-              { preData.status === "Paid" &&
-                <Grid container spacing={2} sx={{mb:2}}>
-           <DataFieldStyle field={"Payment Date"} value={preData.paymentDate}/>
-                  </Grid>
-               }
-              <Grid container spacing={2}>
-              
-              {preData.gst !== null &&<>
-                  <TextFieldWrapper
-                    required={true}
-                    label="Invoice Number"
-                    placeHolder="Enter Invoice Number"
-                    value={preData.invoice_no}
-                    disabled={true}
-                    name="invoice_no"
-                  />
-                  <TextFieldWrapper
-                  required={true}
-                  label="Invoice Date"
-                  placeHolder="Invoice Date"
-                  // value={preData.invoice_date}
-                  value={moment(preData.invoice_date).format("DD/MM/YYYY")}
-                  disabled={true}
-                  // name="rent_amount"
-                  // textAlignRight={"textAlignRight"}
-                  // onBlur={(e) => handleOnBlur(e, i)}
-                  // error={ }
+              <Grid container spacing={2} sx={{ mb: 2 }}>
+                <DataFieldStyle
+                  field={"Rent Month"}
+                  value={preData.dateMonth}
                 />
-                   {/* <Grid item xs={6} md={4}>
+              </Grid>
+              {preData.status === "Paid" && (
+                <Grid container spacing={2} sx={{ mb: 2 }}>
+                  <DataFieldStyle
+                    field={"Payment Date"}
+                    value={preData.paymentDate}
+                  />
+                </Grid>
+              )}
+              <Grid container spacing={2}>
+                {preData.gst !== null && (
+                  <>
+                    <TextFieldWrapper
+                      required={true}
+                      label="Invoice Number"
+                      placeHolder="Enter Invoice Number"
+                      value={preData.invoice_no}
+                      disabled={true}
+                      name="invoice_no"
+                    />
+                    <TextFieldWrapper
+                      required={true}
+                      label="Invoice Date"
+                      placeHolder="Invoice Date"
+                      // value={preData.invoice_date}
+                      value={moment(preData.invoice_date).format("DD/MM/YYYY")}
+                      disabled={true}
+                      // name="rent_amount"
+                      // textAlignRight={"textAlignRight"}
+                      // onBlur={(e) => handleOnBlur(e, i)}
+                      // error={ }
+                    />
+                    {/* <Grid item xs={6} md={4}>
               <FormControl fullWidth>
                 <input
                   type="date"
@@ -230,7 +291,8 @@ export default function FinanceMonthlyRentView() {
                 />
               </FormControl>
             </Grid> */}
-              </>}
+                  </>
+                )}
                 <TextFieldWrapper
                   required={true}
                   label="Rent Amount"
@@ -264,7 +326,7 @@ export default function FinanceMonthlyRentView() {
                   // onBlur={(e) => handleOnBlur(e, i)}
                   // error={ }
                 />
-         {preData.gst !== null &&
+                {preData.gst !== null && (
                   <Grid item xs={8} container>
                     <DocumentUpload
                       uploaded={preData.invoice ? true : false}
@@ -275,12 +337,13 @@ export default function FinanceMonthlyRentView() {
                       fileName={preData.fileName}
                       href={preData.invoice}
                     />
-                  </Grid>}
-                {
-                  preData.remark.length >0 && <Grid item xs={12} container spacing={2} sx={{mt:4}}>
-                  <DataFieldStyle field={"Remark"} value={preData.remark} />
-                </Grid>
-                }
+                  </Grid>
+                )}
+                {preData.remark.length > 0 && (
+                  <Grid item xs={12} container spacing={2} sx={{ mt: 4 }}>
+                    <DataFieldStyle field={"Remark"} value={preData.remark} />
+                  </Grid>
+                )}
               </Grid>
             </Grid>
 

@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 import { CloseFullscreen } from "@mui/icons-material";
 import { DataFieldStyle } from "../StyleComponents/Rental";
+import HamburgerManager from "../Manager/HamburgerManager";
 
 export default function EditInvoice() {
   const navigate = useNavigate();
@@ -198,14 +199,15 @@ useEffect(()=>{
       <Stack sx={{ flexDirection: "row", mb: 4 }}>
         {/* <a id="button"></a> */}
 
-        <HamburgerMenu
+        {/* <HamburgerMenu
       navigateHome={'dashboard'}
           handleListing={()=>navigate('/listing')}
           monthlyRent={() => navigate("/monthly-payment")}
           renewal={() => navigate(`/renewal`)}
           monthlyBtn='true'
-        />
+        /> */}
 
+<HamburgerManager/>
         <Box sx={{ flexGrow: 1 }}>
         <Grid
             item

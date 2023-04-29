@@ -6,7 +6,7 @@ import HamburgerMenu from "../HamburgerMenu";
 import { DashboardItem, MyHeader } from "../StyledComponent";
 import { useSelector } from "react-redux";
 import { getMetaData_finance } from "../../Services/Services";
-
+import FinanceHamburger from "./FinanceHamburger";
 
 function FinanceDashboard() {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ function FinanceDashboard() {
     Pending: 0,
     Approved: 0,
     Renewal: 0,
-    Send_Back:0
+    Send_Back: 0,
   });
 
   const data = [
@@ -27,7 +27,6 @@ function FinanceDashboard() {
     { service: "Renewal Agreements", value: meta.Renewal },
     { service: "Send Back Agreements", value: meta.Send_Back },
   ];
-
 
   async function getMetaDatas(id) {
     const metaData = await getMetaData_finance(id);
@@ -44,7 +43,7 @@ function FinanceDashboard() {
   return (
     <>
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-        <HamburgerMenu
+        {/* <HamburgerMenu
           misReports= {["/rent-paid-schedule"]}
           navigateHome={"finance-dashboard"}
           handleListing={() => navigate("/finance-listing")}
@@ -52,8 +51,8 @@ function FinanceDashboard() {
           renewal={() => navigate("/finance-monthly-rent")}
           monthlyBtn="true"
           renewalBTN="false"
-        />
-
+        /> */}
+        <FinanceHamburger />
         {/* dashboard content */}
         <Grid container sx={{ justifyContent: "center" }}>
           <Grid

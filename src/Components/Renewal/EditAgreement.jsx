@@ -57,6 +57,7 @@ import { setAlert } from "../../store/action/action";
 import PermissionAlert from "../Manager/Alert";
 import { useParams, useNavigate } from "react-router-dom";
 import { DataFieldStyle, ImageView } from "../StyleComponents/Rental";
+import HamburgerManager from "../Manager/HamburgerManager";
 
 function EditAgreement({ history }) {
   const navigate = useNavigate();
@@ -1206,13 +1207,14 @@ console.log(partLabel)
         {/* side nav     */}
         {/* <HamburgerMenu navigateTo={"listing"} /> */}
 
-        <HamburgerMenu
+        {/* <HamburgerMenu
           navigateHome={"dashboard"}
           handleListing={() => navigate("/listing")}
           monthlyRent={() => navigate("/monthly-payment")}
           renewal={() => navigate(`/renewal`)}
           monthlyBtn="true"
-        />
+        /> */}
+        <HamburgerManager/>
          <Box className="backButton">
             <IconButton 
               variant="contained"

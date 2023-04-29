@@ -1,6 +1,6 @@
 import { IconButton, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
@@ -8,17 +8,21 @@ import ManagerTable from "./ManagerTable";
 import {
   get_search_srmanager,
   get_srm_agreements,
+  get_srm_agreements_approved,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import { Box } from "@mui/system";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import moment from "moment";
+import SRMHamburger from "./SRMHAmburger";
 
 const options = ["New Agreement", "Monthly Payment", "Rental"];
 
 function SrManagerListing() {
   const { auth } = useSelector((state) => state);
+
+  const {type} = useParams()
 
   const login_srm_id = auth.id;
 
@@ -32,6 +36,17 @@ function SrManagerListing() {
       setData(response.data);
     }
   };
+
+  async function getApprovedagreements (id){
+    try {
+      const response = await get_srm_agreements_approved(id);
+    if (response.status === 200) {
+      setData(response.data);
+    }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   //  console.log(data)
 
@@ -72,8 +87,13 @@ function SrManagerListing() {
   }
 
   useEffect(() => {
-    getData(login_srm_id);
-  }, [refresh]);
+    if(type === "in-procces-ag"){
+      getData(login_srm_id);
+    }else if(type === "approved-ag"){
+      getApprovedagreements(login_srm_id)
+    }
+ 
+  }, [refresh,type]);
 
   function handleSerachChange(e) {
     SearchAPi(login_srm_id, e.target.value);
@@ -85,13 +105,14 @@ function SrManagerListing() {
   return (
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-        <HamburgerMenu
+        {/* <HamburgerMenu
           handleListing={() => navigate("/srManagerListing")}
           navigateHome={"srManagerDashboard"}
           monthlyRent={() => navigate("/srm-monthly-rent")}
           renewal={() => navigate("/srm-renewal-list")}
           monthlyBtn="true"
-        />
+        /> */}
+        <SRMHamburger />
         <ListingComponent
           title1="Rental Management System"
           title="Rental Agreement"

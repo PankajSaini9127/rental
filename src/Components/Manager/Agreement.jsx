@@ -49,6 +49,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 import PermissionAlert from "./Alert";
+import HamburgerManager from "./HamburgerManager";
 
 function Agreement({ history }) {
   const dispatch = useDispatch();
@@ -970,14 +971,17 @@ function Agreement({ history }) {
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
         {/* side nav     */}
         {/* <HamburgerMenu navigateTo={"listing"} /> */}
-
+{/* 
         <HamburgerMenu
           navigateHome={"dashboard"}
           handleListing={() => navigate("/listing")}
           monthlyRent={() => navigate("/monthly-payment")}
           renewal={() => navigate(`/renewal`)}
           monthlyBtn="true"
-        />
+        /> */}
+
+<HamburgerManager/>
+
         <Box className="backButton">
           <IconButton
             variant="contained"

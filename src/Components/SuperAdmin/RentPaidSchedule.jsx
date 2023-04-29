@@ -15,6 +15,7 @@ import { excelDownload, getMisReports } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import HamburgerMenu from "../HamburgerMenu";
 import { Navigate } from "react-router-dom";
+import FinanceHamburger from "../FinancePanel/FinanceHamburger";
 
 const RentPaidSchedule = () => {
   const [startDate, setStartDate] = useState("");
@@ -46,15 +47,7 @@ const RentPaidSchedule = () => {
       { role.includes("Super Admin") ?  <AdminHamburgerMenu
           navigateListing={"/super-admin-listing"}
           navigateHome={"/super-admin-dashboard"}
-        /> :    <HamburgerMenu
-        misReports= {["/rent-paid-schedule"]}
-        navigateHome={"finance-dashboard"}
-        handleListing={() => Navigate("/finance-listing")}
-        monthlyRent={() => Navigate("/finance-monthly-rent")}
-        renewal={() => Navigate("/finance-monthly-rent")}
-        monthlyBtn="true"
-        renewalBTN="false"
-      />}
+        /> :    <FinanceHamburger />}
 
 
         <Box sx={{ flexGrow: 1 }}>

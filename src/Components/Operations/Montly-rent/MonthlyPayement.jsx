@@ -1,99 +1,146 @@
-import { IconButton, Stack } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import HamburgerMenu from '../../HamburgerMenu'
-import { useNavigate } from 'react-router-dom'
-import ListingComponent from '../../StyleComponents/ListingComponent'
-import ListingTable from './ListingTable'
-import { get_monthlt_rent_opr, get_search_monthly_rent_operations } from '../../../Services/Services'
-import { useSelector } from 'react-redux'
+import { IconButton, Stack } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import HamburgerMenu from "../../HamburgerMenu";
+import { useNavigate, useParams } from "react-router-dom";
+import ListingComponent from "../../StyleComponents/ListingComponent";
+import ListingTable from "./ListingTable";
+import {
+  get_monthlt_rent_opr,
+  get_monthlt_rent_opr_paid,
+  get_search_monthly_rent_operations,
+} from "../../../Services/Services";
+import { useSelector } from "react-redux";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
-import { Box } from '@mui/system'
+import { Box } from "@mui/system";
+import OperationsHamburger from "../OperationsHamburger";
 
 function OperationsMonthlyPayement() {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    const [agIDS,setAgIds] = useState([])
-    const [rentData,setRent] = useState({})
+  const {type} = useParams()
 
-       //search
- const [searchValue,setsearchValue] =useState('');
+  const [agIDS, setAgIds] = useState([]);
+  const [rentData, setRent] = useState({});
 
-    const {auth,refresh}= useSelector(s=>s)
+  //search
+  const [searchValue, setsearchValue] = useState("");
 
-    async function fetchData(id){
-      try {
-  const data = await get_monthlt_rent_opr(id)
-  console.log(data)
-     if(data.data.success){
-           setAgIds(data.data.ids)
-           setRent(data.data.agreement)
-           console.log(data.data.agreement)
-     }else{
-     console.log(data)
-     }
-  
-      } catch (error) {
-          console.log(error)
+  const { auth, refresh } = useSelector((s) => s);
+
+  async function fetchData(id) {
+    try {
+      const data = await get_monthlt_rent_opr(id);
+      console.log(data);
+      if (data.data.success) {
+        setAgIds(data.data.ids);
+        setRent(data.data.agreement);
+        console.log(data.data.agreement);
+      } else {
+        console.log(data);
       }
-    }    
-  
-    useEffect(()=>{
-      fetchData(auth.id)
-    },[refresh])
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-    const month = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
-      const rows = agIDS.map((row)=>{
-        return(
-          {
-            id : rentData[row].id,
-            code:rentData[row].code,
-            checkbox:rentData[row].status,
-            status:rentData[row].status,
-            utr:rentData[row].utr_no,
-            name:rentData[row].landlord_name,
-            location:rentData[row].location,
-            gst: rentData[row].gst?rentData[row].gst:"---",
-            percentage:rentData[row].share,
-            month_of_rent: month [new Date(rentData[row].rent_date).getUTCMonth()] + " " + new Date(rentData[row].rent_date).getFullYear(),
-            total_month_rent:rentData[row].monthly_rent,
-            rent_amount: rentData[row].rent_amount ,
-            gst_fee : rentData[row].gst ? parseInt(rentData[row].rent_amount)/100*18 : 0 ,
-            total_rent : rentData[row].gst ? parseInt(rentData[row].rent_amount) + parseInt(rentData[row].rent_amount)/100*18 : parseInt(rentData[row].rent_amount),
-            manager:rentData[row].manager_name,
-            srm:rentData[row].srm_name
-          }
-        )
-      })
-
-      async function SearchAPi(id,searchValue){
-        const search = await get_search_monthly_rent_operations(id,searchValue)
-        setAgIds(search.data.ids)
-        setRent(search.data.agreement)
-      } 
-
-      function handleSerachChange (e){
-    
-        SearchAPi(auth.id,searchValue)
-        setsearchValue(e.target.value)
-    
-        console.log(searchValue)
+  async function fetchDataPaid(id) {
+    try {
+      const data = await get_monthlt_rent_opr_paid(id);
+      console.log(data);
+      if (data.data.success) {
+        setAgIds(data.data.ids);
+        setRent(data.data.agreement);
+        console.log(data.data.agreement);
+      } else {
+        console.log(data);
       }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
+
+  useEffect(() => {
+    if(type === "in-process"){
+      fetchData(auth.id);
+    }else if (type === "paid"){
+      fetchDataPaid(auth.id)
+    }
+  }, [refresh,type]);
+
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const rows = agIDS.map((row) => {
+    return {
+      id: rentData[row].id,
+      code: rentData[row].code,
+      checkbox: rentData[row].status,
+      status: rentData[row].status,
+      utr: rentData[row].utr_no,
+      name: rentData[row].landlord_name,
+      location: rentData[row].location,
+      gst: rentData[row].gst ? rentData[row].gst : "---",
+      percentage: rentData[row].share,
+      month_of_rent:
+        month[new Date(rentData[row].rent_date).getUTCMonth()] +
+        " " +
+        new Date(rentData[row].rent_date).getFullYear(),
+      total_month_rent: rentData[row].monthly_rent,
+      rent_amount: rentData[row].rent_amount,
+      gst_fee: rentData[row].gst
+        ? (parseInt(rentData[row].rent_amount) / 100) * 18
+        : 0,
+      total_rent: rentData[row].gst
+        ? parseInt(rentData[row].rent_amount) +
+          (parseInt(rentData[row].rent_amount) / 100) * 18
+        : parseInt(rentData[row].rent_amount),
+      manager: rentData[row].manager_name,
+      srm: rentData[row].srm_name,
+    };
+  });
+
+  async function SearchAPi(id, searchValue) {
+    const search = await get_search_monthly_rent_operations(id, searchValue);
+    setAgIds(search.data.ids);
+    setRent(search.data.agreement);
+  }
+
+  function handleSerachChange(e) {
+    SearchAPi(auth.id, searchValue);
+    setsearchValue(e.target.value);
+
+    console.log(searchValue);
+  }
 
   return (
     <>
-    <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-         <HamburgerMenu
+      <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
+        {/* <HamburgerMenu
           navigateHome={"operationsDashboard"}
           handleListing={() => navigate("/operationsListing")}
           monthlyRent={() => navigate("/opr-monthly-rent")}
           renewal={() => navigate("/opr-monthly-rent")}
           monthlyBtn="true"
           renewalBTN="false"
-        />
-        <Box className="backButton" sx={{zIndex:222}}>
+        /> */}
+        <OperationsHamburger />
+
+        <Box className="backButton" sx={{ zIndex: 222 }}>
           <IconButton
             variant="contained"
             color="primary"
@@ -110,7 +157,7 @@ function OperationsMonthlyPayement() {
           title1="Rental Management System"
           title="Monthly Payment"
           buttonText="Upload"
-        //   options={options}
+          //   options={options}
           value={"New Agreement"}
           Table={ListingTable}
           rows={rows}
@@ -121,7 +168,7 @@ function OperationsMonthlyPayement() {
         />
       </Stack>
     </>
-  )
+  );
 }
 
-export default OperationsMonthlyPayement
+export default OperationsMonthlyPayement;
