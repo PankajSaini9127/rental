@@ -476,8 +476,6 @@ export async function getModifyDate (id){
 export async function getPaymentModifyDate (id){
     return await axios.get(`${API_LIVE}/api/get-payment-modify-date?id=${id}`)
 }
-
-
 // APIs for MIS Reports
 export function excelDownload(reports, id, role, startDate, endDate) {
     //   console.log(`${API_LIVE}/api/${url}`);
