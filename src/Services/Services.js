@@ -61,9 +61,20 @@ export async function get_agreements (manager_id){
     return axios.get(`${API_LIVE}/api/agreements/${manager_id}`)
 }
 
+
+export async function get_old_agreement (code){
+    return axios.get(`${API_LIVE}/api/old/agreements/${code}`)
+}
+
+
 //approved agreements
 export async function get_approved_agreements (manager_id){
     return axios.get(`${API_LIVE}/api/agreements/approved/${manager_id}`)
+}
+
+//get all agreements
+export async function get_total_agreements (manager_id){
+    return axios.get(`${API_LIVE}/api/agreements/total/${manager_id}`)
 }
 
 export async function add_agreement (data){
@@ -200,9 +211,21 @@ export async function editAgreement(data){
     return await axios.patch(`${API_LIVE}/api/editAgreement`,data)
 }
 
+//total search agreements
 export async function get_search_manager (name){
     return await axios.post(`${API_LIVE}/api/search/manager`,{name})
 }
+
+// approved agreements search in  manager
+export async function get_search_manager_approved (name){
+    return await axios.post(`${API_LIVE}/api/search/approved/manager`,{name})
+}
+
+//in process agreements search in manager
+export async function get_search_manager_inprocess (name){
+    return await axios.post(`${API_LIVE}/api/search/in-process/manager`,{name})
+}
+
 
 export async function add_monthly_rent (data){
     return await axios.post(`${API_LIVE}/api/monthly_rent/add`,data)
@@ -240,6 +263,12 @@ export async function get_srm_agreements(id){
 export async function get_srm_agreements_approved(id){
     return await axios.get(`${API_LIVE}/api/srmanager/approved/get-agreement/${id}`)
 }
+
+//total agreements in srm
+export async function get_srm_agreements_total(id){
+    return await axios.get(`${API_LIVE}/api/srmanager/total/get-agreement/${id}`)
+}
+
 //get_srm_agreements_approved
 //in process mionthly payment
 export async function get_monthlt_rent_srm (id){
@@ -326,6 +355,12 @@ export async function get_BHU_agreements_approved(data){
     return await axios.get(`${API_LIVE}/api/BHU/approved/get-agreement/${data}`)
 }
 
+//total agreements
+
+export async function get_BHU_agreements_total(data){
+    return await axios.get(`${API_LIVE}/api/BHU/total/get-agreement/${data}`)
+}
+
 export async function get_search_Agrteement_buh(id,data){
     return await axios.get(`${API_LIVE}/api/BHU/search/${id}?search=${data}`)
 }
@@ -345,6 +380,10 @@ export async function get_Operations_agreements_approved(data){
     return await axios.get(`${API_LIVE}/api/operations/approved/get-agreement/${data}`)
 }
 
+//get total agreements 
+export async function get_Operations_agreements_total(data){
+    return await axios.get(`${API_LIVE}/api/operations/total/get-agreement/${data}`)
+}
 
 //operations 
 export async function get_agreement_operation (id){
@@ -369,6 +408,17 @@ export async function getLocation (pincode){
 export async function get_finance_agreements(data){
     return await axios.get(`${API_LIVE}/api/finance/get-agreement/${data}`)
 }
+
+export async function get_finance_agreements_inProcess(data){
+    return await axios.get(`${API_LIVE}/api/finance/in-process/get-agreement/${data}`)
+}
+
+export async function get_finance_agreements_approved(data){
+    return await axios.get(`${API_LIVE}/api/finance/approved/get-agreement/${data}`)
+}
+
+
+
 
 // finance search
 export async function get_search_finance_agreements(id,search){

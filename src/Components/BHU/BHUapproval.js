@@ -297,7 +297,7 @@ function SrManagerApproval() {
                   value={agreement.monthlyRent}
                 />
                 <DataFieldStyle field={"tenure"} value={agreement.tenure} />
-                {agreement.tenure !== "11 Month" && (
+                {agreement.tenure > 12 && (
                   <>
                     <Grid container spacing={1} sx={{ mt: 6 }}>
                       <Grid item xs={12} sx={{ mb: 1 }}>
@@ -322,9 +322,7 @@ function SrManagerApproval() {
                           agreement.yearlyIncrement
                         )}
                       />
-                      {(agreement.tenure === "3 Year" ||
-                        agreement.tenure === "4 Year" ||
-                        agreement.tenure === "5 Year") && (
+                      {(agreement.tenure > 24 ) && (
                         <YearField
                           year={"Year 3"}
                           incrementType={agreement.yearlyIncrement}
@@ -336,8 +334,7 @@ function SrManagerApproval() {
                           )}
                         />
                       )}
-                      {(agreement.tenure === "4 Year" ||
-                        agreement.tenure === "5 Year") && (
+                      {(agreement.tenure > 36) && (
                         <YearField
                           year={"Year 4"}
                           incrementType={agreement.yearlyIncrement}
@@ -349,7 +346,7 @@ function SrManagerApproval() {
                           )}
                         />
                       )}
-                      {agreement.tenure === "5 Year" && (
+                      {agreement.tenure > 48 && (
                         <YearField
                           year={"Year 5"}
                           incrementType={agreement.yearlyIncrement}

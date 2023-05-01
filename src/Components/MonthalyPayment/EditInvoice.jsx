@@ -237,8 +237,8 @@ useEffect(()=>{
               {/* Basic Details */}
               <Grid item md={10}>
                 <Grid container spacing={2}>
-                  
-                {preData.gst.lenght > 0 &&<>
+                {console.log(preData.gst)}  
+                {preData.gst.length > 0 &&<>
                   <TextFieldWrapper
                     required={true}
                     label="Invoice Number"
@@ -299,10 +299,10 @@ useEffect(()=>{
                     label="GST Amount"
                     placeHolder="Enter GST Amount"
                     value={parseInt(preData.gst_amount).toLocaleString()}
-                    onChange={(e) => handleChange(e)}
+                    // onChange={(e) => handleChange(e)}
                     name="gst_amount"
                     textAlignRight={"textAlignRight"}
-                    disabled={preData.status === "Sent Back From Operations"?true:false}
+                    disabled={true}
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />
@@ -317,7 +317,7 @@ useEffect(()=>{
                     // onBlur={(e) => handleOnBlur(e, i)}
                     // error={ }
                   />
-                                    {preData.gst.lenght > 0 &&
+                                    {preData.gst.length > 0 &&
                   <Grid item xs={8} container>
                     <DocumentUpload
                       uploaded={preData.invoice ? true : false}

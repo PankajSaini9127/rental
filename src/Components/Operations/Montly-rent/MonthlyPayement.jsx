@@ -101,13 +101,13 @@ function OperationsMonthlyPayement() {
         " " +
         new Date(rentData[row].rent_date).getFullYear(),
       total_month_rent: rentData[row].monthly_rent,
-      rent_amount: rentData[row].rent_amount,
+      rent_amount: parseFloat(rentData[row].rent_amount).toFixed(0),
       gst_fee: rentData[row].gst
-        ? (parseInt(rentData[row].rent_amount) / 100) * 18
+        ? parseFloat((parseInt(rentData[row].rent_amount) / 100) * 18).toFixed(0)
         : 0,
       total_rent: rentData[row].gst
-        ? parseInt(rentData[row].rent_amount) +
-          (parseInt(rentData[row].rent_amount) / 100) * 18
+        ? parseFloat(parseInt(rentData[row].rent_amount) +
+          (parseInt(rentData[row].rent_amount) / 100) * 18).toFixed(0)
         : parseInt(rentData[row].rent_amount),
       manager: rentData[row].manager_name,
       srm: rentData[row].srm_name,

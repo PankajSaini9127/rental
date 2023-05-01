@@ -2,7 +2,6 @@ import { Grid, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import HamburgerMenu from "../HamburgerMenu";
 import { DashboardItem, MyHeader } from "../StyledComponent";
 import { useSelector } from "react-redux";
 import { getMetaData_finance } from "../../Services/Services";
@@ -21,20 +20,27 @@ function FinanceDashboard() {
   });
 
   const data = [
-    { service: "Total Agreement", value: meta.totalAgreement },
-    { service: "Pending Approval", value: meta.Pending },
-    { service: "Approved Agreement", value: meta.Approved },
-    { service: "Renewal Agreements", value: meta.Renewal },
-    { service: "Send Back Agreements", value: meta.Send_Back },
+    {
+      service: "Total Agreement",
+      value: meta.totalAgreement,
+      onClick: () => navigate("/finance-listing/total-ag"),
+    },
+    {
+      service: "Pending Approval",
+      value: meta.Pending,
+      onClick: () => navigate("/finance-listing/in-procces-ag"),
+    },
+    {
+      service: "Approved Agreement",
+      value: meta.Approved,
+      onClick: () => navigate("/finance-listing/approved-ag"),
+    }
   ];
 
   async function getMetaDatas(id) {
     const metaData = await getMetaData_finance(id);
-    // console.log(metaData)
     setMeta(metaData.data);
   }
-
-  // console.log("dashboars")
 
   useEffect(() => {
     getMetaDatas(auth.id);
@@ -43,17 +49,8 @@ function FinanceDashboard() {
   return (
     <>
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-        {/* <HamburgerMenu
-          misReports= {["/rent-paid-schedule"]}
-          navigateHome={"finance-dashboard"}
-          handleListing={() => navigate("/finance-listing")}
-          monthlyRent={() => navigate("/finance-monthly-rent")}
-          renewal={() => navigate("/finance-monthly-rent")}
-          monthlyBtn="true"
-          renewalBTN="false"
-        /> */}
         <FinanceHamburger />
-        {/* dashboard content */}
+
         <Grid container sx={{ justifyContent: "center" }}>
           <Grid
             item
@@ -73,6 +70,7 @@ function FinanceDashboard() {
                     service={item.service}
                     value={item.value}
                     key={index}
+                    onClick={item.onClick}
                   />
                 );
               })}

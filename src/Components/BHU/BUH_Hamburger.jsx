@@ -7,11 +7,11 @@ function BUH_Hamburger() {
     navigateHome={"BHUDashboard"}
     agreements={[
         {
-          text: "In-Process Agreements",
+          text: "In-Process",
           navigateTo: "/BHUListing/in-procces-ag",
         },
         {
-          text: "Approved Agreements",
+          text: "Approved",
           navigateTo: "/BHUListing/approved-ag",
         }
       ]}

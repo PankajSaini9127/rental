@@ -236,7 +236,7 @@ import HamburgerManager from "../Manager/HamburgerManager";
                       field={"tenure"}
                       value={agreement[ids[0]].tenure}
                     />
-                    {agreement[ids[0]].tenure !== "11 Month" && (
+                    {agreement[ids[0]].tenure > 12 && (
                       <>
                         
                         <Grid container spacing={1} sx={{ mt: 6 }}>
@@ -262,9 +262,7 @@ import HamburgerManager from "../Manager/HamburgerManager";
                               agreement[ids[0]].yearlyIncrement
                             )}
                           />
-                          {(agreement[ids[0]].tenure === "3 Year" ||
-                            agreement[ids[0]].tenure === "4 Year" ||
-                            agreement[ids[0]].tenure === "5 Year") && (
+                          {(agreement[ids[0]].tenure > 24) && (
                             <YearField
                               year={"Year 3"}
                               incrementType={agreement[ids[0]].yearlyIncrement}
@@ -276,8 +274,7 @@ import HamburgerManager from "../Manager/HamburgerManager";
                               )}
                             />
                           )}
-                          {(agreement[ids[0]].tenure === "4 Year" ||
-                            agreement[ids[0]].tenure === "5 Year") && (
+                          {(agreement[ids[0]].tenure > 36) && (
                             <YearField
                               year={"Year 4"}
                               incrementType={agreement[ids[0]].yearlyIncrement}
@@ -289,7 +286,7 @@ import HamburgerManager from "../Manager/HamburgerManager";
                               )}
                             />
                           )}
-                          {agreement[ids[0]].tenure === "5 Year" && (
+                          {agreement[ids[0]].tenure > 48 && (
                             <YearField
                               year={"Year 5"}
                               incrementType={agreement[ids[0]].yearlyIncrement}

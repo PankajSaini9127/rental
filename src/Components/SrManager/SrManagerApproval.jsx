@@ -139,6 +139,7 @@ function SrManagerApproval() {
   }, []);
 
   async function handleSendBack() {
+    console.log(agreement[ids[0]].status === "Terminated By Manager"? "Sent Back From Sr Manager Termination" : "Sent Back From Sr Manager")
     if (remark.length <= 0) {
       dispatch(
         setAlert({
@@ -150,7 +151,7 @@ function SrManagerApproval() {
     } else {
       const response = await send_back_to_manager(
         {
-          status: "Sent Back From Sr Manager",
+          status:agreement[ids[0]].status === "Terminated By Manager"? "Sent Back From Sr Manager Termination" : "Sent Back From Sr Manager",
           remark: remark,
         },
         id
@@ -207,8 +208,10 @@ function SrManagerApproval() {
             open: true,
             message:
               agreement[ids[0]].op_id === 0 ||
-              (agreement[ids[0]].op_id === null &&
-                agreement[ids[0]].deposit - deposit !== 0)
+              (agreement[ids[0]].op_id === null 
+                // &&
+                // agreement[ids[0]].deposit - deposit !== 0
+                )
                 ? "Agreement Sent To BUH"
                 : "Agreement Sent To Operations ",
           })
@@ -412,7 +415,7 @@ function SrManagerApproval() {
                     field={"tenure"}
                     value={agreement[ids[0]].tenure}
                   />
-                  {agreement[ids[0]].tenure !== "11 Month" && (
+                  {agreement[ids[0]].tenure > 12 && (
                     <>
                       <Grid container sx={{ mt: 6 }}>
                         <Grid item xs={12} sx={{ mb: 1 }}>
@@ -437,9 +440,7 @@ function SrManagerApproval() {
                             agreement[ids[0]].yearlyIncrement
                           )}
                         />
-                        {(agreement[ids[0]].tenure === "3 Year" ||
-                          agreement[ids[0]].tenure === "4 Year" ||
-                          agreement[ids[0]].tenure === "5 Year") && (
+                        {(agreement[ids[0]].tenure > 24) && (
                           <YearField
                             year={"Year 3"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
@@ -451,8 +452,7 @@ function SrManagerApproval() {
                             )}
                           />
                         )}
-                        {(agreement[ids[0]].tenure === "4 Year" ||
-                          agreement[ids[0]].tenure === "5 Year") && (
+                        {(agreement[ids[0]].tenure > 36) && (
                           <YearField
                             year={"Year 4"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
@@ -464,7 +464,7 @@ function SrManagerApproval() {
                             )}
                           />
                         )}
-                        {agreement[ids[0]].tenure === "5 Year" && (
+                        {agreement[ids[0]].tenure > 48 && (
                           <YearField
                             year={"Year 5"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
@@ -795,8 +795,10 @@ function SrManagerApproval() {
                         >
                           {console.log(agreement[ids[0]].deposit - deposit)}
                           {((agreement[ids[0]].op_id === 0 ||
-                          agreement[ids[0]].op_id === null) &&
-                            agreement[ids[0]].deposit - deposit !== 0)
+                          agreement[ids[0]].op_id === null)
+                          //  &&
+                          //   agreement[ids[0]].deposit - deposit !== 0
+                            )
                             ? " Send to BUH"
                             : " Send To Operations"}
                         </Button>

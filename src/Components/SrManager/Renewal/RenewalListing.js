@@ -13,6 +13,7 @@ import { Box } from "@mui/system";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import SRMHamburger from "../SRMHAmburger";
+import moment from "moment";
 
 
 
@@ -34,6 +35,19 @@ export default function SrmRenwalList() {
 
 
   const rows =agIds.map(row=>{
+      var x = parseInt(agreements[row].tenure) //or whatever offset
+      console.log(x)
+  var CurrentDate = new Date(agreements[row].final_agreement_date);
+  // console.log("Current date:", CurrentDate);
+  CurrentDate.setMonth(CurrentDate.getMonth() + x);
+  CurrentDate.setDate(CurrentDate.getDate() - 1)
+  // console.log("Date after " + x + " months:", CurrentDate);
+  
+  // let daysInExpire =  CurrentDate - new Date().getDate()
+  
+  function datediff(first, second) {        
+      return Math.round((second - first) / (1000 * 60 * 60 * 24));
+  }
     return {
         id: agreements[row].id,
         status: agreements[row].renewal_status,
@@ -44,8 +58,8 @@ export default function SrmRenwalList() {
         state:agreements[row].state,
         city:agreements[row].city,
         deposit:agreements[row].deposit,
-        expiry_date:"---",
-        expiry_day:"---",
+        expiry_date: moment(CurrentDate).format("DD-MM-YYYY"),
+      expiry_day:datediff(new Date(),CurrentDate),
         address:agreements[row].address
       }
     })

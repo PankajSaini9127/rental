@@ -320,7 +320,7 @@ const SelectComponent = ({
 
 //dashboard
 
-const DashboardItem = ({ service, value }) => {
+const DashboardItem = ({ service, value ,onClick}) => {
   return (
     <Grid item md={4} xs={6} container sx={{ justifyContent: "space-evenly" }}>
       <Grid
@@ -334,7 +334,9 @@ const DashboardItem = ({ service, value }) => {
           alignItems: "center",
           boxShadow: "0px 10px 10px rgba(0, 0, 0, 0.25);",
           "@media(max-width:900px)": { height: "130px" },
+          cursor:"pointer"
         }}
+        onClick={onClick}
       >
         <Grid item>
           <Typography

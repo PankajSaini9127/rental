@@ -607,11 +607,8 @@ function EditAgreement({ history }) {
     // })
     console.log(values);
     const agreement = await editAgreement(values);
-    // const result = await add_landlord(landlordData);
 
     if (agreement.status === 200) {
-      // console.log(history);
-      // window.location.href = "/listing";
       dispatch(
         setAlert({
           open: true,
@@ -619,7 +616,7 @@ function EditAgreement({ history }) {
           message: "Agrement Edited & Submited Successfully",
         })
       );
-      navigate("/listing");
+      navigate(-1);
     }
   };
 
@@ -1062,16 +1059,7 @@ function EditAgreement({ history }) {
       {/* <DialogBox value={landblord} setValue={setLandblord} /> */}
       {/* {//console.log(landblord)} */}
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        {/* side nav     */}
-        {/* <HamburgerMenu navigateTo={"listing"} /> */}
-
-        {/* <HamburgerMenu
-          navigateHome={"dashboard"}
-          handleListing={() => navigate("/listing")}
-          monthlyRent={() => navigate("/monthly-payment")}
-          renewal={() => navigate(`/renewal`)}
-          monthlyBtn="true"
-        /> */}
+      
 
 <HamburgerManager/>
         <Box sx={{ flexGrow: 1 }}>

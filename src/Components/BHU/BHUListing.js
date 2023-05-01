@@ -1,21 +1,18 @@
-import { IconButton, Stack } from "@mui/material";
-import axios from "axios";
+import {  Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import HamburgerMenu from "../HamburgerMenu";
 
 import ListingComponent from "../StyleComponents/ListingComponent";
 import ManagerTable from "./ManagerTable";
 import {
-  get_search_srmanager,
   get_BHU_agreements,
   get_search_Agrteement_buh,
-  get_BHU_agreements_approved
+  get_BHU_agreements_approved,
+  get_total_agreements,
+  get_BHU_agreements_total
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
-import { Box } from "@mui/system";
 
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import moment from "moment";
 import BUH_Hamburger from "./BUH_Hamburger";
 
@@ -30,9 +27,9 @@ function SrManagerListing() {
 
   const [data, setData] = useState({ ids: [] });
 
+  //in process agreements
   const getData = async (id) => {
     const response = await get_BHU_agreements(id);
-    console.log(response);
     setData(response.data);
   };
 
@@ -40,6 +37,17 @@ function SrManagerListing() {
   async function get_approved_agreements (id){
     try {
       const response = await get_BHU_agreements_approved(id);
+    console.log(response);
+    setData(response.data);
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  //get total agreements
+  async function get_total_ag (id){
+    try {
+      const response = await get_BHU_agreements_total(id);
     console.log(response);
     setData(response.data);
     } catch (error) {
@@ -61,12 +69,12 @@ function SrManagerListing() {
       manager: data.agreement[item].manager_name,
       rentalAmount: data.agreement[item].monthlyRent,
       sr_manager: data.agreement[item].sr_manager,
-      deposit:parseFloat( data.agreement[item].deposit).toFixed(2),
+      deposit:parseFloat( data.agreement[item].deposit).toFixed(0),
   state: data.agreement[item].state,
   city:data.agreement[item].city,
   address: data.agreement[item].address,
   initiateDate : moment(data.agreement[item].time).format('DD-MM-YYYY'),
-  type:"---"
+  type: data.agreement[item].type === "Renewed" ? "Renewal" : "New",
     };
   });
 
@@ -94,6 +102,8 @@ function SrManagerListing() {
       getData(login_bhu_id);
     }else if(type === "approved-ag"){
       get_approved_agreements(login_bhu_id)
+    }else if(type === "total-ag"){
+      get_total_ag(login_bhu_id)
     }
     
   }, [refresh,type]);

@@ -94,6 +94,8 @@ function EditAgreement({ history }) {
     noc: "",
     remark: "",
     assets: "",
+    property_pic:"",
+    type:"",
   });
 
   async function fetchData() {
@@ -133,7 +135,12 @@ function EditAgreement({ history }) {
           landlord,
           remark,
           assets,
+          property_pic,
+          type,
+          status
         } = response.data;
+
+        // const oldAgreements = await get_old_agreement(code)
 
         setBuh_ID(response.data.buh_id);
         setFinance_ID(response.data.op_id);
@@ -183,6 +190,9 @@ function EditAgreement({ history }) {
           landlord,
           remark,
           assets,
+          property_pic,
+          type,
+          status
         });
 
         setFormError({
@@ -210,6 +220,7 @@ function EditAgreement({ history }) {
           landlord: landlord.map((row) => ({})),
           remark: undefined,
           area: undefined,
+          property_pic:undefined
         });
       }
     } catch (error) {
@@ -637,8 +648,11 @@ function EditAgreement({ history }) {
         tenure,
         ...increment,
         landlord,
-        status:
-          finance_id === 0 && buh_id !== 0
+        status:( preData.status === "Sent Back From Sr Manager Termination" || 
+        preData.status === "Sent Back From BUH Termination" ||
+        preData.status === "Sent Back From Operations Termination" ||
+        preData.status === "Sent Back From Finance Termination")?"Terminated By Manager":
+          finance_id === 0 && (buh_id !== 0)
             ? "Sent To Operations"
             : "Sent To Sr Manager",
 
@@ -658,11 +672,8 @@ function EditAgreement({ history }) {
     // })
     console.log(values);
     const agreement = await editAgreement(values);
-    // const result = await add_landlord(landlordData);
 
     if (agreement.status === 200) {
-      // console.log(history);
-      // window.location.href = "/listing";
       dispatch(
         setAlert({
           open: true,
@@ -670,7 +681,7 @@ function EditAgreement({ history }) {
           message: "Agrement Edited & Submited Successfully",
         })
       );
-      navigate("/listing");
+      navigate(-1);
     }
   };
 
@@ -1104,21 +1115,7 @@ function EditAgreement({ history }) {
         open={open}
         message={"Please check agreement carefully before submission."}
       />
-
-      {/* dialog box ( popup box ) */}
-      {/* <DialogBox value={landblord} setValue={setLandblord} /> */}
-      {/* {//console.log(landblord)} */}
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        {/* side nav     */}
-        {/* <HamburgerMenu navigateTo={"listing"} /> */}
-
-        {/* <HamburgerMenu
-          navigateHome={"dashboard"}
-          handleListing={() => navigate("/listing")}
-          monthlyRent={() => navigate("/monthly-payment")}
-          renewal={() => navigate(`/renewal`)}
-          monthlyBtn="true"
-        /> */}
         <HamburgerManager/>
         <Box className="backButton">
           <IconButton
@@ -1186,6 +1183,7 @@ function EditAgreement({ history }) {
                       handleStateSearch(e);
                     }}
                     error={formError.pincode}
+                    disabled={preData.type === "Renewed"? true :false}
                   />
 
                   <TextFieldWrapper
@@ -1227,6 +1225,7 @@ function EditAgreement({ history }) {
                     value={preData.location || ""}
                     onChange={handleCommonChange}
                     index={i}
+                    disabled={preData.type === "Renewed"? true :false}
                   />
 
                   <TextFieldWrapper
@@ -1240,6 +1239,7 @@ function EditAgreement({ history }) {
                     value={preData.area}
                     onChange={handleCommonChange}
                     index={i}
+                    disabled={buh_id !== 0 ? true : false}
                   />
 
                   <TextFieldWrapper
@@ -1251,6 +1251,7 @@ function EditAgreement({ history }) {
                     value={preData.address}
                     onChange={handleCommonChange}
                     index={i}
+                    disabled={preData.type === "Renewed"? true :false}
                   />
                   <TextFieldWrapper
                     label="Lock In Month(If Applicable)"
@@ -1260,6 +1261,7 @@ function EditAgreement({ history }) {
                     value={preData.lockInYear}
                     error={formError.lockInYear}
                     onChange={handleCommonChange}
+                    disabled={buh_id !== 0 ? true : false}
                   />
                   <TextFieldWrapper
                     label="Notice Period In Month"
@@ -1269,6 +1271,7 @@ function EditAgreement({ history }) {
                     maxLength={2}
                     value={preData.noticePeriod}
                     onChange={handleCommonChange}
+                    disabled={buh_id !== 0 ? true : false}
                   />
                   <TextFieldWrapper
                     label="Deposit Amount"
@@ -1278,22 +1281,22 @@ function EditAgreement({ history }) {
                     error={formError.deposit}
                     value={preData.deposit}
                     onChange={handleCommonChange}
-                    disabled={( buh_id !== null) ? true : false}
+                    disabled={buh_id !== 0 ? true : false}
                   />
-                  {/* {console.log(buh_id !== 0 , buh_id !== null)} */}
+                  {console.log(buh_id !== 0)}
                   <TextFieldWrapper
                     label="Monthly Rental"
                     placeHolder="Enter Rental"
                     required={true}
                     name="monthlyRent"
                     textAlignRight={"textAlignRight"}
-                    disabled={( buh_id !== null) ? true : false}
+                    disabled={buh_id !== 0 ? true : false}
                     error={formError.monthlyRent}
                     value={preData.monthlyRent}
                     onChange={handleCommonChange}
                   />
 
-<TextFieldWrapper
+                 <TextFieldWrapper
                     label="Agreement Tenure"
                     placeHolder="Tenure In Months"
                     name="tenure"
@@ -1305,7 +1308,7 @@ function EditAgreement({ history }) {
                     onChange={handleCommonChange}
                     index={i}
                     maxLength={3}
-                    disabled={( buh_id !== null) ? true : false}
+                    disabled={buh_id !== 0 ? true : false}
                   />
 {/* 
                   <SelectComponent
@@ -1332,7 +1335,7 @@ function EditAgreement({ history }) {
                       options={["Percentage", "Value"]}
                       value={preData.yearlyIncrement}
                       onChange={handleCommonChange}
-                      disabled={( buh_id !== null) ? true : false}
+                      disabled={buh_id !== 0 ? true : false}
                     />
                   )}
                 </Grid>
@@ -1349,7 +1352,7 @@ function EditAgreement({ history }) {
                   increment={increment}
                   setIncrement={setIncrement}
                   monthlyRent={preData.monthlyRent || ""}
-                  disabled={( buh_id !== null) ? true : false}
+                  disabled={buh_id !== 0 ? true : false}
                 />
 
                 {/* landlord Details start here*/}
@@ -1442,6 +1445,7 @@ function EditAgreement({ history }) {
                                 ? formError.landlord[i].aadharNo
                                 : ""
                             }
+                            disabled={preData.type === "Renewed"? true :false}
                           />
                           <TextFieldWrapper
                             label="PAN Number"
@@ -1458,6 +1462,7 @@ function EditAgreement({ history }) {
                             value={preData.landlord[i].panNo}
                             onChange={(e) => handleChange(e, i)}
                             index={i}
+                            disabled={preData.type === "Renewed"? true :false}
                           />
 
                           <TextFieldWrapper
@@ -1681,6 +1686,7 @@ function EditAgreement({ history }) {
                               name={"aadhar_card"}
                               fileName={preData[`aadhar_card${i}`]}
                               href={preData.landlord[i].aadhar_card}
+                              disabled={preData.type === "Renewed"? true :false}
                             />
                           </Grid>
                           <Grid item xs={6}>
@@ -1697,23 +1703,28 @@ function EditAgreement({ history }) {
                               placeHolder={"Upload PAN Card"}
                               handleChange={(e) => handleChangeCommonFile(e, i)}
                               href={preData.landlord[i].pan_card}
+                              disabled={preData.type === "Renewed"? true :false}
                             />
                           </Grid>
+                          {/* {console.log(preData.landlord[i].gst)} */}
+                          {preData.landlord[i].gstNo&&
                           <Grid item xs={6}>
-                            <DocumentUpload
-                              uploaded={
-                                preData[`gst${i}`] || preData.landlord[i]["gst"]
-                                  ? true
-                                  : false
-                              }
-                              label="Upload GST Certificate"
-                              placeHolder="Upload GST Certificate"
-                              handleChange={(e) => handleChangeCommonFile(e, i)}
-                              name={"gst"}
-                              fileName={preData[`gst${i}`]}
-                              href={preData.landlord[i].gst}
-                            />
-                          </Grid>
+                          <DocumentUpload
+                            uploaded={
+                              preData[`gst${i}`] || preData.landlord[i]["gst"]
+                                ? true
+                                : false
+                            }
+                            label="Upload GST Certificate"
+                            placeHolder="Upload GST Certificate"
+                            handleChange={(e) => handleChangeCommonFile(e, i)}
+                            name={"gst"}
+                            fileName={preData[`gst${i}`]}
+                            href={preData.landlord[i].gst}
+                          />
+                        </Grid>
+                          }
+                          
                           <Grid item xs={6}>
                             <DocumentUpload
                               uploaded={
@@ -1829,6 +1840,18 @@ function EditAgreement({ history }) {
                       />
                     </Grid>
                   )}
+                  <Grid item xs={6}>
+                    <DocumentUpload
+                      label="Upload Property Picture"
+                      uploaded={preData.property_pic && true}
+                      placeHolder={"Upload Property Picture"}
+                      handleChange={handleChangeFile}
+                      fileName={preData.property_name}
+                      error={formError.property_pic}
+                      name={"property_pic"}
+                      href={preData.property_pic}
+                    />
+                  </Grid>
                 </Grid>
 
 
@@ -1863,7 +1886,8 @@ function EditAgreement({ history }) {
 
 
                 {/* Button Start from here */}
-                <Grid
+               
+                  <Grid
                   container
                   sx={{ justifyContent: "center", mt: 2 }}
                   spacing={4}
@@ -1889,7 +1913,13 @@ function EditAgreement({ history }) {
                         },
                       }}
                     >
-                      {finance_id === 0 && buh_id !== 0
+                      {console.log(finance_id ,buh_id )}
+                      {console.log(finance_id === 0 && ( buh_id !== 0))}
+                      
+                      {( preData.status === "Sent Back From Sr Manager Termination" || 
+                  preData.status === "Sent Back From Operations Termination" ||
+                  preData.status === "Sent Back From Finance Team Termination")? "Sent To Sr Manager Termination":
+                      finance_id === 0 && ( buh_id !== 0 )
                         ? "Send To Operations"
                         : "Send To Sr Manager"}
                     </Button>
@@ -1918,8 +1948,11 @@ function EditAgreement({ history }) {
                     </Button>
                   </Grid>
                 </Grid>
-
+                
                 {/* Button Ends Here */}
+
+
+
               </Box>
 
               {/* agreemenet from end here */}

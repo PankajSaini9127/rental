@@ -111,13 +111,6 @@ function RenewalViewPage() {
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
           {/* <a id="button"></a> */}
 
-          {/* <HamburgerMenu
-              navigateHome={"dashboard"}
-              handleListing={() => navigate("/listing")}
-              monthlyRent={() => navigate("/monthly-payment")}
-              renewal={() => navigate(`/renewal`)}
-              monthlyBtn="true"
-            /> */}
           <HamburgerManager />
           <Box sx={{ flexGrow: 1 }}>
             <Grid
@@ -167,16 +160,7 @@ function RenewalViewPage() {
                           value={agreement[ids[0]].rent_start_date}
                         />
                       </Grid>
-                      <Grid container sx={{ mt: 1 }}>
-                        <DataFieldStyle
-                          field={"Deposit UTR Number"}
-                          value={agreement[ids[0]].utr_number}
-                        />
-                        <DataFieldStyle
-                          field={"Deposit Payment Date"}
-                          value={agreement[ids[0]].rent_start_date}
-                        />
-                      </Grid>
+                     
                     </>
                   )}
                 </Grid>
@@ -230,7 +214,7 @@ function RenewalViewPage() {
                     field={"tenure"}
                     value={agreement[ids[0]].tenure}
                   />
-                  {agreement[ids[0]].tenure !== "11 Month" && (
+                  {agreement[ids[0]].tenure > 12 && (
                     <>
                       <Grid container spacing={2} sx={{ mt: 4 }}>
                         <Grid item xs={12} container>
@@ -255,9 +239,7 @@ function RenewalViewPage() {
                             agreement[ids[0]].yearlyIncrement
                           )}
                         />
-                        {(agreement[ids[0]].tenure === "3 Year" ||
-                          agreement[ids[0]].tenure === "4 Year" ||
-                          agreement[ids[0]].tenure === "5 Year") && (
+                        {(agreement[ids[0]].tenure > 24 ) && (
                           <YearField
                             year={"Year 3"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
@@ -269,8 +251,7 @@ function RenewalViewPage() {
                             )}
                           />
                         )}
-                        {(agreement[ids[0]].tenure === "4 Year" ||
-                          agreement[ids[0]].tenure === "5 Year") && (
+                        {(agreement[ids[0]].tenure > 36) && (
                           <YearField
                             year={"Year 4"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
@@ -282,7 +263,7 @@ function RenewalViewPage() {
                             )}
                           />
                         )}
-                        {agreement[ids[0]].tenure === "5 Year" && (
+                        {agreement[ids[0]].tenure > 48 && (
                           <YearField
                             year={"Year 5"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
@@ -301,6 +282,7 @@ function RenewalViewPage() {
                   {Array.from(
                     { length: agreement[ids[0]].leeseName.length },
                     (row, id) => (
+                      <>
                       <Grid container sx={{ mt: 3 }}>
                         {/* <Grid item xs={12}>
                             <Typography variant="body1" fontWeight="600">
@@ -355,6 +337,20 @@ function RenewalViewPage() {
                           value={`${agreement[ids[0]].percentage[id]}%`}
                         />
                       </Grid>
+                      {
+                        agreement[ids[0]].utr_number &&
+                         <Grid  container sx = {{alignItems : "baseline",mt: 1 }} >
+                        <DataFieldStyle
+                          field={"Deposit UTR Number"}
+                          value={agreement[ids[0]].utr_number[id]}
+                        />
+                        <DataFieldStyle
+                          field={"Deposit Payment Date"}
+                          value={agreement[ids[0]].payment_date[id]}
+                        />
+                      </Grid>
+                       }
+                       </>
                     )
                   )}
                 </Grid>
@@ -439,6 +435,10 @@ function RenewalViewPage() {
                       img={agreement[ids[0]].noc}
                     />
                   )}
+                    <DocumentView
+                    title={"Property Picture"}
+                    img={agreement[ids[0]].property_pic}
+                  />
                 </Grid>
               </Grid>
 

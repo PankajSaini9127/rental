@@ -302,10 +302,10 @@ function FinanceTable({ rows, setRows }) {
         setAlert({
           variant: "success",
           open: true,
-          message: "Agreement Approved.",
+          message: "UTR Details Added",
         })
       );
-      navigate("/finance-listing");
+      navigate(-1);
     } else {
       dispatch(
         setAlert({
