@@ -479,15 +479,52 @@ export async function getPaymentModifyDate (id){
 
 
 // APIs for MIS Reports
-export function excelDownload(url, excelName, startDate, endDate) {
+export function excelDownload(reports, id, role, startDate, endDate) {
     //   console.log(`${API_LIVE}/api/${url}`);
+  
+    const url =
+      reports === "Rental Property Dump Report"
+        ? "mis/get-rental-property-dump-report"
+        : reports === "Rental Payment MIS"
+        ? "mis/rental-payment-mis"
+        : reports === "Rental Onboarding MIS (All Status)"
+        ? "mis/rental-onboarding-all-status"
+        : reports === "Rental Onboarding MIS (Deposited)"
+        ? "mis/rental-onboarding-deposited"
+        : reports === "rent-paid-schedule"
+        ? "mis/rent-paid-schedule"
+        : reports === "No of agreements"
+        ? "mis/no-of-agreements"
+        : reports === "Monthly rent"
+        ? "mis/monthly-rent"
+        : reports === "Monthly deposit" && "mis/monthly-deposit";
+  
+    const excelName =
+      reports === "Rental Property Dump Report"
+        ? "rental-property-dump-report"
+        : reports === "Rental Payment MIS"
+        ? "rental-payment-mis"
+        : reports === "Rental Onboarding MIS (All Status)"
+        ? "rental-onboarding-all-status"
+        : reports === "Rental Onboarding MIS (Deposited)"
+        ? "rental-onboarding-deposited"
+        : reports === "rent-paid-schedule"
+        ? "rent-paid-schedule"
+        : reports === "No of agreements"
+        ? "no-of-agreements"
+        : reports === "Monthly rent"
+        ? "monthly-rent"
+        : reports === "Monthly deposit" && "monthly-deposit";
+  
+    console.log({ reports, url, excelName });
+  
     const requestBody = {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     };
   
     fetch(
-      `${API_LIVE}/api/${url}?startDate=${startDate}&endDate=${endDate}`,
+      `${API_LIVE}/api/${url}?startDate=${startDate}&endDate=${endDate}&id=${id}&role=${role}`,
       requestBody
     )
       .then((response) => response.blob())
