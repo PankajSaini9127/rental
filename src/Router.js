@@ -66,6 +66,8 @@ import RentalPaymentMIS from "./Components/SuperAdmin/RentalPaymentMIS";
 import RentalOnboardingAllStatus from "./Components/SuperAdmin/RentalOnboardingAllStatus";
 import RentalOnboardingDeposited from "./Components/SuperAdmin/RentalOnboardingDeposited";
 import RentPaidSchedule from "./Components/SuperAdmin/RentPaidSchedule";
+import RentalMisReports from "./Components/SuperAdmin/RentalMisReport";
+import GraphReports from "./Components/SuperAdmin/GraphReports";
 
 function MyRouter() {
   const history = useNavigate();
@@ -483,6 +485,30 @@ function MyRouter() {
       <Route
         path={"/newPassword/:email"}
         element={<ResetPassword history={history} />}
+      />
+
+        <Route
+        exact
+        path="/rental-mis-reports"
+        element={
+          isAuth  ? (
+            <RentalMisReports />
+          ) : (
+            <Login />
+          )
+        }
+      />
+      <Route
+        exact
+        path="/graph-reports"
+        element={
+          isAuth  ? <GraphReports /> : <Login />
+        }
+      />
+      <Route
+        exact
+        path="/rent-paid-schedule"
+        element={isAuth ? <RentPaidSchedule /> : <Login />}
       />
     </Routes>
   );
