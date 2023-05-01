@@ -203,7 +203,7 @@ import {
                   textTransform: "capitalize",
                 }}
                 onClick={() => {
-                  excelDownload(reports, id, role, startDate, endDate);
+                  excelDownload(reports, id, startDate, endDate);
                 }}
                 disabled={reports && startDate && endDate ? false : true}
               >
