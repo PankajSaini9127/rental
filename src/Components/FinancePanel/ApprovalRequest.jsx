@@ -76,7 +76,10 @@ function FinanceApproval() {
 
   const [recovery, setRecovery] = useState({});
 
+  console.log("Recovery >>>>" ,recovery)
+
   async function get_recovery_data(id) {
+    console.log("function called")
     try {
       const recovery = await get_data_recovery(id);
       if (recovery.status === 200) {
@@ -113,7 +116,7 @@ function FinanceApproval() {
           renewal_status: "Approved Termination",
           modify_date: new Date(),
         },
-        id
+        agreement.agreement_id
       );
       if (response.data.success) {
         dispatch(
@@ -137,23 +140,17 @@ function FinanceApproval() {
   }
 
   async function get_deposit(code) {
+    console.log("function called")
     try {
       const deposit_amount = await get_deposit_amount(code);
       console.log(deposit_amount);
       if (deposit_amount.data.success) {
-        setDeposit(deposit_amount.data.deposit);
+        setDeposit(deposit_amount.data.deposit[0].deposit);
       } else {
         setDeposit(0);
       }
     } catch (error) {
       console.log(error);
-      dispatch(
-        setAlert({
-          open: true,
-          variant: "success",
-          message: "Something Went Wrong Please Try Again Later.",
-        })
-      );
     }
   }
 
@@ -165,8 +162,8 @@ function FinanceApproval() {
         setAgreement(agreement.data.agreement[0]);
         // console.log(agreement.data.ids);
         // setIds(agreement.data.ids);
-        // get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id);
-        // get_deposit(agreement.data.agreement[agreement.data.ids[0]].code);
+        await get_recovery_data(agreement.data.agreement[0].agreement_id);
+       await get_deposit(agreement.data.agreement[0].code);
       } else {
         dispatch(
           setAlert({
@@ -178,13 +175,13 @@ function FinanceApproval() {
       }
     } catch (error) {
       console.log(error);
-      dispatch(
-        setAlert({
-          open: true,
-          variant: "error",
-          message: "Something Went Wrong Please Try Again Later.",
-        })
-      );
+      // dispatch(
+      //   setAlert({
+      //     open: true,
+      //     variant: "error",
+      //     message: "Something Went Wrong Please Try Again Later.",
+      //   })
+      // );
     }
   };
 
@@ -206,7 +203,7 @@ function FinanceApproval() {
     } else {
       const response = await send_back_to_manager(
         {
-          status: "Sent Back From Finance",
+          status:agreement.status === "Terminated By Operations"? "Sent Back From Finance Team Termination" : "Sent Back From Finance",
           remark: remark,
           modify_date: new Date(),
         },
@@ -220,7 +217,7 @@ function FinanceApproval() {
             message: "Send back For Rectification",
           })
         );
-        navigate("/finance-listing");
+        navigate(-1);
       } else {
         dispatch(
           setAlert({
@@ -243,7 +240,7 @@ function FinanceApproval() {
         payment_date: utr.paymentDate,
         modify_date: new Date(),
       },
-      
+      agreement.agreement_id
     );
     if (response.data.success) {
       dispatch(
@@ -253,7 +250,7 @@ function FinanceApproval() {
           message: "Agreement Approved.",
         })
       );
-      navigate("/finance-listing");
+      navigate(-1);
     } else {
       dispatch(
         setAlert({
@@ -290,7 +287,7 @@ function FinanceApproval() {
             message: "Agreement Approved.",
           })
         );
-        navigate("/finance-listing");
+        navigate(-1);
       } else {
         dispatch(
           setAlert({
@@ -467,7 +464,7 @@ function FinanceApproval() {
                     field={"tenure"}
                     value={agreement.tenure}
                   />
-                  {agreement.tenure !== "11 Month" && (
+                  {agreement.tenure > 12&& (
                     <>
                       <Grid container sx={{ mt: 6 }}>
                         <Grid item xs={12} sx={{ mb: 1 }}>
@@ -492,9 +489,7 @@ function FinanceApproval() {
                             agreement.yearlyIncrement
                           )}
                         />
-                        {(agreement.tenure === "3 Year" ||
-                          agreement.tenure === "4 Year" ||
-                          agreement.tenure === "5 Year") && (
+                        {(agreement.tenure  > 24) && (
                           <YearField
                             year={"Year 3"}
                             incrementType={agreement.yearlyIncrement}
@@ -506,8 +501,7 @@ function FinanceApproval() {
                             )}
                           />
                         )}
-                        {(agreement.tenure === "4 Year" ||
-                          agreement.tenure === "5 Year") && (
+                        {(agreement.tenure > 36) && (
                           <YearField
                             year={"Year 4"}
                             incrementType={agreement.yearlyIncrement}
@@ -519,7 +513,7 @@ function FinanceApproval() {
                             )}
                           />
                         )}
-                        {agreement.tenure === "5 Year" && (
+                        {agreement.tenure > 48 && (
                           <YearField
                             year={"Year 5"}
                             incrementType={agreement.yearlyIncrement}
@@ -573,14 +567,6 @@ function FinanceApproval() {
                           bold={true}
                           cursor={true}
                         />
-                        {/* <DataFieldStyle
-                          field={"Cancel Cheque"}
-                          value={agreement.accountNo}
-                          href={agreement.cheque}
-                          name={"cheque"}
-                          bold={true}
-                          cursor={true}
-                        /> */}
 
                         <DataFieldStyle
                           field={"mobile number"}
@@ -598,7 +584,24 @@ function FinanceApproval() {
                           field={"Percentage Share"}
                           value={`${agreement.percentage}%`}
                         />
+                        {console.log((agreement.deposit - deposit )/ 100 * parseInt(agreement.percentage))}
+                        <DataFieldStyle
+                          field={"Deposit Payable Amount"}
+                          value={((agreement.deposit - deposit )/ 100 * parseInt(agreement.percentage)) }
+                        />
                       </Grid>
+
+                      
+                      <Grid  container sx = {{alignItems : "baseline",mt: 1 }} >
+                      <DataFieldStyle
+                        field={"Deposit UTR Number"}
+                        value={agreement.utr_number}
+                      />
+                      <DataFieldStyle
+                        field={"Deposit Payment Date"}
+                        value={agreement.payment_date}
+                      />
+                    </Grid>
                 </Grid>
               </Grid>
 
@@ -608,7 +611,7 @@ function FinanceApproval() {
               <Grid item md={10}>
                 <Grid container>
                       <Grid container>
-                        <Heading heading={`Landlord ${id + 1} Bank Details`} />
+                        <Heading heading={`Landlord Bank Details`} />
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement.bankName}

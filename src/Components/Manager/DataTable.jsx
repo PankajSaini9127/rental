@@ -96,7 +96,11 @@ function DataTable({ rows, loading, check, setCheck }) {
         {(e.row.status === "Sent Back From Sr Manager" ||
           e.row.status === "Sent Back From BUH" ||
           e.row.status === "Sent Back From Finance" ||
-          e.row.status === "Sent Back From Operations") && (
+          e.row.status === "Sent Back From Operations" || 
+          e.row.status === "Sent Back From Sr Manager Termination" ||
+          e.row.status === "Sent Back From BUH Termination" ||
+          e.row.status === "Sent Back From Operations Termination" ||
+          e.row.status === "Sent Back From Finance Team Termination" ) && (
           <Grid container>
             <Grid item md={6} sx={{ color: "white !important" }}>
               <Button
@@ -642,7 +646,11 @@ function DataTable({ rows, loading, check, setCheck }) {
                 parms.row.status === "Terminated By Manager" ||
                 parms.row.status === "Terminated By Sr Manager" ||
                 parms.row.status === "Terminated By Operations" ||
-                parms.row.status === "Approved for Termination")
+                parms.row.status === "Approved for Termination" || 
+                parms.row.status === "Sent Back From Sr Manager Termination"||
+                parms.row.status === "Sent Back From BUH Termination"||
+                parms.row.status === "Sent Back From Operations Termination"||
+                parms.row.status === "Sent Back From Finance Team Termination")
             ) {
               cellClass.push("red statusCell");
             }

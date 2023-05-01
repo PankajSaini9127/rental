@@ -21,20 +21,37 @@ function SrManagerDashboard() {
   });
 
   const data = [
-    { service: "Total Agreement", value: meta.totalAgreement },
-    { service: "Pending Approval", value: meta.Pending },
-    { service: "Approved Agreement", value: meta.Approved },
-    { service: "Renewal Agreements", value: meta.Renewal },
-    { service: "Send Back Agreements", value: meta.Send_Back },
+    {
+      service: "Total Agreement",
+      value: meta.totalAgreement,
+      onClick: () => navigate("/srManagerListing/total-ag"),
+    },
+    {
+      service: "Pending Approval",
+      value: meta.Pending,
+      onClick: () => navigate("/srManagerListing/in-procces-ag"),
+    },
+    {
+      service: "Approved Agreement",
+      value: meta.Approved,
+      onClick: () => navigate("/srManagerListing/approved-ag"),
+    },
+    {
+      service: "Renewal Agreements",
+      value: meta.Renewal,
+      onClick: () => navigate("/srm-renewal-list"),
+    },
   ];
 
   async function getMetaDatas(id) {
-    const metaData = await getMetaData_SRM(id);
-    // console.log(metaData)
-    setMeta(metaData.data);
+    try {
+      const metaData = await getMetaData_SRM(id);
+      setMeta(metaData.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  // console.log("dashboars")
 
   useEffect(() => {
     getMetaDatas(auth.id);
@@ -43,14 +60,6 @@ function SrManagerDashboard() {
   return (
     <>
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-        {/* <HamburgerMenu
-          handleListing={() => navigate("/srManagerListing")}
-          navigateHome={"srManagerDashboard"}
-          monthlyRent={() => navigate("/srm-monthly-rent")}
-          renewal={() => navigate("/srm-renewal-list")}
-          monthlyBtn="true"
-        /> */}
-
         <SRMHamburger />
         <Grid container sx={{ justifyContent: "center" }}>
           <Grid
@@ -71,6 +80,7 @@ function SrManagerDashboard() {
                     service={item.service}
                     value={item.value}
                     key={index}
+                    onClick={item.onClick}
                   />
                 );
               })}

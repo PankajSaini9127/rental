@@ -37,7 +37,7 @@ export default function ListingTable({rows}) {
               color: "white",
               fontSize: "12px",
               textTransform: "capitalize",
-              // width:"100%"
+              // minWidth:"100%"
             }}
             onClick={(e) => {
               e.stopPropagation(); // don't select this row after clicking
@@ -66,7 +66,7 @@ export default function ListingTable({rows}) {
       const columns = [
         {
           field: "checkbox",
-          width: 20,
+          minWidth: 20,
           type: "number",
           headerClassName: "dataGridHeader",
           headerAlign: "center",
@@ -89,7 +89,7 @@ export default function ListingTable({rows}) {
         {
           field: "code",
           headerName: "Code",
-          width: 70,
+          minWidth: 100,
           flex: 1,
           type: "number",
           headerAlign: "center",
@@ -99,18 +99,19 @@ export default function ListingTable({rows}) {
           headerName: "Rent Month",
           headerAlign: "center",
           flex: 1
+          ,minWidth:120
         },
         {
           field: "name",
           headerName: "Landlord Name",
-          width: 100,
+          minWidth: 100,
           headerAlign: "center",
           flex: 1
         },
         {
           field: "location",
           headerName: "Location",
-          width: 150,
+          minWidth: 150,
           headerAlign: "center",
           flex: 1
     
@@ -118,7 +119,7 @@ export default function ListingTable({rows}) {
         {
           field: "gst",
           headerName: "GST",
-          width: 100,
+          minWidth: 100,
           headerAlign: "center",
           flex: 1
     
@@ -126,7 +127,7 @@ export default function ListingTable({rows}) {
         {
           field: "manager",
           headerName: "Manager",
-          width: 100,
+          minWidth: 100,
           headerAlign: "center",
           flex: 1
     
@@ -134,7 +135,7 @@ export default function ListingTable({rows}) {
         {
           field: "srm",
           headerName: "Sr Manager",
-          width: 100,
+          minWidth: 100,
           headerAlign: "center",
           flex: 1
     
@@ -143,12 +144,13 @@ export default function ListingTable({rows}) {
           field: "total_month_rent",
           headerName: "Month Rent",
           headerAlign: "center",
-          flex: 1
+          flex: 1,
+          minWidth:100
         },
         {
           field: "percentage",
           headerName: "Percentage Share",
-          width: 150,
+          minWidth: 150,
           headerAlign: "center",
         },
         {
@@ -179,13 +181,13 @@ export default function ListingTable({rows}) {
           field: "status",
           headerName: "Status",
           headerAlign: "center",
-          width: 200,
+          minWidth: 200,
           flex: 1
         },
         // {
         //   field: "utr",
         //   headerName: "UTR Number",
-        //   width: 100,
+        //   minWidth: 100,
         //   headerAlign: "center",
         //   flex: 1
     

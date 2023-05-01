@@ -31,11 +31,10 @@ function SrManagerDashboard() {
   });
 
   const data = [
-    { service: "Total Agreement", value: meta.totalAgreement },
-    { service: "Pending Approval", value: meta.Pending },
-    { service: "Approved Agreement", value: meta.Approved },
-    { service: "Renewal Agreements", value: meta.Renewal },
-    { service: "Send Back Agreements", value: meta.Send_Back },
+    { service: "Total Agreement", value: meta.totalAgreement ,onClick:()=> navigate("/BHUListing/total-ag") },
+    { service: "Pending Approval", value: meta.Pending ,onClick:()=> navigate("/BHUListing/in-procces-ag")},
+    { service: "Approved Agreement", value: meta.Approved ,onClick:()=> navigate("/BHUListing/approved-ag")},
+    // { service: "Send Back Agreements", value: meta.Send_Back,onClick:()=> navigate("/BHUListing/in-procces-ag") },
   ];
 
   async function getMetaDatas(id) {
@@ -82,6 +81,7 @@ function SrManagerDashboard() {
                     service={item.service}
                     value={item.value}
                     key={index}
+                    onClick={item.onClick}
                   />
                 );
               })}

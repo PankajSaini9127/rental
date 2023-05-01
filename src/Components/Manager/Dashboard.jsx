@@ -35,10 +35,26 @@ function Dashboard() {
   }, []);
 
   const data = [
-    { service: "Total Agreement", value: meta.totalAgreement },
-    { service: "Pending Approval", value: meta.Pending },
-    { service: "Approved Agreement", value: meta.Approved },
-    { service: "Renewal Agreements", value: meta.Renewal },
+    {
+      service: "Total Agreement",
+      value: meta.totalAgreement,
+      onClick: () => navigate("/listing/total-ag"),
+    },
+    {
+      service: "Pending Approval",
+      value: meta.Pending,
+      onClick: () => navigate("/listing/in-procces-ag"),
+    },
+    {
+      service: "Approved Agreement",
+      value: meta.Approved,
+      onClick: () => navigate("/listing/approved-ag"),
+    },
+    {
+      service: "Renewal Agreements",
+      value: meta.Renewal,
+      onClick: () => navigate("/renewal"),
+    },
   ];
 
   return (
@@ -51,7 +67,7 @@ function Dashboard() {
           renewal={() => navigate(`/renewal`)}
           monthlyBtn="true"
         /> */}
-<HamburgerManager/>
+        <HamburgerManager />
         {/* dashboard content */}
         {/* <ManagerHome/> */}
         <Grid container sx={{ justifyContent: "center" }}>
@@ -75,6 +91,7 @@ function Dashboard() {
                     service={item.service}
                     value={item.value}
                     key={index}
+                    onClick={item.onClick}
                   />
                 );
               })}

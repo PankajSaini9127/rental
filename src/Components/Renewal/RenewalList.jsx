@@ -11,6 +11,7 @@ import { get_renewal, get_search_renewal } from "../../Services/Services";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import { Box } from "@mui/system";
 import HamburgerManager from "../Manager/HamburgerManager";
+import moment from "moment";
 
 export default function RenewalList() {
   const navigate = useNavigate();
@@ -67,6 +68,20 @@ export default function RenewalList() {
   }, [refresh]);
 
   const rows = agIds.map((row) => {
+    var x = parseInt(agreements[row].tenure) //or whatever offset
+    console.log(x)
+var CurrentDate = new Date(agreements[row].final_agreement_date);
+// console.log("Current date:", CurrentDate);
+CurrentDate.setMonth(CurrentDate.getMonth() + x);
+CurrentDate.setDate(CurrentDate.getDate() - 1)
+// console.log("Date after " + x + " months:", CurrentDate);
+
+// let daysInExpire =  CurrentDate - new Date().getDate()
+
+function datediff(first, second) {        
+    return Math.round((second - first) / (1000 * 60 * 60 * 24));
+}
+
     return {
       id: agreements[row].id,
       status: agreements[row].renewal_status,
@@ -77,8 +92,8 @@ export default function RenewalList() {
       state: agreements[row].state,
       city: agreements[row].city,
       deposit: agreements[row].deposit,
-      expiry_date: "---",
-      expiry_day: "---",
+      expiry_date: moment(CurrentDate).format("DD-MM-YYYY"),
+      expiry_day:datediff(new Date(),CurrentDate),
       address: agreements[row].address,
     };
   });
@@ -93,7 +108,7 @@ export default function RenewalList() {
           renewal={() => navigate(`/renewal`)}
           monthlyBtn="true"
         /> */}
-<HamburgerManager/>
+        <HamburgerManager />
         <ListingComponent
           title1={"Rental Management System"}
           title={"Renewal"}

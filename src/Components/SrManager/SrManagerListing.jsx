@@ -9,6 +9,7 @@ import {
   get_search_srmanager,
   get_srm_agreements,
   get_srm_agreements_approved,
+  get_srm_agreements_total,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import { Box } from "@mui/system";
@@ -48,6 +49,18 @@ function SrManagerListing() {
     }
   }
 
+  //total agreements\
+  async function get_all_total_Ag (id){
+    try {
+      const response = await get_srm_agreements_total(id);
+    if (response.status === 200) {
+      setData(response.data);
+    }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   //  console.log(data)
 
   //  data.ids = data.ids.reverse()
@@ -63,12 +76,12 @@ function SrManagerListing() {
       location: data.agreement[item].location,
       manager: data.agreement[item].manager,
       rentalAmount: data.agreement[item].monthlyRent,
-      deposit:parseFloat( data.agreement[item].deposit).toFixed(2),
+      deposit:parseFloat( data.agreement[item].deposit).toFixed(0),
       state: data.agreement[item].state,
       city:data.agreement[item].city,
       address: data.agreement[item].address,
       initiateDate : moment(data.agreement[item].time).format('DD-MM-YYYY'),
-      type:"---",
+      type: data.agreement[item].type === "Renewed" ? "Renewal" : "New",
       sitevisit:data.agreement[item].site_visit_date
     };
   });
@@ -91,6 +104,8 @@ function SrManagerListing() {
       getData(login_srm_id);
     }else if(type === "approved-ag"){
       getApprovedagreements(login_srm_id)
+    }else if(type === "total-ag"){
+      get_all_total_Ag(login_srm_id)
     }
  
   }, [refresh,type]);

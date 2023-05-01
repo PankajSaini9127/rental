@@ -9,7 +9,6 @@ import { useSelector } from "react-redux";
 import { getMetaData_operations } from "../../Services/Services";
 import OperationsHamburger from "./OperationsHamburger";
 
-
 function SrManagerDashboard() {
   const navigate = useNavigate();
   const { auth } = useSelector((s) => s);
@@ -19,17 +18,27 @@ function SrManagerDashboard() {
     Pending: 0,
     Approved: 0,
     Renewal: 0,
-    Send_Back:0
+    Send_Back: 0,
   });
 
   const data = [
-    { service: "Total Agreement", value: meta.totalAgreement },
-    { service: "Pending Approval", value: meta.Pending },
-    { service: "Approved Agreement", value: meta.Approved },
-    { service: "Renewal Agreements", value: meta.Renewal },
-    { service: "Send Back Agreements", value: meta.Send_Back },
+    {
+      service: "Total Agreement",
+      value: meta.totalAgreement,
+      onClick: () => navigate("/operationsListing/total-ag"),
+    },
+    {
+      service: "Pending Approval",
+      value: meta.Pending,
+      onClick: () => navigate("/operationsListing/in-procces-ag"),
+    },
+    {
+      service: "Approved Agreement",
+      value: meta.Approved,
+      onClick: () => navigate("/operationsListing/approved-ag"),
+    }
+    // { service: "Send Back Agreements", value: meta.Send_Back },
   ];
-
 
   async function getMetaDatas(id) {
     const metaData = await getMetaData_operations(id);
@@ -46,18 +55,7 @@ function SrManagerDashboard() {
   return (
     <>
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-        {/* <HamburgerMenu
-          navigateHome={"operationsDashboard"}
-          handleListing={() => navigate("/operationsListing")}
-          monthlyRent={() => navigate("/opr-monthly-rent")}
-          renewal={() => navigate("/opr-monthly-rent")}
-          monthlyBtn="true"
-          renewalBTN="false"
-          misReports= {['/rental-payment-mis','/rental-property-dump-report','/rental-onboarding-all-status','/rental-onboarding-deposited']} 
-
-        /> */}
-
-         <OperationsHamburger/>
+        <OperationsHamburger />
 
         {/* dashboard content */}
         <Grid container sx={{ justifyContent: "center" }}>
@@ -79,6 +77,7 @@ function SrManagerDashboard() {
                     service={item.service}
                     value={item.value}
                     key={index}
+                    onClick={item.onClick}
                   />
                 );
               })}

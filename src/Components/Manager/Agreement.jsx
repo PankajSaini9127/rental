@@ -752,7 +752,7 @@ function Agreement({ history }) {
       const result = await add_landlord(landlordData);
 
       if (result) {
-        window.location.href = "/listing";
+        navigate(-1)
         dispatch(
           setAlert({
             open: true,

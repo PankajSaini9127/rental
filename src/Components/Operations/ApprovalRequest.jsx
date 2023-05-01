@@ -116,7 +116,7 @@ function ApprovalRequest() {
             message: "Agreement Sent To Finance Team.",
           })
         );
-        navigate("/operationsListing");
+        navigate(-1);
       } else {
         dispatch(
           setAlert({
@@ -203,7 +203,7 @@ function ApprovalRequest() {
     } else {
       const response = await send_back_to_manager(
         {
-          status: "Sent Back From Operations",
+          status: agreement[ids[0]].status === "Terminated By Sr Manager"? "Sent Back From Operations Termination" :"Sent Back From Operations",
           remark: remark,
         },
         id
@@ -216,7 +216,7 @@ function ApprovalRequest() {
             message: "Send back For Rectification",
           })
         );
-        navigate("/operationsListing");
+        navigate(-1);
       } else {
         dispatch(
           setAlert({
@@ -389,7 +389,7 @@ function ApprovalRequest() {
                     field={"tenure"}
                     value={agreement[ids[0]].tenure}
                   />
-                  {agreement[ids[0]].tenure !== "11 Month" && (
+                  {agreement[ids[0]].tenure > 12 && (
                     <>
                       <Grid container spacing={1} sx={{ mt: 6 }}>
                         <Grid item xs={12} container>
@@ -414,9 +414,7 @@ function ApprovalRequest() {
                             agreement[ids[0]].yearlyIncrement
                           )}
                         />
-                        {(agreement[ids[0]].tenure === "3 Year" ||
-                          agreement[ids[0]].tenure === "4 Year" ||
-                          agreement[ids[0]].tenure === "5 Year") && (
+                        {(agreement[ids[0]].tenure > 24) && (
                           <YearField
                             year={"Year 3"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
@@ -428,8 +426,7 @@ function ApprovalRequest() {
                             )}
                           />
                         )}
-                        {(agreement[ids[0]].tenure === "4 Year" ||
-                          agreement[ids[0]].tenure === "5 Year") && (
+                        {(agreement[ids[0]].tenure > 36) && (
                           <YearField
                             year={"Year 4"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
@@ -441,7 +438,7 @@ function ApprovalRequest() {
                             )}
                           />
                         )}
-                        {agreement[ids[0]].tenure === "5 Year" && (
+                        {agreement[ids[0]].tenure > 48 && (
                           <YearField
                             year={"Year 5"}
                             incrementType={agreement[ids[0]].yearlyIncrement}

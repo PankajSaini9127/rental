@@ -675,8 +675,10 @@ function EditAgreement({ history }) {
         ...increment,
         manager_id,
         // landlord,
-        renewal_status: "Renewed",
+       status: "Sent To Sr Manager",
         remark: "",
+        renewal_status:"Renewed",
+        type:"Renewed"
       },
       landlord
     );
@@ -1176,9 +1178,10 @@ console.log(partLabel)
           noc,
           tenure,
           ...increment,
-          renewal_status: "Hold",
+          status: "Hold",
           remark: "",
-
+          type:"Renewed",
+          renewal_status:"Renewed"
         },
         landlord
       );
@@ -1416,7 +1419,7 @@ console.log(partLabel)
                     onChange={handleCommonChange}
                   />
 
-                  <SelectComponent
+                  {/* <SelectComponent
                     label={"Agreement Tenure"}
                     required={true}
                     error={formError.tenure}
@@ -1437,9 +1440,28 @@ console.log(partLabel)
                     value={preData.tenure || ""}  
                     helperText = {partLabel.tenure}             
                     onChange={handleCommonChange}
+                  /> */}
+
+                    <TextFieldWrapper
+                    label="Agreement Tenure"
+                    placeHolder="Tenure In Months"
+                    name="tenure"
+                    notationVal="Month's"
+                    textAlignRight={"textAlignRight"}
+                    error={formError.tenure}
+                    required={true}
+                    value={preData.tenure || ""}
+                    onChange={handleCommonChange}
+                    index={i}
+                    maxLength={3}
+                    partLabel={
+                      partLabel.tenure &&
+                      partLabel.tenure
+                        ? "Old Tenure:"+ partLabel.tenure
+                        : ""
+                    }
                   />
-                  {preData.tenure === "" ? null : preData.tenure ===
-                    "11 Month" ? null : (
+                  {preData.tenure === "" ? null : preData.tenure < 12 ? null : (
                     <SelectComponent
                       label={"Yearly Increment"}
                       required={true}
@@ -1539,8 +1561,8 @@ console.log(partLabel)
                           </Grid>
 
                           <TextFieldWrapper
-                            label="Name Of Lesse"
-                            placeHolder="Enter Name Of Lesse"
+                            label="Name Of Lessor"
+                            placeHolder="Enter Name Of Lessor"
                             required={true}
                             disabled={true}
                             onBlur={(e) => handleOnBlur(e, i)}
@@ -1868,8 +1890,8 @@ console.log(partLabel)
                           <Grid item xs={6}>
                             <DocumentUpload
                               uploaded={
-                                preData[`cheque${i}`] ||
-                                preData.landlord[i]["cheque"]
+                                (preData[`cheque${i}`] ||
+                                preData.landlord[i]["cheque"]) && (partLabel.landlord[i].ifscCode === preData.landlord[i].ifscCode)
                                   ? true
                                   : false
                               }

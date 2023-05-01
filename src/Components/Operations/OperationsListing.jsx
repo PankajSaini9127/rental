@@ -10,6 +10,7 @@ import {
   get_Operations_agreements,
   get_search_agreement_operation,
   get_Operations_agreements_approved,
+  get_Operations_agreements_total,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import OperationsTable from "./OperationsTable";
@@ -46,6 +47,18 @@ function SrManagerListing() {
     }
   }
 
+  //get total agreements
+
+  async function get_total_agreements (id){
+    try {
+      const response = await get_Operations_agreements_total(id);
+    console.log(response.data)
+    setData(response.data );
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   console.log(data)
 
  
@@ -73,6 +86,8 @@ function SrManagerListing() {
       getData(login_operations_id);
     }else if(type === "approved-ag"){
       get_approved_agreements(login_operations_id)
+    }else if(type === "total-ag"){
+      get_total_agreements(login_operations_id)
     }
     
   }, [refresh,type]);
@@ -91,13 +106,13 @@ function SrManagerListing() {
       location: data.agreement[item].location,
       address: data.agreement[item].address,
       rentalAmount: data.agreement[item].monthlyRent,
-      deposit:parseFloat( data.agreement[item].deposit).toFixed(2),
+      deposit:parseFloat( data.agreement[item].deposit).toFixed(0),
       state: data.agreement[item].state,
       manager: data.agreement[item].manager_name,
       sr_manager: data.agreement[item].Sr_name,
       city:data.agreement[item].city,
       initiateDate : moment(data.agreement[item].time).format('DD-MM-YYYY'),
-      type:"---"
+      type: data.agreement[item].type === "Renewed" ? "Renewal" : "New",
     };
   });
 

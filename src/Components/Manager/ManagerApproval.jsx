@@ -123,7 +123,7 @@ function ManagerApproval() {
           message: "Agreement Sent To Sr Manager",
         })
       );
-      navigate("/listing");
+      navigate(-1);
     } else {
       dispatch(
         setAlert({
@@ -153,13 +153,6 @@ function ManagerApproval() {
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
           {/* <a id="button"></a> */}
 
-          {/* <HamburgerMenu
-            navigateHome={"dashboard"}
-            handleListing={() => navigate("/listing")}
-            monthlyRent={() => navigate("/monthly-payment")}
-            renewal={() => navigate(`/renewal`)}
-            monthlyBtn="true"
-          /> */}
 
           <HamburgerManager/>
 
@@ -290,7 +283,7 @@ function ManagerApproval() {
                     field={"tenure"}
                     value={agreement[ids[0]].tenure}
                   />
-                  {agreement[ids[0]].tenure !== "11 Month" && (
+                  {agreement[ids[0]].tenure > 12 && (
                     <>
                       <Grid  container sx = {{alignItems : "baseline",mt: 4  }} spacing={2}>
                         <Grid item xs={12}  container sx = {{alignItems : "baseline" }}>
@@ -315,9 +308,7 @@ function ManagerApproval() {
                             agreement[ids[0]].yearlyIncrement
                           )}
                         />
-                        {(agreement[ids[0]].tenure === "3 Year" ||
-                          agreement[ids[0]].tenure === "4 Year" ||
-                          agreement[ids[0]].tenure === "5 Year") && (
+                        {(agreement[ids[0]].tenure > 24 ) && (
                           <YearField
                             year={"Year 3"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
@@ -329,8 +320,7 @@ function ManagerApproval() {
                             )}
                           />
                         )}
-                        {(agreement[ids[0]].tenure === "4 Year" ||
-                          agreement[ids[0]].tenure === "5 Year") && (
+                        {(agreement[ids[0]].tenure > 36) && (
                           <YearField
                             year={"Year 4"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
@@ -342,7 +332,7 @@ function ManagerApproval() {
                             )}
                           />
                         )}
-                        {agreement[ids[0]].tenure === "5 Year" && (
+                        {agreement[ids[0]].tenure > 48 && (
                           <YearField
                             year={"Year 5"}
                             incrementType={agreement[ids[0]].yearlyIncrement}
@@ -416,16 +406,20 @@ function ManagerApproval() {
                           value={`${agreement[ids[0]].percentage[id]}%`}
                         />
                       </Grid>
-                      <Grid  container sx = {{alignItems : "baseline",mt: 1 }} >
-                      <DataFieldStyle
-                        field={"Deposit UTR Number"}
-                        value={agreement[ids[0]].utr_number[id]}
-                      />
-                      <DataFieldStyle
-                        field={"Deposit Payment Date"}
-                        value={agreement[ids[0]].payment_date[id]}
-                      />
-                    </Grid>
+                      {
+                       agreement[ids[0]].utr_number &&
+                        <Grid  container sx = {{alignItems : "baseline",mt: 1 }} >
+                       <DataFieldStyle
+                         field={"Deposit UTR Number"}
+                         value={agreement[ids[0]].utr_number[id]}
+                       />
+                       <DataFieldStyle
+                         field={"Deposit Payment Date"}
+                         value={agreement[ids[0]].payment_date[id]}
+                       />
+                     </Grid>
+                      }
+                      
                     </>
                     )
                   )}
@@ -506,7 +500,7 @@ function ManagerApproval() {
                     title={"Property tax receipt"}
                     img={agreement[ids[0]].tax_receipt}
                   />
-                  {agreement[ids[0]].leeseName && (
+                  {agreement[ids[0]].leeseName.length > 1 && (
                     <DocumentView
                       title={"NOC (if multiple owner)"}
                       img={agreement[ids[0]].noc}
@@ -516,25 +510,26 @@ function ManagerApproval() {
                     title={"Property Picture"}
                     img={agreement[ids[0]].property_pic}
                   />
+                  
                 </Grid>
               </Grid>
               {/* // Landlord assets */}
 
               {agreement[ids[0]].renewal_status === "Sent Forr Termination"&&
               <Grid item  container sx = {{alignItems : "baseline",mt: 5  }} xs={10} >
-              <DataFieldStyle
-                field={"Landlord Assets"}
-                value={agreement[ids[0]].assets}
-              />
+               <DocumentView
+                  title={"Termination File"}
+                  img={agreement[ids[0]].file}
+                />
             </Grid>
              }
 
               {agreement[ids[0]].assets && (
               <Grid item  container sx = {{alignItems : "baseline",mt: 5  }} xs={10} >
-                <DocumentView
-                  title={"Termination File"}
-                  img={agreement[ids[0]].file}
-                />
+               <DataFieldStyle
+                field={"Landlord Assets"}
+                value={agreement[ids[0]].assets}
+              />
               </Grid>)}
               {/* document section ends here */}
 

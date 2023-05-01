@@ -357,7 +357,7 @@ function DataTable({ rows, loading }) {
     },
     {
       field:"expiry_day" ,
-      headerName:"Day In Expire" ,
+      headerName:"No. of Days to Expire" ,
       minWidth: 230,
       headerClassName: "dataGridHeader",
       headerAlign: "center",

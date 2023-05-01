@@ -109,29 +109,19 @@ const { auth, refresh } = useSelector((state) => state);
   async function SearchAPi(id,searchValue){
     const search = await get_search_monthly_rent_manager(id,searchValue)
     setData(search.data)
-    // setAgIds(search.data.ids)
-    // setRent(search.data.agreement)
   } 
 
 
   function handleSerachChange (e){
-    
     setsearchValue(e.target.value)
     SearchAPi(auth.id,searchValue)
-
     console.log(searchValue)
   }
 
   return (
     <>
     <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-    {/* <HamburgerMenu
-      navigateHome={'dashboard'}
-          handleListing={()=>navigate('/listing')}
-          monthlyRent={() => navigate("/monthly-payment")}
-          renewal={() => navigate(`/renewal`)}
-          monthlyBtn='true'
-        /> */}
+      
 <HamburgerManager/>
 
       <ListingComponent
