@@ -9,22 +9,25 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { MyHeader } from "../StyledComponent";
+import { MyHeader, TextFieldWrapper } from "../StyledComponent";
 import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
 import { excelDownload, getMisReports } from "../../Services/Services";
 import { useSelector } from "react-redux";
-import HamburgerMenu from "../HamburgerMenu";
-import { Navigate } from "react-router-dom";
-import FinanceHamburger from "../FinancePanel/FinanceHamburger";
+import moment from "moment";
 
 const RentPaidSchedule = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
-
-  console.log({ startDate, endDate });
+  const [financialYear, setFinancialYear] = useState("");
+  const [error, setError] = useState(false);
+  const reports = "rent-paid-schedule";
   const { auth } = useSelector((s) => s);
 
-  const { role, isAuth } = auth;
+  const { role, isAuth, id } = auth;
+
+  console.log(startDate && endDate ? true : false);
+  console.log({ startDate, endDate });
+
   const labelStyle = {
     fontSize: "20px",
     lineHeight: "30px",
@@ -33,7 +36,30 @@ const RentPaidSchedule = () => {
     "@media(max-width:900px)": { fontSize: "10px" },
   };
 
+  function getFinancialYearDates(financialYear) {
+    const startDate = `${financialYear.split("-")[0]}-04-01`;
+    const endDate = `${moment(financialYear.split("-")[0])
+      .add(12, "M")
+      .format("YYYY")}-03-31`;
+    return { financialStartDate: startDate, financialEndDate: endDate };
+  }
+
   function onChange(e) {
+    if (e.target.name === "financialYear") {
+      const regex = /^\d{4}-(\d{2})?$/;
+      setFinancialYear(e.target.value);
+      if (regex.test(e.target.value)) {
+        const { financialStartDate, financialEndDate } = getFinancialYearDates(
+          e.target.value
+        );
+
+        setStartDate(financialStartDate);
+        setEndDate(financialEndDate);
+        setError(false);
+      } else {
+        setError(true);
+      }
+    }
     if (e.target.name === "start_date") {
       setStartDate(e.target.value);
     } else if (e.target.name === "end_date") {
@@ -44,11 +70,10 @@ const RentPaidSchedule = () => {
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-      { role.includes("Super Admin") ?  <AdminHamburgerMenu
+        <AdminHamburgerMenu
           navigateListing={"/super-admin-listing"}
           navigateHome={"/super-admin-dashboard"}
-        /> :    <FinanceHamburger />}
-
+        />
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid
@@ -88,6 +113,19 @@ const RentPaidSchedule = () => {
                 </Grid>
               </Grid>
             </Grid>
+            <br />
+            <TextFieldWrapper
+              label="Financial Year e.g 2022-23"
+              placeHolder="Enter financial year e.g 2022-23"
+              name="financialYear"
+              maxLength={7}
+              value={financialYear}
+              onChange={(e) => onChange(e)}
+              // index={i}
+              error={
+                error && "The value does not match the financial year pattern."
+              }
+            />
             <Grid item md={10} sx={{ display: "flex", mt: 4 }}>
               <FormControl fullWidth sx={{ mr: 4 }}>
                 <FormLabel>
@@ -137,13 +175,9 @@ const RentPaidSchedule = () => {
                 textTransform: "capitalize",
               }}
               onClick={() => {
-                excelDownload(
-                  "mis/rent-paid-schedule",
-                  "rent-paid-schedule",
-                  startDate,
-                  endDate
-                );
+                excelDownload(reports, id, role, startDate, endDate);
               }}
+              disabled={startDate && endDate ? false : true}
             >
               Export
             </Button>
