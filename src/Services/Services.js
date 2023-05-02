@@ -479,7 +479,7 @@ export async function getPaymentModifyDate (id){
 
 
 // APIs for MIS Reports
-export function excelDownload(reports, id, role, startDate, endDate) {
+export function excelDownload(reports, id, startDate, endDate); {
     //   console.log(`${API_LIVE}/api/${url}`);
   
     const url =
