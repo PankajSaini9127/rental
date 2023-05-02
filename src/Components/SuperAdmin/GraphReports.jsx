@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import {
   Box,
   Button,
@@ -19,6 +19,11 @@ import { excelDownload } from "../../Services/Services";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
+
+import FinanceHam from "../FinancePanel/FinanceHamburger";
+import ManagerHam from "../Manager/HamburgerManager";
+import SrMHam from "../SrManager/SRMHAmburger";
+import OPHam from "../Operations/OperationsHamburger";
 
 const GraphReports = () => {
   const [startDate, setStartDate] = useState("");
@@ -75,6 +80,21 @@ const GraphReports = () => {
 
   return (
     <>
+      <Box sx = {{position : 'absolute', right : '1%', top : '2%'}}>
+    <Typography variant = 'body1' sx = {{fontWeight : 700 }}> Welcome {auth.name}</Typography>
+    </Box>
+      <Stack p = {1} sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
+      { role.includes("Super Admin") && <AdminHamburgerMenu
+          navigateListing={"/super-admin-listing"}
+          navigateHome={"/super-admin-dashboard"}
+        />}
+
+        
+{role.includes('Finance') && <FinanceHam/>}
+{role.includes('Manager') && <ManagerHam/>}
+{role.includes('Senior_Manager') && <SrMHam/>}
+{role.includes('Operations') && <OPHam/>}
+
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
         <AdminHamburgerMenu
           navigateListing={"/super-admin-listing"}
@@ -203,7 +223,9 @@ const GraphReports = () => {
                 textTransform: "capitalize",
               }}
               onClick={() => {
-                excelDownload(reports, id, role, startDate, endDate);
+
+                excelDownload(reports, id, startDate, endDate);;
+
               }}
               disabled={reports && startDate && endDate ? false : true}
             >
@@ -217,7 +239,7 @@ const GraphReports = () => {
 };
 
 export default GraphReports;
-=======
+
 import {
     Box,
     Button,
@@ -436,4 +458,4 @@ import {
   };
   
   export default GraphReports;
->>>>>>> parent of 71e0e6b (fix :: MIS reports)
+

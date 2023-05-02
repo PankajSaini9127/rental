@@ -6,7 +6,12 @@ function FinanceHamburger() {
 
   return (
     <HamburgerMenu
-    misReports= {[{text:"Rent Paid Schedule",navigateTo:"/rent-paid-schedule"}]}
+    misReports= {[
+      
+      // { text: "Rental MIS Reports", navigateTo: "/rental-mis-reports" },
+      // { text:"Graph Reports",navigateTo:"/graph-reports"},
+      {text:"Rent Paid Schedule",navigateTo:"/rent-paid-schedule"}
+    ]}
     navigateHome={"finance-dashboard"}
     monthlyBtn="true"
     agreements={[

@@ -62,8 +62,9 @@ import ViewPage from "./Components/MonthalyPayment/ViewPage";
 import SrmRenwalList from "./Components/SrManager/Renewal/RenewalListing";
 import RenewalViewPage from "./Components/Renewal/ViewPage";
 import RentPaidSchedule from "./Components/SuperAdmin/RentPaidSchedule";
-import RentalMisReports from "./Components/SuperAdmin/RentalMisReports";
 import GraphReports from "./Components/SuperAdmin/GraphReports";
+import RentalMisReports from "./Components/SuperAdmin/RentalMisReports";
+
 
 function MyRouter() {
   const history = useNavigate();
@@ -387,6 +388,24 @@ function MyRouter() {
         path="/graph-reports"
         element={
           isAuth && role.includes("Super Admin") ? <GraphReports /> : <Login />
+        }
+      />
+         <Route
+        exact
+        path="/rental-mis-reports"
+        element={
+          isAuth  ? (
+            <RentalMisReports />
+          ) : (
+            <Login />
+          )
+        }
+      />
+        <Route
+        exact
+        path="/graph-reports"
+        element={
+          isAuth  ? <GraphReports /> : <Login />
         }
       />
       <Route

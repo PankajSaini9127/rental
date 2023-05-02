@@ -87,6 +87,7 @@ function FinanceListing() {
   }, [type]);
 
 useEffect(()=>{
+  console.log(data)
   setRows(data.map((item) => {
     console.log(item.deposit,item.percentage)
     return {
@@ -116,7 +117,7 @@ useEffect(()=>{
   //search
   async function SearchAPi(id, searchValue) {
       const search = await get_search_finance_agreements(id, searchValue);
-      setData(search.data);
+      setData(Object.values(search.data.agreement));
   }
 
   function handleSerachChange(e){

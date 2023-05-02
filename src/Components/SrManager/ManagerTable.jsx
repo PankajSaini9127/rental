@@ -54,7 +54,7 @@ function ManagerTable({ rows }) {
             View
           </Button>
         </Grid>
-        {(e.row.sitevisit === null && (e.row.status === "Sent To BUH" || e.row.status === "Sent To Operations" ||e.row.status === "Sent To Finance Team"))&& (
+        {(e.row.sitevisit === null && (e.row.status === "Sent To Sr Manager" || e.row.status === "Sent To BUH" || e.row.status === "Sent To Operations" ||e.row.status === "Sent To Finance Team"))&& (
           <Grid item xs={6}>
             <Button
               variant="contained"

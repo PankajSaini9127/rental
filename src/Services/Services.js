@@ -477,7 +477,9 @@ export async function getPaymentModifyDate (id){
     return await axios.get(`${API_LIVE}/api/get-payment-modify-date?id=${id}`)
 }
 // APIs for MIS Reports
-export function excelDownload(reports, id, role, startDate, endDate) {
+
+export function excelDownload(reports, id, startDate, endDate) {
+
     //   console.log(`${API_LIVE}/api/${url}`);
   
     const url =
@@ -522,7 +524,8 @@ export function excelDownload(reports, id, role, startDate, endDate) {
     };
   
     fetch(
-      `${API_LIVE}/api/${url}?startDate=${startDate}&endDate=${endDate}&id=${id}&role=${role}`,
+      `${API_LIVE}/api/${url}?startDate=${startDate}&endDate=${endDate}&id=${id}`,
+
       requestBody
     )
       .then((response) => response.blob())
