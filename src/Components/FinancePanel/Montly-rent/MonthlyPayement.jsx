@@ -108,26 +108,16 @@ function FinanceMonthlyPayement() {
   return (
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
-        {/* <HamburgerMenu
-          navigateHome={"finance-dashboard"}
-          handleListing={() => navigate("/finance-listing")}
-          monthlyRent={() => navigate("/finance-monthly-rent")}
-          renewal={() => navigate("/finance-monthly-rent")}
-          monthlyBtn="true"
-          renewalBTN="false"
-        /> */}
         <FinanceHamburger />
         <ListingComponent
           title1="Rental Management System"
           title="Monthly Payment"
           buttonText="Upload"
-          //   options={options}
           value={"New Agreement"}
           Table={ListingTable}
           rows={rows}
           dropDown={false}
           searchValue={searchValue}
-          // setsearchValue={setsearchValue}
           handleSerachChange={handleSerachChange}
         />
       </Stack>
