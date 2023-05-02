@@ -57,9 +57,47 @@ function AdminHamburgerMenu({navigateListing,navigateHome}) {
             onClick={() => navigate(navigateHome)}
             />
             <br/>
+ {!expand ? (
+            <>
+              <NavItem
+                Vector={VectorUser}
+                onClick={() => navigate(`${navigateListing}`)}
+              />
+              <NavItem
+                Vector={VectorUser}
+                onClick={() => navigate("/rental-mis-reports")}
+              />
+              <NavItem
+                Vector={VectorUser}
+                onClick={() => navigate("/graph-reports")}
+              />
+              <NavItem
+                Vector={VectorUser}
+                onClick={() => navigate("/rent-paid-schedule")}
+              />
+              {/* write code here for adding new menu */}
+              <NavItem Vector={VectorLogout} onClick={logout} />
+            </>
+          ) : (
+            <Stack container spacing={2}>
+              {/* onclick */}
+              <NavExpand
+                msg="Users"
+                Vector={VectorUser}
+                NavItem={NavItem}
+                onClick={() => navigate(`${navigateListing}`)}
+              />
+              <NavExpand
+                msg="LogOut"
+                // navigateTO=""
+                Vector={VectorLogout}
+                onClick={logout}
+              />
+            </Stack>
+          )}
 
   {/* MiS */}
-  <Box
+  {/* <Box
             sx={{
               background: `url(${MIS})`,
               backgroundSize: "cover",
@@ -115,37 +153,13 @@ function AdminHamburgerMenu({navigateListing,navigateHome}) {
               cursor:'pointer'
             }}
             onClick={() => navigate("/rent-paid-schedule")}
-            />
+            /> */}
            {/* MiS END*/}
 
           </Box>
 
 
-          {!expand ? (
-            <>
-              <NavItem
-                Vector={VectorUser}
-                onClick={() => navigate(`${navigateListing}`)}
-              />
-              <NavItem Vector={VectorLogout} onClick={logout}/>
-            </>
-          ) : (
-            <Stack container spacing={2}>
-              {/* onclick */}
-              <NavExpand
-                msg="Users"
-                Vector={VectorUser}
-                NavItem={NavItem}
-                onClick={() => navigate(`${navigateListing}`)}
-              />
-              <NavExpand
-                msg="LogOut"
-                // navigateTO=""
-                Vector={VectorLogout}
-                onClick={logout}
-              />
-            </Stack>
-          )}
+       
         </Stack>
       </Grid>
     </>

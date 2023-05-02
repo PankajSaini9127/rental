@@ -22,13 +22,8 @@ function SRMHamburger() {
         { text: "Paid", navigateTo: "/srm-monthly-rent/paid" },
       ]}
       misReports={[
-        { text: "Payment MIS Report", navigateTo: "/rental-payment-mis" },
-        {
-          text: "Property Dump Report",
-          navigateTo: "/rental-property-dump-report",
-        },
-        { text:"On Boarding All Status",navigateTo:"/rental-onboarding-all-status"},
-        { text:"On Boarding Deposited",navigateTo:"/rental-onboarding-deposited"},
+        { text: "Rental MIS Reports", navigateTo: "/rental-mis-reports" },
+        { text:"Graph Reports",navigateTo:"/graph-reports"},
         {text:"Rent Paid Schedule",navigateTo:"/rent-paid-schedule"}
       ]}
     />

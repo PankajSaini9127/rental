@@ -61,13 +61,9 @@ import EditInvoice from "./Components/MonthalyPayment/EditInvoice";
 import ViewPage from "./Components/MonthalyPayment/ViewPage";
 import SrmRenwalList from "./Components/SrManager/Renewal/RenewalListing";
 import RenewalViewPage from "./Components/Renewal/ViewPage";
-import RentalPropertyDumpReport from "./Components/SuperAdmin/RentalPropertyDumpReport";
-import RentalPaymentMIS from "./Components/SuperAdmin/RentalPaymentMIS";
-import RentalOnboardingAllStatus from "./Components/SuperAdmin/RentalOnboardingAllStatus";
-import RentalOnboardingDeposited from "./Components/SuperAdmin/RentalOnboardingDeposited";
 import RentPaidSchedule from "./Components/SuperAdmin/RentPaidSchedule";
-import GraphReports from "./Components/SuperAdmin/GraphReports";
 import RentalMisReports from "./Components/SuperAdmin/RentalMisReports";
+import GraphReports from "./Components/SuperAdmin/GraphReports";
 
 function MyRouter() {
   const history = useNavigate();
@@ -100,12 +96,12 @@ function MyRouter() {
       />
       <Route
         exact
-        path="/listing/:params"
+        path="/listing"
         element={isAuth && role.includes("Manager") ? <Listing /> : <Login />}
       />
       <Route
         exact
-        path="/monthly-payment/:type"
+        path="/monthly-payment"
         element={
           isAuth && role.includes("Manager") ? <MonthalyList /> : <Login />
         }
@@ -179,7 +175,7 @@ function MyRouter() {
       />
       <Route
         exact
-        path="/srManagerListing/:type"
+        path="/srManagerListing"
         element={
           isAuth && role.includes("Senior_Manager") ? (
             <SrManagerListing />
@@ -201,7 +197,7 @@ function MyRouter() {
       />
       <Route
         exact
-        path="/srm-monthly-rent/:type"
+        path="/srm-monthly-rent"
         element={
           isAuth && role.includes("Senior_Manager") ? (
             <MonthlyPayement />
@@ -221,6 +217,7 @@ function MyRouter() {
           )
         }
       />
+      //SRM Renewal Listing
       <Route
         exact
         path="/srm-renewal-list"
@@ -246,7 +243,7 @@ function MyRouter() {
       />
       <Route
         exact
-        path="/operationsListing/:type"
+        path="/operationsListing"
         element={
           isAuth && role.includes("Operations") ? (
             <OperationsListing />
@@ -268,7 +265,7 @@ function MyRouter() {
       />
       <Route
         exact
-        path="/opr-monthly-rent/:type"
+        path="/opr-monthly-rent"
         element={
           isAuth && role.includes("Operations") ? (
             <OperationsMonthlyPayement />
@@ -291,7 +288,7 @@ function MyRouter() {
       {/* BHU Section */}
       <Route
         exact
-        path="/BHUListing/:type"
+        path="/BHUListing"
         element={isAuth && role.includes("BUH") ? <BHUListing /> : <Login />}
       />
       <Route
@@ -374,80 +371,28 @@ function MyRouter() {
           )
         }
       />
-
-      {/* mis  */}
       <Route
-        exact
-        path="/rental-property-dump-report"
-        element={
-          isAuth  ? (
-            <RentalPropertyDumpReport />
-          ) : (
-            <Login />
-          )
-        }
-      />
-      <Route
-        exact
-        path="/rental-payment-mis"
-        element={
-          isAuth ? (
-            <RentalPaymentMIS />
-          ) : (
-            <Login />
-          )
-        }
-      />
-      <Route
-        exact
-        path="/rental-onboarding-all-status"
-        element={
-          isAuth  ? (
-            <RentalOnboardingAllStatus />
-          ) : (
-            <Login />
-          )
-        }
-      />
-      <Route
-        exact
-        path="/rental-onboarding-deposited"
-        element={
-          isAuth  ? (
-            <RentalOnboardingDeposited />
-          ) : (
-            <Login />
-          )
-        }
-      />
-         <Route
         exact
         path="/rental-mis-reports"
         element={
-          isAuth  ? (
+          isAuth && role.includes("Super Admin") ? (
             <RentalMisReports />
           ) : (
             <Login />
           )
         }
       />
-        <Route
+      <Route
         exact
         path="/graph-reports"
         element={
-          isAuth  ? <GraphReports /> : <Login />
+          isAuth && role.includes("Super Admin") ? <GraphReports /> : <Login />
         }
       />
       <Route
         exact
         path="/rent-paid-schedule"
-        element={
-          isAuth  ? (
-            <RentPaidSchedule />
-          ) : (
-            <Login />
-          )
-        }
+        element={isAuth ? <RentPaidSchedule /> : <Login />}
       />
       {/*Super Admin Ends Here */}
       {/* Finance team start here */}
@@ -458,7 +403,7 @@ function MyRouter() {
         }
       />
       <Route
-        path="/finance-listing/:type"
+        path="/finance-listing"
         element={
           isAuth && role.includes("Finance") ? <FinanceListing /> : <Login />
         }
@@ -470,7 +415,7 @@ function MyRouter() {
         }
       />
       <Route
-        path="/finance-monthly-rent/:type"
+        path="/finance-monthly-rent"
         element={
           isAuth && role.includes("Finance") ? (
             <FinanceMonthlyPayement />

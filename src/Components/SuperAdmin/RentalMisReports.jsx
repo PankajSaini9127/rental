@@ -9,28 +9,31 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { MyHeader, TextFieldWrapper } from "../StyledComponent";
+import {
+  MyHeader,
+  SelectComponent,
+  TextFieldWrapper,
+} from "../StyledComponent";
+import { excelDownload } from "../../Services/Services";
+import moment from "moment";
+import { useSelector } from "react-redux";
 import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
 import FinanceHam from "../FinancePanel/FinanceHamburger";
 import ManagerHam from "../Manager/HamburgerManager";
 import SrMHam from "../SrManager/SRMHAmburger";
 import OPHam from "../Operations/OperationsHamburger";
-import { excelDownload, getMisReports } from "../../Services/Services";
-import { useSelector } from "react-redux";
-import moment from "moment";
-
-const RentPaidSchedule = () => {
+const RentalMisReports = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [reports, setReports] = useState("");
   const [financialYear, setFinancialYear] = useState("");
   const [error, setError] = useState(false);
-  const reports = "rent-paid-schedule";
+
   const { auth } = useSelector((s) => s);
 
   const { role, isAuth, id } = auth;
 
-  console.log(startDate && endDate ? true : false);
-  console.log({ startDate, endDate });
+  console.log({ auth, role });
 
   const labelStyle = {
     fontSize: "20px",
@@ -47,7 +50,6 @@ const RentPaidSchedule = () => {
       .format("YYYY")}-03-31`;
     return { financialStartDate: startDate, financialEndDate: endDate };
   }
-
   function onChange(e) {
     if (e.target.name === "financialYear") {
       const regex = /^\d{4}-(\d{2})?$/;
@@ -64,7 +66,9 @@ const RentPaidSchedule = () => {
         setError(true);
       }
     }
-    if (e.target.name === "start_date") {
+    if (e.target.name === "reports") {
+      setReports(e.target.value);
+    } else if (e.target.name === "start_date") {
       setStartDate(e.target.value);
     } else if (e.target.name === "end_date") {
       setEndDate(e.target.value);
@@ -73,16 +77,16 @@ const RentPaidSchedule = () => {
 
   return (
     <>
-      <Box sx = {{position : 'absolute', right : '1%', top : '2%'}}>
+    <Box sx = {{position : 'absolute', right : '1%', top : '2%'}}>
     <Typography variant = 'body1' sx = {{fontWeight : 700 }}> Welcome {auth.name}</Typography>
     </Box>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        {/* {console.log(role)} */}
-        { role.includes("Super Admin") && <AdminHamburgerMenu
+      { role.includes("Super Admin") && <AdminHamburgerMenu
           navigateListing={"/super-admin-listing"}
           navigateHome={"/super-admin-dashboard"}
         />}
 
+        
 {role.includes('Finance') && <FinanceHam/>}
 {role.includes('Manager') && <ManagerHam/>}
 {role.includes('Senior_Manager') && <SrMHam/>}
@@ -94,7 +98,6 @@ const RentPaidSchedule = () => {
             sx={{ flexDirection: "column", justifyContent: "center" }}
           >
             <Grid xs={12}>
-              {" "}
               <MyHeader>Rental Management System</MyHeader>
               <Divider />
               <Grid
@@ -121,61 +124,85 @@ const RentPaidSchedule = () => {
                       },
                     }}
                   >
-                    Rental Paid Schedule
+                    Rental Mis Reports
                   </Typography>
                 </Grid>
               </Grid>
             </Grid>
-            <br />
-            <TextFieldWrapper
-              label="Financial Year e.g 2022-23"
-              placeHolder="Enter financial year e.g 2022-23"
-              name="financialYear"
-              maxLength={7}
-              value={financialYear}
-              onChange={(e) => onChange(e)}
-              // index={i}
-              error={
-                error && "The value does not match the financial year pattern."
-              }
-            />
-            <Grid item md={10} sx={{ display: "flex", mt: 4 }}>
-              <FormControl fullWidth sx={{ mr: 4 }}>
-                <FormLabel>
-                  <Typography variant="body1" sx={labelStyle}>
-                    Start Date
-                  </Typography>
-                </FormLabel>
-                <input
-                  type="date"
-                  name="start_date"
-                  value={startDate}
-                  className="DatePicker"
-                  onChange={(e) => onChange(e)}
-                />
-                <Typography
-                  variant="caption"
-                  sx={{ color: "red" }}
-                ></Typography>
-              </FormControl>
-              <FormControl fullWidth>
-                <FormLabel>
-                  <Typography variant="body1" sx={labelStyle}>
-                    End Date
-                  </Typography>
-                </FormLabel>
-                <input
-                  type="date"
-                  name="end_date"
-                  value={endDate}
-                  className="DatePicker"
-                  onChange={(e) => onChange(e)}
-                />
-                <Typography
-                  variant="caption"
-                  sx={{ color: "red" }}
-                ></Typography>
-              </FormControl>
+            <Grid sx={{ mt: 4 }}>
+              <SelectComponent
+                label={"Rental MIS Reports"}
+                required={true}
+                // error={formError.tenure}
+                name="reports"
+                // disabled={buh_id !== 0 || buh_id === null ? true : false}
+                options={[
+                  "Rental Property Dump Report",
+                  "Rental Payment MIS",
+                  "Rental Onboarding MIS (All Status)",
+                  "Rental Onboarding MIS (Deposited)",
+                ]}
+                value={reports}
+                onChange={(e) => {
+                  onChange(e);
+                }}
+              />
+              <br />
+              <TextFieldWrapper
+                label="Financial Year e.g 2022-23"
+                placeHolder="Enter financial year e.g 2022-23"
+                name="financialYear"
+                maxLength={7}
+                value={financialYear}
+                onChange={(e) => onChange(e)}
+                // index={i}
+                error={
+                  error &&
+                  "The value does not match the financial year pattern."
+                }
+              />
+              <Grid item md={10} sx={{ display: "flex", mt: 4 }}>
+                {/* <FormControl> */}
+                <FormControl fullWidth sx={{ mr: 4 }}>
+                  <FormLabel>
+                    <Typography variant="body1" sx={labelStyle}>
+                      Start Date
+                    </Typography>
+                  </FormLabel>
+                  <input
+                    type="date"
+                    name="start_date"
+                    value={startDate}
+                    className="DatePicker"
+                    onChange={(e) => onChange(e)}
+                    disabled={financialYear}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{ color: "red" }}
+                  ></Typography>
+                </FormControl>
+                {/* <FormControl> */}
+                <FormControl fullWidth>
+                  <FormLabel>
+                    <Typography variant="body1" sx={labelStyle}>
+                      End Date
+                    </Typography>
+                  </FormLabel>
+                  <input
+                    type="date"
+                    name="end_date"
+                    value={endDate}
+                    className="DatePicker"
+                    onChange={(e) => onChange(e)}
+                    disabled={financialYear}
+                  />
+                  <Typography
+                    variant="caption"
+                    sx={{ color: "red" }}
+                  ></Typography>
+                </FormControl>
+              </Grid>
             </Grid>
             <Button
               variant="contained"
@@ -190,7 +217,7 @@ const RentPaidSchedule = () => {
               onClick={() => {
                 excelDownload(reports, id, role, startDate, endDate);
               }}
-              disabled={startDate && endDate ? false : true}
+              disabled={reports && startDate && endDate ? false : true}
             >
               Export
             </Button>
@@ -201,4 +228,4 @@ const RentPaidSchedule = () => {
   );
 };
 
-export default RentPaidSchedule;
+export default RentalMisReports;
