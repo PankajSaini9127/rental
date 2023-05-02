@@ -11,6 +11,10 @@ import {
 import React, { useState } from "react";
 import { MyHeader, TextFieldWrapper } from "../StyledComponent";
 import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
+import FinanceHam from "../FinancePanel/FinanceHamburger";
+import ManagerHam from "../Manager/HamburgerManager";
+import SrMHam from "../SrManager/SRMHAmburger";
+import OPHam from "../Operations/OperationsHamburger";
 import { excelDownload, getMisReports } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import moment from "moment";
@@ -69,11 +73,22 @@ const RentPaidSchedule = () => {
 
   return (
     <>
+      <Box sx = {{position : 'absolute', right : '1%', top : '2%'}}>
+    <Typography variant = 'body1' sx = {{fontWeight : 700 }}> Welcome {auth.name}</Typography>
+    </Box>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        <AdminHamburgerMenu
+
+        {/* {console.log(role)} */}
+        { role.includes("Super Admin") && <AdminHamburgerMenu
           navigateListing={"/super-admin-listing"}
           navigateHome={"/super-admin-dashboard"}
-        />
+        />}
+
+{role.includes('Finance') && <FinanceHam/>}
+{role.includes('Manager') && <ManagerHam/>}
+{role.includes('Senior_Manager') && <SrMHam/>}
+{role.includes('Operations') && <OPHam/>}
+
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid
@@ -175,7 +190,9 @@ const RentPaidSchedule = () => {
                 textTransform: "capitalize",
               }}
               onClick={() => {
-                excelDownload(reports, id, role, startDate, endDate);
+
+                excelDownload(reports, id, startDate, endDate);;
+
               }}
               disabled={startDate && endDate ? false : true}
             >

@@ -35,7 +35,7 @@ function HamburgerMenu({
   agreements
 }) {
 
-  console.log(agreements)
+  agreements =  agreements ? agreements : []
   const [expand, setExpand] = useState(false);
 
   const { auth } = useSelector((s) => s);
