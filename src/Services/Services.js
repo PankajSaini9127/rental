@@ -479,7 +479,7 @@ export async function getPaymentModifyDate (id){
 
 
 // APIs for MIS Reports
-export function excelDownload(reports, id, startDate, endDate); {
+export function excelDownload(reports, id, startDate, endDate) {
     //   console.log(`${API_LIVE}/api/${url}`);
   
     const url =
@@ -524,7 +524,7 @@ export function excelDownload(reports, id, startDate, endDate); {
     };
   
     fetch(
-      `${API_LIVE}/api/${url}?startDate=${startDate}&endDate=${endDate}&id=${id}&role=${role}`,
+      `${API_LIVE}/api/${url}?startDate=${startDate}&endDate=${endDate}&id=${id}`,
       requestBody
     )
       .then((response) => response.blob())
@@ -541,4 +541,3 @@ export function excelDownload(reports, id, startDate, endDate); {
         tempLink.click();
       });
   }
-  
