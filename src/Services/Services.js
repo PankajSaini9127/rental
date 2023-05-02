@@ -141,6 +141,11 @@ export async function get_search_monthly_rent_finance (id,search) {
     return axios.get(`${API_LIVE}/api/finance/get-search-finance-monthlyrent?id=${id}&search=${search}`)
 }
 
+//paid search
+export async function get_search_monthly_rent_finance_paid (id,search) {
+    console.log(search)
+    return axios.get(`${API_LIVE}/api/finance/paid/get-search-finance-monthlyrent?id=${id}&search=${search}`)
+}
 
 export async function delete_agreement (id){
     return await axios.delete(`${API_LIVE}/api/delAgreement/${id}`)
@@ -314,6 +319,9 @@ export async function get_monthlt_rent_finance(id){
 }
 
 
+export async function get_monthlt_rent_finance_paid(id){
+    return await axios.get(`${API_LIVE}/api/finance/paid/finance-monthly-rent/${id}`)
+}
 
 
 
