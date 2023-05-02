@@ -18,10 +18,12 @@ import { excelDownload } from "../../Services/Services";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
+
 import FinanceHam from "../FinancePanel/FinanceHamburger";
 import ManagerHam from "../Manager/HamburgerManager";
 import SrMHam from "../SrManager/SRMHAmburger";
 import OPHam from "../Operations/OperationsHamburger";
+
 const RentalMisReports = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -91,6 +93,7 @@ const RentalMisReports = () => {
 {role.includes('Manager') && <ManagerHam/>}
 {role.includes('Senior_Manager') && <SrMHam/>}
 {role.includes('Operations') && <OPHam/>}
+
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid
@@ -215,7 +218,9 @@ const RentalMisReports = () => {
                 textTransform: "capitalize",
               }}
               onClick={() => {
+
                 excelDownload(reports, id, startDate, endDate);;
+
               }}
               disabled={reports && startDate && endDate ? false : true}
             >

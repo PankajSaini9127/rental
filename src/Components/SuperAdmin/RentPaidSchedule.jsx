@@ -77,6 +77,7 @@ const RentPaidSchedule = () => {
     <Typography variant = 'body1' sx = {{fontWeight : 700 }}> Welcome {auth.name}</Typography>
     </Box>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
+
         {/* {console.log(role)} */}
         { role.includes("Super Admin") && <AdminHamburgerMenu
           navigateListing={"/super-admin-listing"}
@@ -87,6 +88,7 @@ const RentPaidSchedule = () => {
 {role.includes('Manager') && <ManagerHam/>}
 {role.includes('Senior_Manager') && <SrMHam/>}
 {role.includes('Operations') && <OPHam/>}
+
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid
@@ -188,7 +190,9 @@ const RentPaidSchedule = () => {
                 textTransform: "capitalize",
               }}
               onClick={() => {
+
                 excelDownload(reports, id, startDate, endDate);;
+
               }}
               disabled={startDate && endDate ? false : true}
             >
