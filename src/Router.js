@@ -65,6 +65,8 @@ import RentPaidSchedule from "./Components/SuperAdmin/RentPaidSchedule";
 import GraphReports from "./Components/SuperAdmin/GraphReports";
 import RentalMisReports from "./Components/SuperAdmin/RentalMisReports";
 
+// add by Yashwant 
+import LandlordList from './Components/landlordOperations/Listing'
 
 function MyRouter() {
   const history = useNavigate();
@@ -75,7 +77,11 @@ function MyRouter() {
 
   return (
     <Routes>
+      {/* Route Added by Yashwant Sahu  */}
+      <Route exact path="/list-landlord" element={<LandlordList />} />
+      
       <Route exact path="/" element={<Login />} />
+      
       <Route
         exact
         path="/dashboard"
