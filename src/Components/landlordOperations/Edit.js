@@ -637,6 +637,9 @@ async function handleChangeFile(e) {
                     value={data.bankName || ""}
                     />
                     </Box>
+
+  <Box sx = {style.docConatiner}>
+                    
                     { data.gstNo !== old.gstNo &&
           <Box sx = {style.item}>
         <DocumentUpload
@@ -671,6 +674,7 @@ async function handleChangeFile(e) {
                               />
                     </Box>
       }
+      </Box>
         
         <Box sx = {style.button} mt = {5}>
           <Button type='submit' sx = {style.btn}  variant = 'contained'>
@@ -730,6 +734,11 @@ const style = {
     btn : {
       padding : '1% 2%',
       borderRadius : '20px'
+    },
+    docConatiner : {
+      display : 'flex',
+      width : '100%',
+      gap : '2rem',
     }
   };
 export default Edit;

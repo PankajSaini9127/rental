@@ -107,7 +107,21 @@ const [renewal,setRenewal] = useState({
   });
 
 
-  
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
 
   async function fetchData() {
     try {
@@ -2115,7 +2129,7 @@ console.log(partLabel)
                   <Grid item xs={12} >
                   <Grid coantiner sx = {{display : 'flex',gap : '2rem', flexDirection : 'column'}}>
                 <Grid item xs = {12} >
-                  <Typography variant = 'h6' color = {"primary"} sx = {{fontWeight : 700}}>Upaid Months</Typography>
+                  <Typography variant = 'h6' color = {"primary"} sx = {{fontWeight : 700}}>Unpaid Months</Typography>
                 </Grid>
                 {
                   upaid.map((row)=><Grid item xs = {12} sx = {{display : 'flex',gap : '2rem'}}>
@@ -2123,13 +2137,13 @@ console.log(partLabel)
                     label={"Rent Month (Unpaid)"}
                     placeHolder="Deposit Amount"
                     disabled={true}
-                    value={new Date(row.rent_date).toDateString()}
+                    value={month[new Date(row.rent_date).getUTCMonth()] + "-" + new Date(row.rent_date).getFullYear()}
                     onChange={(e) => handleChange(e)}
                   />
                   <TextFieldWrapper
                     label="Rent Amount"
                     disabled={true}
-                    value={row.rent_amount}
+                    value={parseInt(row.rent_amount)}
                     onChange={(e) => handleChange(e)}
                   />
                   <TextFieldWrapper

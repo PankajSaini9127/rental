@@ -72,6 +72,21 @@ function EditAgreement({ history }) {
 
   const [upaid,setUnpaid] = useState([])
 
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
 
   const [preData, setPreData] = useState({
     assets : '',
@@ -1897,8 +1912,8 @@ function EditAgreement({ history }) {
                   />
                   </Grid>
                   
-                  <Grid item xs={12} container >
-                  <Grid item xs={12} sx = {{gap : '1rem'}}>
+                  <Grid item xs={12} container spacing = {3}>
+                  <Grid item xs={12} >
                             <Typography color={"var( --main-color)"}>
                               {"Adjustment Amount"}
                             </Typography>
@@ -1913,8 +1928,6 @@ function EditAgreement({ history }) {
                     value={recovery.remainingMonth}
                     onChange={(e) => handleChange(e)}
                   />
-
-
                  
                   <TextFieldWrapper
                     label="Adjustment Amount"
@@ -1941,7 +1954,7 @@ function EditAgreement({ history }) {
  {upaid.length > 0 && <Grid mt = {1} mb = {1} item xs={12} >
                   <Grid coantiner sx = {{display : 'flex',gap : '2rem', flexDirection : 'column'}}>
                 <Grid item xs = {12} >
-                  <Typography  color = {"primary"} >Upaid Months</Typography>
+                  <Typography  color = {"primary"} >Unpaid Months</Typography>
                 </Grid>
                 {
                   upaid.map((row)=><Grid item xs = {12} sx = {{display : 'flex',gap : '2rem'}}>
@@ -1949,7 +1962,7 @@ function EditAgreement({ history }) {
                     label={"Rent Month (Unpaid)"}
                     placeHolder="Deposit Amount"
                     disabled={true}
-                    value={new Date(row.rent_date).toDateString()}
+                    value={month[new Date(row.rent_date).getUTCMonth()] + "-" + new Date(row.rent_date).getFullYear()}
                     onChange={(e) => handleChange(e)}
                   />
                   <TextFieldWrapper
