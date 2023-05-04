@@ -408,11 +408,12 @@ function DataTable({ rows, loading, check, setCheck }) {
           // // console.log(result)
           // if(result.data.success){
           //   // setLandlord(result.data.landlords_id)
-          //   console.log(result.data.landlords_id)
+            // console.log(row)
 
           Promise.allSettled(
             monthCalculation.data.monthly_rent.map(async (row, index) => {
               return await add_monthly_rent({
+                agreement_id : selectID, 
                 rent_amount: row.rent_amount,
                 rent_date: row.rent_date,
                 landlord_name: row.landlord_name,

@@ -7,6 +7,7 @@ function SRMHamburger() {
       navigateHome={"srManagerDashboard"}
       monthlyBtn="true"
       agreements={[
+
         {
           text: "In-Process ",
           navigateTo: "/srManagerListing/in-procces-ag",
@@ -16,6 +17,8 @@ function SRMHamburger() {
           navigateTo: "/srManagerListing/approved-ag",
         },
         { text: "Renewal", navigateTo: "/srm-renewal-list" },
+        { text: "Landlord List", navigateTo: "/list-landlord" },
+
       ]}
       monthly={[
         { text: "In-Process", navigateTo: "/srm-monthly-rent/in-process" },
@@ -26,6 +29,7 @@ function SRMHamburger() {
         { text:"Graph Reports",navigateTo:"/graph-reports"},
         {text:"Rent Paid Schedule",navigateTo:"/rent-paid-schedule"}
       ]}
+
     />
   );
 }

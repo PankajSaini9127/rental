@@ -1,12 +1,14 @@
 import { IconButton, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import HamburgerMenu from "../../HamburgerMenu";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ListingComponent from "../../StyleComponents/ListingComponent";
 import ListingTable from "./ListingTable";
 import {
   get_monthlt_rent_finance,
+  get_monthlt_rent_finance_paid,
   get_search_monthly_rent_finance,
+  get_search_monthly_rent_finance_paid,
 } from "../../../Services/Services";
 import { useSelector } from "react-redux";
 import { Box } from "@mui/system";
@@ -15,6 +17,8 @@ import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import FinanceHamburger from "../FinanceHamburger";
 
 function FinanceMonthlyPayement() {
+
+  const { type } = useParams()
   const navigate = useNavigate();
 
   const { auth, refresh } = useSelector((s) => s);
@@ -40,9 +44,29 @@ function FinanceMonthlyPayement() {
     }
   }
 
+    async function fetchDataPaid(id) {
+    try {
+      const data = await get_monthlt_rent_finance_paid(id);
+      if (data.data.success) {
+        setAgIds(data.data.ids);
+        setRent(data.data.agreement);
+        console.log(data.data.agreement);
+      } else {
+        console.log(data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
   useEffect(() => {
-    fetchData(auth.id);
-  }, [refresh]);
+    if(type === "in-process"){
+      fetchData(auth.id);
+    }else if (type === "paid"){
+      fetchDataPaid(auth.id)
+    }
+  }, [refresh,type]);
 
   const month = [
     "January",
@@ -98,8 +122,21 @@ function FinanceMonthlyPayement() {
     setRent(search.data.agreement);
   }
 
+  async function Search_Paid(id, searchValue) {
+    const search = await get_search_monthly_rent_finance_paid(id, searchValue);
+    setAgIds(search.data.ids);
+    setRent(search.data.agreement);
+  }
+
+  
+
   function handleSerachChange(e) {
-    SearchAPi(auth.id, searchValue);
+    if(type === "in-process"){
+      SearchAPi(auth.id, searchValue);
+    }else if (type === "paid"){
+      Search_Paid(auth.id, searchValue);
+    }
+    
     setsearchValue(e.target.value);
 
     console.log(searchValue);

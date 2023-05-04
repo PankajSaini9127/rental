@@ -1,151 +1,259 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import FinanceHam from "../FinancePanel/FinanceHamburger";
 import ManagerHam from "../Manager/HamburgerManager";
 import SrMHam from "../SrManager/SRMHAmburger";
 import OPHam from "../Operations/OperationsHamburger";
-import { Box, TextField, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { Box, Button, TextField, Tooltip, Typography } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+// action
+import { setAlert, setForm } from "../../store/action/action";
+// services
+import { listLandlord , search_landlord} from "../../Services/Services";
+import EditIcon from "@mui/icons-material/Edit";
+import { Link } from "react-router-dom";
+const Listing = (props) => {
+  const [row, setRow] = useState([]);
+  const history = props.history
 
-const Listing = () => {
-    const {auth : {role, id}} = useSelector(state=>state)
+  const {
+    auth: { role, id },
+  } = useSelector((state) => state);
+  const dispatch = useDispatch();
 
-    // for fetching the landlords according the user ID
-    // function fetchLandlord(){
+  // for fetching the landlords according the user ID
+  async function fetchLandlord(id) {
+    try {
+      let response = await listLandlord(id);
+      if (response.status === 200) {
+        setRow(
+          response.data.data.map((row, i) => {
+            return {
+              id: i + 1,
+              agreement_id: row.agreement_id,
+              agreement_code: row.code,
+              name: row.name,
+              aadhaar_no: row.aadharNo,
+              pan_no: row.panNo,
+              gst_no: row.gstNo || "---",
+              mobile: row.mobileNo,
+              email: row.email,
+              share: row.percentage,
+              action: row,
+            };
+          })
+        );
+      } else {
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "warring",
+            message: "May User Id valid or provided?",
+          })
+        );
+      }
+    } catch (error) {
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something went wrong !!!",
+        })
+      );
+    }
+  }
 
-    // }
-    // useEffect(()=>{
 
-    // },[])
-    return (
-        <Box sx={style.container}>
-        <Box>
+  async function handleSearch(e){
+    let response = await search_landlord({id,search : e.target.value})
+
+    if (response.status === 200) {
+    console.log(response)
+
+      setRow(
+        response.data.data.map((row, i) => {
+          return {
+            id: i + 1,
+            agreement_id: row.agreement_id,
+            agreement_code: row.code,
+            name: row.name,
+            aadhaar_no: row.aadharNo,
+            pan_no: row.panNo,
+            gst_no: row.gstNo || "---",
+            mobile: row.mobileNo,
+            email: row.email,
+            share: row.percentage,
+            action: row,
+          };
+        })
+      );
+    } 
+
+  }
+  useEffect(() => {
+    fetchLandlord(id);
+  }, []);
+  return (
+    <Box sx={style.container}>
+      <Box>
         {/* Hamburger */}
-        {role.includes('Finance') && <FinanceHam />}
-        {role.includes('Manager') && <ManagerHam />}
-        {role.includes('Senior_Manager') && <SrMHam />}
-        {role.includes('Operations') && <OPHam />}
+        {role.includes("Finance") && <FinanceHam />}
+        {role.includes("Manager") && <ManagerHam />}
+        {role.includes("Senior_Manager") && <SrMHam />}
+        {role.includes("Operations") && <OPHam />}
         {/* Hamburger ends */}
-        </Box>
+      </Box>
 
-        <Box sx = {style.contentContainer}>
+      <Box sx={style.contentContainer}>
         {/* Header  */}
-            <Box sx = {style.header}>
-            <Typography sx = {{fontWeight : 700}} color = 'primary' variant = 'h5'>Listing Landlord</Typography>
-            <Typography sx = {{fontWeight : 700}} variant = 'body1'>{role}</Typography>
-            </Box>
+        <Box sx={style.header}>
+          <Typography sx={{ fontWeight: 700 }} color="primary" variant="h4">
+            Rental Management System
+          </Typography>
+          <Typography sx={{ fontWeight: 700 }} variant="body1">
+            {role}
+          </Typography>
+        </Box>
         {/* Header ends */}
+        {/* module Name */}
+        <Box>
+          <Typography sx={{ fontWeight: 700 }} variant="h6">
+            Listing Landlord
+          </Typography>
+        </Box>
+        {/* module Name ends */}
         {/* Search Box */}
-        <Box sx = {style.searchBox}>
-            <TextField
-            variant='outlined'
-            placeholder='Search...'
-            size='small'
-            />
+        <Box sx={style.searchBox}>
+          <TextField variant="outlined" onChange = {handleSearch} placeholder="Search..." size="small" />
         </Box>
         {/* Search Box ends */}
         {/* Listing Component */}
-        <ListingPart row = {""}/>
+        <ListingPart row={row} history = {history}/>
         {/* Listing Component ends */}
-        </Box>
-            
-        </Box>
-    );
-}
-
-function ListingPart({row}){
-
-
-const columns = [
-    { field: 'id', headerName: 'ID', width: 90 },
-    {
-      field: 'firstName',
-      headerName: 'First name',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'lastName',
-      headerName: 'Last name',
-      width: 150,
-      editable: true,
-    },
-    {
-      field: 'age',
-      headerName: 'Age',
-      type: 'number',
-      width: 110,
-      editable: true,
-    },
-    {
-      field: 'fullName',
-      headerName: 'Full name',
-      description: 'This column has a value getter and is not sortable.',
-      sortable: false,
-      width: 160,
-      valueGetter: (params) =>
-        `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-    },
-  ];
-  
-  const rows = [
-    { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-    { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-    { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-    { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-    { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-    { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-    { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-    { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-    { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-  ];
-  
-    return (
-      <Box sx={{ height: 400, width: '100%' }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 5,
-              },
-            },
-          }}
-          pageSizeOptions={[5]}
-        />
       </Box>
+    </Box>
+  );
+};
+
+// data grid section
+function ListingPart({ row, history }) {
+
+  const dispatch = useDispatch();
+
+  const actionButton = (values) => {
+    return (
+      <>
+        <Tooltip title="Edit">
+          <Button  variant = 'contained' size = 'small' endIcon = {<EditIcon/>} onClick = {()=>{
+            dispatch(setForm(values.formattedValue))
+          history('/edit-landlord')
+          }}>
+            Edit
+            </Button>
+        </Tooltip>
+      </>
     );
+  };
+  const columns = [
+    { field: "id", headerName: "ID", width: 90 },
+    {
+      field: "agreement_id",
+      headerName: "Agreement ID",
+      width: 150,
+    },
+    {
+      field: "agreement_code",
+      headerName: "Agreement Code",
+      width: 150,
+    },
+    {
+      field: "name",
+      headerName: "Lessor Name",
+      width: 150,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: 110,
+    },
+    {
+      field: "aadhaar_no",
+      headerName: "Aadhaar Number",
+      width: 150,
+    },
+    {
+      field: "pan_no",
+      headerName: "Pan Number",
+      width: 110,
+    },
+    {
+      field: "gst_no",
+      headerName: "GST",
 
+      width: 110,
+    },
+    {
+      field: "mobile",
+      headerName: "Mobile Number",
+
+      width: 110,
+    },
+    {
+      field: "share",
+      headerName: "Share",
+
+      width: 110,
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 110,
+      renderCell: actionButton,
+    },
+  ];
+
+  return (
+    <Box sx={{ height: 400, width: "100%" }}>
+      <DataGrid
+        rows={row}
+        columns={columns}
+        initialState={{
+          pagination: {
+            paginationModel: {
+              pageSize: 5,
+            },
+          },
+        }}
+        pageSizeOptions={[5]}
+      />
+    </Box>
+  );
 }
-
 
 // style Css (Inline CSS part here)
 const style = {
-    container : {
-        display : 'flex',
-        width : '100%',
-        gap : '1rem',
-        padding : '0.3%',
-    },
-    contentContainer :{
-        flex : 1,
-        justifyContent : 'space-between',
-        padding : '1rem',
-        gap : '5rem',
-        display : 'flex',
-        flexDirection : 'column',
-    },
-    header :{
-        display : 'flex',
-        justifyContent : 'space-between'
-    },
-    searchBox :{
-        display : 'flex',
-        justifyContent : 'space-between'
-    }
-}
+  container: {
+    display: "flex",
+    width: "100%",
+    gap: "1rem",
+    padding: "0.3%",
+  },
+  contentContainer: {
+    flex: 1,
+    justifyContent: "space-between",
+    padding: "1rem",
+    gap: "2rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  searchBox: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+};
 
 export default Listing;
-
-

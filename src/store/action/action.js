@@ -26,13 +26,6 @@ export const setTab = (parameters) => {
         payload: parameters
     }
 }
-// Actions for change to dark mode
-export const setForm = (parameters) => {
-    return {
-        type: 'FORM',
-        payload: parameters
-    }
-}
 
 // for refresh token Box 
 
@@ -49,4 +42,11 @@ export const addLandLoard = (data)=>{
         type: "ADD_LANDLOARD",
         payload : data
     }
+}
+
+export const setForm = (data)=>{
+    return {
+        type : "FORM",
+        payload : data
+    } 
 }

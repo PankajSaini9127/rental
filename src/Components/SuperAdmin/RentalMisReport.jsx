@@ -19,6 +19,10 @@ import {
   import { useSelector } from "react-redux";
   import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
   
+import FinanceHam from "../FinancePanel/FinanceHamburger";
+import ManagerHam from "../Manager/HamburgerManager";
+import SrMHam from "../SrManager/SRMHAmburger";
+import OPHam from "../Operations/OperationsHamburger";
   const RentalMisReports = () => {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
@@ -75,11 +79,16 @@ import {
     return (
       <>
         <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-          <AdminHamburgerMenu
-            navigateListing={"/super-admin-listing"}
-            navigateHome={"/super-admin-dashboard"}
-          />
-  
+        { role.includes("Super Admin") && <AdminHamburgerMenu
+          navigateListing={"/super-admin-listing"}
+          navigateHome={"/super-admin-dashboard"}
+        />}
+
+        
+{role.includes('Finance') && <FinanceHam/>}
+{role.includes('Manager') && <ManagerHam/>}
+{role.includes('Senior_Manager') && <SrMHam/>}
+{role.includes('Operations') && <OPHam/>}
           <Box sx={{ flexGrow: 1 }}>
             <Grid
               container
