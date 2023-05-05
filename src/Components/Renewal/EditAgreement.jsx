@@ -1904,12 +1904,14 @@ console.log(partLabel)
                               href={ preData.landlord[i].pan_card}
                             />
                           </Grid>
-                          <Grid item xs={6}>
+                          {
+                          (partLabel.landlord[i].gstNo === preData.landlord[i]["gst"] || preData.landlord[i].gstNo !== "" ) && 
+                            <Grid item xs={6}>
                             <DocumentUpload
                               uploaded={
                                 preData[`gst${i}`] || preData.landlord[i]["gst"]
-                                  ? true
-                                  : false
+                                  ? (partLabel.landlord[i].gstNo != preData.landlord[i]["gst"]) ? false
+                                  : true : false
                               }
                               label="Upload GST Certificate"
                               placeHolder="Upload GST Certificate"
@@ -1917,15 +1919,17 @@ console.log(partLabel)
                               name={"gst"}
                               fileName={preData[`gst${i}`]}
                               href={ partLabel.landlord[i].gst}
-                            />
+                              />
                           </Grid>
+                            }
+
+                         { (partLabel.landlord[i].ifscCode === preData.landlord[i]["ifscCode"] || preData.landlord[i].ifscCode !== "" ) && 
                           <Grid item xs={6}>
                             <DocumentUpload
                               uploaded={
-                                (preData[`cheque${i}`] ||
-                                preData.landlord[i]["cheque"]) && (partLabel.landlord[i].ifscCode === preData.landlord[i].ifscCode)
-                                  ? true
-                                  : false
+                                preData[`cheque${i}`] || preData.landlord[i]["cheque"]
+                                  ? (partLabel.landlord[i].ifscCode != preData.landlord[i]["ifscCode"]) ? false
+                                  : true : false
                               }
                               label="Upload Cancel Cheque"
                               name={"cheque"}
@@ -1935,6 +1939,7 @@ console.log(partLabel)
                               href={ partLabel.landlord[i].cheque}
                             />
                           </Grid>
+}
                         </Grid>
                       </Collapse>
                     </>
