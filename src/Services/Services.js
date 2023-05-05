@@ -63,7 +63,7 @@ export async function get_agreements (manager_id){
 
 
 export async function get_old_agreement (code){
-    return axios.get(`${API_LIVE}/api/old/agreements/${code}`)
+    return axios.get(`${API_LIVE}/api/old/agreements?code=${code}`)
 }
 
 
@@ -141,6 +141,11 @@ export async function get_search_monthly_rent_finance (id,search) {
     return axios.get(`${API_LIVE}/api/finance/get-search-finance-monthlyrent?id=${id}&search=${search}`)
 }
 
+//paid search
+export async function get_search_monthly_rent_finance_paid (id,search) {
+    console.log(search)
+    return axios.get(`${API_LIVE}/api/finance/paid/get-search-finance-monthlyrent?id=${id}&search=${search}`)
+}
 
 export async function delete_agreement (id){
     return await axios.delete(`${API_LIVE}/api/delAgreement/${id}`)
@@ -314,6 +319,9 @@ export async function get_monthlt_rent_finance(id){
 }
 
 
+export async function get_monthlt_rent_finance_paid(id){
+    return await axios.get(`${API_LIVE}/api/finance/paid/finance-monthly-rent/${id}`)
+}
 
 
 
@@ -417,9 +425,6 @@ export async function get_finance_agreements_approved(data){
     return await axios.get(`${API_LIVE}/api/finance/approved/get-agreement/${data}`)
 }
 
-
-
-
 // finance search
 export async function get_search_finance_agreements(id,search){
     return await axios.get(`${API_LIVE}/api/finance/search/${id}?search=${search}`)
@@ -476,69 +481,84 @@ export async function getModifyDate (id){
 export async function getPaymentModifyDate (id){
     return await axios.get(`${API_LIVE}/api/get-payment-modify-date?id=${id}`)
 }
+
+//get modification date
+export async function listLandlord (id){
+    return await axios.get(`${API_LIVE}/api/list-landlord?id=${id}`)
+}
+//get modification date
+export async function updateLandlord (data){
+    return await axios.post(`${API_LIVE}/api/update-landlord`,data)
+}
+//get modification date
+export async function search_landlord ({id,search}){
+    return await axios.get(`${API_LIVE}/api/search-landlord?id=${id}&search=${search}`)
+}
+//get modification date
+export async function addRenewalDesposit (data){
+    return await axios.post(`${API_LIVE}/api/add-renewal-deposit`,data)
+}
+
 // APIs for MIS Reports
+export function excelDownload(reports, id, role, startDate, endDate) {
+  //   console.log(`${API_LIVE}/api/${url}`);
 
-export function excelDownload(reports, id, startDate, endDate) {
+  const url =
+    reports === "Rental Property Dump Report"
+      ? "mis/get-rental-property-dump-report"
+      : reports === "Rental Payment MIS"
+      ? "mis/rental-payment-mis"
+      : reports === "Rental Onboarding MIS (All Status)"
+      ? "mis/rental-onboarding-all-status"
+      : reports === "Rental Onboarding MIS (Deposited)"
+      ? "mis/rental-onboarding-deposited"
+      : reports === "rent-paid-schedule"
+      ? "mis/rent-paid-schedule"
+      : reports === "No of agreements"
+      ? "mis/no-of-agreements"
+      : reports === "Monthly rent"
+      ? "mis/monthly-rent"
+      : reports === "Monthly deposit" && "mis/monthly-deposit";
 
-    //   console.log(`${API_LIVE}/api/${url}`);
-  
-    const url =
-      reports === "Rental Property Dump Report"
-        ? "mis/get-rental-property-dump-report"
-        : reports === "Rental Payment MIS"
-        ? "mis/rental-payment-mis"
-        : reports === "Rental Onboarding MIS (All Status)"
-        ? "mis/rental-onboarding-all-status"
-        : reports === "Rental Onboarding MIS (Deposited)"
-        ? "mis/rental-onboarding-deposited"
-        : reports === "rent-paid-schedule"
-        ? "mis/rent-paid-schedule"
-        : reports === "No of agreements"
-        ? "mis/no-of-agreements"
-        : reports === "Monthly rent"
-        ? "mis/monthly-rent"
-        : reports === "Monthly deposit" && "mis/monthly-deposit";
-  
-    const excelName =
-      reports === "Rental Property Dump Report"
-        ? "rental-property-dump-report"
-        : reports === "Rental Payment MIS"
-        ? "rental-payment-mis"
-        : reports === "Rental Onboarding MIS (All Status)"
-        ? "rental-onboarding-all-status"
-        : reports === "Rental Onboarding MIS (Deposited)"
-        ? "rental-onboarding-deposited"
-        : reports === "rent-paid-schedule"
-        ? "rent-paid-schedule"
-        : reports === "No of agreements"
-        ? "no-of-agreements"
-        : reports === "Monthly rent"
-        ? "monthly-rent"
-        : reports === "Monthly deposit" && "monthly-deposit";
-  
-    console.log({ reports, url, excelName });
-  
-    const requestBody = {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-    };
-  
-    fetch(
-      `${API_LIVE}/api/${url}?startDate=${startDate}&endDate=${endDate}&id=${id}`,
+  const excelName =
+    reports === "Rental Property Dump Report"
+      ? "rental-property-dump-report"
+      : reports === "Rental Payment MIS"
+      ? "rental-payment-mis"
+      : reports === "Rental Onboarding MIS (All Status)"
+      ? "rental-onboarding-all-status"
+      : reports === "Rental Onboarding MIS (Deposited)"
+      ? "rental-onboarding-deposited"
+      : reports === "rent-paid-schedule"
+      ? "rent-paid-schedule"
+      : reports === "No of agreements"
+      ? "no-of-agreements"
+      : reports === "Monthly rent"
+      ? "monthly-rent"
+      : reports === "Monthly deposit" && "monthly-deposit";
 
-      requestBody
-    )
-      .then((response) => response.blob())
-      .then((result) => {
-        // console.log(result);
-        var data = new Blob([result], { type: "text/xlsx" });
-        var csvURL = window.URL.createObjectURL(data);
-        var tempLink = document.createElement("a");
-        tempLink.href = csvURL;
-        tempLink.setAttribute(
-          "download",
-          `${excelName}-${startDate}-${endDate}.xlsx`
-        );
-        tempLink.click();
-      });
-  }
+  console.log({ reports, url, excelName });
+
+  const requestBody = {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  };
+
+  fetch(
+    `${API_LIVE}/api/${url}?startDate=${startDate}&endDate=${endDate}&id=${id}&role=${role}`,
+    requestBody
+  )
+    .then((response) => response.blob())
+    .then((result) => {
+      // console.log(result);
+      var data = new Blob([result], { type: "text/xlsx" });
+      var csvURL = window.URL.createObjectURL(data);
+      var tempLink = document.createElement("a");
+      tempLink.href = csvURL;
+      tempLink.setAttribute(
+        "download",
+        `${excelName}-${startDate}-${endDate}.xlsx`
+      );
+      tempLink.click();
+    });
+}

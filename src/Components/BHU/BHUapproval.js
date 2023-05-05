@@ -17,6 +17,7 @@ import { useEffect, useState } from "react";
 import {
   get_agreement_buh_id,
   get_agreement_id,
+  get_old_agreement,
   send_back_to_manager,
 } from "../../Services/Services";
 import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
@@ -56,17 +57,48 @@ function SrManagerApproval() {
 
   const [sendBackMsg, setSendBackMsg] = useState("");
 
+  const [partLabel,setPartLabel] = useState({landlord:[{
+    accountNo: "",
+    alternateMobile: "",
+    area:"",
+    bankName:"",
+    benificiaryName: "",
+    branchName:"",
+    cheque:"",
+    email: "",
+    gst:null,
+    gstNo: null,
+    ifscCode: "",
+      }]});
+
   const { auth } = useSelector((s) => s);
 
   const srm_id = auth.id;
 
   const dispatch = useDispatch();
 
+  const [oldIds, setOldIds] = useState([]);
+
+  async function get_old_data (code){
+    try {
+      const oldvalue = await get_old_agreement(code)
+      console.log(oldvalue.data)
+     oldvalue.status === 200 &&  setPartLabel(oldvalue.data.agreement);
+     oldvalue.status === 200 && setOldIds(oldvalue.data.ids)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const getData = async (id) => {
     const agreement = await get_agreement_buh_id(id);
     setAgreement(agreement.data[0]);
     // setIds(agreement.data.ids);
     // setSendBackMsg(agreement.data.agreement.remark);
+    console.log(agreement.data[0])
+    if(agreement.data[0].type === "Renewed"){
+      get_old_data(agreement.data[0].code)
+    }
     console.log(agreement);
   };
 
@@ -162,14 +194,9 @@ function SrManagerApproval() {
 
   return (
     <>
+    { (agreement.type === "Renewed" ? oldIds.length > 0 : true) && 
       <Stack sx={{ flexDirection: "row", mb: 4 }}>
-        {/* <HamburgerMenu
-          navigateHome={"BHUDashboard"}
-          handleListing={() => navigate("/BHUListing")}
-          // monthlyRent={() => navigate("/buh-monthly-rent")}
-          // renewal={() => navigate("/buh-monthly-rent")}
-          // monthlyBtn="true"
-        /> */}
+        
         <BUH_Hamburger />
         <Box className="backButton">
           <IconButton
@@ -192,11 +219,15 @@ function SrManagerApproval() {
                 xs={12}
                 sx={{ justifyContent: "space-between", display: "flex" }}
               >
+
                 <MyHeader>Rental Management System</MyHeader>
+
                 <Typography mt="15px" mr="15px" fontWeight="600">
                   Welcome {auth.name}
                 </Typography>
+
               </Grid>
+
               <Box className="backButton">
                 <IconButton
                   variant="contained"
@@ -210,10 +241,12 @@ function SrManagerApproval() {
                   />
                 </IconButton>
               </Box>
+
             </Grid>
 
             {/* Basic Details */}
             <Grid item md={10} sx={{ mt: 2 }}>
+
               {agreement.status === "Deposited" && (
                 <>
                   <Grid container>
@@ -260,6 +293,7 @@ function SrManagerApproval() {
                   </Grid>
                 </>
               )}
+
               <Grid container sx={{ mt: 2 }}>
                 <DataFieldStyle
                   field={"manager"}
@@ -282,21 +316,34 @@ function SrManagerApproval() {
                 <DataFieldStyle
                   field={"area"}
                   value={agreement.area + " sq. ft"}
+                  partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].area}
                 />
                 <DataFieldStyle
                   field={"lock in month"}
                   value={agreement.lockInYear}
+                  partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].lockInYear}
                 />
                 <DataFieldStyle
                   field={"notice period in month"}
                   value={agreement.noticePeriod}
+                  partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].noticePeriod}
                 />
-                <DataFieldStyle field={"deposit"} value={agreement.deposit} />
+                <DataFieldStyle 
+                field={"deposit"} 
+                value={agreement.deposit} 
+                partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].deposit}
+                />
                 <DataFieldStyle
                   field={"monthly rental"}
                   value={agreement.monthlyRent}
+                  partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].monthlyRent}
                 />
-                <DataFieldStyle field={"tenure"} value={agreement.tenure} />
+                <DataFieldStyle 
+                field={"tenure"} 
+                value={agreement.tenure} 
+                partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].tenure}
+                />
+
                 {agreement.tenure > 12 && (
                   <>
                     <Grid container spacing={1} sx={{ mt: 6 }}>
@@ -304,6 +351,7 @@ function SrManagerApproval() {
                         <DataFieldStyle
                           field={"yearly Increment"}
                           value={agreement.yearlyIncrement}
+                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].yearlyIncrement}
                         />
                       </Grid>
                       <YearField
@@ -311,6 +359,7 @@ function SrManagerApproval() {
                         incrementType={agreement.yearlyIncrement}
                         Increment={0}
                         amount={agreement.year1}
+                        partLabel={partLabel[oldIds[0]].year1}
                       />
                       <YearField
                         year={"Year 2"}
@@ -321,6 +370,13 @@ function SrManagerApproval() {
                           agreement.year2,
                           agreement.yearlyIncrement
                         )}
+                        partLabel={
+                          getIncrement(
+                            partLabel[oldIds[0]].year1,
+                            partLabel[oldIds[0]].year2,
+                            partLabel[oldIds[0]].yearlyIncrement
+                          )
+                        }
                       />
                       {(agreement.tenure > 24 ) && (
                         <YearField
@@ -332,6 +388,13 @@ function SrManagerApproval() {
                             agreement.year3,
                             agreement.yearlyIncrement
                           )}
+                          partLabel={
+                            getIncrement(
+                              partLabel[oldIds[0]].year2,
+                              partLabel[oldIds[0]].year3,
+                              partLabel[oldIds[0]].yearlyIncrement
+                            )
+                          }
                         />
                       )}
                       {(agreement.tenure > 36) && (
@@ -344,6 +407,13 @@ function SrManagerApproval() {
                             agreement.year4,
                             agreement.yearlyIncrement
                           )}
+                          partLabel={
+                            getIncrement(
+                              partLabel[oldIds[0]].year3,
+                              partLabel[oldIds[0]].year4,
+                              partLabel[oldIds[0]].yearlyIncrement
+                            )
+                          }
                         />
                       )}
                       {agreement.tenure > 48 && (
@@ -356,6 +426,13 @@ function SrManagerApproval() {
                             agreement.year5,
                             agreement.yearlyIncrement
                           )}
+                          partLabel={
+                            getIncrement(
+                              partLabel[oldIds[0]].year4,
+                              partLabel[oldIds[0]].year5,
+                              partLabel[oldIds[0]].yearlyIncrement
+                            )
+                          }
                         />
                       )}
                     </Grid>
@@ -435,7 +512,8 @@ function SrManagerApproval() {
             {/* buttons end here */}
           </Grid>
         </Box>
-      </Stack>
+      </Stack> 
+      }
     </>
   );
 }

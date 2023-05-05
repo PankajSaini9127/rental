@@ -6,8 +6,7 @@ function FinanceHamburger() {
 
   return (
     <HamburgerMenu
-    misReports= {[
-      
+    misReports= {[      
       // { text: "Rental MIS Reports", navigateTo: "/rental-mis-reports" },
       // { text:"Graph Reports",navigateTo:"/graph-reports"},
       {text:"Rent Paid Schedule",navigateTo:"/rent-paid-schedule"}
@@ -23,6 +22,8 @@ function FinanceHamburger() {
         text: "Approved",
         navigateTo: "/finance-listing/approved-ag",
       },
+      { text: "Landlord List", navigateTo: "/list-landlord" },
+
     ]}
     monthly={[
       { text: "In-Process", navigateTo: "/finance-monthly-rent/in-process" },

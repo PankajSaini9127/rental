@@ -15,6 +15,7 @@ function HamburgerManager() {
         { text: "In-Process ", navigateTo: "/listing/in-procces-ag" },
         { text: "Approved ", navigateTo: "/listing/approved-ag" },
         { text: "Renewal ", navigateTo: "/renewal" },
+        { text: "Landlord List", navigateTo: "/list-landlord" },
       ]}
       monthly={[
         { text: "In-Process", navigateTo: "/monthly-payment/in-process" },

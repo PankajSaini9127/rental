@@ -10,7 +10,7 @@ import {
   import { useNavigate, useParams } from "react-router-dom";
   import HamburgerMenu from "../HamburgerMenu";
   import { DataFieldStyle, YearField } from "../StyleComponents/Rental";
-  import { MyHeader} from "../StyledComponent";
+  import { DocumentUpload, MyHeader, TextFieldWrapper} from "../StyledComponent";
   import { useEffect, useState } from "react";
 
   import { useDispatch, useSelector } from "react-redux";
@@ -21,6 +21,7 @@ import {
   import { setAlert } from "../../store/action/action";
   import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import HamburgerManager from "../Manager/HamburgerManager";
+import moment from "moment";
   
   
   function ViewPage() {
@@ -36,8 +37,7 @@ import HamburgerManager from "../Manager/HamburgerManager";
     const [agreement, setAgreement] = useState({});
     const [ids, setIds] = useState([]);
   
-    const [sendBackMsg, setSendBackMsg] = useState("");
-
+console.log(agreement)
   
   
     const getData = async (id) => {
@@ -46,7 +46,6 @@ import HamburgerManager from "../Manager/HamburgerManager";
      if(agreement.status === 200){
         setAgreement(agreement.data.agreement);
         setIds(agreement.data.ids);
-        // setSendBackMsg(agreement.data.agreement[ids[0]].remark);
      }
     };
   
@@ -84,13 +83,6 @@ import HamburgerManager from "../Manager/HamburgerManager";
       <>
         {ids.length > 0 && (
           <Stack sx={{ flexDirection: "row", mb: 4 }}>
-             {/* <HamburgerMenu
-      navigateHome={'dashboard'}
-          handleListing={()=>navigate('/listing')}
-          monthlyRent={() => navigate("/monthly-payment")}
-          renewal={() => navigate(`/renewal`)}
-          monthlyBtn='true'
-        /> */}
 
 <HamburgerManager/>
 
@@ -126,6 +118,7 @@ import HamburgerManager from "../Manager/HamburgerManager";
  {
   agreement[ids[0]].payment_status === "Paid" && (
 <Grid container>
+
                     <DataFieldStyle
                           field={"Invoice"}
                           href={agreement[ids[0]].invoice}
@@ -304,6 +297,105 @@ import HamburgerManager from "../Manager/HamburgerManager";
   
                    
                   </Grid>
+
+                  <Grid item md={10}>
+              
+              {agreement[ids[0]].status === "Paid" && (
+                <Grid container spacing={2} sx={{ mb: 2 }}>
+                  <DataFieldStyle
+                    field={"Payment Date"}
+                    value={agreement[ids[0]].paymentDate}
+                  />
+                </Grid>
+                )}
+
+
+              {agreement[ids[0]].status === "Paid" && (
+                <Grid container spacing={2} sx={{ mb: 2 }}>
+                  <DataFieldStyle
+                    field={"UTR Number"}
+                    value={agreement[ids[0]].utr_number}
+                  />
+                   <DataFieldStyle
+                    field={"Payment Date"}
+                    value={agreement[ids[0]].paymentDate}
+                  />
+                </Grid>
+                )} 
+
+
+              <Grid container spacing={4} sx={{mt:4}}>
+                {
+                  agreement[ids[0]].rent_gst.length > 0 && <>
+                    <TextFieldWrapper
+                  required={true}
+                  label="Invoice Number"
+                  placeHolder="Enter Invoice Number"
+                  value={agreement[ids[0]].invoice_no}
+                  disabled={true}
+                  name="invoice_no"
+                />
+                <TextFieldWrapper
+                  required={true}
+                  label="Invoice Date"
+                  placeHolder="Invoice Date"
+                  value={moment(agreement[ids[0]].invoice_date).format("DD/MM/YYYY")}
+                  disabled={true}
+                />
+                  </>
+                }
+              
+                <TextFieldWrapper
+                  required={true}
+                  label="Rent Amount"
+                  placeHolder="Enter Rent Amount"
+                  value={parseInt(agreement[ids[0]].rent_amount).toLocaleString()}
+                  disabled={true}
+                  name="rent_amount"
+                  textAlignRight={"textAlignRight"}
+                />
+                 {
+                  agreement[ids[0]].rent_gst.length > 0 && 
+                <TextFieldWrapper
+                  required={true}
+                  label="GST Amount"
+                  placeHolder="Enter GST AMount"
+                  value={parseInt(agreement[ids[0]].gst_amount).toLocaleString()}
+                  disabled={true}
+                  name="gst_amount"
+                  textAlignRight={"textAlignRight"}
+                />}
+                <TextFieldWrapper
+                  required={true}
+                  label="Total Amount"
+                  placeHolder="Enter Total Amount"
+                  value={parseInt(parseInt(agreement[ids[0]].rent_amount) + parseInt(agreement[ids[0]].gst_amount)).toLocaleString()}
+                  disabled={true}
+                  textAlignRight={"textAlignRight"}
+                />
+
+{
+                  agreement[ids[0]].rent_gst.length > 0 && 
+                <Grid item xs={12} container>
+                  <Grid item xs={4}>
+                    <DocumentUpload
+                      label="Invoice"
+                      disabled={true}
+                      placeHolder="Invoice"
+                      name={"invoice"}
+                      href={agreement[ids[0]].invoice}
+                    />
+                  </Grid>
+                </Grid>
+  }
+                {agreement[ids[0]].remark.length > 0 && (
+                  <Grid item xs={12} container  sx={{ mt: 4 }}>
+                    <DataFieldStyle field={"Remark"} value={agreement[ids[0]].remark} />
+                  </Grid>
+                )}
+              </Grid>
+               
+            </Grid>
                 </Grid>
   
                 {agreement[ids[0]].status === "Sent To BUH" && (

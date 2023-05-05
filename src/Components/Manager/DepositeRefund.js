@@ -70,6 +70,22 @@ function EditAgreement({ history }) {
 
   const [finance_id, setFinance_ID] = useState(null);
 
+  const [upaid,setUnpaid] = useState([])
+
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
 
   const [preData, setPreData] = useState({
@@ -158,10 +174,15 @@ function EditAgreement({ history }) {
           assets,
           file,
           termination_remark
-        } = response.data;
+        } = response.data.agreement;
 
         setBuh_ID(response.data.bhu_id);
         setFinance_ID(response.data.op_id);
+
+          // get the unpaid hisorty of the agreement
+          let unpaid_amount = response.data.listUnpaidRow.reduce((sum,row)=>sum+=parseInt(row.rent_amount),0)
+          if(response.data.listUnpaidRow.length > 0)
+          setUnpaid(response.data.listUnpaidRow)
 
         let rent = monthlyRent;
 
@@ -169,8 +190,9 @@ function EditAgreement({ history }) {
 
         setRecovery((old) => ({
           ...old,
+          unpaid_amount : unpaid_amount,
           depositedAmount: deposit,
-          balanceDeposit: deposit,
+          balanceDeposit: deposit - unpaid_amount,
           monthlyRent: monthlyRent,
         }));
 
@@ -431,7 +453,7 @@ function EditAgreement({ history }) {
             parseInt(old.depositedAmount) -
             (old.monthlyRent * parseInt(e.target.value) +
               recovery.otherAdjustments +
-              recovery.expenses),
+              recovery.expenses) - old.unpaid_amount ,
         }));
       } else {
         setRecovery((old) => ({
@@ -439,7 +461,7 @@ function EditAgreement({ history }) {
           [e.target.name]:
             e.target.value.length > 0 ? parseInt(e.target.value) : 0,
           totalAdjustmentAmount: sum,
-          balanceDeposit: parseInt(old.depositedAmount) - sum,
+          balanceDeposit: parseInt(old.depositedAmount) - sum - old.unpaid_amount,
         }));
       }
     }
@@ -1890,8 +1912,8 @@ function EditAgreement({ history }) {
                   />
                   </Grid>
                   
-                  <Grid item xs={12} container >
-                  <Grid item xs={12} sx = {{gap : '1rem'}}>
+                  <Grid item xs={12} container spacing = {3}>
+                  <Grid item xs={12} >
                             <Typography color={"var( --main-color)"}>
                               {"Adjustment Amount"}
                             </Typography>
@@ -1906,6 +1928,7 @@ function EditAgreement({ history }) {
                     value={recovery.remainingMonth}
                     onChange={(e) => handleChange(e)}
                   />
+                 
                   <TextFieldWrapper
                     label="Adjustment Amount"
                     placeHolder="Adjustment Amount"
@@ -1926,6 +1949,42 @@ function EditAgreement({ history }) {
                     onChange={(e) => handleRemarkChange(e)}
                   />
                   </Grid>
+
+ {/* unpaid section */}
+ {upaid.length > 0 && <Grid mt = {1} mb = {1} item xs={12} >
+                  <Grid coantiner sx = {{display : 'flex',gap : '2rem', flexDirection : 'column'}}>
+                <Grid item xs = {12} >
+                  <Typography  color = {"primary"} >Unpaid Months</Typography>
+                </Grid>
+                {
+                  upaid.map((row)=><Grid item xs = {12} sx = {{display : 'flex',gap : '2rem'}}>
+                  <TextFieldWrapper
+                    label={"Rent Month (Unpaid)"}
+                    placeHolder="Deposit Amount"
+                    disabled={true}
+                    value={month[new Date(row.rent_date).getUTCMonth()] + "-" + new Date(row.rent_date).getFullYear()}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  <TextFieldWrapper
+                    label="Rent Amount"
+                    disabled={true}
+                    value={row.rent_amount}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  <TextFieldWrapper
+                    label="Status"
+                    disabled={true}
+                    value={row.status}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  </Grid>)
+                }
+                  </Grid>
+               </Grid>}
+
+                  {/* unpaid section ends */}
+
+
                   <Grid item xs={12} container spacing = {2}>
                   <Grid item xs={12}>
                             <Typography color={"var( --main-color)"}>

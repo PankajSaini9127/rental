@@ -11,6 +11,8 @@ function OperationsHamburger() {
       // monthlyRent={() => navigate("/opr-monthly-rent")}
       // renewal={() => navigate("/opr-monthly-rent")}
       agreements={[
+        { text: "Landlord List", navigateTo: "/list-landlord" },
+
         {
           text: "In-Process",
           navigateTo: "/operationsListing/in-procces-ag",

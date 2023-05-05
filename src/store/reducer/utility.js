@@ -1,3 +1,4 @@
+
 const initialAlert = {
     open: false,
     message: null,
@@ -66,17 +67,14 @@ export const tab = (state = initialTab, action) => {
     }
 }
 const initialForm = {
-    state: false,
-    formType: null,
     payload: null,
-    row: null,
-    setRow: null
 
 }
 
 export const form = (state = initialForm, action) => {
     switch (action.type) {
         case 'FORM':
+            // console.log(action)
             return state = action.payload;
         default:
             return state;

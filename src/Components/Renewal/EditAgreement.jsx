@@ -51,6 +51,7 @@ import {
   getLocation,
   getDetails_renewal,
   send_to_bhu,
+  addRenewalDesposit
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
@@ -65,7 +66,16 @@ function EditAgreement({ history }) {
   const dispatch = useDispatch();
   const [agreement, setAgreement] = useState([]);
   const { id } = useParams();
-
+// renewal data state
+const [renewal,setRenewal] = useState({
+  deposited : 0,
+  unpaid_amount : 0,
+  balance_amount : 0,
+  new_deposit : 0,
+  receivable : 0,
+  status : 'Pending'
+})
+  const [upaid,setUnpaid] = useState([])
 
   // modified by yashwant
   const [preData, setPreData] = useState({
@@ -97,8 +107,21 @@ function EditAgreement({ history }) {
   });
 
 
-  
- console.log(preData)
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
 
   async function fetchData() {
     try {
@@ -140,8 +163,22 @@ function EditAgreement({ history }) {
           branchName,
           assets,
           property_pic
-        } = response.data;
+        } = response.data.agreement;
 
+        // get the unpaid hisorty of the agreement
+        let unpaid_amount = response.data.listUnpaidRow.reduce((sum,row)=>sum+=parseInt(row.rent_amount),0)
+        if(response.data.listUnpaidRow.length > 0)
+        setUnpaid(response.data.listUnpaidRow)
+
+        console.log(unpaid_amount)
+
+        setRenewal(old=>({
+          deposited : parseInt(deposit),
+          unpaid_amount : unpaid_amount,
+          balance_amount : parseInt(deposit) - unpaid_amount,
+          new_deposit : 0,
+          receivable : parseInt(deposit) - unpaid_amount +  0
+        }))
 
         let rent = monthlyRent;
         if(yearlyIncrement === "Percentage"){
@@ -284,7 +321,17 @@ function EditAgreement({ history }) {
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
   const [formError, setFormError] = useState({});
   const [isSubmit, setIsSubmit] = useState(false);
-
+  const [recovery,setRecovery] = useState({
+    agreement_id : id,
+    remainingMonth : 0,
+    depositedAmount : 0,
+    adjustmentAmount : 0,
+    expenses : 0,
+    otherAdjustments : 0,
+    totalAdjustmentAmount : 0,
+    balanceDeposit : 0,
+    monthlyRent : 0,
+  })
   const [increment, setIncrement] = useState({
     year1: "",
     year2: "",
@@ -300,6 +347,16 @@ function EditAgreement({ history }) {
     year5: 0,
   });
 
+  function handleRenewal(e)
+  {
+    let newDP = parseInt(e.target.value || 0)
+    setRenewal(old=>({
+      ...old,
+      [e.target.name] : newDP,
+      receivable : (newDP > 0) ? newDP - old.balance_amount : old.deposited - old.unpaid_amount
+    }))
+
+  }
   // upload document
   async function handleChangeCommonFile(e, i) {
     const FD = new FormData();
@@ -677,7 +734,7 @@ function EditAgreement({ history }) {
         // landlord,
        status: "Sent To Sr Manager",
         remark: "",
-        renewal_status:"Renewed",
+        renewal_status:"",
         type:"Renewed"
       },
       landlord
@@ -715,35 +772,9 @@ function EditAgreement({ history }) {
 
 console.log(partLabel)
 
+
   const [expand, setExpand] = useState(0);
 
-  // const APICall = async (values, landlordData) => {
-
-
-  //   // for renaming the landlord ID to ID
-  //   // landlordData = landlordData.map((row)=>{
-  //   //   row['id'] = row["landlord_id"]
-  //   //   delete row["landlord_id"]
-  //   //   return row
-  //   // })
-
-  //   console.log(values);
-  //   const agreement = await editAgreement(values);
-  //   // const result = await add_landlord(landlordData);
-
-  //   if (agreement.status === 200) {
-  //     // console.log(history);
-  //     // window.location.href = "/listing";
-  //     dispatch(
-  //       setAlert({
-  //         open: true,
-  //         variant: "success",
-  //         message:  "Agrement Edited & Submited Successfully",
-  //       })
-  //     );
-  //     navigate('/listing')
-  //   }
-  // };
 
   async function APICall(values, landlordData) {
     console.log(values, landlordData);
@@ -760,10 +791,11 @@ console.log(partLabel)
            return row
        })
       
-
-      const result = await add_landlord(landlordData);
-      console.log(result)
-
+       
+       const result = await add_landlord(landlordData);
+       console.log(result)
+       
+       const renew_deposit = await addRenewalDesposit({...renewal,agreement_id})
       if (result) {
         // window.location.href = "/listing";
         const response = await send_to_bhu(
@@ -908,7 +940,7 @@ console.log(partLabel)
     e.preventDefault();
     // console.log(">>>",formError)
     console.log(validate(preData), validateFields(preData));
-
+   
     setPreData((old) => ({ ...old, ...increment }));
     if (validate(preData) && validateFields(preData)) {
       setIsSubmit(true);
@@ -1181,7 +1213,7 @@ console.log(partLabel)
           status: "Hold",
           remark: "",
           type:"Renewed",
-          renewal_status:"Renewed"
+          renewal_status:""
         },
         landlord
       );
@@ -1208,15 +1240,6 @@ console.log(partLabel)
       {/* {//console.log(landblord)} */}
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
         {/* side nav     */}
-        {/* <HamburgerMenu navigateTo={"listing"} /> */}
-
-        {/* <HamburgerMenu
-          navigateHome={"dashboard"}
-          handleListing={() => navigate("/listing")}
-          monthlyRent={() => navigate("/monthly-payment")}
-          renewal={() => navigate(`/renewal`)}
-          monthlyBtn="true"
-        /> */}
         <HamburgerManager/>
          <Box className="backButton">
             <IconButton 
@@ -2058,6 +2081,114 @@ console.log(partLabel)
                     />
                 </Grid>
               )} */}
+
+{/* New Renewal Disposite Form */}
+<Grid
+                  container
+                  sx={{ mt: "25px", mb: "25px"}}
+                  spacing={isSmall ? 2 : 4}
+                  component={"form"}
+                  onSubmit={handleSubmit}
+                  method="post"
+                >
+                  <Grid item xs={12}>
+                    <Typography
+                      variant="body1"
+                      color="var(--main-color)"
+                      fontSize="25px"
+                      lineHeight="28px"
+                      fontWeight="600"
+                      // my="20px"
+                    >
+                       Renewal Adjustments Form
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12} >
+                  <TextFieldWrapper
+                    label="Deposit Amount (Paid)"
+                    placeHolder="Deposit Amount"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="depositedAmount"
+                    disabled={true}
+                    value={renewal.deposited}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  </Grid>
+
+                  {/* unpaid section */}
+                  <Grid item xs={12} >
+                  <Grid coantiner sx = {{display : 'flex',gap : '2rem', flexDirection : 'column'}}>
+                <Grid item xs = {12} >
+                  <Typography variant = 'h6' color = {"primary"} sx = {{fontWeight : 700}}>Unpaid Months</Typography>
+                </Grid>
+                {
+                  upaid.map((row)=><Grid item xs = {12} sx = {{display : 'flex',gap : '2rem'}}>
+                  <TextFieldWrapper
+                    label={"Rent Month (Unpaid)"}
+                    placeHolder="Deposit Amount"
+                    disabled={true}
+                    value={month[new Date(row.rent_date).getUTCMonth()] + "-" + new Date(row.rent_date).getFullYear()}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  <TextFieldWrapper
+                    label="Rent Amount"
+                    disabled={true}
+                    value={parseInt(row.rent_amount)}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  <TextFieldWrapper
+                    label="Status"
+                    disabled={true}
+                    value={row.status}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  </Grid>)
+                }
+                  </Grid>
+               </Grid>
+
+                  {/* unpaid section ends */}
+                  <Grid item xs={12} >
+                  <TextFieldWrapper
+                    label="Balance Deposit Amount"
+                    placeHolder="Balance Deposit Amount"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="depositedAmount"
+                    disabled={true}
+                    value={renewal.balance_amount}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  </Grid>
+                  <Grid item xs={12} >
+                  <TextFieldWrapper
+                    label="New Deposit Amount"
+                    placeHolder="New Deposit Amount"
+                    name="new_deposit"
+                    // disabled={true}
+                    required = {true}
+                    value={renewal.new_deposit}
+                    onChange={(e) => handleRenewal(e)}
+                  />
+                  </Grid>
+                  <Grid item xs={12} >
+                  <TextFieldWrapper
+                    label="Balance Deposit Payable/Receivable"
+                    placeHolder="Balance Deposit Payable/Receivable"
+                    // onBlur={(e) => handleOnBlur(e, i)}
+                    // error = {errorObj.leeseName}
+                    name="depositedAmount"
+                    disabled={true}
+                    value={renewal.receivable}
+                    onChange={(e) => handleChange(e)}
+                  />
+                  </Grid>
+                
+                </Grid>
+{/* New Renewal Disposite Form ends */}
+
+
                 {/* Button Start from here */}
                 <Grid
                   container
