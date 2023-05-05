@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Button, Checkbox } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { Add_utr_datails, getModifyDate, send_to_operations } from "../../Services/Services";
+import { Add_utr_datails, convertToPaid, getModifyDate, send_to_operations } from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
 import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
 import {
@@ -17,6 +17,7 @@ function FinanceTable({ rows, setRows }) {
 
 
   const [open, setopen] = useState({open:false});
+  const [code, setCode] = useState({open:false});
 
   const [utr, setUtr] = useState({ utr: "", paymentDate: "" });
 
@@ -30,6 +31,8 @@ function FinanceTable({ rows, setRows }) {
 
   const renderDetailsButton = (e) => {
     const id = e.id;
+
+    const code = e.row.code;
     const modify_date = e.row.modify_date
     return (
       <Box sx = {{display : "flex", gap : '1rem', width : "100%"}}>
@@ -65,7 +68,8 @@ function FinanceTable({ rows, setRows }) {
             //  startIcon={<EditIcon />}
              onClick={(e) => {
                setModifyDate(modify_date)
-               setopen({open : true, id : id})
+               setCode(code)
+               setopen({open : true, id : id, code})
              }}
            >
              UTR Number
@@ -255,7 +259,7 @@ function FinanceTable({ rows, setRows }) {
       if (response.data.success) {
         dispatch(
           setAlert({
-            vatiant: "success",
+            variant: "success",
             open: true,
             message: "Approved ",
           })
@@ -264,7 +268,7 @@ function FinanceTable({ rows, setRows }) {
       } else {
         dispatch(
           setAlert({
-            vatiant: "error",
+            variant: "error",
             open: true,
             message: "Something went wrong! Please again later.",
           })
@@ -275,8 +279,9 @@ function FinanceTable({ rows, setRows }) {
 
 
   const handleConfirm = async (e) => {
-    console.log(utr);
+    console.log(code);
    
+    // return 1
     const response = await Add_utr_datails(
       {
         utr_number: utr.utr,
@@ -284,7 +289,13 @@ function FinanceTable({ rows, setRows }) {
       },
       open.id
     );
+
     if (response.data.success) {
+// settled all the unpaid entries to paid one
+const res2 = await convertToPaid(code)
+
+console.log(res2.data)
+
       setRows(old=>rows.map((data)=>{
         // console.log(data.id,open.id)
         if(data.id === open.id)

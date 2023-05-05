@@ -30,8 +30,8 @@ const Edit = (props) => {
       {
         console.log(form)
         setOldData(form)
-        delete form.gst
-        delete form.cheque
+        // delete form.gst
+        // delete form.cheque
         setData(form)
       }
     }
@@ -271,7 +271,7 @@ const Edit = (props) => {
   function validate(){
     const feilds = [
           ,"mobileNo" 
-          ,"alternateMobile" 
+          // ,"alternateMobile" 
           ,"email" 
           ,"bankName" 
           ,"benificiaryName" 
@@ -538,7 +538,7 @@ async function handleChangeFile(e) {
         <Box sx = {style.item}>
         <TextFieldWrapper
                     label="Alternate Number"
-                    required={true}
+                    // required={true}
                     fullWidth
                     error = {formError.alternateMobile}
                     name="alternateMobile"
@@ -578,7 +578,7 @@ async function handleChangeFile(e) {
                     required={true}
                     disabled={true}
                     fullWidth
-                    // value={data.city || ""}
+                    value={data.payment_date || ""}
                     // error={formError.city}
                     // onChange={handleCommonChange}
                     />
@@ -630,8 +630,8 @@ async function handleChangeFile(e) {
                     label="Bank Name"
                     required={true}
                     disabled={true}
-                            onBlur={(e) => handleOnBlur(e)}
-                            fullWidth
+                    onBlur={(e) => handleOnBlur(e)}
+                    fullWidth
                     error = {formError.bankName}
                     name="bankName"
                     value={data.bankName || ""}
@@ -640,16 +640,16 @@ async function handleChangeFile(e) {
 
   <Box sx = {style.docConatiner}>
                     
-                    { data.gstNo !== old.gstNo &&
+                    { (data.gstNo !== old.gstNo && data.gstNo !== "" ) &&
           <Box sx = {style.item}>
         <DocumentUpload
-                              uploaded={data.gst ? true : false}
+                              uploaded={data.gst !== old.gst ? true : false}
                               label="Upload GST Certificate"
                               placeHolder="Upload GST Certificate"
                               handleChange={handleChangeFile}
                               name={"gst"}
-                             error={formError.gst}
-                              fileName={data[`gst_name`]}
+                              error={formError.gst}
+                              fileName={ data.gstNo !== old.gstNo ? "": data[`gst_name`]}
                               href={data.gst}
                               />
                     </Box>
@@ -663,12 +663,11 @@ async function handleChangeFile(e) {
           <Box sx = {style.item}>
         <DocumentUpload
                               placeHolder="Upload Cancel Cheque"
-                              uploaded={data.cheque ? true : false}
+                              uploaded={data.cheque !== old.cheque ? true : false}
                               label="Upload Cancel Cheque"
                               handleChange={handleChangeFile}
                               name={"cheque"}
                       error={formError.cheque}
-
                               fileName={data[`cheque`]}
                               href={data.cheque}
                               />

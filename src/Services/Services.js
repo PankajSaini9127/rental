@@ -438,6 +438,11 @@ export async function Add_utr_datails (data,id){
     return await axios.put(`${API_LIVE}/api/finance/add-utr/finance/${id}`,data)
 }
 
+// API for converting the unpaid status to paid one after the final submission of finance 
+export async function convertToPaid (code){
+    return await axios.put(`${API_LIVE}/api/finance/convert-to-paid?code=${code}`)
+}
+
 
 // APIs for finalize the Agreement
 export async function setFinalAgreement (data){
