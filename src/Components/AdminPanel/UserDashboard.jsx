@@ -5,6 +5,7 @@ import { DashboardItem, MyHeader } from "../StyledComponent";
 import HamburgerMenu from "../HamburgerMenu";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import HamburgerAdmin from "./HamburgerAdmin";
 
 function UserDashboard() {
   const [metaData, setMeta] = useState({});
@@ -29,31 +30,8 @@ function UserDashboard() {
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        <HamburgerMenu
-          navigateHome={
-            role.includes("Manager")
-              ? "dashboard"
-              : role.includes("Operations")
-              ? "operationsDashboard"
-              : role.includes("BUH")
-              ? "BHUdashboard"
-              : role.includes("Admin") && "userDashboard"
-          }
-          handleListing={() =>
-            navigate(
-              role.includes("Manager")
-                ? "/listing"
-                : role.includes("Operations")
-                ? "/operationsListing"
-                : role.includes("BUH")
-                ? "/BHUListing"
-                : ""
-            )
-          }
-          monthlyRent={() => navigate("/monthly-payment")}
-          renewal={() => navigate(`/renewal`)}
-          // monthlyBtn="true"
-        />
+ 
+     <HamburgerAdmin/>
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid container sx={{ justifyContent: "center" }}>
@@ -63,22 +41,31 @@ function UserDashboard() {
             </Grid>
             <Grid item md={10} sx={{ mt: 4 }}>
               <Grid container spacing={4}>
+               
                 <DashboardItem
+                  service="Total Operation"
+                  value={metaData.Operations}
+                  onClick={()=>navigate("/userManagement/Operation")}
+                />
+                <DashboardItem 
+                service="Total BUH" 
+                value={metaData.BHU} 
+                onClick={()=>navigate("/userManagement/BUH")}
+                />
+                <DashboardItem
+                  service="Total Finance"
+                  value={metaData.Finance}
+                  onClick={()=>navigate("/userManagement/Finance")}
+                />
+                 <DashboardItem
                   service="Total Sr Manager"
                   value={metaData.Senior_Manager}
+                  onClick={()=>navigate("/userManagement/Senior_Manager")}
                 />
                 <DashboardItem
                   service="Total Manager"
                   value={metaData.Manager}
-                />
-                <DashboardItem
-                  service="Total Operation"
-                  value={metaData.Operations}
-                />
-                <DashboardItem service="Total BHU" value={metaData.BHU} />
-                <DashboardItem
-                  service="Total Finance"
-                  value={metaData.Finance}
+                  onClick={()=>navigate("/userManagement/Manager")}
                 />
               </Grid>
             </Grid>

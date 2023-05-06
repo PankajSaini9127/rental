@@ -20,7 +20,6 @@ import {
   SelectComponent,
   TextFieldWrapper,
 } from "../StyledComponent";
-import AdminHamburgerMenu from "./AdminHamburgerMenu";
 import AdminCheckBox from "../StyleComponents/AdminCheckBox";
 import {
   EditUserInfo,
@@ -34,6 +33,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
 import HamburgerMenu from "../HamburgerMenu";
+import HamburgerAdmin from "./HamburgerAdmin";
 const initialState = {
   code: "123456",
   name: "",
@@ -364,7 +364,7 @@ function EditUser() {
         navigateListing={'/userManagement'}
         navigateHome={'/userDashboard'}
         /> */}
-        <HamburgerMenu
+        {/* <HamburgerMenu
           navigateHome={
             auth.role.includes("Manager")
               ? "dashboard"
@@ -388,7 +388,10 @@ function EditUser() {
           monthlyRent={() => navigate("/monthly-payment")}
           renewal={() => navigate(`/renewal`)}
           // monthlyBtn="true"
-        />
+        /> */}
+
+<HamburgerAdmin/>
+
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Rental Management System</MyHeader>
 

@@ -180,24 +180,21 @@ export default function MonthalyRentView() {
     fetchData(id);
   }, []);
 
-
   const [agreement, setAgreement] = useState({});
   const [ids, setIds] = useState([]);
 
-console.log(agreement)
-
+  console.log(agreement);
 
   const getData = async (id) => {
-    console.log(id)
+    console.log(id);
     const agreement = await get_agreement_code(id);
-   if(agreement.status === 200){
+    if (agreement.status === 200) {
       setAgreement(agreement.data.agreement);
       setIds(agreement.data.ids);
-   }
+    }
   };
 
   useEffect(() => {
-
     getData(id);
   }, []);
 
@@ -292,7 +289,6 @@ console.log(agreement)
 
   console.log(preData);
 
-
   function getIncrement(rent, value, type) {
     let incrementType;
     rent = Number(rent);
@@ -307,94 +303,91 @@ console.log(agreement)
 
   return (
     <>
-    {ids.length > 0 && (
-      <Stack sx={{ flexDirection: "row", mb: 4 }}>
+      {ids.length > 0 && (
+        <Stack sx={{ flexDirection: "row", mb: 4 }}>
+          <OperationsHamburger />
 
-        <OperationsHamburger />
-
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid
-            item
-            xs={12}
-            sx={{ justifyContent: "space-between", display: "flex" }}
-          >
-            <MyHeader>Rental Management System</MyHeader>
-            <Typography mt="15px" mr="15px" fontWeight="600">
-              Welcome {auth.name}
-            </Typography>
-          </Grid>
-          <Box className="backButton">
-            <IconButton
-              variant="contained"
-              color="primary"
-              onClick={() => navigate(-1)}
-              size={"large"}
+          <Box sx={{ flexGrow: 1 }}>
+            <Grid
+              item
+              xs={12}
+              sx={{ justifyContent: "space-between", display: "flex" }}
             >
-              <ArrowCircleLeftIcon
-                sx={{ fontSize: "3rem" }}
-                color="#FFFFF !important"
-              />
-            </IconButton>
-          </Box>
-          <Box component={"form"}>
-            <Grid container sx={{ justifyContent: "center", mt: 3 }}>
-              <Grid item md={10}>
-                <Grid container spacing={2} sx={{ mb: 2 }}>
-                  <DataFieldStyle
-                    field={"Rent Month"}
-                    value={preData.dateMonth}
-                  />
-                </Grid>
-                {preData.status === "Paid" && (
+              <MyHeader>Rental Management System</MyHeader>
+              <Typography mt="15px" mr="15px" fontWeight="600">
+                Welcome {auth.name}
+              </Typography>
+            </Grid>
+            <Box className="backButton">
+              <IconButton
+                variant="contained"
+                color="primary"
+                onClick={() => navigate(-1)}
+                size={"large"}
+              >
+                <ArrowCircleLeftIcon
+                  sx={{ fontSize: "3rem" }}
+                  color="#FFFFF !important"
+                />
+              </IconButton>
+            </Box>
+            <Box component={"form"}>
+              <Grid container sx={{ justifyContent: "center", mt: 3 }}>
+                <Grid item md={10}>
                   <Grid container spacing={2} sx={{ mb: 2 }}>
                     <DataFieldStyle
-                      field={"Payment Date"}
-                      value={preData.paymentDate}
+                      field={"Rent Month"}
+                      value={preData.dateMonth}
                     />
                   </Grid>
-                )}
+                  {preData.status === "Paid" && (
+                    <Grid container spacing={2} sx={{ mb: 2 }}>
+                      <DataFieldStyle
+                        field={"Payment Date"}
+                        value={preData.paymentDate}
+                      />
+                    </Grid>
+                  )}
 
+                  <Grid container sx={{ mt: 4 }}>
+                    <DataFieldStyle
+                      field={"Final Agreement"}
+                      href={agreement[ids[0]].final_agreement}
+                      name={"Final Agreement"}
+                      bold={true}
+                      cursor={true}
+                    />
+                    <DataFieldStyle
+                      field={"Final Agreement Date"}
+                      value={agreement[ids[0]].final_agreement_date}
+                    />
+                    <DataFieldStyle
+                      field={"Monthly Rent Start Date"}
+                      value={agreement[ids[0]].rent_start_date}
+                    />
+                  </Grid>
+                  <Grid container sx={{ mt: 1 }}>
+                    <DataFieldStyle
+                      field={"Deposit UTR Number"}
+                      value={agreement[ids[0]].utr_deposit}
+                    />
+                    <DataFieldStyle
+                      field={"Deposit Payment Date"}
+                      value={agreement[ids[0]].rent_start_date}
+                    />
+                  </Grid>
 
-<Grid container sx={{mt:4}} >
-                        <DataFieldStyle
-                          field={"Final Agreement"}
-                          href={agreement[ids[0]].final_agreement}
-                          name={"Final Agreement"}
-                          bold={true}
-                          cursor={true}
-                        />
-                        <DataFieldStyle
-                          field={"Final Agreement Date"}
-                          value={agreement[ids[0]].final_agreement_date}
-                        />
-                        <DataFieldStyle
-                          field={"Monthly Rent Start Date"}
-                          value={agreement[ids[0]].rent_start_date}
-                        />
-                      </Grid>
-                      <Grid container sx={{ mt: 1 }}>
-                        <DataFieldStyle
-                          field={"Deposit UTR Number"}
-                          value={agreement[ids[0]].utr_deposit}
-                        />
-                        <DataFieldStyle
-                          field={"Deposit Payment Date"}
-                          value={agreement[ids[0]].rent_start_date}
-                        />
-                      </Grid>
-                  
-  
-                  <Grid container sx={{ mt: 2}}>
+                  <Grid container sx={{ mt: 2 }}>
                     <DataFieldStyle
                       field={"code"}
                       value={agreement[ids[0]].code}
                     />
-  
+
                     <DataFieldStyle
                       field={"state"}
                       value={agreement[ids[0]].state}
                     />
-                     <DataFieldStyle
+                    <DataFieldStyle
                       field={"city"}
                       value={agreement[ids[0]].city}
                     />
@@ -402,7 +395,7 @@ console.log(agreement)
                       field={"location"}
                       value={agreement[ids[0]].location}
                     />
-                   
+
                     <DataFieldStyle
                       field={"pincode"}
                       value={agreement[ids[0]].pincode}
@@ -437,13 +430,12 @@ console.log(agreement)
                     />
                     {agreement[ids[0]].tenure > 12 && (
                       <>
-                        
                         <Grid container spacing={1} sx={{ mt: 6 }}>
-                          <Grid item xs={12} sx={{mb:1}}>
-                          <DataFieldStyle
-                          field={"yearly Increment"}
-                          value={agreement[ids[0]].yearlyIncrement}
-                        />
+                          <Grid item xs={12} sx={{ mb: 1 }}>
+                            <DataFieldStyle
+                              field={"yearly Increment"}
+                              value={agreement[ids[0]].yearlyIncrement}
+                            />
                           </Grid>
                           <YearField
                             year={"Year 1"}
@@ -461,7 +453,7 @@ console.log(agreement)
                               agreement[ids[0]].yearlyIncrement
                             )}
                           />
-                          {(agreement[ids[0]].tenure > 24) && (
+                          {agreement[ids[0]].tenure > 24 && (
                             <YearField
                               year={"Year 3"}
                               incrementType={agreement[ids[0]].yearlyIncrement}
@@ -473,7 +465,7 @@ console.log(agreement)
                               )}
                             />
                           )}
-                          {(agreement[ids[0]].tenure > 36) && (
+                          {agreement[ids[0]].tenure > 36 && (
                             <YearField
                               year={"Year 4"}
                               incrementType={agreement[ids[0]].yearlyIncrement}
@@ -500,157 +492,179 @@ console.log(agreement)
                         </Grid>
                       </>
                     )}
-  
-                   
                   </Grid>
 
+                  <Grid container spacing={4} sx={{ mt: 4 }}>
+                    {agreement[ids[0]].rent_gst.length > 0 && (
+                      <>
+                        <TextFieldWrapper
+                          required={true}
+                          label="Invoice Number"
+                          placeHolder="Enter Invoice Number"
+                          value={agreement[ids[0]].invoice_no}
+                          disabled={true}
+                          name="invoice_no"
+                        />
+                        <TextFieldWrapper
+                          required={true}
+                          label="Invoice Date"
+                          placeHolder="Invoice Date"
+                          value={moment(agreement[ids[0]].invoice_date).format(
+                            "DD/MM/YYYY"
+                          )}
+                          disabled={true}
+                        />
+                      </>
+                    )}
 
-                  <Grid container spacing={4} sx={{mt:4}}>
-                {
-                  agreement[ids[0]].rent_gst.length > 0 && <>
                     <TextFieldWrapper
-                  required={true}
-                  label="Invoice Number"
-                  placeHolder="Enter Invoice Number"
-                  value={agreement[ids[0]].invoice_no}
-                  disabled={true}
-                  name="invoice_no"
-                />
-                <TextFieldWrapper
-                  required={true}
-                  label="Invoice Date"
-                  placeHolder="Invoice Date"
-                  value={moment(agreement[ids[0]].invoice_date).format("DD/MM/YYYY")}
-                  disabled={true}
-                />
-                  </>
-                }
-              
-                <TextFieldWrapper
-                  required={true}
-                  label="Rent Amount"
-                  placeHolder="Enter Rent Amount"
-                  value={parseInt(agreement[ids[0]].rent_amount).toLocaleString()}
-                  disabled={true}
-                  name="rent_amount"
-                  textAlignRight={"textAlignRight"}
-                />
-                 {
-                  agreement[ids[0]].rent_gst.length > 0 && 
-                <TextFieldWrapper
-                  required={true}
-                  label="GST Amount"
-                  placeHolder="Enter GST AMount"
-                  value={parseInt(agreement[ids[0]].gst_amount).toLocaleString()}
-                  disabled={true}
-                  name="gst_amount"
-                  textAlignRight={"textAlignRight"}
-                />}
-                <TextFieldWrapper
-                  required={true}
-                  label="Total Amount"
-                  placeHolder="Enter Total Amount"
-                  value={parseInt(parseInt(agreement[ids[0]].rent_amount) + parseInt(agreement[ids[0]].gst_amount)).toLocaleString()}
-                  disabled={true}
-                  textAlignRight={"textAlignRight"}
-                />
-
-{
-                  agreement[ids[0]].rent_gst.length > 0 && 
-                <Grid item xs={12} container>
-                  <Grid item xs={4}>
-                    <DocumentUpload
-                      label="Invoice"
+                      required={true}
+                      label="Rent Amount"
+                      placeHolder="Enter Rent Amount"
+                      value={parseInt(
+                        agreement[ids[0]].rent_amount
+                      ).toLocaleString()}
                       disabled={true}
-                      placeHolder="Invoice"
-                      name={"invoice"}
-                      href={agreement[ids[0]].invoice}
+                      name="rent_amount"
+                      textAlignRight={"textAlignRight"}
                     />
+                    {agreement[ids[0]].rent_gst.length > 0 && (
+                      <TextFieldWrapper
+                        required={true}
+                        label="GST Amount"
+                        placeHolder="Enter GST AMount"
+                        value={parseInt(
+                          agreement[ids[0]].gst_amount
+                        ).toLocaleString()}
+                        disabled={true}
+                        name="gst_amount"
+                        textAlignRight={"textAlignRight"}
+                      />
+                    )}
+                    <TextFieldWrapper
+                      required={true}
+                      label="Total Amount"
+                      placeHolder="Enter Total Amount"
+                      value={parseInt(
+                        parseInt(agreement[ids[0]].rent_amount) +
+                          parseInt(agreement[ids[0]].gst_amount)
+                      ).toLocaleString()}
+                      disabled={true}
+                      textAlignRight={"textAlignRight"}
+                    />
+
+                    {agreement[ids[0]].rent_gst.length > 0 && (
+                      <Grid item xs={12} container>
+                        <Grid item xs={4}>
+                          <DocumentUpload
+                            label="Invoice"
+                            disabled={true}
+                            placeHolder="Invoice"
+                            name={"invoice"}
+                            href={agreement[ids[0]].invoice}
+                          />
+                        </Grid>
+                      </Grid>
+                    )}
+
+                    {(agreement[ids[0]].status === "Paid" &&
+                       agreement[ids[0]].utr_number === null) && (
+                        <Grid item xs={10}>
+                          <Typography
+                            variant="body1"
+                            height="30px"
+                            color="primary"
+                          >
+                            Note: Monthly Payment Adjust In Deposit Adjustment
+                          </Typography>
+                        </Grid>
+                      )}
+
+                    {agreement[ids[0]].remark.length > 0 && (
+                      <Grid item xs={12} container sx={{ mt: 4 }}>
+                        <DataFieldStyle
+                          field={"Remark"}
+                          value={agreement[ids[0]].remark}
+                        />
+                      </Grid>
+                    )}
                   </Grid>
                 </Grid>
-  }
-                {agreement[ids[0]].remark.length > 0 && (
-                  <Grid item xs={12} container  sx={{ mt: 4 }}>
-                    <DataFieldStyle field={"Remark"} value={agreement[ids[0]].remark} />
-                  </Grid>
-                )}
-              </Grid>
-              </Grid>
 
-              {/* Buttons start here*/}
+                {/* Buttons start here*/}
 
-              {preData.status === "Sent To Operations" && (
-                <>
-                  <Grid
-                    item
-                    xs={10}
-                    sx={{ mt: 5 }}
-                    className={"textFieldWrapper"}
-                  >
-                    <Grid item xs={8}>
-                      <TextField
-                        type="text"
-                        multiline
-                        rows={3}
-                        fullWidth
-                        variant="outlined"
-                        label="Remark *"
-                        placeholder="Remark *"
-                        value={remark}
-                        onChange={(e) => setRemark(e.target.value)}
-                      />
-                    </Grid>
-                  </Grid>
-                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                {preData.status === "Sent To Operations" && (
+                  <>
                     <Grid
-                      container
-                      spacing={1}
-                      sx={{ justifyContent: "center" }}
+                      item
+                      xs={10}
+                      sx={{ mt: 5 }}
+                      className={"textFieldWrapper"}
                     >
-                      <Grid item md={6} xs={11}>
-                        <Button
-                          variant="contained"
-                          sx={{
-                            height: "55px",
-                            borderRadius: "12px",
-                            backgroundColor: "primary",
-                            width: "100%",
-                            color: "#FFFFFF",
-                            textTransform: "capitalize",
-                            fontSize: "18px",
-                            lineHeight: "20px",
-                          }}
-                          onClick={handleSubmit}
-                        >
-                          Approve And Send To Finance
-                        </Button>
-                      </Grid>
-                      <Grid item md={6} xs={11}>
-                        <Button
+                      <Grid item xs={8}>
+                        <TextField
+                          type="text"
+                          multiline
+                          rows={3}
+                          fullWidth
                           variant="outlined"
-                          sx={{
-                            height: "55px",
-                            borderRadius: "12px",
-                            width: "100%",
-                            textTransform: "capitalize",
-                            fontSize: "18px",
-                          }}
-                          onClick={handleSendBack}
-                        >
-                          Send Back To Manager
-                        </Button>
+                          label="Remark *"
+                          placeholder="Remark *"
+                          value={remark}
+                          onChange={(e) => setRemark(e.target.value)}
+                        />
                       </Grid>
                     </Grid>
-                  </Grid>
-                </>
-              )}
+                    <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                      <Grid
+                        container
+                        spacing={1}
+                        sx={{ justifyContent: "center" }}
+                      >
+                        <Grid item md={6} xs={11}>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              height: "55px",
+                              borderRadius: "12px",
+                              backgroundColor: "primary",
+                              width: "100%",
+                              color: "#FFFFFF",
+                              textTransform: "capitalize",
+                              fontSize: "18px",
+                              lineHeight: "20px",
+                            }}
+                            onClick={handleSubmit}
+                          >
+                            Approve And Send To Finance
+                          </Button>
+                        </Grid>
+                        <Grid item md={6} xs={11}>
+                          <Button
+                            variant="outlined"
+                            sx={{
+                              height: "55px",
+                              borderRadius: "12px",
+                              width: "100%",
+                              textTransform: "capitalize",
+                              fontSize: "18px",
+                            }}
+                            onClick={handleSendBack}
+                          >
+                            Send Back To Manager
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </>
+                )}
 
-              {/* buttons end here */}
-            </Grid>
+                {/* buttons end here */}
+              </Grid>
+            </Box>
           </Box>
-        </Box>
-      </Stack>
-)}
+        </Stack>
+      )}
     </>
   );
 }

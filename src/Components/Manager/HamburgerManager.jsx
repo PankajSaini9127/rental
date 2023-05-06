@@ -7,9 +7,6 @@ function HamburgerManager() {
   return (
     <HamburgerMenu
       navigateHome={"dashboard"}
-      // handleListing={() => navigate("/listing")}
-      // monthlyRent={() => navigate("/monthly-payment")}
-      // renewal={() => navigate(`/renewal`)}
       monthlyBtn="true"
       agreements={[
         { text: "In-Process ", navigateTo: "/listing/in-procces-ag" },

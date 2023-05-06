@@ -324,7 +324,7 @@ function MyRouter() {
       />
       <Route
         exact
-        path="/userManagement"
+        path="/userManagement/:type"
         element={
           isAuth && role.includes("Admin") ? <UserManagement /> : <Login />
         }
@@ -364,7 +364,7 @@ function MyRouter() {
       />
       <Route
         exact
-        path="/super-admin-listing"
+        path="/super-admin-listing/:type"
         element={
           isAuth && role.includes("Super Admin") ? (
             <SuperAdminListing />

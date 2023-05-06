@@ -18,12 +18,12 @@ import {
 import { excelDownload } from "../../Services/Services";
 import moment from "moment";
 import { useSelector } from "react-redux";
-import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
 
 import FinanceHam from "../FinancePanel/FinanceHamburger";
 import ManagerHam from "../Manager/HamburgerManager";
 import SrMHam from "../SrManager/SRMHAmburger";
 import OPHam from "../Operations/OperationsHamburger";
+import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
 const GraphReports = () => {
   const [startDate, setStartDate] = useState("");
@@ -84,10 +84,8 @@ const GraphReports = () => {
         <Typography variant='body1' sx={{ fontWeight: 700 }}> Welcome {auth.name}</Typography>
       </Box>
       <Stack p={1} sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        {role.includes("Super Admin") && <AdminHamburgerMenu
-          navigateListing={"/super-admin-listing"}
-          navigateHome={"/super-admin-dashboard"}
-        />}
+        {role.includes("Super Admin") && 
+        <AdminHamburgerMenu/>}
 
 
         {role.includes('Finance') && <FinanceHam />}
