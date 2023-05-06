@@ -83,7 +83,7 @@ function DataTable({ rows, loading, check, setCheck }) {
   const renderDetailsButton = (e) => {
     const id = e.id;
 
-    // console.log();
+    console.log(e.row.utr_number);
     let utr_count = 0;
    e.row.utr_number.map(item=>{
       if(item === null)  utr_count += 1 

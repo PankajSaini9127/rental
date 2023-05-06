@@ -3,7 +3,7 @@ import ListingComponent from "../StyleComponents/ListingComponent";
 import { Stack } from "@mui/material";
 import DataTable from "./DataTable";
 import { useNavigate, useParams } from "react-router-dom";
-import { get_paid_monthly_payment, get_search_monthly_rent_manager, listMonthRent } from "../../Services/Services";
+import { get_paid_monthly_payment, get_search_monthly_rent_manager, get_search_monthly_rent_manager_paid, listMonthRent } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import HamburgerManager from "../Manager/HamburgerManager";
 // const options = ["New Agreement","Monthly Payment","Rental"]
@@ -107,8 +107,19 @@ const { auth, refresh } = useSelector((state) => state);
   });
 
   async function SearchAPi(id,searchValue){
-    const search = await get_search_monthly_rent_manager(id,searchValue)
-    setData(search.data)
+    if(type === "in-process"){
+      const search = await get_search_monthly_rent_manager(id,searchValue)
+      if(search.status === 200){
+        setData(search.data)
+      }
+    }else if(type=== "paid"){
+      const search = await get_search_monthly_rent_manager_paid(id,searchValue)
+      if(search.status === 200){
+        setData(search.data)
+      }
+    }
+
+  
   } 
 
 

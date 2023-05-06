@@ -11,6 +11,8 @@ import {
   get_search_agreement_operation,
   get_Operations_agreements_approved,
   get_Operations_agreements_total,
+  get_search_agreement_operation_approved,
+  get_search_agreement_operation_process,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import OperationsTable from "./OperationsTable";
@@ -67,15 +69,22 @@ function SrManagerListing() {
 
   //search
   async function SearchAPi(id, searchValue) {
-    const search = await get_search_agreement_operation(id, searchValue);
-    console.log("search")
-      console.log(search)
-      setData(search.data);
-  
+        
+     if(type === "in-procces-ag"){
+      const search = await get_search_agreement_operation_process(id, searchValue);
+      search.status === 200 && setData(search.data);
+     }else if(type === "total-ag"){
+      const search = await get_search_agreement_operation(id, searchValue);
+      search.status === 200 && setData(search.data);
+     }else if(type === "approved-ag"){
+      const search = await get_search_agreement_operation_approved(id, searchValue);
+      search.status === 200 && setData(search.data);
+     }
   }
 
 
   function handleSerachChange(e){
+
     SearchAPi(login_operations_id, e.target.value);
     setsearchValue(e.target.value)
   }
