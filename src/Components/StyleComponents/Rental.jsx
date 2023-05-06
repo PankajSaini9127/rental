@@ -93,7 +93,8 @@ const YearField = ({ year, amount,Increment,incrementType }) => {
   );
 };
 
-const DocumentView = ({ title, img }) => {
+const DocumentView = ({ title, img,partLabel }) => {
+  console.log(partLabel)
    const [open, setOpen] = useState(false);
    function handleView() {
     console.log(img.split(".").slice(-1));
@@ -104,6 +105,15 @@ const DocumentView = ({ title, img }) => {
   function handleClose() {
     setOpen(false);
   }
+
+
+  const [imgView,setImgView] =useState(false)
+
+  function handleClick(partLabel,title) {
+
+    saveAs(partLabel, title);
+  }
+
   return (
     <Grid item xs={4}>
     { img !== undefined &&   <ImageView
@@ -182,6 +192,11 @@ const DocumentView = ({ title, img }) => {
           </Link>
         </Button>
       </Box>
+      {partLabel && <Box sx={{mt:1}}> 
+              <VisibilityIcon color={"primary"} onClick={()=>setImgView(true)} sx={{mr:1}} /> 
+             <DownloadIcon color={"primary"} onClick={handleClick} />
+             </Box>
+      }
     </Grid>
   );
 };

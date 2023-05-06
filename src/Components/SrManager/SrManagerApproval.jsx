@@ -25,6 +25,7 @@ import { saveAs } from "file-saver";
 import {
   get_agreement_id,
   get_data_recovery,
+  get_old_agreement,
   send_back_to_manager,
   send_to_bhu,
 } from "../../Services/Services";
@@ -69,6 +70,22 @@ function SrManagerApproval() {
 
   console.log(deposit);
 
+  const [oldIds, setOldIds] = useState([]);
+
+  const [partLabel,setPartLabel] = useState({landlord:[{
+    accountNo: "",
+    alternateMobile: "",
+    area:"",
+    bankName:"",
+    benificiaryName: "",
+    branchName:"",
+    cheque:"",
+    email: "",
+    gst:null,
+    gstNo: null,
+    ifscCode: "",
+      }]});
+
   async function get_deposit(code) {
     try {
       const deposit_amount = await get_deposit_amount(code);
@@ -89,6 +106,18 @@ function SrManagerApproval() {
     }
   }
 
+  async function get_old_data (code){
+    try {
+      const oldvalue = await get_old_agreement(code)
+      console.log(oldvalue.data)
+     oldvalue.status === 200 &&  setPartLabel(oldvalue.data.agreement);
+     oldvalue.status === 200 && setOldIds(oldvalue.data.ids)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
   const getData = async (id) => {
     try {
       const agreement = await get_agreement_id(id);
@@ -98,6 +127,9 @@ function SrManagerApproval() {
         get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id)
         setAgreement(agreement.data.agreement);
         console.log(agreement.data.ids);
+        if(agreement.data.agreement[agreement.data.ids[0]].type === "Renewed"){
+          get_old_data(agreement.data.agreement[agreement.data.ids[0]].code)
+        }
         setIds(agreement.data.ids);
         get_deposit(agreement.data.agreement[agreement.data.ids[0]].code);
       } else {
@@ -281,18 +313,10 @@ function SrManagerApproval() {
 
   return (
     <>
-      {ids && ids.length > 0 && (
+      {(ids && ids.length > 0 && (agreement[ids[0]].type === "Renewed" ? oldIds.length > 0 : true) )&& (
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
           {/* <a id="button"></a> */}
           {console.log(agreement[ids[0]].op_id)};
-          {/* <h1>555</h1> */}
-          {/* <HamburgerMenu
-            handleListing={() => navigate("/srManagerListing")}
-            navigateHome={"srManagerDashboard"}
-            monthlyRent={() => navigate("/srm-monthly-rent")}
-            renewal={() => navigate("/srm-renewal-list")}
-            monthlyBtn="true"
-          /> */}
 
           <SRMHamburger/>
           <Box sx={{ flexGrow: 1 }}>
@@ -394,26 +418,32 @@ function SrManagerApproval() {
                   <DataFieldStyle
                     field={"area"}
                     value={agreement[ids[0]].area + " sq. ft"}
+                    partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].area}
                   />
                   <DataFieldStyle
                     field={"lock in Month"}
                     value={agreement[ids[0]].lockInYear}
+                    partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].lockInYear}
                   />
                   <DataFieldStyle
                     field={"notice period in month"}
                     value={agreement[ids[0]].noticePeriod}
+                    partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].noticePeriod}
                   />
                   <DataFieldStyle
                     field={"deposit"}
                     value={agreement[ids[0]].deposit}
+                    partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].deposit}
                   />
                   <DataFieldStyle
                     field={"monthly rental"}
                     value={agreement[ids[0]].monthlyRent}
+                    partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].monthlyRent}
                   />
                   <DataFieldStyle
                     field={"tenure"}
                     value={agreement[ids[0]].tenure}
+                    partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].tenure}
                   />
                   {agreement[ids[0]].tenure > 12 && (
                     <>
@@ -422,6 +452,7 @@ function SrManagerApproval() {
                           <DataFieldStyle
                             field={"yearly Increment"}
                             value={agreement[ids[0]].yearlyIncrement}
+                            partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].yearlyIncrement}
                           />
                         </Grid>
                         <YearField
@@ -429,6 +460,7 @@ function SrManagerApproval() {
                           incrementType={agreement[ids[0]].yearlyIncrement}
                           Increment={0}
                           amount={agreement[ids[0]].year1}
+                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].year1}
                         />
                         <YearField
                           year={"Year 2"}
@@ -439,6 +471,13 @@ function SrManagerApproval() {
                             agreement[ids[0]].year2,
                             agreement[ids[0]].yearlyIncrement
                           )}
+                          partLabel={
+                            getIncrement(
+                              partLabel[oldIds[0]].year1,
+                              partLabel[oldIds[0]].year2,
+                              partLabel[oldIds[0]].yearlyIncrement
+                            )
+                          }
                         />
                         {(agreement[ids[0]].tenure > 24) && (
                           <YearField
@@ -450,6 +489,14 @@ function SrManagerApproval() {
                               agreement[ids[0]].year3,
                               agreement[ids[0]].yearlyIncrement
                             )}
+                            partLabel={
+                              agreement[ids[0]].type === "Renewed" &&
+                              getIncrement(
+                                partLabel[oldIds[0]].year2,
+                                partLabel[oldIds[0]].year3,
+                                partLabel[oldIds[0]].yearlyIncrement
+                              )
+                            }
                           />
                         )}
                         {(agreement[ids[0]].tenure > 36) && (
@@ -462,6 +509,14 @@ function SrManagerApproval() {
                               agreement[ids[0]].year4,
                               agreement[ids[0]].yearlyIncrement
                             )}
+                            partLabel={
+                              agreement[ids[0]].type === "Renewed" &&
+                              getIncrement(
+                                partLabel[oldIds[0]].year3,
+                                partLabel[oldIds[0]].year4,
+                                partLabel[oldIds[0]].yearlyIncrement
+                              )
+                            }
                           />
                         )}
                         {agreement[ids[0]].tenure > 48 && (
@@ -474,6 +529,14 @@ function SrManagerApproval() {
                               agreement[ids[0]].year5,
                               agreement[ids[0]].yearlyIncrement
                             )}
+                            partLabel={
+                              agreement[ids[0]].type === "Renewed" &&
+                              getIncrement(
+                                partLabel[oldIds[0]].year4,
+                                partLabel[oldIds[0]].year5,
+                                partLabel[oldIds[0]].yearlyIncrement
+                              )
+                            }
                           />
                         )}
                       </Grid>
@@ -520,31 +583,29 @@ function SrManagerApproval() {
                           name={"gst"}
                           bold={true}
                           cursor={true}
+                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].gstNo[id]}
                         />
-                        {/* <DataFieldStyle
-                          field={"Cancel Cheque"}
-                          value={agreement[ids[0]].accountNo[id]}
-                          href={agreement[ids[0]].cheque[id]}
-                          name={"cheque"}
-                          bold={true}
-                          cursor={true}
-                        /> */}
+                        
 
                         <DataFieldStyle
                           field={"mobile number"}
                           value={agreement[ids[0]].mobileNo[id]}
+                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].mobileNo[id]}
                         />
                         <DataFieldStyle
                           field={"alternate mobile"}
                           value={agreement[ids[0]].alternateMobile[id]}
+                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].alternateMobile[id]}
                         />
                         <DataFieldStyle
                           field={"email"}
                           value={agreement[ids[0]].email[id]}
+                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].email[id]}
                         />
                         <DataFieldStyle
                           field={"Percentage Share"}
                           value={`${agreement[ids[0]].percentage[id]}%`}
+                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].percentage[id]}
                         />
                       </Grid>
                        <Grid  container sx = {{alignItems : "baseline",mt: 1 }} >
@@ -581,11 +642,12 @@ function SrManagerApproval() {
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement[ids[0]].bankName[id]}
-                         
+                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].bankName[id]}
                         />
                         <DataFieldStyle
                           field={"beneficiary name"}
                           value={agreement[ids[0]].benificiaryName[id]}
+                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].benificiaryName[id]}
                         />
                         <DataFieldStyle
                           field={"bank A/c number"}
@@ -594,11 +656,13 @@ function SrManagerApproval() {
                           name={"cheque"}
                           bold={true}
                           cursor={true}
+                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].accountNo[id]}
                         />
                         <DataFieldStyle
                           field={"Bank IFSC"}
-                          partLabel={agreement[ids[0]].branchName[id]}
+                          // partLabel={agreement[ids[0]].branchName[id]}
                           value={agreement[ids[0]].ifscCode[id]}
+                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].ifscCode[id]}
                         />
                       </Grid>
                     )
@@ -619,10 +683,12 @@ function SrManagerApproval() {
                   <DocumentView
                     title={"draft agreement"}
                     img={agreement[ids[0]].draft_agreement}
+                    partLabel={agreement[ids[0]].type === "Renewed" && partLabel[oldIds[0]].draft_agreement}
                   />
                   <DocumentView
                     title={"electricity bill"}
                     img={agreement[ids[0]].electricity_bill}
+                    partLabel={agreement[ids[0]].type === "Renewed" && partLabel[oldIds[0]].electricity_bill}
                   />
                   {/* <DocumentView
                     title={"Cancel bank cheque"}
@@ -631,16 +697,23 @@ function SrManagerApproval() {
                   <DocumentView
                     title={"maintaince bill"}
                     img={agreement[ids[0]].maintaince_bill}
+                    partLabel={agreement[ids[0]].type === "Renewed" && partLabel[oldIds[0]].maintaince_bill}
                   />
-                  <DocumentView title={"POA"} img={agreement[ids[0]].poa} />
+                  <DocumentView 
+                  title={"POA"} 
+                  img={agreement[ids[0]].poa} 
+                  partLabel={agreement[ids[0]].type === "Renewed" && partLabel[oldIds[0]].poa}
+                  />
                   <DocumentView
                     title={"Property tax receipt"}
                     img={agreement[ids[0]].tax_receipt}
+                    partLabel={agreement[ids[0]].type === "Renewed" && partLabel[oldIds[0]].tax_receipt}
                   />
                   {agreement[ids[0]].leeseName.length > 1 && (
                     <DocumentView
                       title={"NOC (if multiple owner)"}
                       img={agreement[ids[0]].noc}
+                      partLabel={agreement[ids[0]].type === "Renewed" && partLabel[oldIds[0]].noc}
                     />
                   )}
                     <DocumentView
