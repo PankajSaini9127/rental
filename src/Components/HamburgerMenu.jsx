@@ -22,8 +22,6 @@ import MIS from "../assest/pic/Dashboard/mis.png";
 import Dashboard from "../assest/pic/Dashboard/chart.png";
 import { useDispatch, useSelector } from "react-redux";
 
-
-
 function HamburgerMenu({
   handleListing,
   misReports,
@@ -32,10 +30,11 @@ function HamburgerMenu({
   renewal,
   monthlyBtn,
   monthly,
-  agreements
+  agreements,
+  admin,
 }) {
+  agreements = agreements ? agreements : [];
 
-  agreements =  agreements ? agreements : []
   const [expand, setExpand] = useState(false);
 
   const { auth } = useSelector((s) => s);
@@ -83,24 +82,6 @@ function HamburgerMenu({
               onClick={() => navigate(`/${navigateHome}`)}
             />
           </Box>
-          {/* {misReports &&
-            misReports.map((row) => (
-              <Box
-                sx={{ display: "grid", placeItems: "center", width: "89px" }}
-              >
-                <Box
-                  component={Link}
-                  sx={{
-                    background: `url(${MIS})`,
-                    backgroundSize: "cover",
-                    height: "45px",
-                    width: "45px",
-                    cursor: "pointer",
-                  }}
-                  to={`${row}`}
-                />
-              </Box>
-            ))} */}
 
           {!expand ? (
             <>
@@ -128,49 +109,74 @@ function HamburgerMenu({
                   />
                 </>
               )}
-               {misReports &&
-              <NavItem Vector={Vector1}  onClick={() => setExpand(!expand)} />
-               }
+              {misReports && (
+                <NavItem Vector={Vector1} onClick={() => setExpand(!expand)} />
+              )}
               <NavItem Vector={VectorLogout} onClick={logout} />
             </>
           ) : (
             <Stack container spacing={2}>
               {/* onclick */}
-              {auth.role.includes("Admin") && (
-                <NavExpand
-                  msg="Users"
-                  Vector={VectorUser}
-                  NavItem={NavItem}
-                  onClick={() => navigate(`/userDashboard`)}
-                />
+              {admin && (
+                <>
+                  <NavExpand
+                    msg="Users"
+                    Vector={VectorUser}
+                    NavItem={NavItem}
+                    onClick={() => setCollaps("admin")}
+                  />
+                  <Collapse
+                    in={collapse === "admin"}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <List>
+                      {admin.map((row) => (
+                        <ListItem disablePadding>
+                          <ListItemButton
+                            onClick={() => navigate(`${row.navigateTo}`)}
+                          >
+                            <ListItemText
+                              primary={row.text}
+                              sx={{ color: "primary" }}
+                            />
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
+                </>
               )}
-
-              <NavExpand
-                msg="New Agreement"
-                // onClick={handleListing}
-                Vector={Vector1}
-                onClick={() => setCollaps("Agreement")}
-              />
-              <Collapse
-                in={collapse === "Agreement"}
-                timeout="auto"
-                unmountOnExit
-              >
-                <List>
-                  {
-                    agreements.map(row=>(
-                      <ListItem disablePadding>
-                      <ListItemButton onClick={()=>navigate(`${row.navigateTo}`)}>
-                        <ListItemText
-                          primary={row.text}
-                          sx={{ color: "primary" }}
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                    ))
-                  }
-                </List>
-              </Collapse>
+              {agreements.length > 0 && (
+                <>
+                  <NavExpand
+                    msg="New Agreement"
+                    // onClick={handleListing}
+                    Vector={Vector1}
+                    onClick={() => setCollaps("Agreement")}
+                  />
+                  <Collapse
+                    in={collapse === "Agreement"}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <List>
+                      {agreements.map((row) => (
+                        <ListItem disablePadding>
+                          <ListItemButton
+                            onClick={() => navigate(`${row.navigateTo}`)}
+                          >
+                            <ListItemText
+                              primary={row.text}
+                              sx={{ color: "primary" }}
+                            />
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
+                </>
+              )}
               {monthlyBtn && (
                 <>
                   <NavExpand
@@ -188,7 +194,9 @@ function HamburgerMenu({
                     <List>
                       {monthly.map((row, i) => (
                         <ListItem disablePadding>
-                          <ListItemButton onClick={()=>navigate(row.navigateTo)}>
+                          <ListItemButton
+                            onClick={() => navigate(row.navigateTo)}
+                          >
                             <ListItemText
                               primary={row.text}
                               sx={{ color: "primary" }}
@@ -201,34 +209,36 @@ function HamburgerMenu({
                 </>
               )}
 
-{misReports &&<>
-              <NavExpand
-                msg="MIS Report"
-                // onClick={handleListing}
-                Vector={Vector1}
-                onClick={() => setCollaps("MIS")}
-              />
-              <Collapse
-                in={collapse === "MIS"}
-                timeout="auto"
-                unmountOnExit
-              >
-                <List>
-                  {
-                    misReports.map(row=>(
-                      <ListItem disablePadding>
-                      <ListItemButton onClick={()=>navigate(`${row.navigateTo}`)}>
-                        <ListItemText
-                          primary={row.text}
-                          sx={{ color: "primary" }}
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                    ))
-                  }
-                </List>
-              </Collapse>
-</>}
+              {misReports && (
+                <>
+                  <NavExpand
+                    msg="MIS Report"
+                    // onClick={handleListing}
+                    Vector={Vector1}
+                    onClick={() => setCollaps("MIS")}
+                  />
+                  <Collapse
+                    in={collapse === "MIS"}
+                    timeout="auto"
+                    unmountOnExit
+                  >
+                    <List>
+                      {misReports.map((row) => (
+                        <ListItem disablePadding>
+                          <ListItemButton
+                            onClick={() => navigate(`${row.navigateTo}`)}
+                          >
+                            <ListItemText
+                              primary={row.text}
+                              sx={{ color: "primary" }}
+                            />
+                          </ListItemButton>
+                        </ListItem>
+                      ))}
+                    </List>
+                  </Collapse>
+                </>
+              )}
 
               <NavExpand msg="Logout" Vector={VectorLogout} onClick={logout} />
             </Stack>

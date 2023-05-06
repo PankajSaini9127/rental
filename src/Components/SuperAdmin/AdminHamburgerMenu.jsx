@@ -13,7 +13,7 @@ import { NavExpand, NavItem } from "../StyleComponents/HamburgerStyled";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useDispatch } from "react-redux";
 
-function AdminHamburgerMenu({ navigateListing, navigateHome }) {
+function AdminHamburgerMenu() {
   const [expand, setExpand] = useState(false);
   const dispatch = useDispatch();
 
@@ -51,7 +51,7 @@ function AdminHamburgerMenu({ navigateListing, navigateHome }) {
                 width: "45px",
                 cursor: "pointer",
               }}
-              onClick={() => navigate(navigateHome)}
+              onClick={() => navigate("/super-admin-dashboard")}
             />
           </Box>
 
@@ -59,7 +59,7 @@ function AdminHamburgerMenu({ navigateListing, navigateHome }) {
             <>
               <NavItem
                 Vector={VectorUser}
-                onClick={() => navigate(`${navigateListing}`)}
+                onClick={() => navigate(`/super-admin-listing`)}
               />
               <NavItem
                 Vector={VectorUser}
@@ -83,7 +83,7 @@ function AdminHamburgerMenu({ navigateListing, navigateHome }) {
                 msg="Users"
                 Vector={VectorUser}
                 NavItem={NavItem}
-                onClick={() => navigate(`${navigateListing}`)}
+                onClick={() => navigate(`/super-admin-listing`)}
               />
               <NavExpand
                 msg="LogOut"

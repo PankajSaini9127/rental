@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { MyHeader, TextFieldWrapper } from "../StyledComponent";
-import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
 import FinanceHam from "../FinancePanel/FinanceHamburger";
 import ManagerHam from "../Manager/HamburgerManager";
 import SrMHam from "../SrManager/SRMHAmburger";
@@ -18,6 +17,7 @@ import OPHam from "../Operations/OperationsHamburger";
 import { excelDownload, getMisReports } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
 const RentPaidSchedule = () => {
   const [startDate, setStartDate] = useState("");
@@ -79,10 +79,7 @@ const RentPaidSchedule = () => {
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
 
         {/* {console.log(role)} */}
-        { role.includes("Super Admin") && <AdminHamburgerMenu
-          navigateListing={"/super-admin-listing"}
-          navigateHome={"/super-admin-dashboard"}
-        />}
+        { role.includes("Super Admin") && <AdminHamburgerMenu/>}
 
 {role.includes('Finance') && <FinanceHam/>}
 {role.includes('Manager') && <ManagerHam/>}

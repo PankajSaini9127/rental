@@ -1,4 +1,17 @@
-import { Alert, Autocomplete, Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, Snackbar, Stack, TextField } from "@mui/material";
+import {
+  Alert,
+  Autocomplete,
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  Snackbar,
+  Stack,
+  TextField,
+} from "@mui/material";
 
 import React, { startTransition, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -8,12 +21,19 @@ import {
   TextFieldWrapper,
 } from "../StyledComponent";
 
-import AdminHamburgerMenu from "./AdminHamburgerMenu";
-import { AddUser, GetSupervisor, GetSupervisorSRM, getCityList, getStateList, get_emp_code } from "../../Services/Services";
+import {
+  AddUser,
+  GetSupervisor,
+  GetSupervisorSRM,
+  getCityList,
+  getStateList,
+  get_emp_code,
+} from "../../Services/Services";
 import AddUserCheckBox from "../StyleComponents/AddUserCheckBox";
 import HamburgerMenu from "../HamburgerMenu";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
+import HamburgerAdmin from "./HamburgerAdmin";
 
 const initialState = {
   code: "",
@@ -22,8 +42,8 @@ const initialState = {
   role: [],
   mobile: "",
   supervisor: "",
-  state:"",
-  city:""
+  state: "",
+  city: "",
 };
 
 function NewUser() {
@@ -31,12 +51,9 @@ function NewUser() {
   const [randomPassword, setRandomPassword] = useState("");
 
   const [stateList, setStateList] = useState([]);
-  const [cityList, setCityList] = useState([])
+  const [cityList, setCityList] = useState([]);
 
-
-const dispatch = useDispatch()
-
-
+  const dispatch = useDispatch();
 
   const superVisor = [
     "Admin",
@@ -54,20 +71,23 @@ const dispatch = useDispatch()
   const [formError, setformError] = useState({});
 
   function validate(e) {
-   const error = {};
-   if(e.target.value < 1 && e.target.name === "code"){
-    error.code = "Emp.code Required!"
-  }else
-    if (
+    const error = {};
+    if (e.target.value < 1 && e.target.name === "code") {
+      error.code = "Emp.code Required!";
+    } else if (
       e.target.value.length !== 0 &&
       e.target.value.length < 4 &&
       e.target.name === "name"
     ) {
       error.name = "Name must be of 4 character.";
-    }else if(!e.target.value.match(  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) && e.target.value.length > 0 && e.target.name === "email")
-    {
-      
-      error.email = "Please Enter Valid Email !!"
+    } else if (
+      !e.target.value.match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      ) &&
+      e.target.value.length > 0 &&
+      e.target.name === "email"
+    ) {
+      error.email = "Please Enter Valid Email !!";
     } else if (
       e.target.value.length !== 0 &&
       e.target.value.length < 10 &&
@@ -110,15 +130,17 @@ const dispatch = useDispatch()
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log(formError)
-   
+    console.log(formError);
+
     if (Object.keys(formError).length < 1) {
       if (role.length < 1) {
-        dispatch(setAlert({
-          open: true,
-          variant: "error",
-          message: "Please Select Role",
-        }))
+        dispatch(
+          setAlert({
+            open: true,
+            variant: "error",
+            message: "Please Select Role",
+          })
+        );
       } else {
         apiCall(formData, randomPassword);
       }
@@ -126,7 +148,7 @@ const dispatch = useDispatch()
   };
 
   //distructring elements from values
-  const {code, name, email, role, mobile, supervisor,state,city } = formData;
+  const { code, name, email, role, mobile, supervisor, state, city } = formData;
 
   // state for set supervisor value
   const [supervisorArray, setsupervisorArray] = useState([]);
@@ -158,24 +180,33 @@ const dispatch = useDispatch()
       return finalQuerry.includes(row);
     });
 
-    console.log(role)
-    if(role.includes("Manager")){
-      const supervisor = await GetSupervisor({role:superVisor1,state,city});
+    console.log(role);
+    if (role.includes("Manager")) {
+      const supervisor = await GetSupervisor({
+        role: superVisor1,
+        state,
+        city,
+      });
       setsupervisorArray(supervisor.data);
-    }else if(role.includes("Senior_Manager") ||  role.includes("Operations")
-    || role.includes("BUH") ){
-      console.log("first")
+    } else if (
+      role.includes("Senior_Manager") ||
+      role.includes("Operations") ||
+      role.includes("BUH")
+    ) {
+      console.log("first");
       const supervisor = await GetSupervisorSRM(superVisor1);
       setsupervisorArray(supervisor.data);
     }
-    
   }
 
   // Role Check Box Disable Manage
   function manageRole(role) {
     console.log(role);
     let setVal = {};
-    if (role.includes("Manager") || role.includes("Operations") && role.length > 0) {
+    if (
+      role.includes("Manager") ||
+      (role.includes("Operations") && role.length > 0)
+    ) {
       superVisor.map(
         (row) =>
           (setVal = {
@@ -186,51 +217,51 @@ const dispatch = useDispatch()
           })
       );
       setDisable(setVal);
-    }else if(role.includes('Admin') && role.length === 1){
-      superVisor.map((row)=>(
-        setVal={
-          ...setVal,
-          [row]:true,
-          Operations:false,
-          Manager:false
-        }
-      ));
+    } else if (role.includes("Admin") && role.length === 1) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            Operations: false,
+            Manager: false,
+          })
+      );
       setDisable(setVal);
-    }else if(role.includes("Senior_Manager")){
-      superVisor.map((row)=>(
-        setVal={
-          ...setVal,
-          [row]:true,
-          Senior_Manager:false
-        }
-      ));
+    } else if (role.includes("Senior_Manager")) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            Senior_Manager: false,
+          })
+      );
       setDisable(setVal);
-    }
-    else if(role.includes("Finance")){
-      superVisor.map((row)=>(
-        setVal={
-          ...setVal,
-          [row]:true,
-          Finance:false
-        }
-      ));
+    } else if (role.includes("Finance")) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            Finance: false,
+          })
+      );
       setDisable(setVal);
-    }
-    else if(role.includes("BUH")){
-      superVisor.map((row)=>(
-        setVal={
-          ...setVal,
-          [row]:true,
-          BUH:false
-        }
-      ));
+    } else if (role.includes("BUH")) {
+      superVisor.map(
+        (row) =>
+          (setVal = {
+            ...setVal,
+            [row]: true,
+            BUH: false,
+          })
+      );
       setDisable(setVal);
-    }
-     else if (role.length < 2) {
+    } else if (role.length < 2) {
       superVisor.map((row) => (setVal = { ...setVal, [row]: false }));
       setDisable(setVal);
-    }
-     else if (role.includes("Admin") && role.length === 2) {
+    } else if (role.includes("Admin") && role.length === 2) {
       superVisor.map(
         (row) =>
           (setVal = {
@@ -265,7 +296,6 @@ const dispatch = useDispatch()
     // auth_flag(role)
   }, [role]);
 
-
   // For save data in DB
   const apiCall = async (values, randomPassword) => {
     values = { ...values, password: randomPassword };
@@ -273,26 +303,28 @@ const dispatch = useDispatch()
     const result = await AddUser(values);
     // console.log(result)
     if (result.status === 201) {
-      dispatch(setAlert({
-        open: true,
-        variant: "success",
-        message: result.data.message,
-      }))
-     navigate('/userManagement')
-    }else {
-      dispatch(setAlert({
-        open: true,
-        variant: "error",
-        message: "Something Went Wrong ! Please Try Again Later.",
-      }))
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "success",
+          message: result.data.message,
+        })
+      );
+      navigate("/userManagement");
+    } else {
+      dispatch(
+        setAlert({
+          open: true,
+          variant: "error",
+          message: "Something Went Wrong ! Please Try Again Later.",
+        })
+      );
     }
     setLoading(false);
   };
 
-
-
-   // funciton for fetching state list
-   async function handleStateSearch(e, i) {
+  // funciton for fetching state list
+  async function handleStateSearch(e, i) {
     let response = await getStateList(e.target.value);
 
     if (response.status === 200) {
@@ -320,11 +352,11 @@ const dispatch = useDispatch()
     } else setCityList([]);
   }
 
-  const {auth} = useSelector(s=>s)
+  const { auth } = useSelector((s) => s);
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-      <HamburgerMenu
+        {/* <HamburgerMenu
           navigateHome={
             auth.role.includes("Manager")
               ? "dashboard"
@@ -345,7 +377,10 @@ const dispatch = useDispatch()
                 : ""
             )
           }
-        />
+        /> */}
+
+        <HamburgerAdmin />
+
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>New User</MyHeader>
 
@@ -371,14 +406,14 @@ const dispatch = useDispatch()
                     value={code}
                     onChange={handleChange}
                     error={formError.code}
-                    onBlur={(e)=>validate(e)}
+                    onBlur={(e) => validate(e)}
                   />
                   <TextFieldWrapper
                     label="Full Name"
                     placeHolder="Full Name"
                     value={name}
                     name="name"
-                    onBlur={(e)=>validate(e)}
+                    onBlur={(e) => validate(e)}
                     onChange={(e) => {
                       handleChange(e);
                     }}
@@ -394,7 +429,7 @@ const dispatch = useDispatch()
                     onChange={(e) => {
                       handleChange(e);
                     }}
-                    onBlur={(e)=>validate(e)}
+                    onBlur={(e) => validate(e)}
                     required={true}
                     type={"email"}
                     error={formError.email}
@@ -407,7 +442,7 @@ const dispatch = useDispatch()
                     required={true}
                     error={formError.mobile}
                     maxLength={10}
-                    onBlur={(e)=>validate(e)}
+                    onBlur={(e) => validate(e)}
                     onChange={(e) => {
                       handleChange(e);
                     }}
@@ -439,7 +474,7 @@ const dispatch = useDispatch()
                             {...params}
                             label="State"
                             required
-                            onBlur={(e)=>validate(e)}
+                            onBlur={(e) => validate(e)}
                             onChange={(e) => {
                               handleStateSearch(e);
                             }}
@@ -492,34 +527,44 @@ const dispatch = useDispatch()
                     //onBlur={validate}
                   />
 
-<Grid item md={4} xs={6} sx={{mb:'0px !important','@media(max-width:900px)':{my:1}}}>
-      <FormControl fullWidth className="textFieldWrapper">
-      <InputLabel id="demo-simple-select-label">{"Supervisor"}</InputLabel>
-        <Select
-          name={"supervisor"}
-          onChange={(e) => handleChange(e)}
-          variant="outlined"
-          labelId="demo-simple-select-label"
-          value={supervisor}
-          label={"Supervisor"}
-          sx={{
-            mt: "0px !important",
-            color: "rgba(16, 99, 173, 0.47)",
-            width: "100%",
-            height:'50px !important',
-            boxShadow: "none",
-            
-          }}
-        >
-          {
-            supervisorArray.map((item,i)=>{
-              return <MenuItem value={item.id} key={item.id} >{item.name}</MenuItem>
-            })
-          }
-        </Select>
-      </FormControl>
-    </Grid>
-
+                  <Grid
+                    item
+                    md={4}
+                    xs={6}
+                    sx={{
+                      mb: "0px !important",
+                      "@media(max-width:900px)": { my: 1 },
+                    }}
+                  >
+                    <FormControl fullWidth className="textFieldWrapper">
+                      <InputLabel id="demo-simple-select-label">
+                        {"Supervisor"}
+                      </InputLabel>
+                      <Select
+                        name={"supervisor"}
+                        onChange={(e) => handleChange(e)}
+                        variant="outlined"
+                        labelId="demo-simple-select-label"
+                        value={supervisor}
+                        label={"Supervisor"}
+                        sx={{
+                          mt: "0px !important",
+                          color: "rgba(16, 99, 173, 0.47)",
+                          width: "100%",
+                          height: "50px !important",
+                          boxShadow: "none",
+                        }}
+                      >
+                        {supervisorArray.map((item, i) => {
+                          return (
+                            <MenuItem value={item.id} key={item.id}>
+                              {item.name}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+                  </Grid>
                 </Grid>
                 <Grid container sx={{ justifyContent: "space-evenly", mt: 3 }}>
                   <Grid item sm={3.0}>

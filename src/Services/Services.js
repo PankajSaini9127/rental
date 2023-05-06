@@ -23,6 +23,14 @@ export async function GetUser (data){
     return await axios.post(`${API_LIVE}/api/admin/user`,data)
 }
 
+
+// get specific user
+export async function GetUser_specific (data){
+    return await axios.post(`${API_LIVE}/api/admin/user/spicific`,data)
+}
+
+
+
 export async function EditUserInfo (id,data){
     return await axios.put(`${API_LIVE}/api/admin/edit/${id}`,data)
 }

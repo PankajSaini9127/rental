@@ -26,7 +26,7 @@ import { EditUserInfo, GetSupervisor, GetSupervisorSRM, getCityList, getStateLis
 
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/action/action";
-import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
+import AdminHamburgerMenu from "./AdminHamburgerMenu";
 const initialState = {
   code: "123456",
   name: "",
@@ -314,10 +314,7 @@ async function handleCitySearch() {
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        <AdminHamburgerMenu
-          navigateListing={"/super-admin-listing"}
-          navigateHome={"/super-admin-dashboard"}
-        />
+        <AdminHamburgerMenu/>
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Rental Management System</MyHeader>
