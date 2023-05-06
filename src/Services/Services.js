@@ -127,14 +127,26 @@ export async function invoice_validation (invoiceNo) {
 
 //get monthly rent  serarch in sr manager 
 export async function get_search_monthly_rent_srm (id,search) {
-    console.log(search)
     return axios.get(`${API_LIVE}/api/srmanager/get-search-srm-monthlyrent?id=${id}&search=${search}`)
 }
+
+//get monthly rent  serarch in sr manager 
+export async function get_search_monthly_rent_srm_paid (id,search) {
+    return axios.get(`${API_LIVE}/api/srmanager/get-search-srm-monthlyrent/paid?id=${id}&search=${search}`)
+}
+
+
 
 // //get monthly rent  serarch in sr manager 
 export async function get_search_monthly_rent_manager (id,search) {
     console.log(search)
     return axios.get(`${API_LIVE}/api/get-search-manager-monthlyrent?id=${id}&search=${search}`)
+}
+
+// //get monthly rent  serarch in sr manager 
+export async function get_search_monthly_rent_manager_paid (id,search) {
+    console.log(search)
+    return axios.get(`${API_LIVE}/api/get-search-manager-monthlyrent/paid?id=${id}&search=${search}`)
 }
 
 // //get monthly rent  serarch in opertaions 
@@ -377,9 +389,21 @@ export async function get_BHU_agreements_total(data){
     return await axios.get(`${API_LIVE}/api/BHU/total/get-agreement/${data}`)
 }
 
+//in process agreements search
 export async function get_search_Agrteement_buh(id,data){
     return await axios.get(`${API_LIVE}/api/BHU/search/${id}?search=${data}`)
 }
+
+//get search approved 
+export async function get_search_Agrteement_buh_approved(id,data){
+    return await axios.get(`${API_LIVE}/api/BHU/search/approved/${id}?search=${data}`)
+}
+
+//get total ag search
+export async function get_search_Agrteement_buh_total(id,data){
+    return await axios.get(`${API_LIVE}/api/BHU/search/total/${id}?search=${data}`)
+}
+
 
 //send to BHU 
 export async function send_to_operations (data,id){
@@ -409,6 +433,16 @@ export async function get_agreement_operation (id){
 //operations 
 export async function get_search_agreement_operation (id,data){
     return await axios.get(`${config.API_LIVE}/api/operations/search/${id}?search=${data}`)
+}
+
+//operations 
+export async function get_search_agreement_operation_approved (id,data){
+    return await axios.get(`${config.API_LIVE}/api/operations/search/approved/${id}?search=${data}`)
+}
+
+//operations 
+export async function get_search_agreement_operation_process (id,data){
+    return await axios.get(`${config.API_LIVE}/api/operations/search/in-process/${id}?search=${data}`)
 }
 
 // search state and city based on  Pin code

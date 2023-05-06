@@ -4,7 +4,7 @@ import HamburgerMenu from "../../HamburgerMenu";
 import { useNavigate, useParams } from "react-router-dom";
 import ListingComponent from "../../StyleComponents/ListingComponent";
 import ListingTable from "./ListingTable";
-import { get_monthlt_rent_srm, get_monthlt_rent_srm_paid, get_search_monthly_rent_srm } from "../../../Services/Services";
+import { get_monthlt_rent_srm, get_monthlt_rent_srm_paid, get_search_monthly_rent_srm, get_search_monthly_rent_srm_paid } from "../../../Services/Services";
 import { useSelector } from "react-redux";
 
 
@@ -104,9 +104,20 @@ function MonthlyPayement() {
   });
 
   async function SearchAPi(id,searchValue){
-    const search = await get_search_monthly_rent_srm(id,searchValue)
-    setAgIds(search.data.ids)
-    setRent(search.data.agreement)
+    if(type === "in-process"){
+      const search = await get_search_monthly_rent_srm(id,searchValue)
+      if(search.status === 200){
+        setAgIds(search.data.ids)
+        setRent(search.data.agreement)
+      }     
+    }else if (type === "paid"){
+      const search = await get_search_monthly_rent_srm_paid(id,searchValue)
+      if(search.status === 200){
+        setAgIds(search.data.ids)
+        setRent(search.data.agreement)
+      }  
+    }
+    
   } 
 
   function handleSerachChange (e){

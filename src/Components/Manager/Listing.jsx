@@ -157,8 +157,6 @@ const row = data.map((item) => {
       city: agreement[item].city,
       state: agreement[item].state,
       deposit:parseFloat( agreement[item].deposit).toFixed(0),
-      
-
     };
   });
 

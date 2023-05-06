@@ -9,7 +9,9 @@ import {
   get_search_Agrteement_buh,
   get_BHU_agreements_approved,
   get_total_agreements,
-  get_BHU_agreements_total
+  get_BHU_agreements_total,
+  get_search_Agrteement_buh_approved,
+  get_search_Agrteement_buh_total
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 
@@ -85,9 +87,16 @@ function SrManagerListing() {
   //search
   async function SearchAPi(id, searchValue) {
     if (searchValue) {
-      const search = await get_search_Agrteement_buh(id, searchValue);
-      // setAgreement(search.data.agreement)
-      setData(search.data);
+      if(type === "in-procces-ag"){
+        const search = await get_search_Agrteement_buh(id, searchValue);
+        search.status === 200 && setData(search.data);
+      }else if(type === "approved-ag"){
+        const search = await get_search_Agrteement_buh_approved(id, searchValue);
+        search.status === 200 && setData(search.data);
+      }else if(type === "total-ag"){
+        const search = await get_search_Agrteement_buh_total(id, searchValue);
+        search.status === 200 && setData(search.data);
+      }
     }
   }
 
