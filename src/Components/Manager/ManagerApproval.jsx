@@ -325,12 +325,14 @@ async function get_recovery_data (id){
                           year={"Year 2"}
                           incrementType={agreement[ids[0]].yearlyIncrement}
                           amount={agreement[ids[0]].year2}
-                          Increment={getIncrement(
+                          Increment={
+                            getIncrement(
                             agreement[ids[0]].year1,
                             agreement[ids[0]].year2,
                             agreement[ids[0]].yearlyIncrement
                           )}
                           partLabel={
+                            agreement[ids[0]].type === "Renewed" &&
                             getIncrement(
                               partLabel[oldIds[0]].year1,
                               partLabel[oldIds[0]].year2,
@@ -349,6 +351,7 @@ async function get_recovery_data (id){
                               agreement[ids[0]].yearlyIncrement
                             )}
                             partLabel={
+                              agreement[ids[0]].type === "Renewed" &&
                               getIncrement(
                                 partLabel[oldIds[0]].year2,
                                 partLabel[oldIds[0]].year3,
@@ -368,6 +371,7 @@ async function get_recovery_data (id){
                               agreement[ids[0]].yearlyIncrement
                             )}
                             partLabel={
+                              agreement[ids[0]].type === "Renewed" &&
                               getIncrement(
                                 partLabel[oldIds[0]].year3,
                                 partLabel[oldIds[0]].year4,
@@ -387,6 +391,7 @@ async function get_recovery_data (id){
                               agreement[ids[0]].yearlyIncrement
                             )}
                             partLabel={
+                              agreement[ids[0]].type === "Renewed" &&
                               getIncrement(
                                 partLabel[oldIds[0]].year4,
                                 partLabel[oldIds[0]].year5,

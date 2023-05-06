@@ -649,7 +649,7 @@ async function handleChangeFile(e) {
                               handleChange={handleChangeFile}
                               name={"gst"}
                               error={formError.gst}
-                              fileName={ data.gstNo !== old.gstNo ? "": data[`gst_name`]}
+                              fileName={data[`gst_name`]}
                               href={data.gst}
                               />
                     </Box>

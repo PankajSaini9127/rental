@@ -654,7 +654,7 @@ function FinanceApproval() {
                           value={`${agreement.percentage}%`}
                           partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].percentage[id]}
                         />
-                        {console.log((agreement.deposit - deposit )/ 100 * parseInt(agreement.percentage))}
+                        {/* {console.log((agreement.deposit - deposit )/ 100 * parseInt(agreement.percentage))} */}
                         <DataFieldStyle
                           field={"Deposit Payable Amount"}
                           value={((agreement.deposit - deposit )/ 100 * parseInt(agreement.percentage)) }
@@ -762,6 +762,12 @@ function FinanceApproval() {
                 <DataFieldStyle
                   field={"Landlord Assets"}
                   value={agreement.assets}
+                />
+              </Grid>
+              <Grid item container xs={10} sx={{ mt: 5 }}>
+                <DataFieldStyle
+                  field={"Remark"}
+                  value={agreement.remark}
                 />
               </Grid>
 

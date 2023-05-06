@@ -360,7 +360,7 @@ const [renewal,setRenewal] = useState({
   // upload document
   async function handleChangeCommonFile(e, i) {
     const FD = new FormData();
-    console.log(e.target.files[0]);
+    console.log();
     console.log(e.target.name);
 
     FD.append("photo", e.target.files[0]);
@@ -380,7 +380,7 @@ const [renewal,setRenewal] = useState({
         ...old,
         [e.target.name + "_name"]: e.target.files[0].name,
         landlord: old.landlord.map((row, index) => {
-          if (i === index) {
+          if (parseInt(i) === index) {
             row[e.target.name] = response.data.link;
             return row;
           } else return row;
@@ -555,11 +555,12 @@ const [renewal,setRenewal] = useState({
       getBankDetails(e.target.value, i);
     }
     if (!error.state) {
-      if (preData.landlord[i]) {
+      console.log("in")
         setPreData((old) => ({
           ...old,
           landlord: old.landlord.map((row, id) => {
-            if (i === id) {
+            console.log(id)
+            if (parseInt(i) === id) {
               return {
                 ...row,
                 [e.target.name]: e.target.value,
@@ -568,18 +569,8 @@ const [renewal,setRenewal] = useState({
             return row;
           }),
         }));
-      } else {
-        setPreData((old) => ({
-          ...old,
-          landlord: [
-            ...old.landlord,
-            {
-              [e.target.name]: e.target.value,
-            },
-          ],
-        }));
       }
-    }
+      console.log(preData)
   }
 
   // handle Change for common feilds
@@ -1895,39 +1886,34 @@ console.log(partLabel)
                               href={ preData.landlord[i].pan_card}
                             />
                           </Grid>
+                          {console.log('>>>',i)}
                           {
-                          (partLabel.landlord[i].gstNo === preData.landlord[i]["gst"] || preData.landlord[i].gstNo !== "" ) && 
+                          (partLabel.landlord[i].gstNo !== preData.landlord[i]["gstNo"] || (preData.landlord[i].gstNo !== "" && preData.landlord[i].gstNo !== null) ) && 
                             <Grid item xs={6}>
                             <DocumentUpload
-                              uploaded={
-                                preData[`gst${i}`] || preData.landlord[i]["gst"]
-                                  ? (partLabel.landlord[i].gstNo != preData.landlord[i]["gst"]) ? false
-                                  : true : false
-                              }
+                              uploaded={(partLabel.landlord[i].gst || preData.landlord[i].gst) ? true : false}
                               label="Upload GST Certificate"
                               placeHolder="Upload GST Certificate"
                               handleChange={(e) => handleChangeCommonFile(e, i)}
                               name={"gst"}
                               fileName={preData[`gst${i}`]}
-                              href={ partLabel.landlord[i].gst}
+                              href={partLabel.landlord[i].gst || preData.landlord[i].gst }
                               />
                           </Grid>
                             }
 
-                         { (partLabel.landlord[i].ifscCode === preData.landlord[i]["ifscCode"] || preData.landlord[i].ifscCode !== "" ) && 
+                         { (partLabel.landlord[i].ifscCode !== preData.landlord[i]["ifscCode"] || preData.landlord[i].ifscCode !== "" ) && 
                           <Grid item xs={6}>
                             <DocumentUpload
                               uploaded={
-                                preData[`cheque${i}`] || preData.landlord[i]["cheque"]
-                                  ? (partLabel.landlord[i].ifscCode != preData.landlord[i]["ifscCode"]) ? false
-                                  : true : false
+                                partLabel.landlord[i].cheque || preData.landlord[i].cheque ? true : false
                               }
                               label="Upload Cancel Cheque"
                               name={"cheque"}
                               fileName={preData[`cheque${i}`]}
                               placeHolder="Upload Cancel Cheque"
                               handleChange={(e) => handleChangeCommonFile(e, i)}
-                              href={ partLabel.landlord[i].cheque}
+                              href={partLabel.landlord[i].cheque || preData.landlord[i].cheque}
                             />
                           </Grid>
 }
