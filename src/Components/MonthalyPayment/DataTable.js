@@ -245,7 +245,7 @@ function DataTable({rows}) {
       headerAlign: "center",
       renderCell: (params) => (
         <>
-          {console.log( params)}
+          {/* {console.log( params)} */}
           {(params.formattedValue === "" && params.row.status === "Pending")? (
             <Checkbox
               onChange={handleSwitch}

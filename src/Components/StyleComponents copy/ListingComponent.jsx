@@ -37,7 +37,8 @@ function ListingComponent({
   serachValue,
   handleSerachChange,
   check,
-  setCheck
+  setCheck,
+  setSort
 }) {
 
   const navigate = useNavigate()
@@ -136,6 +137,7 @@ function ListingComponent({
           onChange={handleSerachChange}
             size="small"
           />
+          {/* <SortBy setSort = {setSort}/> */}
         </Grid>
 
 {
@@ -188,5 +190,32 @@ function ListingComponent({
     </Box>
   );
 }
+
+
+function SortBy({setSort}){
+  
+  const sort = ["Code", "Name", "Rent Date", "Time"]
+  return (
+    <>
+         <TextField
+          id="outlined-select-currency-native"
+          select
+          label="Native select"
+          defaultValue="EUR"
+          SelectProps={{
+            native: true,
+          }}
+          helperText="Please select your currency"
+        >
+          {sort.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </TextField>
+    </>
+  )
+}
+
 
 export default ListingComponent;

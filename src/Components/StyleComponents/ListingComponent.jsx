@@ -37,7 +37,8 @@ function ListingComponent({
   serachValue,
   handleSerachChange,
   check,
-  setCheck
+  setCheck,
+  setSortBy
 }) {
 
   const navigate = useNavigate()
@@ -122,7 +123,7 @@ function ListingComponent({
         }}
         spacing={2}
       >
-        <Grid item md={8} xs={7} sx={{flexGrow:1}}>
+        <Grid item md={8} xs={7} sx={{flex  : 1, display : 'flex', justifyContent : "space-between", gap : '1rem'}}>
           <TextField
             placeholder="Search By Field Name..."
             InputProps={{
@@ -136,6 +137,7 @@ function ListingComponent({
           onChange={handleSerachChange}
             size="small"
           />
+          {setSortBy && <SortBy  sortBy= {setSortBy}/>}
         </Grid>
 
 {
@@ -187,6 +189,35 @@ function ListingComponent({
       <Table rows={rows} setRows = {setRows} setCheck={setCheck} check={check}/>
     </Box>
   );
+}
+
+
+function SortBy({sortBy}){
+  
+  const sort = ["Code", "Name", "Rent Date", "Time"]
+  return (
+    <>
+         <TextField
+          id="outlined-select-currency-native"
+          select
+          size = {'small'}
+          fullWidth
+          label="Sort By"
+          defaultValue="Name"
+          SelectProps={{
+            native: true,
+          }}
+          onChange = {(e)=>sortBy(e.target.value)}
+          helperText="Please select the sort order..."
+        >
+          {sort.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </TextField>
+    </>
+  )
 }
 
 export default ListingComponent;

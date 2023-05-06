@@ -13,6 +13,8 @@ export default function MonthalyList() {
 
   const {type} = useParams();
 
+  const [sortBy,setSortBy] = useState('Name')
+
     const [Select, setSelect] = useState("New Agreement");
 
   const handleChange = (e) => {
@@ -23,7 +25,10 @@ const navigate = useNavigate();
   //search
   const [searchValue,setsearchValue] =useState('');
 
-
+  useEffect(()=>{
+    console.log(sortBy)
+    APICALL()
+  },[sortBy])
 
 const { auth, refresh } = useSelector((state) => state);
 
@@ -34,7 +39,7 @@ const { auth, refresh } = useSelector((state) => state);
   const APICALL = async () => {
     setLoading(true);
     setData([]);
-    const result = await listMonthRent(auth.id);
+    const result = await listMonthRent({id : auth.id,sortBy});
     console.log(result);
     if (result.status === 200) {
       //   const data = result.data.data.reverse();
@@ -143,6 +148,7 @@ const { auth, refresh } = useSelector((state) => state);
         Table={DataTable}
         onChange={handleChange}
         dropDown={false}
+        setSortBy = {setSortBy}
         rows={row}
         searchValue={searchValue}
         // setsearchValue={setsearchValue}

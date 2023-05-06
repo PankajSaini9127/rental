@@ -492,8 +492,8 @@ export async function setFinalAgreement (data){
 }
 
 // APIs for listMonthRent
-export async function listMonthRent (manager_id){
-    return await axios.get(`${API_LIVE}/api/listMonthRent/${manager_id}`)
+export async function listMonthRent (data){
+    return await axios.get(`${API_LIVE}/api/listMonthRent?id=${data.id}&sortBy=${data.sortBy}`)
 }
 
 // APIs for paid listMonthRent
