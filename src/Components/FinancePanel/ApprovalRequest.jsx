@@ -522,6 +522,7 @@ function FinanceApproval() {
                             agreement.yearlyIncrement
                           )}
                           partLabel={
+                            agreement.type === "Renewed" &&
                             getIncrement(
                               partLabel[oldIds[0]].year1,
                               partLabel[oldIds[0]].year2,

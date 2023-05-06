@@ -359,7 +359,7 @@ function SrManagerApproval() {
                         incrementType={agreement.yearlyIncrement}
                         Increment={0}
                         amount={agreement.year1}
-                        partLabel={partLabel[oldIds[0]].year1}
+                        partLabel={ agreement.type === "Renewed" && partLabel[oldIds[0]].year1}
                       />
                       <YearField
                         year={"Year 2"}
@@ -371,6 +371,7 @@ function SrManagerApproval() {
                           agreement.yearlyIncrement
                         )}
                         partLabel={
+                          agreement.type === "Renewed" &&
                           getIncrement(
                             partLabel[oldIds[0]].year1,
                             partLabel[oldIds[0]].year2,
@@ -389,6 +390,7 @@ function SrManagerApproval() {
                             agreement.yearlyIncrement
                           )}
                           partLabel={
+                            agreement.type === "Renewed" &&
                             getIncrement(
                               partLabel[oldIds[0]].year2,
                               partLabel[oldIds[0]].year3,
@@ -408,6 +410,7 @@ function SrManagerApproval() {
                             agreement.yearlyIncrement
                           )}
                           partLabel={
+                            agreement.type === "Renewed" &&
                             getIncrement(
                               partLabel[oldIds[0]].year3,
                               partLabel[oldIds[0]].year4,
@@ -427,6 +430,7 @@ function SrManagerApproval() {
                             agreement.yearlyIncrement
                           )}
                           partLabel={
+                            agreement.type === "Renewed" &&
                             getIncrement(
                               partLabel[oldIds[0]].year4,
                               partLabel[oldIds[0]].year5,

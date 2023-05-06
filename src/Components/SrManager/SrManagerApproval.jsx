@@ -462,6 +462,7 @@ function SrManagerApproval() {
                           amount={agreement[ids[0]].year1}
                           partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].year1}
                         />
+                        {console.log(partLabel,agreement)}
                         <YearField
                           year={"Year 2"}
                           incrementType={agreement[ids[0]].yearlyIncrement}
@@ -472,6 +473,7 @@ function SrManagerApproval() {
                             agreement[ids[0]].yearlyIncrement
                           )}
                           partLabel={
+                            agreement[ids[0]].type === "Renewed" &&
                             getIncrement(
                               partLabel[oldIds[0]].year1,
                               partLabel[oldIds[0]].year2,

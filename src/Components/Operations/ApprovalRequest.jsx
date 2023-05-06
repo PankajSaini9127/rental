@@ -441,6 +441,7 @@ function ApprovalRequest() {
                             agreement[ids[0]].yearlyIncrement
                           )}
                           partLabel={
+                            agreement[ids[0]].type === "Renewed" &&
                             getIncrement(
                               partLabel[oldIds[0]].year1,
                               partLabel[oldIds[0]].year2,
