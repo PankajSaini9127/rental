@@ -128,7 +128,7 @@ async function sendToOperations (){
         {
           field: "code",
           headerName: "Code",
-          minWidth: 70,
+          minWidth: 100,
           flex: 1,
           type: "number",
           headerAlign: "center",
@@ -137,12 +137,13 @@ async function sendToOperations (){
           field: "month_of_rent",
           headerName: "Rent Month",
           headerAlign: "center",
-          flex: 1
+          flex: 1,
+          minWidth:120
         },
         {
           field: "name",
           headerName: "Landlord Name",
-          minWidth: 100,
+          minWidth: 150,
           headerAlign: "center",
           flex: 1
         },
@@ -157,7 +158,7 @@ async function sendToOperations (){
         {
           field: "gst",
           headerName: "GST Number",
-          minWidth: 100,
+          minWidth: 180,
           headerAlign: "center",
           flex: 1
     
@@ -165,7 +166,7 @@ async function sendToOperations (){
         {
           field: "manager",
           headerName: "Manager Name",
-          minWidth: 100,
+          minWidth: 130,
           headerAlign: "center",
           flex: 1
     
@@ -174,7 +175,8 @@ async function sendToOperations (){
           field: "total_month_rent",
           headerName: "Month Rent",
           headerAlign: "center",
-          flex: 1
+          flex: 1,
+          minWidth:100
         },
         {
           field: "percentage",
@@ -226,7 +228,8 @@ async function sendToOperations (){
           headerName: "Action",
           headerAlign: "center",
           flex: 1,
-          renderCell: renderDetailsButton
+          renderCell: renderDetailsButton,
+          minWidth:150
         }
     
       ];

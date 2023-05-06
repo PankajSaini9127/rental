@@ -10,12 +10,12 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { MyHeader } from "../StyledComponent";
-import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
 import { excelDownload, getMisReports } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import HamburgerMenu from "../HamburgerMenu";
 import OperationsHamburger from "../Operations/OperationsHamburger";
+import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
 const RentalPaymentMIS = () => {
   const [startDate, setStartDate] = useState("");
@@ -44,10 +44,7 @@ const RentalPaymentMIS = () => {
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-      { role.includes("Super Admin") ?  <AdminHamburgerMenu
-          navigateListing={"/super-admin-listing"}
-          navigateHome={"/super-admin-dashboard"}
-        />:     <OperationsHamburger/>}
+      { role.includes("Super Admin") ?  <AdminHamburgerMenu/>:     <OperationsHamburger/>}
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid

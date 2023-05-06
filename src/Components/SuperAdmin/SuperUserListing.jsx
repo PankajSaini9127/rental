@@ -5,8 +5,8 @@ import { useNavigate } from "react-router-dom";
 import ListingComponent from "../StyleComponents/ListingComponent";
 import { GetUser, get_search } from "../../Services/Services";
 import SuperAdminTable from "./DataTable";
-import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
 import { useSelector } from "react-redux";
+import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
 function SuperAdminListing() {
   const navigate = useNavigate();
@@ -72,8 +72,6 @@ const{refresh} = useSelector(s=>s)
     <>
       <Stack sx={{ flexWrap: "wap", flexDirection: "row" }}>
         <AdminHamburgerMenu
-          navigateListing={"/super-admin-listing"}
-          navigateHome={"/super-admin-dashboard"}
         />
         <ListingComponent
           title="User Management"

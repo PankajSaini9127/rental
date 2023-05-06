@@ -2,7 +2,7 @@ import { Box, Grid, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { meta } from "../../Services/Services";
 import { DashboardItem, MyHeader } from "../StyledComponent";
-import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
+import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
 function SuperAdminDashboard() {
   const [metaData, setMeta] = useState({});
@@ -23,8 +23,6 @@ function SuperAdminDashboard() {
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
       <AdminHamburgerMenu
-          navigateListing={"/super-admin-listing"}
-          navigateHome={"/super-admin-dashboard"}
         />
 
         <Box sx={{ flexGrow: 1 }}>

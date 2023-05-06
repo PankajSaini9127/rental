@@ -184,20 +184,13 @@ export default function ListingTable({rows}) {
           minWidth: 200,
           flex: 1
         },
-        // {
-        //   field: "utr",
-        //   headerName: "UTR Number",
-        //   minWidth: 100,
-        //   headerAlign: "center",
-        //   flex: 1
-    
-        // },
         {
           field: "action",
           headerName: "Action",
           headerAlign: "center",
           flex: 1,
-          renderCell: renderDetailsButton
+          renderCell: renderDetailsButton,
+          minWidth: 150,
         }
     
       ];

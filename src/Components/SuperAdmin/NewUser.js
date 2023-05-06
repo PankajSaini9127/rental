@@ -25,9 +25,9 @@ import {
   getStateList,
 } from "../../Services/Services";
 import AddUserCheckBox from "../StyleComponents/AddUserCheckBox";
-import AdminHamburgerMenu from "../AdminPanel/AdminHamburgerMenu";
 import { useDispatch } from "react-redux";
 import { setAlert } from "../../store/action/action";
+import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
 const initialState = {
   code: "",
@@ -339,10 +339,7 @@ function SuperAdminNewUser() {
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-        <AdminHamburgerMenu
-          navigateListing={"/super-admin-listing"}
-          navigateHome={"/super-admin-dashboard"}
-        />
+        <AdminHamburgerMenu />
 
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Rental Management System</MyHeader>
