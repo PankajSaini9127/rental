@@ -93,10 +93,10 @@ const YearField = ({ year, amount,Increment,incrementType }) => {
   );
 };
 
-const DocumentView = ({ title, img }) => {
+const DocumentView = ({ title, img,partLabel }) => {
    const [open, setOpen] = useState(false);
    function handleView() {
-    console.log(img.split(".").slice(-1));
+    // console.log(img.split(".").slice(-1));
     setOpen(true);
   }
 
@@ -104,6 +104,14 @@ const DocumentView = ({ title, img }) => {
   function handleClose() {
     setOpen(false);
   }
+
+  const [imgView,setImgView] =useState(false)
+
+  function handleClick(partLabel,title) {
+
+    saveAs(partLabel, title);
+  }
+
   return (
     <Grid item xs={4}>
     { img !== undefined &&   <ImageView
@@ -112,6 +120,7 @@ const DocumentView = ({ title, img }) => {
         href={img}
         name={title}
       />}
+      <ImageView open={imgView} handleClose={()=>setImgView(false)} href={partLabel} name={title} />
       <Typography
         variant="body1"
         fontSize={"18px"}
@@ -151,8 +160,6 @@ const DocumentView = ({ title, img }) => {
               alignItems: "center",
               textDecoration: "none",
             }}
-            // href={img}
-            // target="_blank"`
             onClick={handleView}
           >
             View
@@ -182,6 +189,11 @@ const DocumentView = ({ title, img }) => {
           </Link>
         </Button>
       </Box>
+      { <Box sx={{mt:1}}> 
+              <VisibilityIcon color={"primary"} onClick={()=>setImgView(true)} sx={{mr:1}} /> 
+             <DownloadIcon color={"primary"} onClick={handleClick} />
+             </Box>
+      }
     </Grid>
   );
 };

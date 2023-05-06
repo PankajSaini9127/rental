@@ -1240,15 +1240,6 @@ console.log(partLabel)
       {/* {//console.log(landblord)} */}
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
         {/* side nav     */}
-        {/* <HamburgerMenu navigateTo={"listing"} /> */}
-
-        {/* <HamburgerMenu
-          navigateHome={"dashboard"}
-          handleListing={() => navigate("/listing")}
-          monthlyRent={() => navigate("/monthly-payment")}
-          renewal={() => navigate(`/renewal`)}
-          monthlyBtn="true"
-        /> */}
         <HamburgerManager/>
          <Box className="backButton">
             <IconButton 

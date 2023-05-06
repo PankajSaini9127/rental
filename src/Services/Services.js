@@ -63,7 +63,7 @@ export async function get_agreements (manager_id){
 
 
 export async function get_old_agreement (code){
-    return axios.get(`${API_LIVE}/api/old/agreements/${code}`)
+    return axios.get(`${API_LIVE}/api/old/agreements?code=${code}`)
 }
 
 
