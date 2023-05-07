@@ -89,10 +89,10 @@ function FinanceListing() {
 useEffect(()=>{
   console.log(data)
   setRows(data.map((item) => {
-    console.log(item.deposit,item.percentage)
+    console.log(item)
     return {
-      checkbox: item.status,
-      id: item.landlords,
+    checkbox: item.status,
+    id: item.landlords,
     i: item.id,
     status: item.status,
     code: item.code,
@@ -107,7 +107,9 @@ useEffect(()=>{
     initiateDate : moment(item.time).format('DD-MM-YYYY'),
     type: item.type === "Renewed" ? "Renewal" : "New",
     utr_number :item.utr_number,
-    modify_date:item.modify_date
+    modify_date:item.modify_date,
+    modify_date:item.modify_date,
+    payable_deposit:(item.old_deposit - item.new_amount) * (item.percentage/100),
     };
   }))
 },[data])
