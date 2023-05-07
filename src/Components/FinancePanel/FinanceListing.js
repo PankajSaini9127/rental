@@ -109,7 +109,7 @@ useEffect(()=>{
     utr_number :item.utr_number,
     modify_date:item.modify_date,
     modify_date:item.modify_date,
-    payable_deposit:(item.old_deposit - item.new_amount) * (item.percentage/100),
+    payable_deposit: (item.old_deposit && item.new_amount) ? (item.old_deposit - item.new_amount) * (item.percentage/100) : "---",
     };
   }))
 },[data])
