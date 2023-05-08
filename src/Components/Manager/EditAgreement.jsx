@@ -149,8 +149,8 @@ function EditAgreement({ history }) {
 
         // const oldAgreements = await get_old_agreement(code)
 
-        setBuh_ID(response.data.buh_id);
-        setFinance_ID(response.data.op_id);
+        setBuh_ID(response.data.agreement.buh_id);
+        setFinance_ID(response.data.agreement.op_id);
 
         let rent = monthlyRent;
         if (yearlyIncrement === "Percentage") {
