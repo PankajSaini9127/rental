@@ -176,7 +176,7 @@ const [renewal,setRenewal] = useState({
           deposited : parseInt(deposit),
           unpaid_amount : unpaid_amount,
           balance_amount : parseInt(deposit) - unpaid_amount,
-          new_deposit : 0,
+          new_deposit : parseInt(deposit),
           receivable : parseInt(deposit) - unpaid_amount +  0
         }))
 
@@ -1888,10 +1888,14 @@ console.log(partLabel)
                           </Grid>
                           {console.log('>>>',i)}
                           {
-                          (partLabel.landlord[i].gstNo !== preData.landlord[i]["gstNo"] || (preData.landlord[i].gstNo !== "" && preData.landlord[i].gstNo !== null) ) && 
+                          ((partLabel.landlord[i].gstNo === preData.landlord[i].gstNo && partLabel.landlord[i].gstNo !== "" ) || preData.landlord[i].gstNo !== "") && 
                             <Grid item xs={6}>
                             <DocumentUpload
-                              uploaded={(partLabel.landlord[i].gst || preData.landlord[i].gst) ? true : false}
+                              uploaded={(preData.landlord[i].gst !== "" &&
+                              partLabel.landlord[i].gstNo === preData.landlord[i].gstNo
+                              ) ? true :
+                              (partLabel.landlord[i].gst !== preData.landlord[i].gst ) ?
+                                true : false}
                               label="Upload GST Certificate"
                               placeHolder="Upload GST Certificate"
                               handleChange={(e) => handleChangeCommonFile(e, i)}
@@ -1902,12 +1906,16 @@ console.log(partLabel)
                           </Grid>
                             }
 
-                         { (partLabel.landlord[i].ifscCode !== preData.landlord[i]["ifscCode"] || preData.landlord[i].ifscCode !== "" ) && 
+                         { 
+                         ((partLabel.landlord[i].ifscCode === preData.landlord[i].ifscCode && partLabel.landlord[i].ifscCode !== "" ) || preData.landlord[i].ifscCode !== "")
+                         && 
                           <Grid item xs={6}>
                             <DocumentUpload
-                              uploaded={
-                                partLabel.landlord[i].cheque || preData.landlord[i].cheque ? true : false
-                              }
+                             uploaded={(preData.landlord[i].cheque !== "" &&
+                             partLabel.landlord[i].ifscCode === preData.landlord[i].ifscCode
+                             ) ? true :
+                             (partLabel.landlord[i].cheque !== preData.landlord[i].cheque ) ?
+                               true : false}
                               label="Upload Cancel Cheque"
                               name={"cheque"}
                               fileName={preData[`cheque${i}`]}
