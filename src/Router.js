@@ -73,6 +73,7 @@ import EditLandlord from "./Components/landlordOperations/Edit";
 
 // add by Yashwant 
 import LandlordList from './Components/landlordOperations/Listing'
+import OldAgreements from "./Components/Manager/OldAgreement";
 
 function MyRouter() {
   const history = useNavigate();
@@ -175,6 +176,17 @@ function MyRouter() {
           isAuth && role.includes("Manager") ? <ManagerApproval /> : <Login />
         }
       />
+  <Route
+        exact
+        path="/old-agreement"
+        element={
+          isAuth && role.includes("Manager") ? <OldAgreements /> : <Login />
+        }
+      />
+
+
+
+
       {/* Sr Manager */}
       <Route
         exact

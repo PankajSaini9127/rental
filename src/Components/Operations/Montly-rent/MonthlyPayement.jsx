@@ -8,6 +8,7 @@ import {
   get_monthlt_rent_opr,
   get_monthlt_rent_opr_paid,
   get_search_monthly_rent_operations,
+  get_search_monthly_rent_operations_paid,
 } from "../../../Services/Services";
 import { useSelector } from "react-redux";
 
@@ -115,9 +116,17 @@ function OperationsMonthlyPayement() {
   });
 
   async function SearchAPi(id, searchValue) {
-    const search = await get_search_monthly_rent_operations(id, searchValue);
+
+    if(type === "in-process"){
+      const search = await get_search_monthly_rent_operations(id, searchValue);
     setAgIds(search.data.ids);
     setRent(search.data.agreement);
+    }else if (type === "paid"){
+      const search = await get_search_monthly_rent_operations_paid(id, searchValue);
+      setAgIds(search.data.ids);
+      setRent(search.data.agreement);
+    }
+   
   }
 
   function handleSerachChange(e) {
@@ -139,20 +148,6 @@ function OperationsMonthlyPayement() {
           renewalBTN="false"
         /> */}
         <OperationsHamburger />
-
-        <Box className="backButton" sx={{ zIndex: 222 }}>
-          <IconButton
-            variant="contained"
-            color="primary"
-            onClick={() => navigate(-1)}
-            size={"large"}
-          >
-            <ArrowCircleLeftIcon
-              sx={{ fontSize: "3rem" }}
-              color="#FFFFF !important"
-            />
-          </IconButton>
-        </Box>
         <ListingComponent
           title1="Rental Management System"
           title="Monthly Payment"

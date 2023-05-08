@@ -26,6 +26,7 @@ import {
   get_agreement_id,
   get_data_recovery,
   get_old_agreement,
+  get_renewal_recovery_data,
   send_back_to_manager,
   send_to_bhu,
 } from "../../Services/Services";
@@ -75,6 +76,9 @@ function ApprovalRequest() {
     ifscCode: "",
       }]});
 
+       //renewal recovery data
+  const [renewalRecovery, setRenewalRecovery] = useState({})
+
       
 
   const dispatch = useDispatch();
@@ -90,6 +94,16 @@ function ApprovalRequest() {
     }
   }
 
+  async function get_renewal_recovery(code){
+    try {
+      const renewalRecovery = await get_renewal_recovery_data (code)
+      console.log(renewalRecovery.data)
+      renewalRecovery.status === 200 &&  setRenewalRecovery(renewalRecovery.data.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   async function getData(id) {
     try {
       const agreement = await get_agreement_id(id);
@@ -98,7 +112,8 @@ function ApprovalRequest() {
         console.log(agreement.data.agreement[agreement.data.ids[0]].id);
         get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id);
         if(agreement.data.agreement[agreement.data.ids[0]].type === "Renewed"){
-          get_old_data(agreement.data.agreement[agreement.data.ids[0]].code)
+          get_old_data(agreement.data.agreement[agreement.data.ids[0]].code);
+          get_renewal_recovery(id)
         }
         setAgreement(agreement.data.agreement);
         console.log(agreement.data.ids);
@@ -277,9 +292,6 @@ function ApprovalRequest() {
 
   return (
     <>
-  {
-    console.log(ids && ids.length > 0 && (agreement[ids[0]].type === "Renewed" ? oldIds.length > 0 : true))
-  }
       {(ids && ids.length > 0 && (agreement[ids[0]].type === "Renewed" ? oldIds.length > 0 : true) )&& (
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
 
@@ -701,6 +713,33 @@ function ApprovalRequest() {
                   />
                 </Grid>
               )}
+
+{
+  agreement[ids[0]].type === "Renewed" && <>
+   <Grid item  container sx = {{alignItems : "baseline",mt: 5  }} xs={10} >
+                  <DataFieldStyle
+                    field={"Deposit Amount"}
+                    value={renewalRecovery.balance_amount}
+                  />
+                    <DataFieldStyle
+                    field={"Deposited"}
+                    value={renewalRecovery.deposited}
+                  />
+                   <DataFieldStyle
+                    field={"New Deposit"}
+                    value={renewalRecovery.new_deposit}
+                  />
+                  <DataFieldStyle
+                    field={"Receivable/Payable"}
+                    value={renewalRecovery.receivable}
+                  />
+                  <DataFieldStyle
+                    field={"Un-Paid Amount"}
+                    value={renewalRecovery.unpaid_amount}
+                  />
+                </Grid>
+  </>
+}
 
               {/* Buttons start here*/}
               {agreement[ids[0]].status === "Terminated By Sr Manager" && (

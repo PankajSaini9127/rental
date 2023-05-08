@@ -240,7 +240,7 @@ function OperationsTable({ rows }) {
             sx={{ textTransform: "capitalize", m: 1, mx: 3 }}
             onClick={()=>setRemarkOpen(true)}
           >
-            Send To Operations
+            Send To Finance
           </Button>
         </Box>
       )}

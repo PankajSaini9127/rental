@@ -22,7 +22,7 @@ import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 //download file
 import { saveAs } from "file-saver";
-import { get_agreement_id, get_data_recovery, get_old_agreement, send_to_bhu } from "../../Services/Services";
+import { get_agreement_id, get_data_recovery, get_old_agreement, get_renewal_recovery_data, send_to_bhu } from "../../Services/Services";
 import { setAlert } from "../../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
 import HamburgerManager from "./HamburgerManager";
@@ -56,6 +56,11 @@ function ManagerApproval() {
   const dispatch = useDispatch();
 
   const [recovery,setRecovery] = useState({});
+
+  //renewal recovery data
+  const [renewalRecovery, setRenewalRecovery] = useState({})
+
+  console.log(renewalRecovery)
 
   const [oldIds, setOldIds] = useState([]);
 
@@ -99,16 +104,27 @@ async function get_recovery_data (id){
     console.log(error)
   }
 }
+
+async function get_renewal_recovery(id){
+  try {
+    const renewalRecovery = await get_renewal_recovery_data (id)
+    console.log(renewalRecovery.data)
+    renewalRecovery.status === 200 &&  setRenewalRecovery(renewalRecovery.data.data)
+  } catch (error) {
+    console.log(error)
+  }
+}
  
-  async function getData (id){
+
+async function getData (id){
     try {
       const agreement = await get_agreement_id(id);
       console.log(agreement.data);
       if (agreement.data.success) {
         console.log(agreement.data.agreement[agreement.data.ids[0]].type === "Renewed")
-        get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id)
         if(agreement.data.agreement[agreement.data.ids[0]].type === "Renewed"){
           get_old_data(agreement.data.agreement[agreement.data.ids[0]].code)
+          get_renewal_recovery(id)
         }
         setAgreement(agreement.data.agreement);
         console.log(agreement.data);
@@ -604,6 +620,33 @@ async function get_recovery_data (id){
                 </Grid>
               )}
 
+
+{
+  agreement[ids[0]].type === "Renewed" && <>
+   <Grid item  container sx = {{alignItems : "baseline",mt: 5  }} xs={10} >
+                  <DataFieldStyle
+                    field={"Deposit Amount"}
+                    value={renewalRecovery.balance_amount}
+                  />
+                    <DataFieldStyle
+                    field={"Deposited"}
+                    value={renewalRecovery.deposited}
+                  />
+                   <DataFieldStyle
+                    field={"New Deposit"}
+                    value={renewalRecovery.new_deposit}
+                  />
+                  <DataFieldStyle
+                    field={"Receivable/Payable"}
+                    value={renewalRecovery.receivable}
+                  />
+                  <DataFieldStyle
+                    field={"Un-Paid Amount"}
+                    value={renewalRecovery.unpaid_amount}
+                  />
+                </Grid>
+  </>
+}
                 {/* Buttons start here*/}
    
               {/* Buttons start here*/}

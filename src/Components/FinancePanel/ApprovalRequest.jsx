@@ -29,6 +29,7 @@ import {
   get_data_recovery,
   get_deposit_amount,
   get_old_agreement,
+  get_renewal_recovery_data,
   send_back_to_manager,
   send_to_bhu,
 } from "../../Services/Services";
@@ -67,42 +68,33 @@ function FinanceApproval() {
 
   const [open, setopen] = useState(false);
 
+   //renewal recovery data
+   const [renewalRecovery, setRenewalRecovery] = useState({})
+
   const [utr, setUtr] = useState({ utr: "", paymentDate: "" });
 
   const dispatch = useDispatch();
 
   const [deposit, setDeposit] = useState("");
 
-  console.log(deposit);
+  // console.log(deposit);
 
   const [recovery, setRecovery] = useState({});
 
   const [oldIds, setOldIds] = useState([]);
 
-  const [partLabel,setPartLabel] = useState({
-    landlord:[{
-    accountNo: "",
-    alternateMobile: "",
-    area:"",
-    bankName:"",
-    benificiaryName: "",
-    branchName:"",
-    cheque:"",
-    email: "",
-    gst:null,
-    gstNo: null,
-    ifscCode: "",
-      }]});
+  const [partLabel,setPartLabel] = useState({});
 
+      console.log(oldIds,partLabel)
 
-  console.log("Recovery >>>>" ,recovery)
+  // console.log("Recovery >>>>" ,recovery)
 
   async function get_recovery_data(id) {
-    console.log("function called")
+    // console.log("function called")
     try {
       const recovery = await get_data_recovery(id);
       if (recovery.status === 200) {
-        console.log(recovery.data);
+        // console.log(recovery.data);
         setRecovery(recovery.data.data[0]);
       }
     } catch (error) {
@@ -159,10 +151,10 @@ function FinanceApproval() {
   }
 
   async function get_deposit(code) {
-    console.log("function called")
+    // console.log("function called")
     try {
       const deposit_amount = await get_deposit_amount(code);
-      console.log(deposit_amount);
+      // console.log(deposit_amount);
       if (deposit_amount.data.success) {
         setDeposit(deposit_amount.data.deposit[0].deposit);
       } else {
@@ -173,10 +165,20 @@ function FinanceApproval() {
     }
   }
 
+  async function get_renewal_recovery(code){
+  try {
+    const renewalRecovery = await get_renewal_recovery_data (code)
+    console.log(renewalRecovery.data)
+    renewalRecovery.status === 200 &&  setRenewalRecovery(renewalRecovery.data.data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
   async function get_old_data (code){
     try {
       const oldvalue = await get_old_agreement(code)
-      console.log(oldvalue.data)
+      // console.log(oldvalue.data)
      oldvalue.status === 200 &&  setPartLabel(oldvalue.data.agreement);
      oldvalue.status === 200 && setOldIds(oldvalue.data.ids)
     } catch (error) {
@@ -187,11 +189,12 @@ function FinanceApproval() {
   const getData = async (id) => {
     try {
       const agreement = await get_agreement_id_finance(id);
-      console.log(agreement.data);
+      // console.log(agreement.data);
       if (agreement.data.success) {
         setAgreement(agreement.data.agreement[0]);
         if(agreement.data.agreement[0].type === "Renewed"){
-          get_old_data(agreement.data.agreement[0].code)
+          get_old_data(agreement.data.agreement[0].code);
+          get_renewal_recovery(id)
         }
         // console.log(agreement.data.ids);
         // setIds(agreement.data.ids);
@@ -218,7 +221,7 @@ function FinanceApproval() {
     }
   };
 
-  console.log(agreement);
+  // console.log(agreement);
 
   useEffect(() => {
     getData(id);
@@ -264,7 +267,7 @@ function FinanceApproval() {
   }
 
   const handleConfirm = async (e) => {
-    console.log(utr);
+    // console.log(utr);
     const response = await ApprovedByFinance(
       {
         status: "Approved",
@@ -297,7 +300,7 @@ function FinanceApproval() {
 
 
   async function handleSubmit() {
-    console.log(remark);
+    // console.log(remark);
     // console.log(agreement.deposit-deposit === 0 ? "Deposited" : "Approved")
     if (remark.length > 0) {
       const response = await ApprovedByFinance(
@@ -306,7 +309,7 @@ function FinanceApproval() {
             agreement.deposit - deposit === 0
               ? "Deposited"
               : "Approved",
-          finance_id: "",
+          finance_id: auth.id,
           modify_date: new Date(),
         },
         agreement.agreement_id
@@ -348,9 +351,12 @@ function FinanceApproval() {
     return incrementType;
   }
 
+  // console.log(agreement.type === "Renewed" ? oldIds.length > 0 :"")
+
+
   return (
     <>
-     {(agreement.type === "Renewed" ? oldIds.length > 0 : true)&&
+     {( Object.keys(agreement).length > 0 && agreement.type === "Renewed" ? oldIds.length > 0 : true)&&
         <Stack sx={{ flexDirection: "row", mb: 4 }}>
           {/* <a id="button"></a> */}
           <DialogBoxSBM
@@ -631,28 +637,27 @@ function FinanceApproval() {
                           name={"gst"}
                           bold={true}
                           cursor={true}
-                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].gstNo[id]}
+                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].gstNo}
                         />
-
                         <DataFieldStyle
                           field={"mobile number"}
                           value={agreement.mobileNo}
-                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].mobileNo[id]}
+                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].mobileNo}
                         />
                         <DataFieldStyle
                           field={"alternate mobile"}
                           value={agreement.alternateMobile}
-                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].alternateMobile[id]}
+                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].alternateMobile}
                         />
                         <DataFieldStyle
                           field={"email"}
                           value={agreement.email}
-                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].email[id]}
+                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].email}
                         />
                         <DataFieldStyle
                           field={"Percentage Share"}
                           value={`${agreement.percentage}%`}
-                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].percentage[id]}
+                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].percentage}
                         />
                         {/* {console.log((agreement.deposit - deposit )/ 100 * parseInt(agreement.percentage))} */}
                         <DataFieldStyle
@@ -685,12 +690,12 @@ function FinanceApproval() {
                         <DataFieldStyle
                           field={"bank name"}
                           value={agreement.bankName}
-                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].bankName[id]}
+                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].bankName}
                         />
                         <DataFieldStyle
                           field={"beneficiary name"}
                           value={agreement.benificiaryName}
-                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].benificiaryName[id]}
+                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].benificiaryName}
                         />
                         <DataFieldStyle
                           field={"bank A/c number"}
@@ -699,13 +704,13 @@ function FinanceApproval() {
                           name={"cheque"}
                           bold={true}
                           cursor={true}
-                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].accountNo[id]}
+                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].accountNo}
                         />
                         <DataFieldStyle
                           field={"Bank IFSC"}
                           value={agreement.ifscCode}
                           // partLabel={agreement.branchName}
-                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].branchName[id]}
+                          partLabel={agreement.type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].branchName}
                         />
                       </Grid>
                 </Grid>
@@ -854,6 +859,32 @@ function FinanceApproval() {
                 </>
               )}
 
+{
+ agreement.type === "Renewed" && <>
+   <Grid item  container sx = {{alignItems : "baseline",mt: 5  }} xs={10} >
+                  <DataFieldStyle
+                    field={"Deposit Amount"}
+                    value={renewalRecovery.balance_amount}
+                  />
+                    <DataFieldStyle
+                    field={"Deposited"}
+                    value={renewalRecovery.deposited}
+                  />
+                   <DataFieldStyle
+                    field={"New Deposit"}
+                    value={renewalRecovery.new_deposit}
+                  />
+                  <DataFieldStyle
+                    field={"Receivable/Payable"}
+                    value={renewalRecovery.receivable}
+                  />
+                  <DataFieldStyle
+                    field={"Un-Paid Amount"}
+                    value={renewalRecovery.unpaid_amount}
+                  />
+                </Grid>
+  </>
+}
               {/* Buttons start here*/}
 
               {/* termination */}
