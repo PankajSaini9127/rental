@@ -1295,7 +1295,7 @@ function EditAgreement({ history }) {
                     onChange={handleCommonChange}
                   />
 
-                  <SelectComponent
+                  {/* <SelectComponent
                     label={"Agreement Tenure"}
                     required={true}
                     error={formError.tenure}
@@ -1310,8 +1310,19 @@ function EditAgreement({ history }) {
                     ]}
                     value={preData.tenure || ""}
                     onChange={handleCommonChange}
-                  />
-                  {preData.tenure === "" ? null : preData.tenure ===
+                  /> */}
+                   <TextFieldWrapper
+                            label="Tenure"
+                            placeHolder="Enter Name of tenure"
+                            required={true}
+                            disabled={true}
+                            onBlur={(e) => handleOnBlur(e, i)}
+                            // error = {errorObj.leeseName}
+                            name="name"
+                            value={preData.tenure || ""}
+                            // onChange={(e) => handleChange(e, i)}
+                          />
+                  {preData.tenure === ""? null : preData.tenure <=12 ? null : preData.tenure ===
                     "11 Month" ? null : (
                     <SelectComponent
                       label={"Yearly Increment"}
@@ -1976,7 +1987,7 @@ function EditAgreement({ history }) {
                   <TextFieldWrapper
                     label="Rent Amount"
                     disabled={true}
-                    value={row.rent_amount}
+                    value={parseInt(row.rent_amount)}
                     onChange={(e) => handleChange(e)}
                   />
                   <TextFieldWrapper

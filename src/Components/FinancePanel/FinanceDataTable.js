@@ -31,6 +31,7 @@ function FinanceTable({ rows, setRows }) {
 
   const renderDetailsButton = (e) => {
     const id = e.id;
+    console.log(e)
 
     const code = e.row.code;
     const modify_date = e.row.modify_date
@@ -212,6 +213,14 @@ function FinanceTable({ rows, setRows }) {
     {
       field: "deposit",
       headerName: "Deposit Amount",
+      minWidth: 200,
+      flex: 1,
+      headerClassName: "dataGridHeader",
+      headerAlign: "center",
+    },
+    {
+      field: "payable_deposit",
+      headerName: "Deposit Payable",
       minWidth: 200,
       flex: 1,
       headerClassName: "dataGridHeader",

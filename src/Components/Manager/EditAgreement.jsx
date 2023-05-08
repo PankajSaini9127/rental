@@ -144,9 +144,6 @@ function EditAgreement({ history }) {
         } = response.data.agreement;
 
 
-        // console.log( response.data)/
-      
-
         // const oldAgreements = await get_old_agreement(code)
 
         setBuh_ID(response.data.buh_id);
