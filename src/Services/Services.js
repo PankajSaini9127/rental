@@ -1,5 +1,6 @@
 import axios from "axios";
 import config from "../config.json"
+import moment from "moment";
 
 const API_LIVE = config.API_LIVE
 
@@ -619,4 +620,28 @@ export function excelDownload(reports, id, role, startDate, endDate) {
       );
       tempLink.click();
     });
+}
+
+export async function graphReports() {
+  // let data = [];
+  const url = "mis/graph-reports";
+  const date = moment().format("yyyy");
+  const startDate = `${date}-04-01`;
+  const endDate = `${moment(date).add(12, "M").format("YYYY")}-03-31`;
+
+  const no_of_agreements = await axios.get(
+    `${API_LIVE}/api/mis/no-of-agreements?startDate=${startDate}&endDate=${endDate}&graph=true`
+  );
+  const monthly_rent = await axios.get(
+    `${API_LIVE}/api/mis/monthly-rent?startDate=${startDate}&endDate=${endDate}&graph=true`
+  );
+  const monthly_deposit = await axios.get(
+    `${API_LIVE}/api/mis/monthly-deposit?startDate=${startDate}&endDate=${endDate}&graph=true`
+  );
+
+  return {
+    no_of_agreements: no_of_agreements.data,
+    total_rent: monthly_rent.data,
+    total_deposit: monthly_deposit.data,
+  };
 }
