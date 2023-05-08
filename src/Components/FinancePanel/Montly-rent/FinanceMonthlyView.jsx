@@ -273,7 +273,7 @@ export default function FinanceMonthlyRentView() {
                     value={preData.dateMonth}
                   />
                 </Grid>
-                {preData.status === "Paid" && (
+                {(preData.status === "Paid" && preData.utr_number !== null )&& (
                   <Grid container spacing={2} sx={{ mb: 2 }}>
                     <DataFieldStyle
                       field={"Payment Date"}
@@ -517,6 +517,20 @@ export default function FinanceMonthlyRentView() {
                         </Typography>
                       </Grid>
                     )}
+
+{/* {(agreement[ids[0]].status === "Paid" &&
+                    agreement[ids[0]].utr_number !== null ) && (
+                      <Grid item xs={12} container sx={{ mt: 4 }}>
+                      <DataFieldStyle
+                        field={"UTR Number"}
+                        value={agreement[ids[0]].utr_number}
+                      />
+                      <DataFieldStyle
+                        field={"payment Date"}
+                        value={agreement[ids[0]].paymentDate}
+                      />
+                    </Grid>
+                    )} */}
 
                   {agreement[ids[0]].remark.length > 0 && (
                     <Grid item xs={12} container sx={{ mt: 4 }}>

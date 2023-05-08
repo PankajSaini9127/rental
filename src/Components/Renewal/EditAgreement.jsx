@@ -382,6 +382,7 @@ const [renewal,setRenewal] = useState({
         landlord: old.landlord.map((row, index) => {
           if (parseInt(i) === index) {
             row[e.target.name] = response.data.link;
+            row[e.target.name+index] = response.data.link;
             return row;
           } else return row;
         }),
@@ -405,6 +406,59 @@ const [renewal,setRenewal] = useState({
       );
     }
   }
+
+function handleCheck(e,i){
+  switch (e.target.name) {
+    case "gstNo":
+      if(partLabel.landlord[i].gstNo !== e.target.value){
+        setPreData({
+          ...preData,
+          landlord : preData.landlord.map((row,index)=>{
+              if(i === index){
+                row.gst = null
+              }
+              return row
+          })
+        })
+      }else{
+        setPreData({
+          ...preData,
+          landlord : preData.landlord.map((row,index)=>{
+              if(i === index){
+                row.gst = partLabel.landlord[i].gst
+              }
+              return row
+          })
+        })
+      }
+      break;
+  case "ifscCode":
+    if(partLabel.landlord[i].ifscCode !== e.target.value){
+      setPreData({
+        ...preData,
+        landlord : preData.landlord.map((row,index)=>{
+            if(i === index){
+              row.cheque = null
+            }
+            return row
+        })
+      })
+    }else{
+      setPreData({
+        ...preData,
+        landlord : preData.landlord.map((row,index)=>{
+            if(i === index){
+              row.cheque = partLabel.landlord[i].cheque
+            }
+            return row
+        })
+      })
+    }
+    default:
+      break;
+  }
+}
+
   // upload document
   async function handleChangeFile(e) {
     const FD = new FormData();
@@ -823,30 +877,10 @@ console.log(partLabel)
       "maintaince_bill",
       "tax_receipt",
       "property_pic",
-
+      
     ];
-     preData.landlord.length > 1 && field.push("noc")
 
-
-    // if (preData.landlord.length > 0) {
-    //   preData.landlord.map((row, i) => {
-    //     if (row.gstNo) {
-    //       field.push(
-    //         `${preData.landlord[i].leeseName + "@gst_name"}`.replace(" ", "")
-    //       );
-    //     }
-    //     field.push(
-    //       `${preData.landlord[i].leeseName + "@aadhar_card_name"}`.replace(" ", "")
-    //     );
-    //     field.push(
-    //       `${preData.landlord[i].leeseName + "@cheque_name"}`.replace(" ", "")
-    //     );
-    //     field.push(
-    //       `${preData.landlord[i].leeseName + "@pan_card_name"}`.replace(" ", "")
-    //     );
-    //   });
-    // }
-
+console.log("valuidate")
     let finalCheck = field.map((row) => {
       if (!preData[row]) {
         console.log(row);
@@ -859,16 +893,69 @@ console.log(partLabel)
       }
     });
 
+    preData.landlord.map((row,i)=>{
+      if(preData.landlord[i].gstNo !== partLabel.landlord[i].gstNo && !preData.landlord[i].gst){
+        setFormError({
+          ...formError,
+          ['gst'+i]:"Document Required !"
+        })
+        finalCheck.push(true);
+      }else{
+        setFormError({
+          ...formError,
+          ['gst'+1]:""
+        })
+        finalCheck.push(false);
+      }
+      if(preData.landlord[i].ifscCode !== partLabel.landlord[i].ifscCode){
+        setFormError({
+          ...formError,
+          ['cheque'+1]:"Document Required !"
+        })
+        finalCheck.push(true);
+      }else{
+        setFormError({
+          ...formError,
+          ['cheque'+1]:""
+        })
+        finalCheck.push(false);
+      }
+    })
+
+     preData.landlord.length > 1 && field.push("noc")
+
+
+    // if (preData.landlord.length > 0) {
+    //   preData.landlord.map((row, i) => {
+    //     if (row.gstNo) {
+    //       field.push(
+    //         `${preData.landlord[i].leeseName + "@gst_name"}`.replace(" ", "")
+    //       );
+    //     }
+    //     // field.push(
+    //     //   `${preData.landlord[i].leeseName + "@aadhar_card_name"}`.replace(" ", "")
+    //     // );
+    //     field.push(
+    //       `${preData.landlord[i].leeseName + "@cheque_name"}`.replace(" ", "")
+    //     );
+    //     // field.push(
+    //     //   `${preData.landlord[i].leeseName + "@pan_card_name"}`.replace(" ", "")
+    //     // );
+    //   });
+    // }
+
+ 
+
     console.log(finalCheck.includes(true));
     if (!finalCheck.includes(true)) {
       return true;
     } else return false;
   }
+
   function validateFields(data) {
     console.log("Validate Called");
 
     let field = [
-      ,
       "lockInYear",
       "noticePeriod",
       "deposit",
@@ -880,6 +967,7 @@ console.log(partLabel)
       "pincode",
       "location",
       "area",
+      // "cheque"
     ];
 
     let dataError = [];
@@ -894,9 +982,9 @@ console.log(partLabel)
         ifscCode: data.landlord[i].ifscCode ? false : "Field is required.",
         bankName: data.landlord[i].bankName ? false : "Field is required.",
         accountNo: data.landlord[i].accountNo ? false : "Field is required.",
-        benificiaryName: data.landlord[i].benificiaryName
-          ? false
-          : "Field is required.",
+        benificiaryName: data.landlord[i].benificiaryName? false : "Field is required.",
+        gst: data.landloard[i].gst?false : "Field is required.",
+        // cheque:data.landloard[i].cheque?false : "Field is required.",
       }));
     }
 
@@ -925,6 +1013,7 @@ console.log(partLabel)
       return true;
     } else return false;
   }
+
   const [open, setOpen] = useState(false);
 
   const handleSubmit = (e) => {
@@ -1211,10 +1300,7 @@ console.log(partLabel)
     }
   }
 
-  function Docview ( href, name ){
-    console.log("docview")
-       return <ImageView open={true} handleClose={()=>{}} href={href} name={name} />
-  }
+
 
   return (
     <>
@@ -1432,29 +1518,6 @@ console.log(partLabel)
                     }
                     onChange={handleCommonChange}
                   />
-
-                  {/* <SelectComponent
-                    label={"Agreement Tenure"}
-                    required={true}
-                    error={formError.tenure}
-                    name="tenure"
-                    options={[
-                      "11 Month",
-                      "2 Year",
-                      "3 Year",
-                      "4 Year",
-                      "5 Year",
-                    ]}
-                    partLabel={
-                      partLabel.tenure &&
-                      partLabel.tenure
-                        ? "Old Tenure:"+ partLabel.tenure
-                        : ""
-                    }
-                    value={preData.tenure || ""}  
-                    helperText = {partLabel.tenure}             
-                    onChange={handleCommonChange}
-                  /> */}
 
                     <TextFieldWrapper
                     label="Agreement Tenure"
@@ -1896,6 +1959,7 @@ console.log(partLabel)
                               placeHolder="Upload GST Certificate"
                               handleChange={(e) => handleChangeCommonFile(e, i)}
                               name={"gst"}
+                              error={formError[partLabel.landlord[i].leeseName + "@gst_name"]}
                               fileName={preData[`gst${i}`]}
                               href={partLabel.landlord[i].gst || preData.landlord[i].gst }
                               />
@@ -1912,9 +1976,13 @@ console.log(partLabel)
                               name={"cheque"}
                               fileName={preData[`cheque${i}`]}
                               placeHolder="Upload Cancel Cheque"
-                              handleChange={(e) => handleChangeCommonFile(e, i)}
+                              error={formError[partLabel.landlord[i].leeseName + "@cheque_name"]}
+                              handleChange={(e) => {handleChangeCommonFile(e, i);
+                               handleCheck(e,i)
+                              }}
                               href={partLabel.landlord[i].cheque || preData.landlord[i].cheque}
                             />
+                            
                           </Grid>
 }
                         </Grid>
@@ -1958,7 +2026,7 @@ console.log(partLabel)
                     <DocumentUpload
                       label="Upload Electricity Bill"
                       uploaded={preData.electricity_bill && true}
-                      error={formError.electricatiy_bill}
+                      error={formError.electricity_bill}
                       placeHolder={"Upload Electricity Bill"}
                       handleChange={handleChangeFile}
                       fileName={preData.electricity_bill_name}

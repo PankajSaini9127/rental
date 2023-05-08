@@ -61,46 +61,48 @@ function ApprovalRequest() {
 
   const [oldIds, setOldIds] = useState([]);
 
-  const [partLabel,setPartLabel] = useState({
-    landlord:[{
-    accountNo: "",
-    alternateMobile: "",
-    area:"",
-    bankName:"",
-    benificiaryName: "",
-    branchName:"",
-    cheque:"",
-    email: "",
-    gst:null,
-    gstNo: null,
-    ifscCode: "",
-      }]});
+  const [partLabel, setPartLabel] = useState({
+    landlord: [
+      {
+        accountNo: "",
+        alternateMobile: "",
+        area: "",
+        bankName: "",
+        benificiaryName: "",
+        branchName: "",
+        cheque: "",
+        email: "",
+        gst: null,
+        gstNo: null,
+        ifscCode: "",
+      },
+    ],
+  });
 
-       //renewal recovery data
-  const [renewalRecovery, setRenewalRecovery] = useState({})
-
-      
+  //renewal recovery data
+  const [renewalRecovery, setRenewalRecovery] = useState({});
 
   const dispatch = useDispatch();
 
-  async function get_old_data (code){
+  async function get_old_data(code) {
     try {
-      const oldvalue = await get_old_agreement(code)
-      console.log(oldvalue.data)
-     oldvalue.status === 200 &&  setPartLabel(oldvalue.data.agreement);
-     oldvalue.status === 200 && setOldIds(oldvalue.data.ids)
+      const oldvalue = await get_old_agreement(code);
+      console.log(oldvalue.data);
+      oldvalue.status === 200 && setPartLabel(oldvalue.data.agreement);
+      oldvalue.status === 200 && setOldIds(oldvalue.data.ids);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
-  async function get_renewal_recovery(code){
+  async function get_renewal_recovery(code) {
     try {
-      const renewalRecovery = await get_renewal_recovery_data (code)
-      console.log(renewalRecovery.data)
-      renewalRecovery.status === 200 &&  setRenewalRecovery(renewalRecovery.data.data)
+      const renewalRecovery = await get_renewal_recovery_data(code);
+      console.log(renewalRecovery.data);
+      renewalRecovery.status === 200 &&
+        setRenewalRecovery(renewalRecovery.data.data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
@@ -111,9 +113,11 @@ function ApprovalRequest() {
       if (agreement.data.success) {
         console.log(agreement.data.agreement[agreement.data.ids[0]].id);
         get_recovery_data(agreement.data.agreement[agreement.data.ids[0]].id);
-        if(agreement.data.agreement[agreement.data.ids[0]].type === "Renewed"){
+        if (
+          agreement.data.agreement[agreement.data.ids[0]].type === "Renewed"
+        ) {
           get_old_data(agreement.data.agreement[agreement.data.ids[0]].code);
-          get_renewal_recovery(id)
+          get_renewal_recovery(id);
         }
         setAgreement(agreement.data.agreement);
         console.log(agreement.data.ids);
@@ -252,7 +256,10 @@ function ApprovalRequest() {
     } else {
       const response = await send_back_to_manager(
         {
-          status: agreement[ids[0]].status === "Terminated By Sr Manager"? "Sent Back From Operations Termination" :"Sent Back From Operations",
+          status:
+            agreement[ids[0]].status === "Terminated By Sr Manager"
+              ? "Sent Back From Operations Termination"
+              : "Sent Back From Operations",
           remark: remark,
         },
         id
@@ -292,680 +299,774 @@ function ApprovalRequest() {
 
   return (
     <>
-      {(ids && ids.length > 0 && (agreement[ids[0]].type === "Renewed" ? oldIds.length > 0 : true) )&& (
-        <Stack sx={{ flexDirection: "row", mb: 4 }}>
+      {ids &&
+        ids.length > 0 &&
+        (agreement[ids[0]].type === "Renewed" ? oldIds.length > 0 : true) && (
+          <Stack sx={{ flexDirection: "row", mb: 4 }}>
+            <OperationsHamburger />
 
-            <OperationsHamburger/>
-
-          <Box sx={{ flexGrow: 1 }}>
-            <Grid
-              item
-              xs={12}
-              sx={{ justifyContent: "space-between", display: "flex" }}
-            >
-              <MyHeader>Rental Management System</MyHeader>
-              <Typography mt="15px" mr="15px" fontWeight="600">
-                Welcome {auth.name}
-              </Typography>
-            </Grid>
-            <Box className="backButton">
-              <IconButton
-                variant="contained"
-                color="primary"
-                onClick={() => navigate(-1)}
-                size={"large"}
-              >
-                <ArrowCircleLeftIcon
-                  sx={{ fontSize: "3rem" }}
-                  color="#FFFFF !important"
-                />
-              </IconButton>
-            </Box>
-
-            <Grid container sx={{ justifyContent: "center", mt: 3 }}>
+            <Box sx={{ flexGrow: 1 }}>
               <Grid
                 item
                 xs={12}
-                sx={{ justifyContent: "flex-end", display: "flex" }}
-              ></Grid>
-              {/* Basic Details */}
-              <Grid item md={10}>
-                {agreement[ids[0]].status === "Deposited" && (
-                  <>
-                    <Grid container>
-                      <DataFieldStyle
-                        field={"Final Agreement"}
-                        href={agreement[ids[0]].final_agreement}
-                        name={"Final Agreement"}
-                        bold={true}
-                        cursor={true}
-                      />
-                      <DataFieldStyle
-                        field={"Final Agreement Date"}
-                        value={agreement[ids[0]].final_agreement_date}
-                      />
-                      <DataFieldStyle
-                        field={"Monthly Rent Start Date"}
-                        value={agreement[ids[0]].rent_start_date}
-                      />
-                    </Grid>
-                  </>
-                )}
+                sx={{ justifyContent: "space-between", display: "flex" }}
+              >
+                <MyHeader>Rental Management System</MyHeader>
+                <Typography mt="15px" mr="15px" fontWeight="600">
+                  Welcome {auth.name}
+                </Typography>
+              </Grid>
+              <Box className="backButton">
+                <IconButton
+                  variant="contained"
+                  color="primary"
+                  onClick={() => navigate(-1)}
+                  size={"large"}
+                >
+                  <ArrowCircleLeftIcon
+                    sx={{ fontSize: "3rem" }}
+                    color="#FFFFF !important"
+                  />
+                </IconButton>
+              </Box>
 
-                {agreement[ids[0]].site_visit_date !== null && (
-                  <>
-                    <Grid container sx={{ alignItems: "baseline" }}>
-                      <DataFieldStyle
-                        field={"Site Visit date"}
-                        value={agreement[ids[0]].site_visit_date}
-                      />
-                      <DataFieldStyle
-                        field={"Site Visit Remark"}
-                        value={agreement[ids[0]].site_visit_remark}
-                      />
-                    </Grid>
-                  </>
-                )}
-                <Grid container sx={{ mt: 1 }}>
-                  <DataFieldStyle
-                    field={"code"}
-                    value={agreement[ids[0]].code}
-                  />
-
-                  <DataFieldStyle
-                    field={"state"}
-                    value={agreement[ids[0]].state}
-                  />
-
-                  <DataFieldStyle
-                    field={"city"}
-                    value={agreement[ids[0]].city}
-                  />
-                  <DataFieldStyle
-                    field={"location"}
-                    value={agreement[ids[0]].location}
-                  />
-
-                  <DataFieldStyle
-                    field={"pincode"}
-                    value={agreement[ids[0]].pincode}
-                  />
-                  <DataFieldStyle
-                    field={"address"}
-                    value={agreement[ids[0]].address}
-                  />
-                  {console.log(partLabel)}
-
-                  <DataFieldStyle
-                    field={"area"}
-                    value={agreement[ids[0]].area + " sq. ft"}
-                    partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].area}
-                  />
-                  <DataFieldStyle
-                    field={"lock in Month"}
-                    value={agreement[ids[0]].lockInYear}
-                    partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].lockInYear}
-                  />
-                  <DataFieldStyle
-                    field={"notice period in month"}
-                    value={agreement[ids[0]].noticePeriod}
-                    partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].noticePeriod}
-                  />
-                  <DataFieldStyle
-                    field={"deposit"}
-                    value={agreement[ids[0]].deposit}
-                    partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].deposit}
-                  />
-                  <DataFieldStyle
-                    field={"monthly rental"}
-                    value={agreement[ids[0]].monthlyRent}
-                    partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].monthlyRent}
-                  />
-                  <DataFieldStyle
-                    field={"tenure"}
-                    value={agreement[ids[0]].tenure}
-                    partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].tenure}
-                  />
-                  {agreement[ids[0]].tenure > 12 && (
+              <Grid container sx={{ justifyContent: "center", mt: 3 }}>
+                <Grid
+                  item
+                  xs={12}
+                  sx={{ justifyContent: "flex-end", display: "flex" }}
+                ></Grid>
+                {/* Basic Details */}
+                <Grid item md={10}>
+                  {agreement[ids[0]].status === "Deposited" && (
                     <>
-                      <Grid container spacing={1} sx={{ mt: 6 }}>
-                        <Grid item xs={12} container>
-                          <DataFieldStyle
-                            field={"yearly Increment"}
-                            value={agreement[ids[0]].yearlyIncrement}
-                            partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].yearlyIncrement}
-                          />
-                        </Grid>
-                        <YearField
-                          year={"Year 1"}
-                          incrementType={agreement[ids[0]].yearlyIncrement}
-                          Increment={0}
-                          amount={agreement[ids[0]].year1}
-                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].year1}
+                      <Grid container>
+                        <DataFieldStyle
+                          field={"Final Agreement"}
+                          href={agreement[ids[0]].final_agreement}
+                          name={"Final Agreement"}
+                          bold={true}
+                          cursor={true}
                         />
-                        <YearField
-                          year={"Year 2"}
-                          incrementType={agreement[ids[0]].yearlyIncrement}
-                          amount={agreement[ids[0]].year2}
-                          Increment={getIncrement(
-                            agreement[ids[0]].year1,
-                            agreement[ids[0]].year2,
-                            agreement[ids[0]].yearlyIncrement
-                          )}
-                          partLabel={
-                            agreement[ids[0]].type === "Renewed" &&
-                            getIncrement(
-                              partLabel[oldIds[0]].year1,
-                              partLabel[oldIds[0]].year2,
-                              partLabel[oldIds[0]].yearlyIncrement
-                            )
-                          }
+                        <DataFieldStyle
+                          field={"Final Agreement Date"}
+                          value={agreement[ids[0]].final_agreement_date}
                         />
-                        {(agreement[ids[0]].tenure > 24) && (
-                          <YearField
-                            year={"Year 3"}
-                            incrementType={agreement[ids[0]].yearlyIncrement}
-                            amount={agreement[ids[0]].year3}
-                            Increment={getIncrement(
-                              agreement[ids[0]].year2,
-                              agreement[ids[0]].year3,
-                              agreement[ids[0]].yearlyIncrement
-                            )}
-                            partLabel={
-                              agreement[ids[0]].type === "Renewed" &&
-                              getIncrement(
-                                partLabel[oldIds[0]].year2,
-                                partLabel[oldIds[0]].year3,
-                                partLabel[oldIds[0]].yearlyIncrement
-                              )
-                            }
-                          />
-                        )}
-                        {(agreement[ids[0]].tenure > 36) && (
-                          <YearField
-                            year={"Year 4"}
-                            incrementType={agreement[ids[0]].yearlyIncrement}
-                            amount={agreement[ids[0]].year4}
-                            Increment={getIncrement(
-                              agreement[ids[0]].year3,
-                              agreement[ids[0]].year4,
-                              agreement[ids[0]].yearlyIncrement
-                            )}
-                            partLabel={
-                              agreement[ids[0]].type === "Renewed" &&
-                              getIncrement(
-                                partLabel[oldIds[0]].year3,
-                                partLabel[oldIds[0]].year4,
-                                partLabel[oldIds[0]].yearlyIncrement
-                              )
-                            }
-                          />
-                        )}
-                        {agreement[ids[0]].tenure > 48 && (
-                          <YearField
-                            year={"Year 5"}
-                            incrementType={agreement[ids[0]].yearlyIncrement}
-                            amount={agreement[ids[0]].year5}
-                            Increment={getIncrement(
-                              agreement[ids[0]].year4,
-                              agreement[ids[0]].year5,
-                              agreement[ids[0]].yearlyIncrement
-                            )}
-                            partLabel={
-                              agreement[ids[0]].type === "Renewed" &&
-                              getIncrement(
-                                partLabel[oldIds[0]].year4,
-                                partLabel[oldIds[0]].year5,
-                                partLabel[oldIds[0]].yearlyIncrement
-                              )
-                            }
-                          />
-                        )}
+                        <DataFieldStyle
+                          field={"Monthly Rent Start Date"}
+                          value={agreement[ids[0]].rent_start_date}
+                        />
                       </Grid>
                     </>
                   )}
 
-                  {Array.from(
-                    { length: agreement[ids[0]].leeseName.length },
-                    (row, id) => (
+                  {agreement[ids[0]].site_visit_date !== null && (
+                    <>
+                      <Grid container sx={{ alignItems: "baseline" }}>
+                        <DataFieldStyle
+                          field={"Site Visit date"}
+                          value={agreement[ids[0]].site_visit_date}
+                        />
+                        <DataFieldStyle
+                          field={"Site Visit Remark"}
+                          value={agreement[ids[0]].site_visit_remark}
+                        />
+                      </Grid>
+                    </>
+                  )}
+                  <Grid container sx={{ mt: 1 }}>
+                    <DataFieldStyle
+                      field={"code"}
+                      value={agreement[ids[0]].code}
+                    />
+
+                    <DataFieldStyle
+                      field={"state"}
+                      value={agreement[ids[0]].state}
+                    />
+
+                    <DataFieldStyle
+                      field={"city"}
+                      value={agreement[ids[0]].city}
+                    />
+                    <DataFieldStyle
+                      field={"location"}
+                      value={agreement[ids[0]].location}
+                    />
+
+                    <DataFieldStyle
+                      field={"pincode"}
+                      value={agreement[ids[0]].pincode}
+                    />
+                    <DataFieldStyle
+                      field={"address"}
+                      value={agreement[ids[0]].address}
+                    />
+                    {console.log(partLabel)}
+
+                    <DataFieldStyle
+                      field={"area"}
+                      value={agreement[ids[0]].area + " sq. ft"}
+                      partLabel={
+                        agreement[ids[0]].type === "Renewed" &&
+                        "Old Agreement Value: " + partLabel[oldIds[0]].area
+                      }
+                    />
+                    <DataFieldStyle
+                      field={"lock in Month"}
+                      value={agreement[ids[0]].lockInYear}
+                      partLabel={
+                        agreement[ids[0]].type === "Renewed" &&
+                        "Old Agreement Value: " +
+                          partLabel[oldIds[0]].lockInYear
+                      }
+                    />
+                    <DataFieldStyle
+                      field={"notice period in month"}
+                      value={agreement[ids[0]].noticePeriod}
+                      partLabel={
+                        agreement[ids[0]].type === "Renewed" &&
+                        "Old Agreement Value: " +
+                          partLabel[oldIds[0]].noticePeriod
+                      }
+                    />
+                    <DataFieldStyle
+                      field={"deposit"}
+                      value={agreement[ids[0]].deposit}
+                      partLabel={
+                        agreement[ids[0]].type === "Renewed" &&
+                        "Old Agreement Value: " + partLabel[oldIds[0]].deposit
+                      }
+                    />
+                    <DataFieldStyle
+                      field={"monthly rental"}
+                      value={agreement[ids[0]].monthlyRent}
+                      partLabel={
+                        agreement[ids[0]].type === "Renewed" &&
+                        "Old Agreement Value: " +
+                          partLabel[oldIds[0]].monthlyRent
+                      }
+                    />
+                    <DataFieldStyle
+                      field={"tenure"}
+                      value={agreement[ids[0]].tenure}
+                      partLabel={
+                        agreement[ids[0]].type === "Renewed" &&
+                        "Old Agreement Value: " + partLabel[oldIds[0]].tenure
+                      }
+                    />
+                    {agreement[ids[0]].tenure > 12 && (
                       <>
-                      <Grid container sx={{ mt: 3 }}>
-                        {/* <Grid item xs={12}>
+                        <Grid container spacing={1} sx={{ mt: 6 }}>
+                          <Grid item xs={12} container>
+                            <DataFieldStyle
+                              field={"yearly Increment"}
+                              value={agreement[ids[0]].yearlyIncrement}
+                              partLabel={
+                                agreement[ids[0]].type === "Renewed" &&
+                                "Old Agreement Value: " +
+                                  partLabel[oldIds[0]].yearlyIncrement
+                              }
+                            />
+                          </Grid>
+                          <YearField
+                            year={"Year 1"}
+                            incrementType={agreement[ids[0]].yearlyIncrement}
+                            Increment={0}
+                            amount={agreement[ids[0]].year1}
+                            partLabel={
+                              agreement[ids[0]].type === "Renewed" &&
+                              "Old Agreement Value: " +
+                                partLabel[oldIds[0]].year1
+                            }
+                          />
+                          <YearField
+                            year={"Year 2"}
+                            incrementType={agreement[ids[0]].yearlyIncrement}
+                            amount={agreement[ids[0]].year2}
+                            Increment={getIncrement(
+                              agreement[ids[0]].year1,
+                              agreement[ids[0]].year2,
+                              agreement[ids[0]].yearlyIncrement
+                            )}
+                            partLabel={
+                              agreement[ids[0]].type === "Renewed" &&
+                              getIncrement(
+                                partLabel[oldIds[0]].year1,
+                                partLabel[oldIds[0]].year2,
+                                partLabel[oldIds[0]].yearlyIncrement
+                              )
+                            }
+                          />
+                          {agreement[ids[0]].tenure > 24 && (
+                            <YearField
+                              year={"Year 3"}
+                              incrementType={agreement[ids[0]].yearlyIncrement}
+                              amount={agreement[ids[0]].year3}
+                              Increment={getIncrement(
+                                agreement[ids[0]].year2,
+                                agreement[ids[0]].year3,
+                                agreement[ids[0]].yearlyIncrement
+                              )}
+                              partLabel={
+                                agreement[ids[0]].type === "Renewed" &&
+                                getIncrement(
+                                  partLabel[oldIds[0]].year2,
+                                  partLabel[oldIds[0]].year3,
+                                  partLabel[oldIds[0]].yearlyIncrement
+                                )
+                              }
+                            />
+                          )}
+                          {agreement[ids[0]].tenure > 36 && (
+                            <YearField
+                              year={"Year 4"}
+                              incrementType={agreement[ids[0]].yearlyIncrement}
+                              amount={agreement[ids[0]].year4}
+                              Increment={getIncrement(
+                                agreement[ids[0]].year3,
+                                agreement[ids[0]].year4,
+                                agreement[ids[0]].yearlyIncrement
+                              )}
+                              partLabel={
+                                agreement[ids[0]].type === "Renewed" &&
+                                getIncrement(
+                                  partLabel[oldIds[0]].year3,
+                                  partLabel[oldIds[0]].year4,
+                                  partLabel[oldIds[0]].yearlyIncrement
+                                )
+                              }
+                            />
+                          )}
+                          {agreement[ids[0]].tenure > 48 && (
+                            <YearField
+                              year={"Year 5"}
+                              incrementType={agreement[ids[0]].yearlyIncrement}
+                              amount={agreement[ids[0]].year5}
+                              Increment={getIncrement(
+                                agreement[ids[0]].year4,
+                                agreement[ids[0]].year5,
+                                agreement[ids[0]].yearlyIncrement
+                              )}
+                              partLabel={
+                                agreement[ids[0]].type === "Renewed" &&
+                                getIncrement(
+                                  partLabel[oldIds[0]].year4,
+                                  partLabel[oldIds[0]].year5,
+                                  partLabel[oldIds[0]].yearlyIncrement
+                                )
+                              }
+                            />
+                          )}
+                        </Grid>
+                      </>
+                    )}
+
+                    {Array.from(
+                      { length: agreement[ids[0]].leeseName.length },
+                      (row, id) => (
+                        <>
+                          <Grid container sx={{ mt: 3 }}>
+                            {/* <Grid item xs={12}>
                           <Typography variant="body1" fontWeight="600">
                             Landlord {id + 1} Details
                           </Typography>
                         </Grid> */}
-                        <Heading
-                          heading={`Landlord ${id + 1} Personal Details`}
-                        />
-                        <DataFieldStyle
-                          field={"Name of Lessor"}
-                          value={agreement[ids[0]].name[id]}
-                        />
-                        <DataFieldStyle
-                          field={"aadhaar number"}
-                          value={agreement[ids[0]].aadharNo[id]}
-                          href={agreement[ids[0]].aadhar_card[id]}
-                          name={"AadharCard"}
-                          bold={true}
-                          cursor={true}
-                        />
-                        <DataFieldStyle
-                          field={"PAN number"}
-                          value={agreement[ids[0]].panNo[id]}
-                          href={agreement[ids[0]].pan_card[id]}
-                          name={"pan_certicate"}
-                          bold={true}
-                          cursor={true}
-                        />
-                        {console.log(partLabel[oldIds[0]])}
-                        <DataFieldStyle
-                          field={"GST number"}
-                          value={agreement[ids[0]].gstNo[id]}
-                          href={agreement[ids[0]].gst[id]}
-                          name={"gst"}
-                          bold={true}
-                          cursor={true}
-                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].gstNo[id]}
-                        />
+                            <Heading
+                              heading={`Landlord ${id + 1} Personal Details`}
+                            />
+                            <DataFieldStyle
+                              field={"Name of Lessor"}
+                              value={agreement[ids[0]].name[id]}
+                            />
+                            <DataFieldStyle
+                              field={"aadhaar number"}
+                              value={agreement[ids[0]].aadharNo[id]}
+                              href={agreement[ids[0]].aadhar_card[id]}
+                              name={"AadharCard"}
+                              bold={true}
+                              cursor={true}
+                            />
+                            <DataFieldStyle
+                              field={"PAN number"}
+                              value={agreement[ids[0]].panNo[id]}
+                              href={agreement[ids[0]].pan_card[id]}
+                              name={"pan_certicate"}
+                              bold={true}
+                              cursor={true}
+                            />
+                            {console.log(partLabel[oldIds[0]])}
+                            <DataFieldStyle
+                              field={"GST number"}
+                              value={agreement[ids[0]].gstNo[id]}
+                              href={agreement[ids[0]].gst[id]}
+                              name={"gst"}
+                              bold={true}
+                              cursor={true}
+                              partLabel={
+                                agreement[ids[0]].type === "Renewed" &&
+                                "Old Agreement Value: " +
+                                  partLabel[oldIds[0]].gstNo[id]
+                              }
+                            />
 
-                        <DataFieldStyle
-                          field={"mobile number"}
-                          value={agreement[ids[0]].mobileNo[id]}
-                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].mobileNo[id]}
-                        />
-                        <DataFieldStyle
-                          field={"alternate mobile"}
-                          value={agreement[ids[0]].alternateMobile[id]}
-                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].alternateMobile[id]}
-                        />
-                        <DataFieldStyle
-                          field={"email"}
-                          value={agreement[ids[0]].email[id]}
-                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].email[id]}
-                        />
-                        <DataFieldStyle
-                          field={"Percentage Share"}
-                          value={`${agreement[ids[0]].percentage[id]}%`}
-                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].percentage[id]}
-                        />
-                      </Grid>
-                      <Grid  container sx = {{alignItems : "baseline",mt: 1 }} >
-                      <DataFieldStyle
-                        field={"Deposit UTR Number"}
-                        value={agreement[ids[0]].utr_number[id]}
-                      />
-                      <DataFieldStyle
-                        field={"Deposit Payment Date"}
-                        value={agreement[ids[0]].payment_date[id]}
-                      />
+                            <DataFieldStyle
+                              field={"mobile number"}
+                              value={agreement[ids[0]].mobileNo[id]}
+                              partLabel={
+                                agreement[ids[0]].type === "Renewed" &&
+                                "Old Agreement Value: " +
+                                  partLabel[oldIds[0]].mobileNo[id]
+                              }
+                            />
+                            <DataFieldStyle
+                              field={"alternate mobile"}
+                              value={agreement[ids[0]].alternateMobile[id]}
+                              partLabel={
+                                agreement[ids[0]].type === "Renewed" &&
+                                "Old Agreement Value: " +
+                                  partLabel[oldIds[0]].alternateMobile[id]
+                              }
+                            />
+                            <DataFieldStyle
+                              field={"email"}
+                              value={agreement[ids[0]].email[id]}
+                              partLabel={
+                                agreement[ids[0]].type === "Renewed" &&
+                                "Old Agreement Value: " +
+                                  partLabel[oldIds[0]].email[id]
+                              }
+                            />
+                            <DataFieldStyle
+                              field={"Percentage Share"}
+                              value={`${agreement[ids[0]].percentage[id]}%`}
+                              partLabel={
+                                agreement[ids[0]].type === "Renewed" &&
+                                "Old Agreement Value: " +
+                                  partLabel[oldIds[0]].percentage[id]
+                              }
+                            />
+                          </Grid>
+                          <Grid
+                            container
+                            sx={{ alignItems: "baseline", mt: 1 }}
+                          >
+                            <DataFieldStyle
+                              field={"Deposit UTR Number"}
+                              value={agreement[ids[0]].utr_number[id]}
+                            />
+                            <DataFieldStyle
+                              field={"Deposit Payment Date"}
+                              value={agreement[ids[0]].payment_date[id]}
+                            />
+                          </Grid>
+                        </>
+                      )
+                    )}
+                  </Grid>
+                </Grid>
+
+                {/* Bank Details start here */}
+                {/* */}
+
+                <Grid item md={10}>
+                  <Grid container>
+                    {Array.from(
+                      { length: agreement[ids[0]].leeseName.length },
+                      (row, id) => (
+                        <Grid container>
+                          <Heading
+                            heading={`Landlord ${id + 1} Bank Details`}
+                          />
+
+                          <DataFieldStyle
+                            field={"bank name"}
+                            value={agreement[ids[0]].bankName[id]}
+                            partLabel={
+                              agreement[ids[0]].type === "Renewed" &&
+                              "Old Agreement Value: " +
+                                partLabel[oldIds[0]].bankName[id]
+                            }
+                          />
+                          <DataFieldStyle
+                            field={"beneficiary name"}
+                            value={agreement[ids[0]].benificiaryName[id]}
+                            partLabel={
+                              agreement[ids[0]].type === "Renewed" &&
+                              "Old Agreement Value: " +
+                                partLabel[oldIds[0]].benificiaryName[id]
+                            }
+                          />
+                          <DataFieldStyle
+                            field={"bank A/c number"}
+                            value={agreement[ids[0]].accountNo[id]}
+                            href={agreement[ids[0]].cheque[id]}
+                            name={"cheque"}
+                            bold={true}
+                            cursor={true}
+                            partLabel={
+                              agreement[ids[0]].type === "Renewed" &&
+                              "Old Agreement Value: " +
+                                partLabel[oldIds[0]].accountNo[id]
+                            }
+                          />
+                          <DataFieldStyle
+                            field={"Bank IFSC"}
+                            value={agreement[ids[0]].ifscCode[id]}
+                            // partLabel={agreement[ids[0]].branchName[id]}
+                            partLabel={
+                              agreement[ids[0]].type === "Renewed" &&
+                              "Old Agreement Value: " +
+                                partLabel[oldIds[0]].ifscCode[id]
+                            }
+                          />
+                        </Grid>
+                      )
+                    )}
+                  </Grid>
+                </Grid>
+
+                {/* Bank Details Ends here */}
+
+                <Grid item md={10}>
+                  <Grid container spacing={4} sx={{ mt: 1 }}>
+                    <Grid item xs={12}>
+                      <Heading heading={"Document View/Download"} />
                     </Grid>
-                    </>
-                    )
-                  )}
-
-                </Grid>
-              </Grid>
-
-              {/* Bank Details start here */}
-              {/* */}
-
-              <Grid item md={10}>
-                <Grid container>
-                  {Array.from(
-                    { length: agreement[ids[0]].leeseName.length },
-                    (row, id) => (
-                      <Grid container>
-                        <Heading heading={`Landlord ${id + 1} Bank Details`} />
-
-                        <DataFieldStyle
-                          field={"bank name"}
-                          value={agreement[ids[0]].bankName[id]}
-                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].bankName}
-                        />
-                        <DataFieldStyle
-                          field={"beneficiary name"}
-                          value={agreement[ids[0]].benificiaryName[id]}
-                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].benificiaryName}
-                        />
-                        <DataFieldStyle
-                          field={"bank A/c number"}
-                          value={agreement[ids[0]].accountNo[id]}
-                          href={agreement[ids[0]].cheque[id]}
-                          name={"cheque"}
-                          bold={true}
-                          cursor={true}
-                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].accountNo}
-                        />
-                        <DataFieldStyle
-                          field={"Bank IFSC"}
-                          value={agreement[ids[0]].ifscCode[id]}
-                          // partLabel={agreement[ids[0]].branchName[id]}
-                          partLabel={agreement[ids[0]].type === "Renewed" && "Old Agreement Value: " + partLabel[oldIds[0]].ifscCode}
-                        />
-                      </Grid>
-                    )
-                  )}
-                </Grid>
-              </Grid>
-
-              {/* Bank Details Ends here */}
-
-
-              <Grid item md={10}>
-                <Grid container spacing={4} sx={{ mt: 1 }}>
-                  <Grid item xs={12}>
-                    <Heading heading={"Document View/Download"} />
-                  </Grid>
-                  <DocumentView
-                    title={"draft agreement"}
-                    img={agreement[ids[0]].draft_agreement}
-                    partLabel={agreement[ids[0]].type === "Renewed" && partLabel[oldIds[0]].draft_agreement}
-                  />
-                  <DocumentView
-                    title={"electricity bill"}
-                    img={agreement[ids[0]].electricity_bill}
-                    partLabel={agreement[ids[0]].type === "Renewed" && partLabel[oldIds[0]].electricity_bill}
-                  />
-                  <DocumentView
-                    title={"maintaince bill"}
-                    img={agreement[ids[0]].maintaince_bill}
-                    partLabel={agreement[ids[0]].type === "Renewed" && partLabel[oldIds[0]].maintaince_bill}
-                  />
-                  <DocumentView 
-                  title={"POA"} 
-                  img={agreement[ids[0]].poa} 
-                  partLabel={agreement[ids[0]].type === "Renewed" && partLabel[oldIds[0]].poa}
-                  />
-                  <DocumentView
-                    title={"Property tax receipt"}
-                    img={agreement[ids[0]].tax_receipt}
-                    partLabel={agreement[ids[0]].type === "Renewed" && partLabel[oldIds[0]].tax_receipt}
-                  />
-                  {agreement[ids[0]].leeseName.length > 1 && (
                     <DocumentView
-                      title={"NOC (if multiple owner)"}
-                      img={agreement[ids[0]].noc}
-                      partLabel={agreement[ids[0]].type === "Renewed" && partLabel[oldIds[0]].noc}
+                      title={"draft agreement"}
+                      img={agreement[ids[0]].draft_agreement}
+                      partLabel={
+                        agreement[ids[0]].type === "Renewed" &&
+                        partLabel[oldIds[0]].draft_agreement
+                      }
                     />
-                  )}
-                  <DocumentView
-                    title={"Property Picture"}
-                    img={agreement[ids[0]].property_pic}
-                  />
-                </Grid>
-              </Grid>
-
-              {/* document section ends here */}
-
-              <Grid item container xs={10} sx={{ mt: 5 }}>
-                <DataFieldStyle
-                  field={"Landlord Assets"}
-                  value={agreement[ids[0]].assets}
-                />
-              </Grid>
-
-              {agreement[ids[0]].remark.length > 0 && (
-                <Grid item xs={10}>
-                  <DataFieldStyle
-                    field={"Remark !"}
-                    value={agreement[ids[0]].remark}
-                  />
-                </Grid>
-              )}
-
-{
-  agreement[ids[0]].type === "Renewed" && <>
-   <Grid item  container sx = {{alignItems : "baseline",mt: 5  }} xs={10} >
-                  <DataFieldStyle
-                    field={"Deposit Amount"}
-                    value={renewalRecovery.balance_amount}
-                  />
-                    <DataFieldStyle
-                    field={"Deposited"}
-                    value={renewalRecovery.deposited}
-                  />
-                   <DataFieldStyle
-                    field={"New Deposit"}
-                    value={renewalRecovery.new_deposit}
-                  />
-                  <DataFieldStyle
-                    field={"Receivable/Payable"}
-                    value={renewalRecovery.receivable}
-                  />
-                  <DataFieldStyle
-                    field={"Un-Paid Amount"}
-                    value={renewalRecovery.unpaid_amount}
-                  />
-                </Grid>
-  </>
-}
-
-              {/* Buttons start here*/}
-              {agreement[ids[0]].status === "Terminated By Sr Manager" && (
-                <>
-                  <Grid item container xs={10} sx={{ mt: 2 }}>
-                    <DataFieldStyle
-                      field={"Termination Remark"}
-                      value={agreement[ids[0]].termination_remark}
+                    <DocumentView
+                      title={"electricity bill"}
+                      img={agreement[ids[0]].electricity_bill}
+                      partLabel={
+                        agreement[ids[0]].type === "Renewed" &&
+                        partLabel[oldIds[0]].electricity_bill
+                      }
+                    />
+                    <DocumentView
+                      title={"maintaince bill"}
+                      img={agreement[ids[0]].maintaince_bill}
+                      partLabel={
+                        agreement[ids[0]].type === "Renewed" &&
+                        partLabel[oldIds[0]].maintaince_bill
+                      }
+                    />
+                    <DocumentView
+                      title={"POA"}
+                      img={agreement[ids[0]].poa}
+                      partLabel={
+                        agreement[ids[0]].type === "Renewed" &&
+                        partLabel[oldIds[0]].poa
+                      }
+                    />
+                    <DocumentView
+                      title={"Property tax receipt"}
+                      img={agreement[ids[0]].tax_receipt}
+                      partLabel={
+                        agreement[ids[0]].type === "Renewed" &&
+                        partLabel[oldIds[0]].tax_receipt
+                      }
+                    />
+                    {agreement[ids[0]].leeseName.length > 1 && (
+                      <DocumentView
+                        title={"NOC (if multiple owner)"}
+                        img={agreement[ids[0]].noc}
+                        partLabel={
+                          agreement[ids[0]].type === "Renewed" &&
+                          partLabel[oldIds[0]].noc
+                        }
+                      />
+                    )}
+                    <DocumentView
+                      title={"Property Picture"}
+                      img={agreement[ids[0]].property_pic}
                     />
                   </Grid>
-                  {/* document section ends here */}
+                </Grid>
 
-                  {agreement[ids[0]].remark !== null && (
+                {/* document section ends here */}
+
+                <Grid item container xs={10} sx={{ mt: 5 }}>
+                  <DataFieldStyle
+                    field={"Landlord Assets"}
+                    value={agreement[ids[0]].assets}
+                  />
+                </Grid>
+
+                {agreement[ids[0]].remark.length > 0 && (
+                  <Grid item xs={10}>
+                    <DataFieldStyle
+                      field={"Remark !"}
+                      value={agreement[ids[0]].remark}
+                    />
+                  </Grid>
+                )}
+
+                {agreement[ids[0]].type === "Renewed" && (
+                  <>
+                    <Grid
+                      item
+                      container
+                      sx={{ alignItems: "baseline", mt: 5 }}
+                      xs={10}
+                    >
+                      <DataFieldStyle
+                        field={"Old Deposited Amount"}
+                        value={renewalRecovery.deposited}
+                      />
+
+                      <DataFieldStyle
+                        field={"Unpaid Monthly Rental"}
+                        value={renewalRecovery.unpaid_amount}
+                      />
+
+                      <DataFieldStyle
+                        field={"New Deposit Amount"}
+                        value={renewalRecovery.new_deposit}
+                      />
+                      <DataFieldStyle
+                        field={"New Deposit AmountReceivable/Payable"}
+                        value={renewalRecovery.receivable}
+                      />
+                      {/* <DataFieldStyle
+                        field={"Deposit Amount"}
+                        value={renewalRecovery.balance_amount}
+                      /> */}
+                    </Grid>
+                  </>
+                )}
+
+                {/* Buttons start here*/}
+                {agreement[ids[0]].status === "Terminated By Sr Manager" && (
+                  <>
                     <Grid item container xs={10} sx={{ mt: 2 }}>
                       <DataFieldStyle
-                        field={"Remark !"}
-                        value={agreement[ids[0]].remark}
+                        field={"Termination Remark"}
+                        value={agreement[ids[0]].termination_remark}
                       />
                     </Grid>
-                  )}
+                    {/* document section ends here */}
 
-                  {/* Buttons start here*/}
-                  <Grid item xs={10} sx={{ mt: 2 }}>
-                    <Grid container sx={{ gap: "2rem" }}>
-                      <DataFieldStyle
-                        field="Deposit Amount (Paid)"
-                        value={recovery.depositedAmount}
-                      />
-                    </Grid>
-                    <Grid container sx={{ gap: "2rem", mt: 2 }}>
-                      <DataFieldStyle
-                        field="Remaining Months"
-                        value={recovery.remainingMonth}
-                      />
-                      <DataFieldStyle
-                        field="Adjustment Amount"
-                        value={recovery.adjustmentAmount}
-                      />
-                      <DataFieldStyle
-                        field="Remark"
-                        value={recovery.adjustmentAmountRemark}
-                      />
-                    </Grid>
+                    {agreement[ids[0]].remark !== null && (
+                      <Grid item container xs={10} sx={{ mt: 2 }}>
+                        <DataFieldStyle
+                          field={"Remark !"}
+                          value={agreement[ids[0]].remark}
+                        />
+                      </Grid>
+                    )}
 
-                    <Grid container sx={{ gap: "2rem", mt: 2 }}>
-                      <DataFieldStyle
-                        field="Expenses Amount"
-                        value={recovery.expenses}
-                      />
-                      <DataFieldStyle
-                        field="Remark"
-                        value={recovery.expansesRemark}
-                      />
-                    </Grid>
+                    {/* Buttons start here*/}
+                    <Grid item xs={10} sx={{ mt: 2 }}>
+                      <Grid container sx={{ gap: "2rem" }}>
+                        <DataFieldStyle
+                          field="Deposit Amount (Paid)"
+                          value={recovery.depositedAmount}
+                        />
+                      </Grid>
+                      <Grid container sx={{ gap: "2rem", mt: 2 }}>
+                        <DataFieldStyle
+                          field="Remaining Months"
+                          value={recovery.remainingMonth}
+                        />
+                        <DataFieldStyle
+                          field="Adjustment Amount"
+                          value={recovery.adjustmentAmount}
+                        />
+                        <DataFieldStyle
+                          field="Remark"
+                          value={recovery.adjustmentAmountRemark}
+                        />
+                      </Grid>
 
-                    <Grid item xs={12} container sx={{ gap: "2rem", mt: 2 }}>
-                      <DataFieldStyle
-                        field="Other Adjustments"
-                        value={recovery.otherAdjustments}
-                      />
-                      <DataFieldStyle
-                        field="Remark"
-                        value={recovery.otherRemark}
-                      />
-                    </Grid>
-                    <Grid item xs={12} container sx={{ gap: "2rem", mt: 2 }}>
-                      <DataFieldStyle
-                        field="Total Adjustment Amount "
-                        value={recovery.totalAdjustmentAmount}
-                      />
-                      <DataFieldStyle
-                        field="Balance Deposit "
-                        value={recovery.balanceDeposit}
-                      />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <DocumentView
-                        title={"Termination File"}
-                        img={agreement[ids[0]].file}
-                      />
-                    </Grid>
-                  </Grid>
-                </>
-              )}
+                      <Grid container sx={{ gap: "2rem", mt: 2 }}>
+                        <DataFieldStyle
+                          field="Expenses Amount"
+                          value={recovery.expenses}
+                        />
+                        <DataFieldStyle
+                          field="Remark"
+                          value={recovery.expansesRemark}
+                        />
+                      </Grid>
 
-              {/* termonation */}
-              {agreement[ids[0]].status === "Terminated By Sr Manager" && (
-                <>
-                  <Grid
-                    item
-                    xs={10}
-                    sx={{ mt: 5 }}
-                    className={"textFieldWrapper"}
-                  >
-                    <Grid item xs={8}>
-                      <TextField
-                        type="text"
-                        multiline
-                        rows={3}
-                        fullWidth
-                        variant="outlined"
-                        label="Remark *"
-                        placeholder="Remark *"
-                        value={remark}
-                        onChange={(e) => setRemark(e.target.value)}
-                      />
+                      <Grid item xs={12} container sx={{ gap: "2rem", mt: 2 }}>
+                        <DataFieldStyle
+                          field="Other Adjustments"
+                          value={recovery.otherAdjustments}
+                        />
+                        <DataFieldStyle
+                          field="Remark"
+                          value={recovery.otherRemark}
+                        />
+                      </Grid>
+                      <Grid item xs={12} container sx={{ gap: "2rem", mt: 2 }}>
+                        <DataFieldStyle
+                          field="Total Adjustment Amount "
+                          value={recovery.totalAdjustmentAmount}
+                        />
+                        <DataFieldStyle
+                          field="Balance Deposit "
+                          value={recovery.balanceDeposit}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <DocumentView
+                          title={"Termination File"}
+                          img={agreement[ids[0]].file}
+                        />
+                      </Grid>
                     </Grid>
-                  </Grid>
+                  </>
+                )}
 
-                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                {/* termonation */}
+                {agreement[ids[0]].status === "Terminated By Sr Manager" && (
+                  <>
                     <Grid
-                      container
-                      spacing={2}
-                      sx={{ justifyContent: "center" }}
+                      item
+                      xs={10}
+                      sx={{ mt: 5 }}
+                      className={"textFieldWrapper"}
                     >
-                      <Grid item md={6} xs={11}>
-                        <Button
-                          variant="contained"
-                          sx={{
-                            height: "55px",
-                            borderRadius: "12px",
-                            backgroundColor: "primary",
-                            width: "100%",
-                            color: "#FFFFFF",
-                            textTransform: "capitalize",
-                            fontSize: "18px",
-                            lineHeight: "20px",
-                          }}
-                          onClick={handleTerminate}
-                        >
-                          Send To Finance
-                        </Button>
-                      </Grid>
-                      <Grid item md={6} xs={11}>
-                        <Button
+                      <Grid item xs={8}>
+                        <TextField
+                          type="text"
+                          multiline
+                          rows={3}
+                          fullWidth
                           variant="outlined"
-                          sx={{
-                            height: "55px",
-                            borderRadius: "12px",
-                            width: "100%",
-                            textTransform: "capitalize",
-                            fontSize: "18px",
-                          }}
-                          onClick={handleSendBack}
-                        >
-                          Send Back To Manager
-                        </Button>
+                          label="Remark *"
+                          placeholder="Remark *"
+                          value={remark}
+                          onChange={(e) => setRemark(e.target.value)}
+                        />
                       </Grid>
                     </Grid>
-                  </Grid>
-                </>
-              )}
 
-              {/* Buttons start here*/}
-
-              {agreement[ids[0]].status === "Sent To Operations" && (
-                <>
-                  <Grid
-                    item
-                    xs={10}
-                    sx={{ mt: 5 }}
-                    className={"textFieldWrapper"}
-                  >
-                    <Grid item xs={8}>
-                      <TextField
-                        type="text"
-                        multiline
-                        rows={3}
-                        fullWidth
-                        variant="outlined"
-                        label="Remark *"
-                        placeholder="Remark *"
-                        value={remark}
-                        onChange={(e) => setRemark(e.target.value)}
-                      />
+                    <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                      <Grid
+                        container
+                        spacing={2}
+                        sx={{ justifyContent: "center" }}
+                      >
+                        <Grid item md={6} xs={11}>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              height: "55px",
+                              borderRadius: "12px",
+                              backgroundColor: "primary",
+                              width: "100%",
+                              color: "#FFFFFF",
+                              textTransform: "capitalize",
+                              fontSize: "18px",
+                              lineHeight: "20px",
+                            }}
+                            onClick={handleTerminate}
+                          >
+                            Send To Finance
+                          </Button>
+                        </Grid>
+                        <Grid item md={6} xs={11}>
+                          <Button
+                            variant="outlined"
+                            sx={{
+                              height: "55px",
+                              borderRadius: "12px",
+                              width: "100%",
+                              textTransform: "capitalize",
+                              fontSize: "18px",
+                            }}
+                            onClick={handleSendBack}
+                          >
+                            Send Back To Manager
+                          </Button>
+                        </Grid>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                  <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                  </>
+                )}
+
+                {/* Buttons start here*/}
+
+                {agreement[ids[0]].status === "Sent To Operations" && (
+                  <>
                     <Grid
-                      container
-                      spacing={1}
-                      sx={{ justifyContent: "center" }}
+                      item
+                      xs={10}
+                      sx={{ mt: 5 }}
+                      className={"textFieldWrapper"}
                     >
-                      <Grid item md={6} xs={11}>
-                        <Button
-                          variant="contained"
-                          sx={{
-                            height: "55px",
-                            borderRadius: "12px",
-                            backgroundColor: "primary",
-                            width: "100%",
-                            color: "#FFFFFF",
-                            textTransform: "capitalize",
-                            fontSize: "18px",
-                            lineHeight: "20px",
-                          }}
-                          onClick={handleSubmit}
-                        >
-                          Send To Finance
-                        </Button>
-                      </Grid>
-                      <Grid item md={6} xs={11}>
-                        <Button
+                      <Grid item xs={8}>
+                        <TextField
+                          type="text"
+                          multiline
+                          rows={3}
+                          fullWidth
                           variant="outlined"
-                          sx={{
-                            height: "55px",
-                            borderRadius: "12px",
-                            width: "100%",
-                            textTransform: "capitalize",
-                            fontSize: "18px",
-                          }}
-                          onClick={handleSendBack}
-                        >
-                          Send Back To Manager
-                        </Button>
+                          label="Remark *"
+                          placeholder="Remark *"
+                          value={remark}
+                          onChange={(e) => setRemark(e.target.value)}
+                        />
                       </Grid>
                     </Grid>
-                  </Grid>
-                </>
-              )}
+                    <Grid item md={8} sx={{ mt: 4, mb: 2 }}>
+                      <Grid
+                        container
+                        spacing={1}
+                        sx={{ justifyContent: "center" }}
+                      >
+                        <Grid item md={6} xs={11}>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              height: "55px",
+                              borderRadius: "12px",
+                              backgroundColor: "primary",
+                              width: "100%",
+                              color: "#FFFFFF",
+                              textTransform: "capitalize",
+                              fontSize: "18px",
+                              lineHeight: "20px",
+                            }}
+                            onClick={handleSubmit}
+                          >
+                            Send To Finance
+                          </Button>
+                        </Grid>
+                        <Grid item md={6} xs={11}>
+                          <Button
+                            variant="outlined"
+                            sx={{
+                              height: "55px",
+                              borderRadius: "12px",
+                              width: "100%",
+                              textTransform: "capitalize",
+                              fontSize: "18px",
+                            }}
+                            onClick={handleSendBack}
+                          >
+                            Send Back To Manager
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </>
+                )}
 
-              {/* buttons end here */}
-            </Grid>
-          </Box>
-        </Stack>
-      )}
+                {/* buttons end here */}
+              </Grid>
+            </Box>
+          </Stack>
+        )}
     </>
   );
 }
