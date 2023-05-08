@@ -13,6 +13,7 @@ function HamburgerManager() {
         { text: "Approved ", navigateTo: "/listing/approved-ag" },
         { text: "Renewal ", navigateTo: "/renewal" },
         { text: "Landlord List", navigateTo: "/list-landlord" },
+        { text: "Old Agreement ", navigateTo: "/listing/old-ag" },
       ]}
       monthly={[
         { text: "In-Process", navigateTo: "/monthly-payment/in-process" },

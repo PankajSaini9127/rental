@@ -77,6 +77,22 @@ function ViewPage() {
     return incrementType;
   }
 
+
+  const month = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   return (
     <>
       {ids.length > 0 && (
@@ -111,6 +127,16 @@ function ViewPage() {
 
               {/* Basic Details */}
               <Grid item md={10} sx={{ mt: 2 }}>
+                <Grid container sx={{mt:4}}>
+                <DataFieldStyle
+                    field={"Rent Month"}
+                    value={
+                      (month[new Date(agreement[ids[0]].rent_date).getUTCMonth()] +
+                      " " +
+                      new Date(agreement[ids[0]].rent_date).getFullYear())}
+                  />
+                ,
+                </Grid>
                 {agreement[ids[0]].payment_status === "Paid" && (
                   <Grid container>
                     <DataFieldStyle
@@ -300,7 +326,7 @@ function ViewPage() {
                     </Grid>
                   )}
 
-                  {agreement[ids[0]].status === "Paid" && (
+                  {(agreement[ids[0]].status === "Paid" &&  agreement[ids[0]].utr_number !== null )&& (
                     <Grid container sx={{ mb: 2 }}>
                       <DataFieldStyle
                         field={"UTR Number"}
@@ -308,7 +334,7 @@ function ViewPage() {
                       />
                       <DataFieldStyle
                         field={"Payment Date"}
-                        value={agreement[ids[0]].paymentDate}
+                        value={moment(agreement[ids[0]].paymentDate).format("DD/MM/YYYY")}
                       />
                     </Grid>
                   )}

@@ -38,7 +38,8 @@ function ListingComponent({
   handleSerachChange,
   check,
   setCheck,
-  setSortBy
+  setSortBy,
+  addagreement
 }) {
 
   const navigate = useNavigate()
@@ -87,7 +88,7 @@ function ListingComponent({
           </Typography>
         </Grid>
 
-{
+{/* {
   dropDown === false ?"":<Grid xs={6} md={2}>
   <FormControl fullWidth>
     <Select
@@ -109,7 +110,7 @@ function ListingComponent({
     </Select>
   </FormControl>
 </Grid>
-}
+} */}
       
       </Grid>
       <Divider />
@@ -157,7 +158,8 @@ function ListingComponent({
     }
   }}
   startIcon={<AddCircleOutlineIcon />}
-  onClick={()=>navigate('/newAgreement')}
+  onClick={()=>navigate(addagreement)}
+  kkk
 >
   {buttonText1}
 </Button>
@@ -185,7 +187,6 @@ function ListingComponent({
        
 
       </Grid>
-
       <Table rows={rows} setRows = {setRows} setCheck={setCheck} check={check}/>
     </Box>
   );

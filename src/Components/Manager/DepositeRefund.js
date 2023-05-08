@@ -653,12 +653,14 @@ function EditAgreement({ history }) {
   function validate(data) {
     let field = [
    "assets",
-   "termination_remark"
+   "termination_remark",
+   "file"
     ];
 
 
 
     let finalCheck = field.map((row) => {
+      console.log(agreementData)
       if (!agreementData[row]) {
         console.log(row);
         setFormError((old) => ({ ...old, [row]: "Field required." }));
@@ -670,11 +672,12 @@ function EditAgreement({ history }) {
       }
     });
 
-    console.log(finalCheck.includes(true));
+    console.log(">>>>>",!finalCheck.includes(true));
     if (!finalCheck.includes(true)) {
       return true;
     } else return false;
   }
+
   function validateFields(data) {
     console.log("Validate Called");
 
@@ -741,6 +744,8 @@ function EditAgreement({ history }) {
   async function handleSubmit(e) {
     e.preventDefault();
 
+
+    console.log("<<<>>>",validate())
     if(!validate())
     {
       // dispatch(
@@ -754,7 +759,10 @@ function EditAgreement({ history }) {
     // remove useless fields 
     delete agreementData.file_name
 
+    console.log(recovery)
     let response = await insertAdjustmentAmount(recovery);
+
+    console.log(response)
 
     if (response.status === 200) {
         const updateStatus = await send_to_bhu({"status":"Terminated By Manager",renewal_status:"Sent For Termination",...agreementData},recovery.agreement_id)

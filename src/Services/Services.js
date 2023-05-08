@@ -145,15 +145,20 @@ export async function get_search_monthly_rent_manager (id,search) {
 
 // //get monthly rent  serarch in sr manager 
 export async function get_search_monthly_rent_manager_paid (id,search) {
-    console.log(search)
     return axios.get(`${API_LIVE}/api/get-search-manager-monthlyrent/paid?id=${id}&search=${search}`)
 }
 
 // //get monthly rent  serarch in opertaions 
 export async function get_search_monthly_rent_operations (id,search) {
-    console.log(search)
     return axios.get(`${API_LIVE}/api/operations/get-search-operations-monthlyrent?id=${id}&search=${search}`)
 }
+
+
+// //get monthly rent  serarch in opertaions  paid
+export async function get_search_monthly_rent_operations_paid (id,search) {
+    return axios.get(`${API_LIVE}/api/operations/get-search-operations-monthlyrent/paid?id=${id}&search=${search}`)
+}
+
 
 // //get monthly rent  serarch in sr manager 
 export async function get_search_monthly_rent_finance (id,search) {
@@ -359,6 +364,12 @@ export async function send_back_to_manager (data,id){
 export async function get_data_recovery (id){
     return await axios.get(`${API_LIVE}/api/get-data-recovery/${id}`)
 }
+
+
+export async function get_renewal_recovery_data (id){
+    return await axios.get(`${API_LIVE}/api/get-data-recovery-renewal/${id}`)
+}
+
 
 
 

@@ -38,6 +38,7 @@ function ListingComponent({
   handleSerachChange,
   check,
   setCheck,
+  addagreement,
   setSort
 }) {
 
@@ -157,7 +158,8 @@ function ListingComponent({
     }
   }}
   startIcon={<AddCircleOutlineIcon />}
-  onClick={()=>navigate('/newAgreement')}
+  onClick={()=>navigate({addagreement})}
+  
 >
   {buttonText1}
 </Button>

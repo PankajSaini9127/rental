@@ -18,6 +18,7 @@ import {
   get_agreement_buh_id,
   get_agreement_id,
   get_old_agreement,
+  get_renewal_recovery_data,
   send_back_to_manager,
 } from "../../Services/Services";
 import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
@@ -57,6 +58,9 @@ function SrManagerApproval() {
 
   const [sendBackMsg, setSendBackMsg] = useState("");
 
+       //renewal recovery data
+         const [renewalRecovery, setRenewalRecovery] = useState({})
+
   const [partLabel,setPartLabel] = useState({landlord:[{
     accountNo: "",
     alternateMobile: "",
@@ -90,6 +94,17 @@ function SrManagerApproval() {
     }
   }
 
+  async function get_renewal_recovery(code){
+    try {
+      const renewalRecovery = await get_renewal_recovery_data(code)
+      console.log(renewalRecovery.data)
+      renewalRecovery.status === 200 &&  setRenewalRecovery(renewalRecovery.data.data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
   const getData = async (id) => {
     const agreement = await get_agreement_buh_id(id);
     setAgreement(agreement.data[0]);
@@ -97,7 +112,8 @@ function SrManagerApproval() {
     // setSendBackMsg(agreement.data.agreement.remark);
     console.log(agreement.data[0])
     if(agreement.data[0].type === "Renewed"){
-      get_old_data(agreement.data[0].code)
+      get_old_data(agreement.data[0].code);
+      get_renewal_recovery(id)
     }
     console.log(agreement);
   };
@@ -448,6 +464,33 @@ function SrManagerApproval() {
             <Grid item xs={10} sx={{ mt: 5 }}>
               <DataFieldStyle field={"Remark"} value={agreement.remark} />
             </Grid>
+
+            {
+  agreement.type === "Renewed" && <>
+   <Grid item  container sx = {{alignItems : "baseline",mt: 5  }} xs={10} >
+                  <DataFieldStyle
+                    field={"Deposit Amount"}
+                    value={renewalRecovery.balance_amount}
+                  />
+                    <DataFieldStyle
+                    field={"Deposited"}
+                    value={renewalRecovery.deposited}
+                  />
+                   <DataFieldStyle
+                    field={"New Deposit"}
+                    value={renewalRecovery.new_deposit}
+                  />
+                  <DataFieldStyle
+                    field={"Receivable/Payable"}
+                    value={renewalRecovery.receivable}
+                  />
+                  <DataFieldStyle
+                    field={"Un-Paid Amount"}
+                    value={renewalRecovery.unpaid_amount}
+                  />
+                </Grid>
+  </>
+}
 
             {agreement.status === "Sent To BUH" && (
               <>
