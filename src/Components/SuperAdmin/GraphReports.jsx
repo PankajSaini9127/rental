@@ -25,6 +25,8 @@ import SrMHam from "../SrManager/SRMHAmburger";
 import OPHam from "../Operations/OperationsHamburger";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
 
+import BackButton from "../utility/BackButton"
+
 const GraphReports = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -93,6 +95,7 @@ const GraphReports = () => {
         {role.includes('Senior_Manager') && <SrMHam />}
         {role.includes('Operations') && <OPHam />}
 
+      <BackButton/>
         
 
           <Box sx={{ flexGrow: 1 }}>

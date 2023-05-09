@@ -18,6 +18,7 @@ import { excelDownload, getMisReports } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
+import BackButton from "../utility/BackButton";
 
 const RentPaidSchedule = () => {
   const [startDate, setStartDate] = useState("");
@@ -73,20 +74,22 @@ const RentPaidSchedule = () => {
 
   return (
     <>
-      <Box sx = {{position : 'absolute', right : '1%', top : '2%'}}>
-    <Typography variant = 'body1' sx = {{fontWeight : 700 }}> Welcome {auth.name}</Typography>
-    </Box>
+      <Box sx={{ position: "absolute", right: "1%", top: "2%" }}>
+        <Typography variant="body1" sx={{ fontWeight: 700 }}>
+          {" "}
+          Welcome {auth.name}
+        </Typography>
+      </Box>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-
         {/* {console.log(role)} */}
-        { role.includes("Super Admin") && <AdminHamburgerMenu/>}
+        {role.includes("Super Admin") && <AdminHamburgerMenu />}
 
-{role.includes('Finance') && <FinanceHam/>}
-{role.includes('Manager') && <ManagerHam/>}
-{role.includes('Senior_Manager') && <SrMHam/>}
-{role.includes('Operations') && <OPHam/>}
+        {role.includes("Finance") && <FinanceHam />}
+        {role.includes("Manager") && <ManagerHam />}
+        {role.includes("Senior_Manager") && <SrMHam />}
+        {role.includes("Operations") && <OPHam />}
 
-
+        <BackButton />
         <Box sx={{ flexGrow: 1 }}>
           <Grid
             container
@@ -187,9 +190,7 @@ const RentPaidSchedule = () => {
                 textTransform: "capitalize",
               }}
               onClick={() => {
-
-                excelDownload(reports, id, startDate, endDate);;
-
+                excelDownload(reports, id, startDate, endDate);
               }}
               disabled={startDate && endDate ? false : true}
             >

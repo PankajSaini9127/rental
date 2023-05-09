@@ -95,7 +95,7 @@ function DataTable({ rows, loading, check, setCheck }) {
       <>
         {(e.row.status === "Sent Back From Sr Manager" ||
           e.row.status === "Sent Back From BUH" ||
-          e.row.status === "Sent Back From Finance" ||
+          e.row.status === "Sent Back From Finance Team" ||
           e.row.status === "Sent Back From Operations" || 
           e.row.status === "Sent Back From Sr Manager Termination" ||
           e.row.status === "Sent Back From BUH Termination" ||
@@ -651,7 +651,8 @@ function DataTable({ rows, loading, check, setCheck }) {
                 parms.row.status === "Sent Back From Sr Manager Termination"||
                 parms.row.status === "Sent Back From BUH Termination"||
                 parms.row.status === "Sent Back From Operations Termination"||
-                parms.row.status === "Sent Back From Finance Team Termination")
+                parms.row.status === "Sent Back From Finance Team Termination" ||
+                parms.row.status === "Sent Back From Finance Team")
             ) {
               cellClass.push("red statusCell");
             }
