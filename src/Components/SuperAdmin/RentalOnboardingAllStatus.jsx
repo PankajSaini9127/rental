@@ -13,9 +13,12 @@ import { MyHeader } from "../StyledComponent";
 import { excelDownload, getMisReports } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
-import HamburgerMenu from "../HamburgerMenu";
-import OperationsHamburger from "../Operations/OperationsHamburger";
+import FinanceHam from "../FinancePanel/FinanceHamburger";
+import ManagerHam from "../Manager/HamburgerManager";
+import SrMHam from "../SrManager/SRMHAmburger";
+import OPHam from "../Operations/OperationsHamburger";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
+import BackButton from "../utility/BackButton";
 
 const RentalOnboardingAllStatus = () => {
 
@@ -46,9 +49,16 @@ const RentalOnboardingAllStatus = () => {
   return (
     <>
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-      { role.includes("Super Admin") ?  <AdminHamburgerMenu />:     <OperationsHamburger/>}
+      {role.includes("Super Admin") && <AdminHamburgerMenu />}
 
+{role.includes("Finance") && <FinanceHam />}
+{role.includes("Manager") && <ManagerHam />}
+{role.includes("Senior_Manager") && <SrMHam />}
+{role.includes("Operations") && <OPHam />}
         <Box sx={{ flexGrow: 1 }}>
+
+        <BackButton/>
+
           <Grid
             container
             sx={{ flexDirection: "column", justifyContent: "center" }}

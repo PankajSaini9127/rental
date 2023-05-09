@@ -23,6 +23,7 @@ import ManagerHam from "../Manager/HamburgerManager";
 import SrMHam from "../SrManager/SRMHAmburger";
 import OPHam from "../Operations/OperationsHamburger";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
+import BackButton from "../utility/BackButton";
 
 const RentalMisReports = () => {
   const [startDate, setStartDate] = useState("");
@@ -92,6 +93,7 @@ const RentalMisReports = () => {
 {role.includes('Senior_Manager') && <SrMHam/>}
 {role.includes('Operations') && <OPHam/>}
 
+<BackButton/>
 
         <Box sx={{ flexGrow: 1 }}>
           <Grid

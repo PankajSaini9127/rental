@@ -169,7 +169,7 @@ function FinanceApproval() {
   async function get_renewal_recovery(code) {
     try {
       const renewalRecovery = await get_renewal_recovery_data(code);
-      console.log(renewalRecovery.data);
+      console.log(renewalRecovery);
       renewalRecovery.status === 200 &&
         setRenewalRecovery(renewalRecovery.data.data);
     } catch (error) {
@@ -183,6 +183,7 @@ function FinanceApproval() {
       // console.log(oldvalue.data)
       oldvalue.status === 200 && setPartLabel(oldvalue.data.agreement);
       oldvalue.status === 200 && setOldIds(oldvalue.data.ids);
+      oldvalue.status === 200 &&  get_renewal_recovery(oldvalue.data.agreement[oldvalue.data.ids[0]].agreement_id);
     } catch (error) {
       console.log(error);
     }
@@ -196,7 +197,6 @@ function FinanceApproval() {
         setAgreement(agreement.data.agreement[0]);
         if (agreement.data.agreement[0].type === "Renewed") {
           get_old_data(id);
-          get_renewal_recovery(id);
         }
         // console.log(agreement.data.ids);
         // setIds(agreement.data.ids);
@@ -244,11 +244,11 @@ function FinanceApproval() {
           status:
             agreement.status === "Terminated By Operations"
               ? "Sent Back From Finance Team Termination"
-              : "Sent Back From Finance",
+              : "Sent Back From Finance Team",
           remark: remark,
           modify_date: new Date(),
         },
-        id
+        agreement.agreement_id
       );
       if (response.data.success) {
         dispatch(
