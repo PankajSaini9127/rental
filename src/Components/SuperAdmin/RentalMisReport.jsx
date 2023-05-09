@@ -23,6 +23,7 @@ import ManagerHam from "../Manager/HamburgerManager";
 import SrMHam from "../SrManager/SRMHAmburger";
 import OPHam from "../Operations/OperationsHamburger";
 import AdminHamburgerMenu from "./AdminHamburgerMenu";
+import BackButton from "../utility/BackButton";
 const RentalMisReports = () => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -90,6 +91,7 @@ const RentalMisReports = () => {
             container
             sx={{ flexDirection: "column", justifyContent: "center" }}
           >
+             <BackButton/>
             <Grid xs={12}>
               <MyHeader>Rental Management System</MyHeader>
               <Divider />
