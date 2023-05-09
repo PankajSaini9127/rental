@@ -25,6 +25,7 @@ import { Bar } from "react-chartjs-2";
 function FinanceDashboard() {
   const navigate = useNavigate();
   const { auth } = useSelector((s) => s);
+  const { role, isAuth, id } = auth;
 
   const [graphData, setGraphData] = useState([]);
   const [monthList, setMonthList] = useState([]);
@@ -32,10 +33,12 @@ function FinanceDashboard() {
   const [total_deposit, setTotal_deposit] = useState([]);
   const [total_rent, setTotal_rent] = useState([]);
 
+  console.log({ graphData });
+
   useEffect(() => {
     getMetaDatas(auth.id);
     (async () => {
-      const data = await graphReports();
+      const data = await graphReports(role);
       setGraphData(data);
       if (data) {
         data.no_of_agreements.map((val) => {
@@ -116,7 +119,6 @@ function FinanceDashboard() {
     responsive: true,
     plugins: { legend: { position: "top" } },
   };
-  const { role, isAuth, id } = auth;
 
   const [meta, setMeta] = useState({
     totalAgreement: 0,

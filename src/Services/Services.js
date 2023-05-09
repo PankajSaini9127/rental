@@ -562,6 +562,7 @@ export async function addRenewalDesposit (data){
     return await axios.post(`${API_LIVE}/api/add-renewal-deposit`,data)
 }
 
+
 // APIs for MIS Reports
 export function excelDownload(reports, id, role, startDate, endDate) {
   //   console.log(`${API_LIVE}/api/${url}`);
@@ -626,26 +627,36 @@ export function excelDownload(reports, id, role, startDate, endDate) {
     });
 }
 
-export async function graphReports() {
+export async function graphReports(role) {
   // let data = [];
   const url = "mis/graph-reports";
   const date = moment().format("yyyy");
   const startDate = `${date}-04-01`;
   const endDate = `${moment(date).add(12, "M").format("YYYY")}-03-31`;
 
-  const no_of_agreements = await axios.get(
-    `${API_LIVE}/api/mis/no-of-agreements?startDate=${startDate}&endDate=${endDate}&graph=true`
-  );
-  const monthly_rent = await axios.get(
-    `${API_LIVE}/api/mis/monthly-rent?startDate=${startDate}&endDate=${endDate}&graph=true`
-  );
-  const monthly_deposit = await axios.get(
-    `${API_LIVE}/api/mis/monthly-deposit?startDate=${startDate}&endDate=${endDate}&graph=true`
-  );
-
-  return {
-    no_of_agreements: no_of_agreements.data,
-    total_rent: monthly_rent.data,
-    total_deposit: monthly_deposit.data,
-  };
+  try {
+    const no_of_agreements = await axios.get(
+      `${API_LIVE}/api/mis/no-of-agreements?startDate=${startDate}&endDate=${endDate}&graph=true&role=${role}`
+    );
+    console.log({ no_of_agreements: no_of_agreements.data });
+    const monthly_rent = await axios.get(
+      `${API_LIVE}/api/mis/monthly-rent?startDate=${startDate}&endDate=${endDate}&graph=true&role=${role}`
+    );
+    console.log({ total_rent: monthly_rent });
+    const monthly_deposit = await axios.get(
+      `${API_LIVE}/api/mis/monthly-deposit?startDate=${startDate}&endDate=${endDate}&graph=true&role=${role}`
+    );
+    console.log({
+      no_of_agreements: no_of_agreements.data,
+      total_rent: monthly_rent.data,
+      total_deposit: monthly_deposit.data,
+    });
+    return {
+      no_of_agreements: no_of_agreements.data,
+      total_rent: monthly_rent.data,
+      total_deposit: monthly_deposit.data,
+    };
+  } catch (error) {
+    console.log(error);
+  }
 }
