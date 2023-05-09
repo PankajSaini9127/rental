@@ -70,7 +70,7 @@ function EditAgreement({ history }) {
 
   const [finance_id, setFinance_ID] = useState(null);
 
-  const [upaid,setUnpaid] = useState([])
+  const [upaid, setUnpaid] = useState([]);
 
   const month = [
     "January",
@@ -87,9 +87,8 @@ function EditAgreement({ history }) {
     "December",
   ];
 
-
   const [preData, setPreData] = useState({
-    assets : '',
+    assets: "",
     landlord: [],
     area: "",
     code: "",
@@ -113,28 +112,28 @@ function EditAgreement({ history }) {
     tax_receipt: "",
     noc: "",
     remark: "",
-    file : "",
-    termination_remark : "",
+    file: "",
+    termination_remark: "",
   });
 
-  const [recovery,setRecovery] = useState({
-    agreement_id : id,
-    remainingMonth : 0,
-    depositedAmount : 0,
-    adjustmentAmount : 0,
-    expenses : 0,
-    otherAdjustments : 0,
-    totalAdjustmentAmount : 0,
-    balanceDeposit : 0,
-    monthlyRent : 0,
-  })
+  const [recovery, setRecovery] = useState({
+    agreement_id: id,
+    remainingMonth: 0,
+    depositedAmount: 0,
+    adjustmentAmount: 0,
+    expenses: 0,
+    otherAdjustments: 0,
+    totalAdjustmentAmount: 0,
+    balanceDeposit: 0,
+    monthlyRent: 0,
+  });
   // modified by yashwant
   const [agreementData, setAgreementData] = useState({
-    id : id,
+    id: id,
     assets: preData.assets,
-    file : preData.file,
-    termination_remark : preData.termination_remark,
-  })
+    file: preData.file,
+    termination_remark: preData.termination_remark,
+  });
   async function fetchData() {
     try {
       let response = await getDetails(id);
@@ -173,16 +172,19 @@ function EditAgreement({ history }) {
           remark,
           assets,
           file,
-          termination_remark
+          termination_remark,
         } = response.data.agreement;
 
         setBuh_ID(response.data.bhu_id);
         setFinance_ID(response.data.op_id);
 
-          // get the unpaid hisorty of the agreement
-          let unpaid_amount = response.data.listUnpaidRow.reduce((sum,row)=>sum+=parseInt(row.rent_amount),0)
-          if(response.data.listUnpaidRow.length > 0)
-          setUnpaid(response.data.listUnpaidRow)
+        // get the unpaid hisorty of the agreement
+        let unpaid_amount = response.data.listUnpaidRow.reduce(
+          (sum, row) => (sum += parseInt(row.rent_amount)),
+          0
+        );
+        if (response.data.listUnpaidRow.length > 0)
+          setUnpaid(response.data.listUnpaidRow);
 
         let rent = monthlyRent;
 
@@ -190,7 +192,7 @@ function EditAgreement({ history }) {
 
         setRecovery((old) => ({
           ...old,
-          unpaid_amount : unpaid_amount,
+          unpaid_amount: unpaid_amount,
           depositedAmount: deposit,
           balanceDeposit: deposit - unpaid_amount,
           monthlyRent: monthlyRent,
@@ -241,7 +243,7 @@ function EditAgreement({ history }) {
           landlord,
           remark,
           file,
-          termination_remark
+          termination_remark,
         });
 
         setFormError({
@@ -392,7 +394,7 @@ function EditAgreement({ history }) {
 
       setAgreementData((old) => ({
         ...old,
-        [e.target.name + "_name"] : e.target.files[0].name,
+        [e.target.name + "_name"]: e.target.files[0].name,
         [e.target.name]: response.data.link,
       }));
       dispatch(
@@ -413,12 +415,12 @@ function EditAgreement({ history }) {
     }
   }
 
-  //use for set remark 
-  function handleRemarkChange (e){
+  //use for set remark
+  function handleRemarkChange(e) {
     setRecovery({
       ...recovery,
-      [e.target.name]:e.target.value
-    })
+      [e.target.name]: e.target.value,
+    });
   }
 
   // use on Change for uncommon fields
@@ -453,7 +455,8 @@ function EditAgreement({ history }) {
             parseInt(old.depositedAmount) -
             (old.monthlyRent * parseInt(e.target.value) +
               recovery.otherAdjustments +
-              recovery.expenses) - old.unpaid_amount ,
+              recovery.expenses) -
+            old.unpaid_amount,
         }));
       } else {
         setRecovery((old) => ({
@@ -461,7 +464,8 @@ function EditAgreement({ history }) {
           [e.target.name]:
             e.target.value.length > 0 ? parseInt(e.target.value) : 0,
           totalAdjustmentAmount: sum,
-          balanceDeposit: parseInt(old.depositedAmount) - sum - old.unpaid_amount,
+          balanceDeposit:
+            parseInt(old.depositedAmount) - sum - old.unpaid_amount,
         }));
       }
     }
@@ -651,16 +655,10 @@ function EditAgreement({ history }) {
 
   // form validation
   function validate(data) {
-    let field = [
-   "assets",
-   "termination_remark",
-   "file"
-    ];
-
-
+    let field = ["assets", "termination_remark", "file"];
 
     let finalCheck = field.map((row) => {
-      console.log(agreementData)
+      console.log(agreementData);
       if (!agreementData[row]) {
         console.log(row);
         setFormError((old) => ({ ...old, [row]: "Field required." }));
@@ -672,7 +670,7 @@ function EditAgreement({ history }) {
       }
     });
 
-    console.log(">>>>>",!finalCheck.includes(true));
+    console.log(">>>>>", !finalCheck.includes(true));
     if (!finalCheck.includes(true)) {
       return true;
     } else return false;
@@ -744,38 +742,44 @@ function EditAgreement({ history }) {
   async function handleSubmit(e) {
     e.preventDefault();
 
-
-    console.log("<<<>>>",validate())
-    if(!validate())
-    {
+    console.log("<<<>>>", validate());
+    if (!validate()) {
       // dispatch(
       //   setAlert({
       //     variant: "warning",
       //     open: true,
       //     message:  "Validation Alert !!!",
       //   }))
-      return false
+      return false;
     }
-    // remove useless fields 
-    delete agreementData.file_name
+    // remove useless fields
+    delete agreementData.file_name;
 
-    console.log(recovery)
+    console.log(recovery);
     let response = await insertAdjustmentAmount(recovery);
 
-    console.log(response)
+    console.log(response);
 
     if (response.status === 200) {
-        const updateStatus = await send_to_bhu({"status":"Terminated By Manager",renewal_status:"Sent For Termination",...agreementData},recovery.agreement_id)
-        if(updateStatus.data.success){
-          dispatch(
-            setAlert({
-              variant: "success",
-              open: true,
-              message: response.data.message || "Sent To Sr Manager For Termination",
-            })
-          );
-        }
-      navigate(-1)
+      const updateStatus = await send_to_bhu(
+        {
+          status: "Terminated By Manager",
+          renewal_status: "Sent For Termination",
+          ...agreementData,
+        },
+        recovery.agreement_id
+      );
+      if (updateStatus.data.success) {
+        dispatch(
+          setAlert({
+            variant: "success",
+            open: true,
+            message:
+              response.data.message || "Sent To Sr Manager For Termination",
+          })
+        );
+      }
+      navigate(-1);
     } else {
       dispatch(
         setAlert({
@@ -1089,25 +1093,23 @@ function EditAgreement({ history }) {
       {/* <DialogBox value={landblord} setValue={setLandblord} /> */}
       {/* {//console.log(landblord)} */}
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
-      
-
-<HamburgerManager/>
+        <HamburgerManager />
         <Box sx={{ flexGrow: 1 }}>
           <MyHeader>Old Agreement</MyHeader>
 
           <Box className="backButton">
-              <IconButton
-                variant="contained"
-                color="primary"
-                onClick={() => navigate(-1)}
-                size={"large"}
-              >
-                <ArrowCircleLeftIcon
-                  sx={{ fontSize: "3rem" }}
-                  color="#FFFFF !important"
-                />
-              </IconButton>
-            </Box>
+            <IconButton
+              variant="contained"
+              color="primary"
+              onClick={() => navigate(-1)}
+              size={"large"}
+            >
+              <ArrowCircleLeftIcon
+                sx={{ fontSize: "3rem" }}
+                color="#FFFFF !important"
+              />
+            </IconButton>
+          </Box>
           {/* 
           <Box
                           mb={2}
@@ -1840,56 +1842,77 @@ function EditAgreement({ history }) {
                   )}
                 </Grid>
 
-    {/* // Landlord assets */}
-    {/* <Grid item container xs={10} sx={{ mt: 5 }}>
+                {/* // Landlord assets */}
+                {/* <Grid item container xs={10} sx={{ mt: 5 }}>
                 <DataFieldStyle
                   field={"Landlord Assets"}
                   value={preData.assets}
                 />
               </Grid> */}
-              {/* document section ends here */}
+                {/* document section ends here */}
 
-
-                  <Grid container xs={10} sx={{ mt: 5 }}>
-                 
-                  <Grid item xs={12} mt = {2}>
-                  <Typography sx = {{fontSize : '1.4rem', fontWeight : 700 }} color = 'primary' >Landlord Assets</Typography>
-                      <TextField
-                        type="text"
-                        multiline
-                        rows={3}
-                        fullWidth
-                        helperText = {preData.assets}
-                        variant="outlined"
-                        // sx = {{borderRadius : '100px'}}
-                        // label="Termination Remark"
-                        placeholder="Landlord Assets*"
-                        value={agreementData.assets}
-                        onChange={(e) => setAgreementData(old=>({...old, assets : e.target.value}))}
-                      />
-                  <Typography sx = {{color : 'red' }} variant = 'caption' >{formError.assets}</Typography>
-                      </Grid>
-
-                      <Grid item xs={12} mt = {2}>
-                      <Typography sx = {{fontSize : '1.4rem', fontWeight : 700 }} color = 'primary' >Termination Remark</Typography>
-
-                      <TextField
-                        type="text"
-                        multiline
-                        rows={3}
-                        fullWidth
-                        variant="outlined"
-                        // sx = {{borderRadius : '100px'}}
-                        // label="Termination Remark"
-                        helperText = {preData.termination_remark}
-                        placeholder="Termination Remark*"
-                        value={agreementData.termination_remark}
-                        onChange={(e) => setAgreementData(old=>({...old, termination_remark : e.target.value}))}
-                      />
-                  <Typography variant = 'caption' sx = {{color : 'red' }}  >{formError.termination_remark}</Typography>
-                    </Grid>
-                
+                <Grid container xs={10} sx={{ mt: 5 }}>
+                  <Grid item xs={12} mt={2}>
+                    <Typography
+                      sx={{ fontSize: "1.4rem", fontWeight: 700 }}
+                      color="primary"
+                    >
+                      Landlord Assets
+                    </Typography>
+                    <TextField
+                      type="text"
+                      multiline
+                      rows={3}
+                      fullWidth
+                      helperText={preData.assets}
+                      variant="outlined"
+                      // sx = {{borderRadius : '100px'}}
+                      // label="Termination Remark"
+                      placeholder="Landlord Assets*"
+                      value={agreementData.assets}
+                      onChange={(e) =>
+                        setAgreementData((old) => ({
+                          ...old,
+                          assets: e.target.value,
+                        }))
+                      }
+                    />
+                    <Typography sx={{ color: "red" }} variant="caption">
+                      {formError.assets}
+                    </Typography>
                   </Grid>
+
+                  <Grid item xs={12} mt={2}>
+                    <Typography
+                      sx={{ fontSize: "1.4rem", fontWeight: 700 }}
+                      color="primary"
+                    >
+                      Termination Remark
+                    </Typography>
+
+                    <TextField
+                      type="text"
+                      multiline
+                      rows={3}
+                      fullWidth
+                      variant="outlined"
+                      // sx = {{borderRadius : '100px'}}
+                      // label="Termination Remark"
+                      helperText={preData.termination_remark}
+                      placeholder="Termination Remark*"
+                      value={agreementData.termination_remark}
+                      onChange={(e) =>
+                        setAgreementData((old) => ({
+                          ...old,
+                          termination_remark: e.target.value,
+                        }))
+                      }
+                    />
+                    <Typography variant="caption" sx={{ color: "red" }}>
+                      {formError.termination_remark}
+                    </Typography>
+                  </Grid>
+                </Grid>
 
                 {/* Document upload section end here */}
 
@@ -1900,7 +1923,7 @@ function EditAgreement({ history }) {
                 )}
                 <Grid
                   container
-                  sx={{ mt: "25px", mb: "25px"}}
+                  sx={{ mt: "25px", mb: "25px" }}
                   spacing={isSmall ? 2 : 4}
                   component={"form"}
                   onSubmit={handleSubmit}
@@ -1915,185 +1938,205 @@ function EditAgreement({ history }) {
                       fontWeight="600"
                       // my="20px"
                     >
-                       Deposit Adjustments Form
+                      Deposit Adjustments Form
                     </Typography>
                   </Grid>
                   <Grid item xs={12} container>
-                  <TextFieldWrapper
-                    label="Deposit Amount (Paid)"
-                    placeHolder="Deposit Amount"
-                    // onBlur={(e) => handleOnBlur(e, i)}
-                    // error = {errorObj.leeseName}
-                    name="depositedAmount"
-                    disabled={true}
-                    value={recovery.depositedAmount}
-                    onChange={(e) => handleChange(e)}
-                  />
-                  </Grid>
-                  
-                  <Grid item xs={12} container spacing = {3}>
-                  <Grid item xs={12} >
-                            <Typography color={"var( --main-color)"}>
-                              {"Adjustment Amount"}
-                            </Typography>
-                          </Grid>
-                  <TextFieldWrapper
-                    label=""
-                    placeHolder="Number of Months"
-                    // onBlur={(e) => handleOnBlur(e, i)}
-                    // error = {errorObj.leeseName}
-                    name="remainingMonth"
-                    // disabled = {true}
-                    value={recovery.remainingMonth}
-                    onChange={(e) => handleChange(e)}
-                  />
-                 
-                  <TextFieldWrapper
-                    label="Adjustment Amount"
-                    placeHolder="Adjustment Amount"
-                    // onBlur={(e) => handleOnBlur(e, i)}
-                    // error = {errorObj.leeseName}
-                    name="adjustmentAmount"
-                    // disabled={true}
-                    value={recovery.adjustmentAmount}
-                    onChange={(e) => handleChange(e)}
-                  />
-                  <TextFieldWrapper
-                    label="Remark"
-                    placeHolder="Remark"
-                    // onBlur={(e) => handleOnBlur(e, i)}
-                    // error = {errorObj.leeseName}
-                    name="adjustmentAmountRemark"
-                    value={recovery.adjustmentAmountRemark}
-                    onChange={(e) => handleRemarkChange(e)}
-                  />
+                    <TextFieldWrapper
+                      label="Deposit Amount (Paid)"
+                      placeHolder="Deposit Amount"
+                      // onBlur={(e) => handleOnBlur(e, i)}
+                      // error = {errorObj.leeseName}
+                      name="depositedAmount"
+                      disabled={true}
+                      value={recovery.depositedAmount}
+                      onChange={(e) => handleChange(e)}
+                    />
                   </Grid>
 
- {/* unpaid section */}
- {upaid.length > 0 && <Grid mt = {1} mb = {1} item xs={12} >
-                  <Grid coantiner sx = {{display : 'flex',gap : '2rem', flexDirection : 'column'}}>
-                <Grid item xs = {12} >
-                  <Typography  color = {"primary"} >Unpaid Months</Typography>
-                </Grid>
-                {
-                  upaid.map((row)=><Grid item xs = {12} sx = {{display : 'flex',gap : '2rem'}}>
-                  <TextFieldWrapper
-                    label={"Rent Month (Unpaid)"}
-                    placeHolder="Deposit Amount"
-                    disabled={true}
-                    value={month[new Date(row.rent_date).getUTCMonth()] + "-" + new Date(row.rent_date).getFullYear()}
-                    onChange={(e) => handleChange(e)}
-                  />
-                  <TextFieldWrapper
-                    label="Rent Amount"
-                    disabled={true}
-                    value={parseInt(row.rent_amount)}
-                    onChange={(e) => handleChange(e)}
-                  />
-                  <TextFieldWrapper
-                    label="Status"
-                    disabled={true}
-                    value={row.status}
-                    onChange={(e) => handleChange(e)}
-                  />
-                  </Grid>)
-                }
+                  <Grid item xs={12} container spacing={3}>
+                    <Grid item xs={12}>
+                      <Typography color={"var( --main-color)"}>
+                        {"Adjustment Amount"}
+                      </Typography>
+                    </Grid>
+                    <TextFieldWrapper
+                      label=""
+                      placeHolder="Number of Months"
+                      // onBlur={(e) => handleOnBlur(e, i)}
+                      // error = {errorObj.leeseName}
+                      name="remainingMonth"
+                      // disabled = {true}
+                      value={recovery.remainingMonth}
+                      onChange={(e) => handleChange(e)}
+                    />
+
+                    <TextFieldWrapper
+                      label="Adjustment Amount"
+                      placeHolder="Adjustment Amount"
+                      // onBlur={(e) => handleOnBlur(e, i)}
+                      // error = {errorObj.leeseName}
+                      name="adjustmentAmount"
+                      // disabled={true}
+                      value={recovery.adjustmentAmount}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    <TextFieldWrapper
+                      label="Remark"
+                      placeHolder="Remark"
+                      // onBlur={(e) => handleOnBlur(e, i)}
+                      // error = {errorObj.leeseName}
+                      name="adjustmentAmountRemark"
+                      value={recovery.adjustmentAmountRemark}
+                      onChange={(e) => handleRemarkChange(e)}
+                    />
                   </Grid>
-               </Grid>}
+
+                  {/* unpaid section */}
+                  {upaid.length > 0 && (
+                    <Grid mt={1} mb={1} item xs={12}>
+                      <Grid
+                        coantiner
+                        sx={{
+                          display: "flex",
+                          gap: "2rem",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <Grid item xs={12}>
+                          <Typography color={"primary"}>
+                            Unpaid Months
+                          </Typography>
+                        </Grid>
+                        {upaid.map((row) => (
+                          <Grid
+                            item
+                            xs={12}
+                            sx={{ display: "flex", gap: "2rem" }}
+                          >
+                            <TextFieldWrapper
+                              label={"Rent Month (Unpaid)"}
+                              placeHolder="Deposit Amount"
+                              disabled={true}
+                              value={
+                                month[new Date(row.rent_date).getUTCMonth()] +
+                                "-" +
+                                new Date(row.rent_date).getFullYear()
+                              }
+                              onChange={(e) => handleChange(e)}
+                            />
+                            <TextFieldWrapper
+                              label="Rent Amount"
+                              disabled={true}
+                              value={row.rent_amount}
+                              onChange={(e) => handleChange(e)}
+                            />
+                            <TextFieldWrapper
+                              label="Status"
+                              disabled={true}
+                              value={row.status}
+                              onChange={(e) => handleChange(e)}
+                            />
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </Grid>
+                  )}
 
                   {/* unpaid section ends */}
 
-
-                  <Grid item xs={12} container spacing = {2}>
-                  <Grid item xs={12}>
-                            <Typography color={"var( --main-color)"}>
-                              {"Adjust Towards Expances"}
-                            </Typography>
-                          </Grid>
-                  <TextFieldWrapper
-                    label="Expenses"
-                    placeHolder="Adjustment Amount"
-                    // onBlur={(e) => handleOnBlur(e, i)}
-                    // error = {errorObj.leeseName}
-                    name="expenses"
-                    value={recovery.expenses}
-                    onChange={(e) => handleChange(e)}
-                  />
-<TextFieldWrapper
-                    label="Remark"
-                    placeHolder="Remark"
-                    // onBlur={(e) => handleOnBlur(e, i)}
-                    // error = {errorObj.leeseName}
-                    name="expansesRemark"
-                    // disabled={true}
-                    value={recovery.expansesRemark}
-                    onChange={(e) => handleRemarkChange(e)}
-                  />
-</Grid>
-
-<Grid item xs={12} container spacing = {2}>
-                  <Grid item xs={12}>
-                            <Typography color={"var( --main-color)"}>
-                              {"Other Adjustments"}
-                            </Typography>
-                          </Grid>
-                  <TextFieldWrapper
-                    label="Other Adjustments"
-                    placeHolder="Other Adjustments"
-                    // onBlur={(e) => handleOnBlur(e, i)}
-                    // error = {errorObj.leeseName}
-                    name="otherAdjustments"
-                    value={recovery.otherAdjustments}
-                    onChange={(e) => handleChange(e)}
-                  />
-               <TextFieldWrapper
-                    label="Remark"
-                    placeHolder="Remark"
-                    // onBlur={(e) => handleOnBlur(e, i)}
-                    // error = {errorObj.leeseName}
-                    name="otherRemark"
-                    // disabled={true}
-                    value={recovery.otherRemark}
-                    onChange={(e) => handleRemarkChange(e)}
-                  />
+                  <Grid item xs={12} container spacing={2}>
+                    <Grid item xs={12}>
+                      <Typography color={"var( --main-color)"}>
+                        {"Adjust Towards Expances"}
+                      </Typography>
+                    </Grid>
+                    <TextFieldWrapper
+                      label="Expenses"
+                      placeHolder="Adjustment Amount"
+                      // onBlur={(e) => handleOnBlur(e, i)}
+                      // error = {errorObj.leeseName}
+                      name="expenses"
+                      value={recovery.expenses}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    <TextFieldWrapper
+                      label="Remark"
+                      placeHolder="Remark"
+                      // onBlur={(e) => handleOnBlur(e, i)}
+                      // error = {errorObj.leeseName}
+                      name="expansesRemark"
+                      // disabled={true}
+                      value={recovery.expansesRemark}
+                      onChange={(e) => handleRemarkChange(e)}
+                    />
                   </Grid>
-                  <Grid item xs={12} container spacing = {2}>
-                  <TextFieldWrapper
-                    label="Total Adjustment Amount"
-                    placeHolder="Adjustment Amount"
-                    // onBlur={(e) => handleOnBlur(e, i)}
-                    // error = {errorObj.leeseName}
-                    name="totalAdjustmentAmount"
-                    value={recovery.totalAdjustmentAmount}
-                    onChange={(e) => handleChange(e)}
-                  />
-                  <TextFieldWrapper
-                    label="Balance Deposit "
-                    placeHolder="Balance Deposit"
-                    // onBlur={(e) => handleOnBlur(e, i)}
-                    // error = {errorObj.leeseName}
-                    name="balanceDeposit"
-                    disabled={true}
-                    value={recovery.balanceDeposit}
-                    onChange={(e) => handleChange(e)}
-                  />
+
+                  <Grid item xs={12} container spacing={2}>
+                    <Grid item xs={12}>
+                      <Typography color={"var( --main-color)"}>
+                        {"Other Adjustments"}
+                      </Typography>
+                    </Grid>
+                    <TextFieldWrapper
+                      label="Other Adjustments"
+                      placeHolder="Other Adjustments"
+                      // onBlur={(e) => handleOnBlur(e, i)}
+                      // error = {errorObj.leeseName}
+                      name="otherAdjustments"
+                      value={recovery.otherAdjustments}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    <TextFieldWrapper
+                      label="Remark"
+                      placeHolder="Remark"
+                      // onBlur={(e) => handleOnBlur(e, i)}
+                      // error = {errorObj.leeseName}
+                      name="otherRemark"
+                      // disabled={true}
+                      value={recovery.otherRemark}
+                      onChange={(e) => handleRemarkChange(e)}
+                    />
+                  </Grid>
+                  <Grid item xs={12} container spacing={2}>
+                    <TextFieldWrapper
+                      label="Total Adjustment Amount"
+                      placeHolder="Adjustment Amount"
+                      // onBlur={(e) => handleOnBlur(e, i)}
+                      // error = {errorObj.leeseName}
+                      name="totalAdjustmentAmount"
+                      value={recovery.totalAdjustmentAmount}
+                      onChange={(e) => handleChange(e)}
+                    />
+                    <TextFieldWrapper
+                      label="Balance Deposit "
+                      placeHolder="Balance Deposit"
+                      // onBlur={(e) => handleOnBlur(e, i)}
+                      // error = {errorObj.leeseName}
+                      name="balanceDeposit"
+                      disabled={true}
+                      value={recovery.balanceDeposit}
+                      onChange={(e) => handleChange(e)}
+                    />
                   </Grid>
 
                   {/* <Button type = 'submit' variant = 'contained'>Save</Button> */}
                 </Grid>
 
-                <Grid item xs={12} mt = {2}>
+                <Grid item xs={12} mt={2}>
                   <DocumentUpload
-                      label="Upload File"
-                      uploaded={(agreementData.file !== "" && preData.file !== "") && true}
-                      error={formError.file}
-                      placeHolder={"Upload File"}
-                      handleChange={handleChangeFile}
-                      fileName={agreementData.file_name}
-                      name={"file"}
-                      href={agreementData.file || preData.file}
-                      />
-                      </Grid>
+                    label="Upload File"
+                    uploaded={
+                      agreementData.file !== "" && preData.file !== "" && true
+                    }
+                    error={formError.file}
+                    placeHolder={"Upload File"}
+                    handleChange={handleChangeFile}
+                    fileName={agreementData.file_name}
+                    name={"file"}
+                    href={agreementData.file || preData.file}
+                  />
+                </Grid>
 
                 {/* Button Start from here */}
                 <Grid
@@ -2122,7 +2165,7 @@ function EditAgreement({ history }) {
                         },
                       }}
                     >
-                        Send To Sr Manager
+                      Send To Sr Manager
                     </Button>
                   </Grid>
 
