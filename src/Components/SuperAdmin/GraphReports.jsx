@@ -221,7 +221,7 @@ const GraphReports = () => {
                 }}
                 onClick={() => {
 
-                  excelDownload(reports, id, startDate, endDate);;
+                  excelDownload(reports, id, role, startDate, endDate);;
 
                 }}
                 disabled={reports && startDate && endDate ? false : true}
