@@ -11,6 +11,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PermissionAlert from "./Alert";
 import {
+  Add_utr_datails,
   add_monthly_rent,
   delete_agreement,
   getModifyDate,
@@ -23,6 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAlert, setRefreshBox } from "../../store/action/action";
 import FinalAgreement from "./FinalAgreement";
 import Remark from "../RentalPortal/Remark";
+import DialogBoxSBM from "../RentalPortal/DialogBoxSBM";
 
 function DataTable({ rows, loading, check, setCheck }) {
   const dispatch = useDispatch();
@@ -81,18 +83,21 @@ function DataTable({ rows, loading, check, setCheck }) {
   const navigate = useNavigate();
 
   const renderDetailsButton = (e) => {
-    const id = e.id;
+    const id =  e.row.type !== "Old" ? e.id : e.row.i;
 
-    console.log(e.row.utr_number);
+    const landlord_id =  e.row.landlord_id;
+    console.log(e.row.utr_number,e.row.type !== "Old");
+   
     let utr_count = 0;
+    e.row.type !== "Old" &&
    e.row.utr_number.map(item=>{
       if(item === null)  utr_count += 1 
-    })
-
-    console.log(utr_count)
-
-    return (
-      <>
+    });
+    
+return(
+  <>
+   { e.row.type !== "Old"? 
+<>
         {(e.row.status === "Sent Back From Sr Manager" ||
           e.row.status === "Sent Back From BUH" ||
           e.row.status === "Sent Back From Finance Team" ||
@@ -197,12 +202,66 @@ function DataTable({ rows, loading, check, setCheck }) {
             </Grid>
           </Grid>
         )}
-      </>
-    );
+        </> :
+        <>
+         {(e.row.status === "Submitted"  && e.row.utr_number === null)  &&  (
+          <Grid container>
+            <Grid item md={6} sx={{ color: "white !important" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{
+                  backgroundColor: "#62CDFF",
+                  color: "white",
+                  fontSize: "12px",
+                  textTransform: "capitalize",
+                }}
+                 startIcon={<EditIcon />}
+                onClick={(e) => {
+                  e.stopPropagation(); // don't select this row after clicking
+                  setUtrModal({open:true,id:landlord_id})
+                }}
+              >                
+               UTR Number
+              </Button>
+            </Grid>
+          </Grid>
+        )}
+         {(e.row.status === "Submitted"  && e.row.utr_number !== null)  &&  (
+          <Grid container>
+            <Grid item md={6} sx={{ color: "white !important" }}>
+              <Button
+                variant="contained"
+                color="primary"
+                size="small"
+                style={{
+                  backgroundColor: "#62CDFF",
+                  color: "white",
+                  fontSize: "12px",
+                  textTransform: "capitalize",
+                }}
+                //  startIcon={<EditIcon />}
+                onClick={(e) => {
+                  e.stopPropagation(); // don't select this row after clicking
+
+                  setSelectID(id);
+                  setopen(true);
+                  // getUpdateDate(id);
+                }}
+              >
+                Upload Final Agreement
+              </Button>
+            </Grid>
+          </Grid>
+        )}
+        </>}
+        </>)
   };
 
   const detailsButton = (e) => {
-    const id = e.id;
+    const id =  e.row.type !== "Old" ? e.id : e.row.i;
+
 
     return (
       <Button
@@ -377,6 +436,8 @@ function DataTable({ rows, loading, check, setCheck }) {
   //form delete alert
   const [deleteAlert, setDeleteAlert] = useState({ open: false, id: "" });
 
+  const [utr, setUtr] = useState({ utr: "", paymentDate: "" });
+
   const handleConfirm = () => {
     deleteAPI(deleteAlert.id);
     setDeleteAlert({ open: false, id: "" });
@@ -474,6 +535,8 @@ function DataTable({ rows, loading, check, setCheck }) {
 
   const [remarkMSG, setRemarkMSG] = useState("");
 
+  const [utrModal,setUtrModal] = useState({id:"",open:false})
+
   const handleSelectSend = (e) => {
     console.log(ids);
     console.log(remarkMSG);
@@ -528,6 +591,31 @@ function DataTable({ rows, loading, check, setCheck }) {
     }
   }
 
+  //add utr details
+  async function addUTR (){
+    try {
+      console.log(utrModal,utr)
+      const response = await Add_utr_datails(
+        {
+          utr_number: utr.utr,
+          payment_date: utr.paymentDate,
+        },
+        utrModal.id
+      );
+      if(response.data.success){
+        setUtrModal({
+          open:false,
+          id:""
+        })
+        setUtr({ utr: "", paymentDate: "" })
+        dispatch(setAlert({open:true,variant:"success",message:"UTR DEtails Added Successfully."}));
+        dispatch(setRefreshBox())
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
       {ids.length > 0 && (
@@ -549,6 +637,17 @@ function DataTable({ rows, loading, check, setCheck }) {
         handleClose={() => setRemarkOpen(false)}
       />
 
+      {/* //utr detailsButton */}
+      <DialogBoxSBM
+            open={utrModal.open}
+            handleClose={() => {setUtrModal({...open,open : false});setUtr({ utr: "", paymentDate: "" })}}
+            handleConfirm={addUTR}
+            value={utr}
+            setValue={setUtr}
+            // modifyDate={modifyDate}
+          />
+
+
       <FinalAgreement
         open={open}
         setOpen={setopen}
@@ -557,17 +656,6 @@ function DataTable({ rows, loading, check, setCheck }) {
         setValue={setFinalAgreement}
         modifyDate={modifyDate}
       />
-
-      <Snackbar
-        open={err.open}
-        autoHideDuration={6000}
-        onClose={handleClose}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert onClose={handleClose} severity={err.type} sx={{ width: "100%" }}>
-          {err.message}
-        </Alert>
-      </Snackbar>
 
       <PermissionAlert
         handleClose={handleCancel}
@@ -626,7 +714,8 @@ function DataTable({ rows, loading, check, setCheck }) {
             if (
               parms.field === "status" &&
               (parms.row.status === "Approved" ||
-                parms.row.status === "Deposited")
+                parms.row.status === "Deposited" ||
+                parms.row.status === "Submitted")
             ) {
               cellClass.push("green statusCell");
             } else if (
