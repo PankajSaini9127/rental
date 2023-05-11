@@ -90,6 +90,12 @@ export async function get_total_agreements (manager_id){
     return axios.get(`${API_LIVE}/api/agreements/total/${manager_id}`)
 }
 
+//get all agreements
+export async function get_all_old_agreement (manager_id){
+    return axios.get(`${API_LIVE}/api/agreements/old/${manager_id}`)
+}
+
+
 export async function add_agreement (data){
     console.log(data)
     return  axios.post(`${API_LIVE}/api/newAgreement`,data);
@@ -261,6 +267,10 @@ export async function get_search_manager_inprocess (name){
     return await axios.post(`${API_LIVE}/api/search/in-process/manager`,{name})
 }
 
+
+export async function get_search_manager_old (name){
+    return await axios.post(`${API_LIVE}/api/search/old/manager`,{name})
+}
 
 export async function add_monthly_rent (data){
     return await axios.post(`${API_LIVE}/api/monthly_rent/add`,data)
@@ -659,4 +669,12 @@ export async function graphReports(role) {
   } catch (error) {
     console.log(error);
   }
+}
+//get all manager list
+export async function getManager (){
+    return await axios.get(`${API_LIVE}/api/get-all-manager`)
+}
+
+export async function getemployeeList (id){
+    return await axios.get(`${API_LIVE}/api/get-all-employee-list/?id=${id}`)
 }

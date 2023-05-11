@@ -19,6 +19,8 @@ import {
   FormControl,
   IconButton,
   Collapse,
+  InputLabel,
+  Select,
 } from "@mui/material";
 
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
@@ -45,6 +47,8 @@ import {
   getCityList,
   getBankName,
   getLocation,
+  getManager,
+  getemployeeList,
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
@@ -87,6 +91,11 @@ function OldAgreements({ history }) {
     location: "",
     city: "",
     area: "",
+    manager:"",
+    sr_manager:"",
+    buh:"",
+    operations:"",
+    finance:""
   });
 
   useEffect(() => {
@@ -117,8 +126,7 @@ function OldAgreements({ history }) {
   });
   const [isSubmit, setIsSubmit] = useState(false);
 
-  const [stateList, setStateList] = useState([]);
-  const [cityList, setCityList] = useState([]);
+  const [manager , setManager] = useState({manager:[],sr_manager:[],buh:[],operations:[],finance:[]})
 
   const [expand, setExpand] = useState(0);
   const [docExpand, setDocExpand] = useState(0);
@@ -130,6 +138,7 @@ function OldAgreements({ history }) {
     year4: "",
     year5: "",
   });
+  
   const [yearValue, setYearValue] = useState({
     year1: 0,
     year2: 0,
@@ -540,7 +549,7 @@ function OldAgreements({ history }) {
       case "deposit":
         if (!e.target.value.match(/^[0-9]*$/)) error = { state: true };
         break;
-        case "tenure":
+      case "tenure":
         if (!e.target.value.match(/^[0-9]*$/))
           error = { state: true, message: "Value must be Correct" };
         break;
@@ -588,7 +597,12 @@ function OldAgreements({ history }) {
       city,
       area,
       assets,
-      property_pic
+      property_pic,
+      manager,
+    sr_manager,
+    buh,
+    operations,
+    finance
     } = data;
 
     const { landlord } = data;
@@ -624,9 +638,14 @@ function OldAgreements({ history }) {
         address,
         location,
         city,
-        manager_id: id,
-        status: "Sent To Sr Manager",
-        assets
+        manager_id: manager,
+        srm_id:sr_manager,
+        buh_id:buh,
+        op_id:operations,
+        finance_id:finance,
+        status: "Submitted",
+        assets,
+        type:"Old"
       },
       landlord
     );
@@ -671,7 +690,7 @@ function OldAgreements({ history }) {
       year4,
       year5,
       assets,
-      property_pic
+      property_pic,
     } = data;
     console.log(year1, year2, year3, year4, year5);
     const { landlord } = data;
@@ -708,7 +727,7 @@ function OldAgreements({ history }) {
         status: "Hold",
         remark: "",
         assets,
-        property_pic
+        property_pic,
       },
       landlord
     );
@@ -752,7 +771,7 @@ function OldAgreements({ history }) {
       const result = await add_landlord(landlordData);
 
       if (result) {
-        navigate(-1)
+        navigate(-1);
         dispatch(
           setAlert({
             open: true,
@@ -804,13 +823,12 @@ function OldAgreements({ history }) {
   // form validation
   function validate(data) {
     let field = [
-      ,
       "draft_agreement",
       "electricity_bill",
       "poa",
       "maintaince_bill",
       "tax_receipt",
-      "property_pic"
+      "property_pic",
     ];
 
     data.landlord.length > 1 && field.push("noc");
@@ -852,12 +870,11 @@ function OldAgreements({ history }) {
     } else return false;
   }
 
-  // for field validations 
+  // for field validations
   function validateFields(data) {
     console.log("Validate Called");
 
     let field = [
-      ,
       "lockInYear",
       "noticePeriod",
       "deposit",
@@ -869,7 +886,12 @@ function OldAgreements({ history }) {
       "pincode",
       "location",
       "area",
-      "assets"
+      "assets",
+      "manager",
+      "sr_manager",
+      "buh",
+      "operations",
+      "finance"
     ];
 
     let dataError = [];
@@ -920,7 +942,6 @@ function OldAgreements({ history }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // console.log(">>>",formError)
     console.log(validate(data), validateFields(data));
 
     setData((old) => ({ ...old, ...increment }));
@@ -955,6 +976,83 @@ function OldAgreements({ history }) {
     }
   }
 
+
+  async function getAllManager (){
+    try {
+      const response = await getManager()
+      console.log(response.data)
+      response.status === 200 && setManager({
+        ...manager,
+        manager : response.data
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(()=>{
+    getAllManager()
+  },[])
+
+async function getemployee(id,name){
+  console.log("response ",name)
+  try {
+    const response = await getemployeeList(id);
+ 
+    if(name === "manager"){
+      response.status && 
+      setManager({
+        ...manager,
+        sr_manager:response.data
+      });
+     
+    }else if(name === "sr_manager"){
+      response.status && 
+      setManager({
+        ...manager,
+        buh:response.data
+      });
+    }else if (name === "buh"){
+      response.status && 
+      setManager({
+        ...manager,
+        operations:response.data
+      });
+    }else if (name === "operations"){
+      response.status && 
+      setManager({
+        ...manager,
+        finance:response.data
+      });
+    }
+  
+  
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+  // onchange 
+  function handleSelectEmployee (e){
+    if(e.target.name === "finance"){
+      setData({
+        ...data,
+        [e.target.name]:e.target.value
+      })
+      setFormError((old) => ({ ...old, [e.target.name]: "" }));
+    }else{
+      getemployee(e.target.value, e.target.name);
+      setData({
+        ...data,
+        [e.target.name]:e.target.value
+      })
+      setFormError((old) => ({ ...old, [e.target.name]: "" }));
+    }
+    
+    
+  }
+
   return (
     <>
       {/* alert for submit form */}
@@ -971,7 +1069,7 @@ function OldAgreements({ history }) {
       <Stack sx={{ flexWrap: "nowrap", flexDirection: "row" }}>
         {/* side nav     */}
         {/* <HamburgerMenu navigateTo={"listing"} /> */}
-{/* 
+        {/* 
         <HamburgerMenu
           navigateHome={"dashboard"}
           handleListing={() => navigate("/listing")}
@@ -980,7 +1078,7 @@ function OldAgreements({ history }) {
           monthlyBtn="true"
         /> */}
 
-<HamburgerManager/>
+        <HamburgerManager />
 
         <Box className="backButton">
           <IconButton
@@ -997,7 +1095,7 @@ function OldAgreements({ history }) {
         </Box>
 
         <Box sx={{ flexGrow: 1 }}>
-        <Grid
+          <Grid
             item
             xs={12}
             sx={{ justifyContent: "space-between", display: "flex" }}
@@ -1025,7 +1123,7 @@ function OldAgreements({ history }) {
               >
                 {/* Basic details start here */}
 
-                <Grid container  spacing={isSmall ? 2 : 4}>
+                <Grid container spacing={isSmall ? 2 : 4}>
                   <TextFieldWrapper
                     label="Code"
                     disabled={true}
@@ -1150,7 +1248,7 @@ function OldAgreements({ history }) {
                     value={data.monthlyRent}
                     onChange={handleCommonChange}
                   />
-                     <TextFieldWrapper
+                  <TextFieldWrapper
                     label="Agreement Tenure"
                     placeHolder="Tenure In Months"
                     name="tenure"
@@ -1179,7 +1277,7 @@ function OldAgreements({ history }) {
                     onChange={handleCommonChange}
                   /> */}
 
-                  {data.tenure === "" ? null : data.tenure  <= 12 ? null : (
+                  {data.tenure === "" ? null : data.tenure <= 12 ? null : (
                     <SelectComponent
                       label={"Yearly Increment"}
                       required={true}
@@ -1822,7 +1920,7 @@ function OldAgreements({ history }) {
                       />
                     </Grid>
                   )}
-                    <Grid item xs={6}>
+                  <Grid item xs={6}>
                     <DocumentUpload
                       label="Upload Property Picture"
                       uploaded={data.property_pic && true}
@@ -1838,28 +1936,81 @@ function OldAgreements({ history }) {
                 {/* Document upload section end here */}
 
                 <Grid
-                    item
-                    xs={10}
-                    sx={{ mt: 5 }}
-                    className={"textFieldWrapper"}
-                  >
-                    <Grid item xs={8}>
-                      <TextField
-                        type="text"
-                        multiline
-                        rows={3}
-                        fullWidth
-                        variant="outlined"
-                        label="Landlord Assets *"
-                        name = "assets"
-                        placeholder="Landlord Assets *"
-                        value={data.assets || ""}
-                        onChange={handleCommonChange}
-                        // onChange={(e) => setAssets(e.target.value)}
-                      />
-                      <Typography sx = {{color : 'red'}} variant = 'caption'>{formError.assets}</Typography>
-                    </Grid>
+                  item
+                  xs={10}
+                  sx={{ mt: 5 }}
+                  className={"textFieldWrapper"}
+                >
+                  <Grid item xs={8}>
+                    <TextField
+                      type="text"
+                      multiline
+                      rows={3}
+                      fullWidth
+                      variant="outlined"
+                      label="Landlord Assets *"
+                      name="assets"
+                      placeholder="Landlord Assets *"
+                      value={data.assets || ""}
+                      onChange={handleCommonChange}
+                      // onChange={(e) => setAssets(e.target.value)}
+                    />
+                    <Typography sx={{ color: "red" }} variant="caption">
+                      {formError.assets}
+                    </Typography>
                   </Grid>
+                </Grid>
+
+                {/* <Grid item xs={12} md={10}> */}
+              <Grid container spacing={2} sx={{mt:3}}>
+                <DropDown
+                  label={"Manager"}
+                  name="manager"
+                  value={data.manager}
+                  handleChange={handleSelectEmployee}
+                  employeeList={manager.manager}
+                  error={formError.manager}
+                  onBlur={(e) => handleOnBlur(e, i)}
+                />
+                <DropDown
+                 label={"Sr Manager"}
+                  name="sr_manager"
+                  employeeList={manager.sr_manager}
+                  value={data.sr_manager}
+                  handleChange={handleSelectEmployee}
+                  error={formError.sr_manager}
+                  onBlur={(e) => handleOnBlur(e, i)}
+                />
+                <DropDown
+                  label={"BUH"}
+                  name="buh"
+                  employeeList={manager.buh}
+                  value={data.buh}
+                  handleChange={handleSelectEmployee}
+                  error={formError.buh}
+                  onBlur={(e) => handleOnBlur(e, i)}
+                />
+                <DropDown
+                 label={"Operations"}
+                 name="operations"
+                 employeeList={manager.operations}
+                 value={data.operations}
+                 handleChange={handleSelectEmployee}
+                 error={formError.operations}
+                 onBlur={(e) => handleOnBlur(e, i)}
+                />
+                <DropDown
+                 label={"Finance"}
+                 required={true}
+                 name="finance"
+                 employeeList={manager.finance}
+                 value={data.finance}
+                 handleChange={handleSelectEmployee}
+                 error={formError.finance}
+                 onBlur={(e) => handleOnBlur(e, i)}
+                />
+              </Grid>
+            {/* </Grid> */}
 
                 {/* Landlord Assets */}
 
@@ -1890,7 +2041,7 @@ function OldAgreements({ history }) {
                         },
                       }}
                     >
-                      Submit To Sr Manager
+                      Submit 
                     </Button>
                   </Grid>
 
@@ -1918,11 +2069,11 @@ function OldAgreements({ history }) {
                   </Grid>
                 </Grid>
 
-                {/* Button Ends Here */}
               </Box>
 
-              {/* agreemenet from end here */}
             </Grid>
+
+            
           </Grid>
         </Box>
       </Stack>
@@ -1931,3 +2082,48 @@ function OldAgreements({ history }) {
 }
 
 export default OldAgreements;
+
+
+function DropDown ({handleChange,value,name,employeeList,label,error}){
+  return(
+  <Grid
+  item
+  md={4}
+  xs={6}
+  sx={{
+    mb: "0px !important",
+    "@media(max-width:900px)": { my: 1 },
+  }}
+>
+  <FormControl fullWidth className="textFieldWrapper">
+    <InputLabel id="demo-simple-select-label">
+      {label}
+    </InputLabel>
+    <Select
+      name={name}
+      onChange={(e) => handleChange(e)}
+      variant="outlined"
+      labelId="demo-simple-select-label"
+      value={value}
+      label={label}
+      required={'true'}
+      sx={{
+        mt: "0px !important",
+        color: "rgba(16, 99, 173, 0.47)",
+        width: "100%",
+        height: "50px !important",
+        boxShadow: "none",
+      }}
+    >
+      {employeeList.map((item, i) => {
+        return (
+          <MenuItem value={item.id} key={item.id}>
+            {item.name}
+          </MenuItem>
+        );
+      })}
+    </Select>
+    <Typography variant = 'caption' sx = {{color : 'red'}}>{error}</Typography>
+  </FormControl>
+</Grid>
+)}
