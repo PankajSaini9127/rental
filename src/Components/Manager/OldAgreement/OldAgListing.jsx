@@ -12,7 +12,6 @@ import {
   get_search_manager,
   get_search_manager_approved,
   get_search_manager_inprocess,
-  get_search_manager_old,
   get_total_agreements,
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
@@ -148,13 +147,6 @@ function Listing() {
     setAgreement(search.data.agreement);
   }
 
-  async function SearchAPi_OLD(searchValue) {
-    const search = await get_search_manager_old(searchValue);
-    console.log(search.data.data)
-    setData(search.data.data);
-    // setAgreement(search.data.agreement);
-  }
-
   useEffect(() => {
     if (params === "in-procces-ag") {
       APICALL(auth.id);
@@ -170,10 +162,9 @@ function Listing() {
   // console.log(data);
   const row = 
     params === "old-ag" ?    data.map((item) => {
-      console.log(item.agreement_id,item.landlord_id);
+      console.log(item);
       return {
-        id: item.landlord_id,
-        i:item.agreement_id,
+        id: item.agreement_id,
         status: item.status,
         code: item.code,
         name: item.name,
@@ -188,7 +179,7 @@ function Listing() {
         city: item.city,
         state: item.state,
         deposit: parseFloat(item.deposit).toFixed(0),
-        landlord_id:item.landlord_id
+        type:item.type === "Old"? "Old" :"New/Renewal"
       };
     })  :
     data.map((item) => {
@@ -209,7 +200,7 @@ function Listing() {
         city: agreement[item].city,
         state: agreement[item].state,
         deposit: parseFloat(agreement[item].deposit).toFixed(0),
-        landlord_id:""
+        type:agreement[item].type === "Old"? "Old" :"New/Renewal"
       };
     })
   
@@ -223,8 +214,6 @@ function Listing() {
       SearchAPi_Approve(e.target.value);
     } else if (params === "total-ag") {
       SearchAPi(e.target.value);
-    }else if (params === "old-ag"){
-      SearchAPi_OLD(e.target.value)
     }
 
     setsearchValue(e.target.value);
