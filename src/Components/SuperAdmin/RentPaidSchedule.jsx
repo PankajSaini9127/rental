@@ -190,7 +190,10 @@ const RentPaidSchedule = () => {
                 textTransform: "capitalize",
               }}
               onClick={() => {
-                excelDownload(reports, id, startDate, endDate);
+
+
+                excelDownload(reports, id, role, startDate, endDate);;
+
               }}
               disabled={startDate && endDate ? false : true}
             >
