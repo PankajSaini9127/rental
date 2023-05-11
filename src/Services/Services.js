@@ -637,6 +637,15 @@ export function excelDownload(reports, id, role, startDate, endDate) {
     });
 }
 
+//get all manager list
+export async function getManager (){
+    return await axios.get(`${API_LIVE}/api/get-all-manager`)
+}
+
+export async function getemployeeList (id){
+    return await axios.get(`${API_LIVE}/api/get-all-employee-list/?id=${id}`)
+}
+
 export async function graphReports(role) {
   // let data = [];
   const url = "mis/graph-reports";
@@ -669,12 +678,4 @@ export async function graphReports(role) {
   } catch (error) {
     console.log(error);
   }
-}
-//get all manager list
-export async function getManager (){
-    return await axios.get(`${API_LIVE}/api/get-all-manager`)
-}
-
-export async function getemployeeList (id){
-    return await axios.get(`${API_LIVE}/api/get-all-employee-list/?id=${id}`)
 }
