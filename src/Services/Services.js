@@ -644,6 +644,7 @@ export async function getManager (){
 
 export async function getemployeeList (id){
     return await axios.get(`${API_LIVE}/api/get-all-employee-list/?id=${id}`)
+}
 
 export async function graphReports(role) {
   // let data = [];

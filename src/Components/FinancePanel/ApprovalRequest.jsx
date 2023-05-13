@@ -65,7 +65,6 @@ function FinanceApproval() {
   const [remark, setRemark] = useState("");
 
   const [agreement, setAgreement] = useState({});
-  const [ids, setIds] = useState([]);
 
   const [open, setopen] = useState(false);
 
@@ -833,7 +832,7 @@ function FinanceApproval() {
                 <DataFieldStyle field={"Remark"} value={agreement.remark} />
               </Grid>
 
-              {agreement.status === "Terminated By Operations" && (
+              {(agreement.status === "Terminated By Operations" || agreement.status === "Approved for Termination") && (
                 <>
                   <Grid item container xs={10} sx={{ mt: 2 }}>
                     <DataFieldStyle
