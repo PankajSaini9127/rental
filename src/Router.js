@@ -71,9 +71,10 @@ import RentalOnboardingDeposited from "./Components/SuperAdmin/RentalOnboardingD
 import EditLandlord from "./Components/landlordOperations/Edit";
 // import RentPaidSchedule from "./Components/SuperAdmin/RentPaidSchedule";
 
-// add by Yashwant 
-import LandlordList from './Components/landlordOperations/Listing'
+// add by Yashwant
+import LandlordList from "./Components/landlordOperations/Listing";
 import OldAgreements from "./Components/Manager/OldAgreement";
+import OldAgListing from "./Components/Manager/OldAgreement/OldAgListing";
 
 function MyRouter() {
   const history = useNavigate();
@@ -85,11 +86,19 @@ function MyRouter() {
   return (
     <Routes>
       {/* Route Added by Yashwant Sahu  */}
-      <Route exact path="/list-landlord" element={<LandlordList history = {history}/>} />
-      <Route exact path="/edit-landlord" element={<EditLandlord history = {history} />} />
-      
+      <Route
+        exact
+        path="/list-landlord"
+        element={<LandlordList history={history} />}
+      />
+      <Route
+        exact
+        path="/edit-landlord"
+        element={<EditLandlord history={history} />}
+      />
+
       <Route exact path="/" element={<Login />} />
-      
+
       <Route
         exact
         path="/dashboard"
@@ -113,6 +122,13 @@ function MyRouter() {
         exact
         path="/listing/:params"
         element={isAuth && role.includes("Manager") ? <Listing /> : <Login />}
+      />
+      <Route
+        exact
+        path="/old-listing/:params"
+        element={
+          isAuth && role.includes("Manager") ? <OldAgListing /> : <Login />
+        }
       />
       <Route
         exact
@@ -176,16 +192,13 @@ function MyRouter() {
           isAuth && role.includes("Manager") ? <ManagerApproval /> : <Login />
         }
       />
-  <Route
+      <Route
         exact
         path="/old-agreement"
         element={
           isAuth && role.includes("Manager") ? <OldAgreements /> : <Login />
         }
       />
-
-
-
 
       {/* Sr Manager */}
       <Route
@@ -401,57 +414,27 @@ function MyRouter() {
       <Route
         exact
         path="/rental-property-dump-report"
-        element={
-          isAuth  ? (
-            <RentalPropertyDumpReport />
-          ) : (
-            <Login />
-          )
-        }
+        element={isAuth ? <RentalPropertyDumpReport /> : <Login />}
       />
       <Route
         exact
         path="/rental-payment-mis"
-        element={
-          isAuth ? (
-            <RentalPaymentMIS />
-          ) : (
-            <Login />
-          )
-        }
+        element={isAuth ? <RentalPaymentMIS /> : <Login />}
       />
       <Route
         exact
         path="/rental-onboarding-all-status"
-        element={
-          isAuth  ? (
-            <RentalOnboardingAllStatus />
-          ) : (
-            <Login />
-          )
-        }
+        element={isAuth ? <RentalOnboardingAllStatus /> : <Login />}
       />
       <Route
         exact
         path="/rental-onboarding-deposited"
-        element={
-          isAuth  ? (
-            <RentalOnboardingDeposited />
-          ) : (
-            <Login />
-          )
-        }
+        element={isAuth ? <RentalOnboardingDeposited /> : <Login />}
       />
       <Route
         exact
         path="/rent-paid-schedule"
-        element={
-          isAuth  ? (
-            <RentPaidSchedule />
-          ) : (
-            <Login />
-          )
-        }
+        element={isAuth ? <RentPaidSchedule /> : <Login />}
       />
       {/*Super Admin Ends Here */}
       {/* Finance team start here */}
@@ -512,20 +495,12 @@ function MyRouter() {
       <Route
         exact
         path="/rental-mis-reports"
-        element={
-          isAuth  ? (
-            <RentalMisReports />
-          ) : (
-            <Login />
-          )
-        }
+        element={isAuth ? <RentalMisReports /> : <Login />}
       />
-        <Route
+      <Route
         exact
         path="/graph-reports"
-        element={
-          isAuth  ? <GraphReports /> : <Login />
-        }
+        element={isAuth ? <GraphReports /> : <Login />}
       />
       <Route
         exact

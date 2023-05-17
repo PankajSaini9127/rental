@@ -31,7 +31,7 @@ function FinanceTable({ rows, setRows }) {
 
   const renderDetailsButton = (e) => {
     const id = e.id;
-    console.log(e)
+    const agreement_id = e.row.i
 
     const code = e.row.code;
     const modify_date = e.row.modify_date
@@ -88,7 +88,8 @@ function FinanceTable({ rows, setRows }) {
              }}
             //  startIcon={<EditIcon />}
              onClick={(e) => {
-              navigate(`/balance_recovery/${id}`)
+              // console.log(`/balance_recovery/${agreement_id}`)
+              navigate(`/balance_recovery/${agreement_id}`)
              }}
            >
             Deposit Recovery
