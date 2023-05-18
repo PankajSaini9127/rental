@@ -115,8 +115,9 @@ function SrManagerApproval() {
 
   async function get_old_data(code) {
     try {
+      console.log(code)
       const oldvalue = await get_old_agreement(code);
-      console.log(oldvalue.data);
+      console.log(oldvalue);
       oldvalue.status === 200 && setPartLabel(oldvalue.data.agreement);
       oldvalue.status === 200 && setOldIds(oldvalue.data.ids);
     } catch (error) {
@@ -342,11 +343,13 @@ function SrManagerApproval() {
     return incrementType;
   }
 
+
   return (
     <>
       {ids &&
-        ids.length > 0 &&
-        (agreement[ids[0]].type === "Renewed" ? oldIds.length > 0 : true) && (
+        (ids.length > 0 &&
+        (agreement[ids[0]].type === "Renewed" ? oldIds.length > 0 : true) )&& (
+
           <Stack sx={{ flexDirection: "row", mb: 4 }}>
             {/* <a id="button"></a> */}
             {console.log(agreement[ids[0]].op_id)};
@@ -1119,7 +1122,8 @@ function SrManagerApproval() {
               </Grid>
             </Box>
           </Stack>
-        )}
+        )
+        }
     </>
   );
 }

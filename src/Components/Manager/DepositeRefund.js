@@ -138,7 +138,7 @@ function EditAgreement({ history }) {
     try {
       let response = await getDetails(id);
 
-      console.log(response);
+      // console.log(response);
       if (response.status === 200) {
         let {
           id,
@@ -1916,11 +1916,16 @@ function EditAgreement({ history }) {
 
                 {/* Document upload section end here */}
 
-                {preData.remark.length > 0 && (
-                  <Grid item container xs={10} sx={{ mt: 5 }}>
-                    <DataFieldStyle field={"Remark !"} value={preData.remark} />
-                  </Grid>
-                )}
+                {/* {console.log(preData)} */}
+       {
+        preData.remark !== null &&
+        preData.remark.length > 0 && (
+          <Grid item container xs={10} sx={{ mt: 5 }}>
+            <DataFieldStyle field={"Remark !"} value={preData.remark} />
+          </Grid>
+        )
+       }
+                
                 <Grid
                   container
                   sx={{ mt: "25px", mb: "25px" }}

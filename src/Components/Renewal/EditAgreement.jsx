@@ -1966,7 +1966,7 @@ console.log(partLabel)
                     <DocumentUpload
                       label="Upload Electricity Bill"
                       uploaded={preData.electricity_bill && true}
-                      error={formError.electricatiy_bill}
+                      error={formError.electricity_bill}
                       placeHolder={"Upload Electricity Bill"}
                       handleChange={handleChangeFile}
                       fileName={preData.electricity_bill_name}
