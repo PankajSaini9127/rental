@@ -80,7 +80,7 @@ function ApprovalRequest() {
   });
 
   //renewal recovery data
-  const [renewalRecovery, setRenewalRecovery] = useState({});
+  const [renewalRecovery, setRenewalRecovery] = useState({unpaid_months : []});
 
   const dispatch = useDispatch();
 
@@ -99,6 +99,11 @@ function ApprovalRequest() {
     try {
       const renewalRecovery = await get_renewal_recovery_data(code);
       console.log(renewalRecovery.data);
+
+      if(renewalRecovery.data.data.unpaid_months)
+      renewalRecovery.data.data.unpaid_months = JSON.parse(renewalRecovery.data.data.unpaid_months)
+      else renewalRecovery.data.data.unpaid_months = []
+
       renewalRecovery.status === 200 &&
         setRenewalRecovery(renewalRecovery.data.data);
     } catch (error) {
@@ -184,13 +189,15 @@ function ApprovalRequest() {
 
   const [remark, setRemark] = useState("");
 
-  const [recovery, setRecovery] = useState({});
+  const [recovery, setRecovery] = useState({unpaid_months  : []});
 
   async function get_recovery_data(id) {
     try {
       const recovery = await get_data_recovery(id);
       if (recovery.status === 200) {
         console.log(recovery.data);
+        if(recovery.data.data[0].unpaid_months) recovery.data.data[0].unpaid_months = JSON.parse(recovery.data.data[0].unpaid_months)
+        else recovery.data.data[0].unpaid_months = []
         setRecovery(recovery.data.data[0]);
       }
     } catch (error) {
@@ -810,6 +817,35 @@ function ApprovalRequest() {
 
                 {agreement[ids[0]].type === "Renewed" && (
                   <>
+
+{console.log(renewalRecovery.unpaid_months)}
+                        {/* // unpaid months details here */}
+                      {/* {recovery.unpaid_months.length > 0 &&<> */}
+                      {/* <Typography color = 'primary' sx = {{fontWeight : 600}} variant = 'h6'>Unpaid Months</Typography> */}
+
+                        {renewalRecovery.unpaid_months.map(row=><Grid
+                      item
+                      container
+                      sx={{ alignItems: "baseline", mt: 5 }}
+                      xs={10}><Grid container sx={{ gap: "2rem", mt: 2 }}>
+                        <DataFieldStyle
+                          field="Unpaid Month"
+                          value={row.month}
+                        />
+                        <DataFieldStyle
+                          field="Rent Amount"
+                          value={row.rent}
+                        />
+                        <DataFieldStyle
+                          field="Status"
+                          value={row.status}
+                        />
+                        </Grid>
+                        </Grid>
+                        )}
+
+                        {/* </>} */}
+
                     <Grid
                       item
                       container
@@ -845,6 +881,7 @@ function ApprovalRequest() {
                 {/* Buttons start here*/}
                 {agreement[ids[0]].status === "Terminated By Sr Manager" && (
                   <>
+
                     <Grid item container xs={10} sx={{ mt: 2 }}>
                       <DataFieldStyle
                         field={"Termination Remark"}
@@ -870,6 +907,26 @@ function ApprovalRequest() {
                           value={recovery.depositedAmount}
                         />
                       </Grid>
+                      {/* // unpaid months details here */}
+                      {console.log(recovery.unpaid_months)}
+                      {/* {recovery.unpaid_months.length > 0 &&<> */}
+                      {/* <Typography color = 'primary' sx = {{fontWeight : 600}} variant = 'h6'>Unpaid Months</Typography> */}
+                        {recovery.unpaid_months.map(row=><Grid container sx={{ gap: "2rem", mt: 2 }}>
+                        <DataFieldStyle
+                          field="Unpaid Month"
+                          value={row.month}
+                        />
+                        <DataFieldStyle
+                          field="Rent Amount"
+                          value={row.rent}
+                        />
+                        <DataFieldStyle
+                          field="Status"
+                          value={row.status}
+                        />
+                        </Grid>
+                        )}
+                        {/* </>} */}
                       <Grid container sx={{ gap: "2rem", mt: 2 }}>
                         <DataFieldStyle
                           field="Remaining Months"

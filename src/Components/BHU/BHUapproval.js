@@ -59,7 +59,7 @@ function SrManagerApproval() {
   const [sendBackMsg, setSendBackMsg] = useState("");
 
   //renewal recovery data
-  const [renewalRecovery, setRenewalRecovery] = useState({});
+  const [renewalRecovery, setRenewalRecovery] = useState({unpaid_months : []});
 
   const [partLabel, setPartLabel] = useState({
     landlord: [
@@ -100,10 +100,19 @@ function SrManagerApproval() {
 
   async function get_renewal_recovery(code) {
     try {
-      const renewalRecovery = await get_renewal_recovery_data(code);
-      console.log(renewalRecovery.data);
-      renewalRecovery.status === 200 &&
-        setRenewalRecovery(renewalRecovery.data.data);
+      const response = await get_renewal_recovery_data(code);
+      console.log(response.data);
+
+      if(response.data.data.unpaid_months)
+      response.data.data.unpaid_months = JSON.parse(response.data.data.unpaid_months)
+      
+      else response.data.data.unpaid_months = []
+
+      console.log(response.data.data);
+
+      
+      response.status === 200 &&
+        setRenewalRecovery(response.data.data);
     } catch (error) {
       console.log(error);
     }
@@ -495,6 +504,35 @@ function SrManagerApproval() {
 
               {agreement.type === "Renewed" && (
                 <>
+
+{console.log(renewalRecovery.unpaid_months)}
+                        {/* // unpaid months details here */}
+                      {/* {recovery.unpaid_months.length > 0 &&<> */}
+                      {/* <Typography color = 'primary' sx = {{fontWeight : 600}} variant = 'h6'>Unpaid Months</Typography> */}
+
+                        {renewalRecovery.unpaid_months.map(row=><Grid
+                      item
+                      container
+                      sx={{ alignItems: "baseline", mt: 5 }}
+                      xs={10}><Grid container sx={{ gap: "2rem", mt: 2 }}>
+                        <DataFieldStyle
+                          field="Unpaid Month"
+                          value={row.month}
+                        />
+                        <DataFieldStyle
+                          field="Rent Amount"
+                          value={row.rent}
+                        />
+                        <DataFieldStyle
+                          field="Status"
+                          value={row.status}
+                        />
+                        </Grid>
+                        </Grid>
+                        )}
+
+                        {/* </>} */}
+
                   <Grid
                     item
                     container

@@ -36,7 +36,7 @@ const DataFieldStyle = ({ field, value, href, name, bold, cursor,partLabel }) =>
   }
 
   return (
-    <Grid item md={3} xs={6} sx={{ p: '0 !important', overflow: "auto" }}>
+    <Grid item md={3} xs={6} sx={{ p: '0 !important', overflow: "hidden" }}>
       {href !== undefined && <ImageView
         open={open}
         handleClose={handleClose}

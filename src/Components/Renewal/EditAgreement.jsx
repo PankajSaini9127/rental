@@ -726,7 +726,7 @@ const [renewal,setRenewal] = useState({
        status: "Sent To Sr Manager",
         remark: "",
         renewal_status:"",
-        type:"Renewed"
+        type:"Renewed",
       },
       landlord
     );
@@ -786,7 +786,7 @@ console.log(partLabel)
        const result = await add_landlord(landlordData);
        console.log(result)
        
-       const renew_deposit = await addRenewalDesposit({...renewal,agreement_id})
+       const renew_deposit = await addRenewalDesposit({...renewal,agreement_id,unpaid : [...upaid]})
       if (result) {
         // window.location.href = "/listing";
         const response = await send_to_bhu(

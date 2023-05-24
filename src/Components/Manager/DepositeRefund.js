@@ -756,7 +756,7 @@ function EditAgreement({ history }) {
     delete agreementData.file_name;
 
     console.log(recovery);
-    let response = await insertAdjustmentAmount(recovery);
+    let response = await insertAdjustmentAmount({recovery,unpaid : [...upaid]});
 
     console.log(response);
 

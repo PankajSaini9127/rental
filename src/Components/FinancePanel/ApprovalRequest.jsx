@@ -69,7 +69,7 @@ function FinanceApproval() {
   const [open, setopen] = useState(false);
 
   //renewal recovery data
-  const [renewalRecovery, setRenewalRecovery] = useState({});
+  const [renewalRecovery, setRenewalRecovery] = useState({unpaid_months:[]});
 
   const [utr, setUtr] = useState({ utr: "", paymentDate: "" });
 
@@ -79,7 +79,7 @@ function FinanceApproval() {
 
   // console.log(deposit);
 
-  const [recovery, setRecovery] = useState({});
+  const [recovery, setRecovery] = useState({unpaid_months : []});
 
   const [oldIds, setOldIds] = useState([]);
 
@@ -95,6 +95,8 @@ function FinanceApproval() {
       const recovery = await get_data_recovery(id);
       if (recovery.status === 200) {
         // console.log(recovery.data);
+        if(recovery.data.data[0].unpaid_months) recovery.data.data[0].unpaid_months = JSON.parse(recovery.data.data[0].unpaid_months)
+        else recovery.data.data[0].unpaid_months = []
         setRecovery(recovery.data.data[0]);
       }
     } catch (error) {
@@ -169,6 +171,9 @@ function FinanceApproval() {
     try {
       const renewalRecovery = await get_renewal_recovery_data(code);
       console.log(renewalRecovery);
+      if(renewalRecovery.data.data.unpaid_months)
+      renewalRecovery.data.data.unpaid_months = JSON.parse(renewalRecovery.data.data.unpaid_months)
+      else renewalRecovery.data.data.unpaid_months = []
       renewalRecovery.status === 200 &&
         setRenewalRecovery(renewalRecovery.data.data);
     } catch (error) {
@@ -859,6 +864,28 @@ function FinanceApproval() {
                         value={recovery.depositedAmount}
                       />
                     </Grid>
+
+   {/* // unpaid months details here */}
+   {console.log(recovery.unpaid_months)}
+                      {/* {recovery.unpaid_months.length > 0 &&<> */}
+                      {/* <Typography color = 'primary' sx = {{fontWeight : 600}} variant = 'h6'>Unpaid Months</Typography> */}
+                        {recovery.unpaid_months.map(row=><Grid container sx={{ gap: "2rem", mt: 2 }}>
+                        <DataFieldStyle
+                          field="Unpaid Month"
+                          value={row.month}
+                        />
+                        <DataFieldStyle
+                          field="Rent Amount"
+                          value={row.rent}
+                        />
+                        <DataFieldStyle
+                          field="Status"
+                          value={row.status}
+                        />
+                        </Grid>
+                        )}
+                        {/* </>} */}
+
                     <Grid container sx={{ gap: "2rem", mt: 2 }}>
                       <DataFieldStyle
                         field="Remaining Months"
@@ -917,6 +944,33 @@ function FinanceApproval() {
 
               {agreement.type === "Renewed" && (
                 <>
+                 {console.log(renewalRecovery.unpaid_months)}
+                        {/* // unpaid months details here */}
+                      {/* {recovery.unpaid_months.length > 0 &&<> */}
+                      {/* <Typography color = 'primary' sx = {{fontWeight : 600}} variant = 'h6'>Unpaid Months</Typography> */}
+
+                        {renewalRecovery.unpaid_months.map(row=><Grid
+                      item
+                      container
+                      sx={{ alignItems: "baseline", mt: 5 }}
+                      xs={10}><Grid container sx={{ gap: "2rem", mt: 2 }}>
+                        <DataFieldStyle
+                          field="Unpaid Month"
+                          value={row.month}
+                        />
+                        <DataFieldStyle
+                          field="Rent Amount"
+                          value={row.rent}
+                        />
+                        <DataFieldStyle
+                          field="Status"
+                          value={row.status}
+                        />
+                        </Grid>
+                        </Grid>
+                        )}
+
+                        {/* </>} */}
                   <Grid
                     item
                     container

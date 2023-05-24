@@ -61,7 +61,7 @@ function SrManagerApproval() {
   const [agreement, setAgreement] = useState({});
   const [ids, setIds] = useState([]);
 
-  const [recovery, setRecovery] = useState({});
+  const [recovery, setRecovery] = useState({unpaid_months : []});
 
   const dispatch = useDispatch();
 
@@ -111,7 +111,7 @@ function SrManagerApproval() {
   }
 
   //renewal recovery data
-  const [renewalRecovery, setRenewalRecovery] = useState({});
+  const [renewalRecovery, setRenewalRecovery] = useState({unpaid_months : []});
 
   async function get_old_data(code) {
     try {
@@ -128,7 +128,10 @@ function SrManagerApproval() {
   async function get_renewal_recovery(code) {
     try {
       const renewalRecovery = await get_renewal_recovery_data(code);
-      console.log(renewalRecovery.data);
+      // console.log(renewalRecovery.data.data.unpaid_months);
+      if(renewalRecovery.data.data.unpaid_months)
+      renewalRecovery.data.data.unpaid_months = JSON.parse(renewalRecovery.data.data.unpaid_months)
+      else renewalRecovery.data.data.unpaid_months = []
       renewalRecovery.status === 200 &&
         setRenewalRecovery(renewalRecovery.data.data);
     } catch (error) {
@@ -179,6 +182,8 @@ function SrManagerApproval() {
       const recovery = await get_data_recovery(id);
       if (recovery.status === 200) {
         console.log(recovery.data);
+        if(recovery.data.data[0].unpaid_months) recovery.data.data[0].unpaid_months = JSON.parse(recovery.data.data[0].unpaid_months)
+        else recovery.data.data[0].unpaid_months = []
         setRecovery(recovery.data.data[0]);
       }
     } catch (error) {
@@ -351,6 +356,7 @@ function SrManagerApproval() {
         (agreement[ids[0]].type === "Renewed" ? oldIds.length > 0 : true) )&& (
 
           <Stack sx={{ flexDirection: "row", mb: 4 }}>
+
             {/* <a id="button"></a> */}
             {console.log(agreement[ids[0]].op_id)};
             <SRMHamburger />
@@ -868,6 +874,33 @@ function SrManagerApproval() {
 
                 {agreement[ids[0]].type === "Renewed" && (
                   <>
+                  {console.log(renewalRecovery.unpaid_months)}
+                        {/* // unpaid months details here */}
+                      {/* {recovery.unpaid_months.length > 0 &&<> */}
+                      {/* <Typography color = 'primary' sx = {{fontWeight : 600}} variant = 'h6'>Unpaid Months</Typography> */}
+
+                        {renewalRecovery.unpaid_months.map(row=><Grid
+                      item
+                      container
+                      sx={{ alignItems: "baseline", mt: 5 }}
+                      xs={10}><Grid container sx={{ gap: "2rem", mt: 2 }}>
+                        <DataFieldStyle
+                          field="Unpaid Month"
+                          value={row.month}
+                        />
+                        <DataFieldStyle
+                          field="Rent Amount"
+                          value={row.rent}
+                        />
+                        <DataFieldStyle
+                          field="Status"
+                          value={row.status}
+                        />
+                        </Grid>
+                        </Grid>
+                        )}
+
+                        {/* </>} */}
                     <Grid
                       item
                       container
@@ -921,6 +954,29 @@ function SrManagerApproval() {
                           value={recovery.depositedAmount}
                         />
                       </Grid>
+
+                      {/* // unpaid months details here */}
+                      {console.log(recovery.unpaid_months)}
+                      {/* {recovery.unpaid_months.length > 0 &&<> */}
+                      {/* <Typography color = 'primary' sx = {{fontWeight : 600}} variant = 'h6'>Unpaid Months</Typography> */}
+                        {recovery.unpaid_months.map(row=><Grid container sx={{ gap: "2rem", mt: 2 }}>
+                        <DataFieldStyle
+                          field="Unpaid Month"
+                          value={row.month}
+                        />
+                        <DataFieldStyle
+                          field="Rent Amount"
+                          value={row.rent}
+                        />
+                        <DataFieldStyle
+                          field="Status"
+                          value={row.status}
+                        />
+                        </Grid>
+                        )}
+                        {/* </>} */}
+                      
+
                       <Grid container sx={{ gap: "2rem", mt: 2 }}>
                         <DataFieldStyle
                           field="Remaining Months"
