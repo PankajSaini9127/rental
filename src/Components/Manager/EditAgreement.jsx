@@ -1888,7 +1888,7 @@ function EditAgreement({ history }) {
 
         {preData.remark.length > 0 && (
           <Grid item container xs={10} sx={{ mt: 5 }}>
-            <DataFieldStyle field={"Remark !"} value={preData.remark} />
+            <DataFieldStyle field={"Remark"} value={preData.remark} />
           </Grid>
         )}
 

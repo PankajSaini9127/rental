@@ -13,18 +13,17 @@ import {
   get_search_manager_approved,
   get_search_manager_inprocess,
   get_search_manager_old,
+  get_search_terminated_ag,
+  get_terminated_agreements,
   get_total_agreements,
 } from "../../Services/Services";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
-import { Box } from "@mui/system";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
-import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 import moment from "moment";
 import HamburgerManager from "./HamburgerManager";
 
 function Listing() {
-  const [Select, setSelect] = useState("New Agreement");
   const [data, setData] = useState([]);
 
   const { params } = useParams();
@@ -32,10 +31,6 @@ function Listing() {
   console.log(params);
 
   const { refresh, auth } = useSelector((s) => s);
-
-  const handleChange = (e) => {
-    setSelect(e.target.value);
-  };
 
   const [agreement, setAgreement] = useState({});
 
@@ -47,74 +42,22 @@ function Listing() {
     try {
       setLoading(true);
       setData([]);
-      const result = await get_agreements(id);
+      let result;
+      if (params === "in-procces-ag") {
+        result = await get_agreements(id);
+      } else if (params === "approved-ag") {
+        result = await get_approved_agreements(id);
+      } else if (params === "total-ag") {
+        result = await get_total_agreements(id);
+      } else if (params === "old-ag") {
+        result = await get_all_old_agreement(id);
+      } else if (params === "terminated-ag") {
+        result = await get_terminated_agreements(id);
+      }
 
       if (result.status === 200) {
         const data = result.data.ids;
         setAgreement(result.data.agreement);
-        setData(data);
-
-        setLoading(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  // for in precess agreements
-  async function get_approved_agreemnt(id) {
-    try {
-      setLoading(true);
-      setData([]);
-      const result = await get_approved_agreements(id);
-
-      console.log(result);
-
-      if (result.status === 200) {
-        const data = result.data.ids;
-        setAgreement(result.data.agreement);
-        setData(data);
-
-        setLoading(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  //get all agreememnts
-  async function get_all_agreements(id) {
-    try {
-      setLoading(true);
-      setData([]);
-      const result = await get_total_agreements(id);
-
-      console.log(result);
-
-      if (result.status === 200) {
-        const data = result.data.ids;
-        setAgreement(result.data.agreement);
-        setData(data);
-
-        setLoading(false);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  //get old agreements
-  async function get_old_ag(id) {
-    try {
-      setLoading(true);
-      setData([]);
-      const result = await get_all_old_agreement(id);
-
-      console.log(result);
-
-      if (result.status === 200) {
-        const data = result.data.data;
-        // setAgreement(result.data.agreement);
         setData(data);
 
         setLoading(false);
@@ -127,105 +70,95 @@ function Listing() {
   //search
   const [searchValue, setsearchValue] = useState("");
 
-  //in process search
+  //alll search
   async function SearchAPi(searchValue) {
-    const search = await get_search_manager(searchValue);
-    setData(search.data.ids);
-    setAgreement(search.data.agreement);
-  }
+    try {
+      let search;
 
-  //approved search
-  async function SearchAPi_Approve(searchValue) {
-    const search = await get_search_manager_approved(searchValue);
-    setData(search.data.ids);
-    setAgreement(search.data.agreement);
-  }
+      if (params === "in-procces-ag") {
+        search = await get_search_manager_inprocess(searchValue);
+      } else if (params === "approved-ag") {
+        search = await get_search_manager_approved(searchValue);
+      } else if (params === "total-ag") {
+        search = await get_search_manager(searchValue);
+      } else if (params === "old-ag") {
+        search = await get_search_manager_old(searchValue);
+      }else if(params === "terminated-ag"){
+        search = await get_search_terminated_ag(searchValue)
+      }
 
-  //in process seerach
-  async function SearchAPi_inprocess(searchValue) {
-    const search = await get_search_manager_inprocess(searchValue);
-    setData(search.data.ids);
-    setAgreement(search.data.agreement);
-  }
-
-  async function SearchAPi_OLD(searchValue) {
-    const search = await get_search_manager_old(searchValue);
-    console.log(search.data.data)
-    setData(search.data.data);
-    // setAgreement(search.data.agreement);
+      if (search.status === 200) {
+        setData(search.data.ids);
+        setAgreement(search.data.agreement);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   useEffect(() => {
-    if (params === "in-procces-ag") {
-      APICALL(auth.id);
-    } else if (params === "approved-ag") {
-      get_approved_agreemnt(auth.id);
-    } else if (params === "total-ag") {
-      get_all_agreements(auth.id);
-    } else if (params === "old-ag") {
-      get_old_ag(auth.id);
-    }
+    APICALL(auth.id);
   }, [refresh, params]);
 
   // console.log(data);
-  const row = 
-    params === "old-ag" ?    data.map((item) => {
-      console.log(item.agreement_id,item.landlord_id);
-      return {
-        id: item.landlord_id,
-        i:item.agreement_id,
-        status: item.status,
-        code: item.code,
-        name: item.name,
-        location: item.location,
-        rent_amount: item.monthlyRent,
-        checkbox: item.status,
-        utr_number: item.utr_number,
-        rent_date: item.rent_start_date,
-        initiateDate: moment(item.time).format("DD-MM-YYYY"),
-        type: item.type === "Renewed" ? "Renewal" : item.type === "Old"?"Old" : "New",
-        address: item.address,
-        city: item.city,
-        state: item.state,
-        deposit: parseFloat(item.deposit).toFixed(0),
-        landlord_id:item.landlord_id
-      };
-    })  :
-    data.map((item) => {
-      console.log(agreement[item]);
-      return {
-        id: agreement[item].agreement_id,
-        status: agreement[item].status,
-        code: agreement[item].code,
-        name: agreement[item].name,
-        location: agreement[item].location,
-        rent_amount: agreement[item].monthlyRent,
-        checkbox: agreement[item].status,
-        utr_number: agreement[item].utr_number,
-        rent_date: agreement[item].rent_start_date,
-        initiateDate: moment(agreement[item].time).format("DD-MM-YYYY"),
-        type: agreement[item].type === "Renewed" ? "Renewal" : agreement[item].type === "Old"?"Old" : "New",
-        address: agreement[item].address,
-        city: agreement[item].city,
-        state: agreement[item].state,
-        deposit: parseFloat(agreement[item].deposit).toFixed(0),
-        landlord_id:""
-      };
-    })
-  
-
-  
+  const row =
+    params === "old-ag"
+      ? data.map((item) => {
+          console.log(item.agreement_id, item.landlord_id);
+          return {
+            id: item.landlord_id,
+            i: item.agreement_id,
+            status: item.status,
+            code: item.code,
+            name: item.name,
+            location: item.location,
+            rent_amount: item.monthlyRent,
+            checkbox: item.status,
+            utr_number: item.utr_number,
+            rent_date: item.rent_start_date,
+            initiateDate: moment(item.time).format("DD-MM-YYYY"),
+            type:
+              item.type === "Renewed"
+                ? "Renewal"
+                : item.type === "Old"
+                ? "Old"
+                : "New",
+            address: item.address,
+            city: item.city,
+            state: item.state,
+            deposit: parseFloat(item.deposit).toFixed(0),
+            landlord_id: item.landlord_id,
+          };
+        })
+      : data.map((item) => {
+          console.log(agreement[item]);
+          return {
+            id: agreement[item].agreement_id,
+            status: agreement[item].status,
+            code: agreement[item].code,
+            name: agreement[item].name,
+            location: agreement[item].location,
+            rent_amount: agreement[item].monthlyRent,
+            checkbox: agreement[item].status,
+            utr_number: agreement[item].utr_number,
+            rent_date: agreement[item].rent_start_date,
+            initiateDate: moment(agreement[item].time).format("DD-MM-YYYY"),
+            type:
+              agreement[item].type === "Renewed"
+                ? "Renewal"
+                : agreement[item].type === "Old"
+                ? "Old"
+                : "New",
+            address: agreement[item].address,
+            city: agreement[item].city,
+            state: agreement[item].state,
+            deposit: parseFloat(agreement[item].deposit).toFixed(0),
+            landlord_id: "",
+          };
+        });
 
   function handleSerachChange(e) {
-    if (params === "in-procces-ag") {
-      SearchAPi_inprocess(e.target.value);
-    } else if (params === "approved-ag") {
-      SearchAPi_Approve(e.target.value);
-    } else if (params === "total-ag") {
       SearchAPi(e.target.value);
-    }else if (params === "old-ag"){
-      SearchAPi_OLD(e.target.value)
-    }
 
     setsearchValue(e.target.value);
   }
@@ -239,15 +172,18 @@ function Listing() {
           title1={"Rental Management System"}
           title={"Rental Agreement"}
           buttonText="Upload"
-          buttonText1={params === "old-ag" ?"Add Old Agreement":"Add Agreement"}
+          buttonText1={
+            params === "old-ag" ? "Add Old Agreement" : "Add Agreement"
+          }
           addbtn={true}
           Table={DataTable}
-          onChange={handleChange}
           dropDown={false}
           loading={loading}
           rows={row}
           searchValue={searchValue}
-          addagreement={params === "old-ag" ? '/old-agreement': '/newAgreement'}
+          addagreement={
+            params === "old-ag" ? "/old-agreement" : "/newAgreement"
+          }
           // setsearchValue={setsearchValue}
           handleSerachChange={handleSerachChange}
           check={check}

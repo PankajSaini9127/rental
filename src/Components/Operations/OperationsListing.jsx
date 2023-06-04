@@ -13,6 +13,8 @@ import {
   get_Operations_agreements_total,
   get_search_agreement_operation_approved,
   get_search_agreement_operation_process,
+  get_terminated_ag_opr,
+  get_search_agreement_operation_terminated,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import OperationsTable from "./OperationsTable";
@@ -34,34 +36,28 @@ function SrManagerListing() {
 
 
   const getData = async (id) => {
-    const response = await get_Operations_agreements(id);
-    console.log(response.data)
-    setData(response.data );
+    console.log(type)
+    try {
+      let response ;
+      if(type === "in-procces-ag"){
+        response = await get_Operations_agreements(id);
+      }else if(type === "approved-ag"){
+        response = await get_Operations_agreements_approved(id);
+      }else if(type === "total-ag"){
+        response = await get_Operations_agreements_total(id);
+      }else if (type === "terminated-ag"){
+        response = await get_terminated_ag_opr(id)
+      }
+
+      response.status === 200 && setData(response.data );
+
+    } catch (error) {
+      console.log(error)
+    }
+    
   };
 
-  async function get_approved_agreements (id){
-    try {
-      const response = await get_Operations_agreements_approved(id);
-    console.log(response.data)
-    setData(response.data );
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
-  //get total agreements
-
-  async function get_total_agreements (id){
-    try {
-      const response = await get_Operations_agreements_total(id);
-    console.log(response.data)
-    setData(response.data );
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  console.log(data)
 
  
 
@@ -79,6 +75,9 @@ function SrManagerListing() {
      }else if(type === "approved-ag"){
       const search = await get_search_agreement_operation_approved(id, searchValue);
       search.status === 200 && setData(search.data);
+     }else if(type === "terminated-ag"){
+      const search = await get_search_agreement_operation_terminated(id, searchValue);
+      search.status === 200 && setData(search.data);
      }
   }
 
@@ -91,14 +90,8 @@ function SrManagerListing() {
 
 
   useEffect(() => {
-    if(type === "in-procces-ag"){
-      getData(login_operations_id);
-    }else if(type === "approved-ag"){
-      get_approved_agreements(login_operations_id)
-    }else if(type === "total-ag"){
-      get_total_agreements(login_operations_id)
-    }
     
+    getData(login_operations_id);
   }, [refresh,type]);
 
   const navigate = useNavigate();

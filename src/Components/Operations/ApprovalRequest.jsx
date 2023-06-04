@@ -809,7 +809,7 @@ function ApprovalRequest() {
                 {agreement[ids[0]].remark.length > 0 && (
                   <Grid item xs={10}>
                     <DataFieldStyle
-                      field={"Remark !"}
+                      field={"Remark"}
                       value={agreement[ids[0]].remark}
                     />
                   </Grid>
@@ -893,7 +893,7 @@ function ApprovalRequest() {
                     {agreement[ids[0]].remark !== null && (
                       <Grid item container xs={10} sx={{ mt: 2 }}>
                         <DataFieldStyle
-                          field={"Remark !"}
+                          field={"Remark"}
                           value={agreement[ids[0]].remark}
                         />
                       </Grid>

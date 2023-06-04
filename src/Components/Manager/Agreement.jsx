@@ -857,7 +857,6 @@ function Agreement({ history }) {
     console.log("Validate Called");
 
     let field = [
-      ,
       "lockInYear",
       "noticePeriod",
       "deposit",

@@ -6,11 +6,9 @@ import {
     FormControl,
     FormLabel,
     Grid,
-    TextField,
     Typography,
   } from "@mui/material";
   
-  import DatePicker from "react-datepicker";
   
   import "react-datepicker/dist/react-datepicker.css";
 import { DocumentUpload } from "../StyledComponent";

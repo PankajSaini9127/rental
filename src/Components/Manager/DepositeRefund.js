@@ -50,6 +50,7 @@ import {
   getBankName,
   getLocation,
   insertAdjustmentAmount,
+  update_payment_status,
 } from "../../Services/Services";
 import { useDispatch, useSelector } from "react-redux";
 import { setAlert } from "../../store/action/action";
@@ -126,7 +127,26 @@ function EditAgreement({ history }) {
     totalAdjustmentAmount: 0,
     balanceDeposit: 0,
     monthlyRent: 0,
+    unpaid_amount:0
   });
+
+  const [unpaidRent,setUnpaidRent] = useState(0)
+
+useEffect(()=>{
+ if(upaid.length > 0){
+  let totalunpaidRent = 0;
+  upaid.map(row=>{
+    totalunpaidRent += parseInt(row.rent_amount)
+    setRecovery({
+            ...recovery,
+            totalAdjustmentAmount: totalunpaidRent
+          })
+    setUnpaidRent(totalunpaidRent)
+  })
+ }
+},[upaid])
+
+
   // modified by yashwant
   const [agreementData, setAgreementData] = useState({
     id: id,
@@ -134,6 +154,7 @@ function EditAgreement({ history }) {
     file: preData.file,
     termination_remark: preData.termination_remark,
   });
+
   async function fetchData() {
     try {
       let response = await getDetails(id);
@@ -173,10 +194,14 @@ function EditAgreement({ history }) {
           assets,
           file,
           termination_remark,
+          manager_id,
+          srm_id,
+          buh_id,
+          op_id,
+          finance_id
         } = response.data.agreement;
 
-        setBuh_ID(response.data.bhu_id);
-        setFinance_ID(response.data.op_id);
+    
 
         // get the unpaid hisorty of the agreement
         let unpaid_amount = response.data.listUnpaidRow.reduce(
@@ -196,6 +221,11 @@ function EditAgreement({ history }) {
           depositedAmount: deposit,
           balanceDeposit: deposit - unpaid_amount,
           monthlyRent: monthlyRent,
+          manager_id,
+          srm_id,
+          buh_id,
+          op_id,
+          finance_id
         }));
 
         if (yearlyIncrement === "Percentage") {
@@ -450,20 +480,20 @@ function EditAgreement({ history }) {
           totalAdjustmentAmount:
             old.monthlyRent * parseInt(e.target.value) +
             recovery.otherAdjustments +
-            recovery.expenses,
+            recovery.expenses + unpaidRent ,
           balanceDeposit:
             parseInt(old.depositedAmount) -
             (old.monthlyRent * parseInt(e.target.value) +
               recovery.otherAdjustments +
-              recovery.expenses) -
-            old.unpaid_amount,
+              recovery.expenses + unpaidRent ) -
+            old.unpaid_amount ,
         }));
       } else {
         setRecovery((old) => ({
           ...old,
           [e.target.name]:
             e.target.value.length > 0 ? parseInt(e.target.value) : 0,
-          totalAdjustmentAmount: sum,
+          totalAdjustmentAmount: sum + unpaidRent,
           balanceDeposit:
             parseInt(old.depositedAmount) - sum - old.unpaid_amount,
         }));
@@ -526,36 +556,6 @@ function EditAgreement({ history }) {
     }
   }
 
-  async function getBankDetails(data, i) {
-    try {
-      console.log(data);
-      let res = await getBankName(data);
-
-      if (res.status === 200) {
-        setPreData((old) => ({
-          ...old,
-          landlord: old.landlord.map((row, index) => {
-            if (index === i) {
-              return {
-                ...row,
-                bankName: res.data.BANK,
-                branchName: res.data.BRANCH,
-              };
-            } else return row;
-          }),
-        }));
-      }
-    } catch (err) {
-      setPreData((old) => ({
-        ...old,
-        landlord: old.landlord.map((row, index) => {
-          if (index === i) {
-            return { ...row, bankName: "Not Found", branchName: "" };
-          } else return row;
-        }),
-      }));
-    }
-  }
 
   // on form submit
 
@@ -680,7 +680,6 @@ function EditAgreement({ history }) {
     console.log("Validate Called");
 
     let field = [
-      ,
       "lockInYear",
       "noticePeriod",
       "deposit",
@@ -744,19 +743,27 @@ function EditAgreement({ history }) {
 
     console.log("<<<>>>", validate());
     if (!validate()) {
-      // dispatch(
-      //   setAlert({
-      //     variant: "warning",
-      //     open: true,
-      //     message:  "Validation Alert !!!",
-      //   }))
       return false;
     }
     // remove useless fields
     delete agreementData.file_name;
 
     console.log(recovery);
-    let response = await insertAdjustmentAmount({recovery,unpaid : [...upaid]});
+
+    let adjustData = {
+      agreement_id: recovery.agreement_id,
+      remainingMonth: recovery.remainingMonth,
+      depositedAmount: recovery.depositedAmount,
+      adjustmentAmount: recovery.adjustmentAmount,
+      expenses: recovery.expenses,
+      otherAdjustments: recovery.otherAdjustments,
+      totalAdjustmentAmount: recovery.totalAdjustmentAmount,
+      balanceDeposit: recovery.balanceDeposit,
+      monthlyRent: recovery.monthlyRent,
+      unpaid_amount: recovery.unpaid_amount
+    };
+
+    let response = await insertAdjustmentAmount({recovery:{...adjustData},unpaid : [...upaid]});
 
     console.log(response);
 
@@ -769,7 +776,13 @@ function EditAgreement({ history }) {
         },
         recovery.agreement_id
       );
-      if (updateStatus.data.success) {
+      const update_payment = await update_payment_status(recovery.agreement_id,{status:"Hold", 
+       manager_id :recovery.manager_id,
+      srm_id :recovery.srm_id,
+      op_id :recovery.op_id,
+      finance_id :recovery.finance_id });
+
+      if (updateStatus.data.success && update_payment.data.success) {
         dispatch(
           setAlert({
             variant: "success",
@@ -997,19 +1010,6 @@ function EditAgreement({ history }) {
     }
   }
 
-  async function getBankeDetails(data, i) {
-    let res = await getBankName(data);
-    if (res) {
-      setPreData((old) => ({
-        ...old,
-        landlord: old.landlord.map((row, index) => {
-          if (index === i) {
-            return { ...row, bankName: res.data.BANK };
-          } else return row;
-        }),
-      }));
-    }
-  }
 
   function handleHold() {
     const {
@@ -1898,7 +1898,7 @@ function EditAgreement({ history }) {
                       variant="outlined"
                       // sx = {{borderRadius : '100px'}}
                       // label="Termination Remark"
-                      helperText={preData.termination_remark}
+                      // helperText={preData.termination_remark}
                       placeholder="Termination Remark*"
                       value={agreementData.termination_remark}
                       onChange={(e) =>
@@ -1921,7 +1921,7 @@ function EditAgreement({ history }) {
         preData.remark !== null &&
         preData.remark.length > 0 && (
           <Grid item container xs={10} sx={{ mt: 5 }}>
-            <DataFieldStyle field={"Remark !"} value={preData.remark} />
+            <DataFieldStyle field={"Remark"} value={preData.remark} />
           </Grid>
         )
        }
@@ -2033,7 +2033,7 @@ function EditAgreement({ history }) {
                             <TextFieldWrapper
                               label="Rent Amount"
                               disabled={true}
-                              value={row.rent_amount}
+                              value={parseInt(row.rent_amount).toFixed(2)}
                               onChange={(e) => handleChange(e)}
                             />
                             <TextFieldWrapper
@@ -2139,7 +2139,7 @@ function EditAgreement({ history }) {
                     handleChange={handleChangeFile}
                     fileName={agreementData.file_name}
                     name={"file"}
-                    href={agreementData.file || preData.file}
+                    href={agreementData.file ? agreementData.file || preData.file : false}
                   />
                 </Grid>
 

@@ -3,13 +3,10 @@ import HamburgerMenu from "../HamburgerMenu";
 import { useNavigate } from "react-router-dom";
 
 function OperationsHamburger() {
-  const navigate = useNavigate();
+  
   return (
     <HamburgerMenu
       navigateHome={"operationsDashboard"}
-      // handleListing={() => navigate("/operationsListing")}
-      // monthlyRent={() => navigate("/opr-monthly-rent")}
-      // renewal={() => navigate("/opr-monthly-rent")}
       agreements={[
       
 
@@ -21,6 +18,7 @@ function OperationsHamburger() {
           text: "Approved",
           navigateTo: "/operationsListing/approved-ag",
         },
+        { text: "Terminated", navigateTo: "/operationsListing/terminated-ag" },
         { 
           text: "Landlord List", 
           navigateTo: "/list-landlord" 

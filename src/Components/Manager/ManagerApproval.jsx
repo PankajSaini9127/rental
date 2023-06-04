@@ -761,7 +761,7 @@ function ManagerApproval() {
                     xs={10}
                   >
                     <DataFieldStyle
-                      field={"Remark !"}
+                      field={"Remark"}
                       href={agreement[ids[0]].remark}
                     />
                   </Grid>

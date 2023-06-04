@@ -866,7 +866,7 @@ function SrManagerApproval() {
                 {agreement[ids[0]].remark !== null && (
                   <Grid item container xs={10} sx={{ mt: 2 }}>
                     <DataFieldStyle
-                      field={"Remark !"}
+                      field={"Remark"}
                       value={agreement[ids[0]].remark}
                     />
                   </Grid>

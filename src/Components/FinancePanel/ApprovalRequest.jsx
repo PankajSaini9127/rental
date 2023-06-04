@@ -850,7 +850,7 @@ function FinanceApproval() {
                   {agreement.remark !== null && (
                     <Grid item container xs={10} sx={{ mt: 2 }}>
                       <DataFieldStyle
-                        field={"Remark !"}
+                        field={"Remark"}
                         value={agreement.remark}
                       />
                     </Grid>

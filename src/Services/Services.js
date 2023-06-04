@@ -90,6 +90,11 @@ export async function get_total_agreements (manager_id){
     return axios.get(`${API_LIVE}/api/agreements/total/${manager_id}`)
 }
 
+//get all teminated agreements
+export async function get_terminated_agreements (manager_id){
+    return axios.get(`${API_LIVE}/api/agreements/terminated/${manager_id}`)
+}
+
 //get all agreements
 export async function get_all_old_agreement (manager_id){
     return axios.get(`${API_LIVE}/api/agreements/old/${manager_id}`)
@@ -272,6 +277,11 @@ export async function get_search_manager_old (name){
     return await axios.post(`${API_LIVE}/api/search/old/manager`,{name})
 }
 
+export async function get_search_terminated_ag (name){
+    return await axios.post(`${API_LIVE}/api/search/terminated`,{name})
+}
+
+
 export async function add_monthly_rent (data){
     return await axios.post(`${API_LIVE}/api/monthly_rent/add`,data)
 }
@@ -313,6 +323,12 @@ export async function get_srm_agreements_approved(id){
 export async function get_srm_agreements_total(id){
     return await axios.get(`${API_LIVE}/api/srmanager/total/get-agreement/${id}`)
 }
+
+//get all terminated agreements
+export async function get_srm_terminated_agreements(id){
+    return await axios.get(`${API_LIVE}/api/srmanager/terminated/get-agreement/${id}`)
+}
+
 
 //get_srm_agreements_approved
 //in process mionthly payment
@@ -389,10 +405,16 @@ export async function get_renewal_recovery_data (id){
 
 
 
-//send to BHU 
+//update agreements
 export async function send_to_bhu (data,id){
     return await axios.put(`${API_LIVE}/api/updateAgreement/${id}`,data)
 }
+
+
+export async function update_payment_status (id,data){
+    return await axios.put(`${API_LIVE}/api/updateAgreement/monthly_rent-status/${id}`,data)
+}
+
 
 export async function getBankName(data){
     return await axios.get(`https://ifsc.razorpay.com/${data}`)
@@ -446,6 +468,12 @@ export async function get_Operations_agreements_approved(data){
     return await axios.get(`${API_LIVE}/api/operations/approved/get-agreement/${data}`)
 }
 
+//list of all terminated agreements
+export async function get_terminated_ag_opr(data){
+    return await axios.get(`${API_LIVE}/api/operations/terminated/get-agreement/${data}`)
+}
+
+
 //get total agreements 
 export async function get_Operations_agreements_total(data){
     return await axios.get(`${API_LIVE}/api/operations/total/get-agreement/${data}`)
@@ -471,6 +499,12 @@ export async function get_search_agreement_operation_process (id,data){
     return await axios.get(`${config.API_LIVE}/api/operations/search/in-process/${id}?search=${data}`)
 }
 
+
+//search in terminated
+export async function get_search_agreement_operation_terminated (id,data){
+    return await axios.get(`${config.API_LIVE}/api/operations/search/terminated/${id}?search=${data}`)
+}
+
 // search state and city based on  Pin code
 
 export async function getLocation (pincode){
@@ -493,9 +527,13 @@ export async function get_finance_agreements_approved(data){
     return await axios.get(`${API_LIVE}/api/finance/approved/get-agreement/${data}`)
 }
 
+export async function get_finance_agreements_terminated(data){
+    return await axios.get(`${API_LIVE}/api/finance/terminated/get-agreement/${data}`)
+}
+
 // finance search
 export async function get_search_finance_agreements(id,search){
-    return await axios.get(`${API_LIVE}/api/finance/search/${id}?search=${search}`)
+    return await axios.get(`${API_LIVE}/api/finance/search/${id}?search=${search.searchValue}&type=${search.type}`)
 }
 
 export async function ApprovedByFinance (data,id){

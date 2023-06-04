@@ -16,6 +16,7 @@ function SRMHamburger() {
           text: "Approved ",
           navigateTo: "/srManagerListing/approved-ag",
         },
+        { text: "Terminated", navigateTo: "/srManagerListing/terminated-ag" },
         { text: "Renewal", navigateTo: "/srm-renewal-list" },
         { text: "Landlord List", navigateTo: "/list-landlord" },
 

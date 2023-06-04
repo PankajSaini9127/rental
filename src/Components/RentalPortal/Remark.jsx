@@ -69,7 +69,7 @@ function Remark({ open, handleClose, handleSend,remark,setRemark,setIds }) {
               fontSize: "15px",
             },
           }}
-          placeholder={"Remark !"}
+          placeholder={"Remark"}
           value={remark}
           fullWidth
           color={'primary'}

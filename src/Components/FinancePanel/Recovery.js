@@ -1,13 +1,9 @@
 import {
   Box,
   Button,
-  Dialog,
-  DialogActions,
   FormControl,
-  FormLabel,
   Grid,
   useMediaQuery,
-  TextField,
   useTheme,
   Typography,
   Stack,
@@ -23,46 +19,27 @@ import {
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-import DatePicker from "react-datepicker";
 import ArrowCircleLeftIcon from "@mui/icons-material/ArrowCircleLeft";
 
 import "react-datepicker/dist/react-datepicker.css";
-import { DocumentUpload, TextFieldWrapper, MyHeader } from "../StyledComponent";
-import { setAlert } from "../../store/action/action";
+import { TextFieldWrapper, MyHeader } from "../StyledComponent";
+import { setAlert, setForm } from "../../store/action/action";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  invoice_validation,
-  uploadDoc,
   insertRecoveryLog,
   getRecoveryLog,
   send_to_bhu,
+  update_payment_status,
 } from "../../Services/Services";
-import { Try } from "@mui/icons-material";
-import HamburgerMenu from "../HamburgerMenu";
 import FinanceHamburger from "./FinanceHamburger";
+import moment from "moment";
+import BackButton from "../utility/BackButton";
 
-const labelStyle = {
-  fontSize: "20px",
-  lineHeight: "30px",
-  color: "var(--main-color)",
-  fontWeight: "600",
-  "@media(max-width:900px)": { fontSize: "10px" },
-};
-
-const fieldStyle = {
-  border: "1px solid var(--main-color)",
-  borderRadius: "20px",
-  //   height: "50px",
-  p: 1,
-  px: 2,
-  // width: "450px",
-
-  color: "rgba(16, 99, 173, 0.47)",
-  "@media(max-width:900px)": { height: "46px", p: 1 },
-};
-
-function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
+function UploadInvoice() {
   const [formError, setFormError] = useState({});
+
+  // console.log(formError)
+
   const [history, setHistory] = useState([]);
   const [balance, setBalance] = useState([]);
   const navigate = useNavigate();
@@ -93,31 +70,6 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
     }
   }
 
-  function onChange(e) {
-    if (e.target.name === "invoiceDate" || e.target.name === "invoiceNo") {
-      setValue({
-        ...value,
-        [e.target.name]: e.target.value,
-      });
-      setFormError({ ...formError, [e.target.name]: "" });
-    }
-
-    if (e.target.value.match(/^[0-9]*$/)) {
-      setValue({
-        ...value,
-        [e.target.name]: e.target.value,
-      });
-    }
-
-    // if(!error)
-    // {
-    //   setValue({
-    //     ...value,
-    //     [e.target.name]: e.target.value,
-    //   });
-    // }
-  }
-
   const disablePastDate = () => {
     const today = new Date();
     const dd = String(today.getDate() + 0).padStart(2, "0");
@@ -126,7 +78,7 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
     return yyyy + "-" + mm + "-" + dd;
   };
 
-  const [ferror, setError] = useState(true);
+  // const [ferror, setError] = useState(true);
   const [data, setData] = useState({
     agreement_id: id,
     receivedDate: "",
@@ -135,15 +87,54 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
     remark: "",
   });
 
+  function validate(data) {
+    let error = {};
+    if (data.receivedDate === "") {
+      error.receivedDate = "Field is required.";
+    }
+    if (data.receivedAmount === "") {
+      error.receivedAmount = "Field is required.";
+    }
+    if (data.paymentDetails === "") {
+      error.paymentDetails = "Field is required.";
+    }
+    if (data.remark === "") {
+      error.remark = "Field is required.";
+    }
+    setFormError(error);
+    if(Object.keys(error).length > 0){
+      return false
+    }else{
+      return true
+    }
+
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
-    let res = await insertRecoveryLog(data);
 
-    if (res.status === 200) {
-      if (balance.balance - balance.total === parseInt(data.receivedAmount)) {
-        //checking the agreement status to Terminated
-        let res2 = await send_to_bhu({ status: "Terminated" }, id);
-        if (res2.status === 200) {
+    validate(data);
+    if (validate(data)) {
+      let res = await insertRecoveryLog(data);
+
+      if (res.status === 200) {
+        if (balance.balance - balance.total === parseInt(data.receivedAmount)) {
+          //checking the agreement status to Terminated
+          let res2 = await send_to_bhu({ status: "Terminated" }, id);
+         let  update_payment = await update_payment_status(id,{status:"Paid"});
+          if (res2.status === 200 && update_payment.data.success) {
+            dispatch(
+              setAlert({
+                open: true,
+                variant: "success",
+                message: "Log inserted successfully.",
+              })
+            );
+            window.location.reload();
+          }
+        } else {
+          console.log(balance.balance - balance.total, data.receivedAmount);
+
           dispatch(
             setAlert({
               open: true,
@@ -154,25 +145,14 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
           window.location.reload();
         }
       } else {
-        console.log(balance.balance - balance.total, data.receivedAmount);
-
         dispatch(
           setAlert({
             open: true,
-            variant: "success",
-            message: "Log inserted successfully.",
+            variant: "error",
+            message: "Something Went Wrong !!!",
           })
         );
-        window.location.reload();
       }
-    } else {
-      dispatch(
-        setAlert({
-          open: true,
-          variant: "error",
-          message: "Something Went Wrong !!!",
-        })
-      );
     }
   }
 
@@ -180,6 +160,8 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
 
   // use on Change for uncommon fields
   function handleChange(e) {
+    let fields = ["receivedDate", "receivedAmount", "paymentDetails", "remark"];
+
     let error = { state: false, message: null };
     console.log(e.target.name);
     switch (e.target.name) {
@@ -193,31 +175,27 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
         break;
     }
 
-    if (!error.state) {
-      setData((old) => ({
-        ...old,
-        [e.target.name]: e.target.value,
-      }));
-    }
+    console.log(formError)
+    fields.map((row) => {
+      // console.log(row, e.target.name);
+      if (e.target.name === row) {
+        // console.log(row,formError.e.target.name)
+        setFormError({ ...formError, [e.target.name]: "" });
+        if (!error.state) {
+          setData((old) => ({
+            ...old,
+            [e.target.name]: e.target.value,
+          }));
+        }
+      }
+    });
   }
 
   return (
     <>
       <Stack sx={{ flexWrap: "warap", flexDirection: "row" }}>
-        {/* side nav     */}
-        {/* <HamburgerMenu navigateTo={"listing"} /> */}
-
-        {/* <HamburgerMenu
-            navigateHome={"finance-dashboard"}
-            handleListing={() => navigate("/finance-listing")}
-            monthlyRent={() => navigate("/finance-monthly-rent")}
-            renewal={() => navigate("/finance-monthly-rent")}
-            monthlyBtn="true"
-            renewalBTN="false"
-          /> */}
         <FinanceHamburger />
         <Box sx={{ flexGrow: 1 }}>
-          {/* <MyHeader>Recovery Balance</MyHeader> */}
           <Grid
             item
             xs={12}
@@ -228,19 +206,7 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
               Welcome {auth.name}
             </Typography>
           </Grid>
-          <Box className="backButton">
-            <IconButton
-              variant="contained"
-              color="primary"
-              onClick={() => navigate(-1)}
-              size={"large"}
-            >
-              <ArrowCircleLeftIcon
-                sx={{ fontSize: "3rem" }}
-                color="#FFFFF !important"
-              />
-            </IconButton>
-          </Box>
+          <BackButton />
           <Grid
             container
             pt={3}
@@ -316,51 +282,47 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
                       type="date"
                       name="receivedDate"
                       value={data.receivedDate}
+                      // required
                       onkeydown="return false"
-                      min={disablePastDate()}
+                      // min={disablePastDate()}
                       className="DatePicker"
                       onChange={(e) => handleChange(e)}
-                      // error={formError.date && true}
+                      max={moment().format("YYYY-MM-DD")}
                     />
                     <Typography variant="caption" sx={{ color: "red" }}>
-                      {formError.agreement_date}
+                      {formError.receivedDate}
                     </Typography>
                   </FormControl>
                 </Grid>
 
                 <TextFieldWrapper
-                  label="Received Amount"
+                  label="Received Amount *"
                   placeHolder="Received Amount"
-                  // onBlur={(e) => handleOnBlur(e, i)}
-                  // error = {errorObj.leeseName}
                   name="receivedAmount"
-                  // disabled = {true}
                   value={data.receivedAmount}
                   onChange={(e) => handleChange(e)}
+                  error={formError.receivedAmount}
                 />
                 <TextFieldWrapper
-                  label="Payment Details"
+                  label="Payment Details *"
                   placeHolder="paymentDetails"
-                  // onBlur={(e) => handleOnBlur(e, i)}
-                  // error = {errorObj.leeseName}
                   name="paymentDetails"
-                  // disabled = {true}
                   value={data.paymentDetails}
                   onChange={(e) => handleChange(e)}
+                  error={formError.paymentDetails}
                 />
                 <TextFieldWrapper
                   label="Remark"
-                  placeHolder="Remark"
-                  // onBlur={(e) => handleOnBlur(e, i)}
-                  // error = {errorObj.leeseName}
+                  placeHolder="Remark *"
                   name="remark"
                   value={data.remark}
                   onChange={(e) => handleChange(e)}
+                  error={formError.remark}
                 />
 
                 <Grid
                   item
-                  xs={12}
+                  xs={4}
                   mt={2}
                   sx={{ display: "flex", justifyContent: "center" }}
                 >
@@ -369,11 +331,12 @@ function UploadInvoice({ open, handleClose, handleConfirm, value, setValue }) {
                     size="larger"
                     sx={{ borderRadius: "50px", padding: "12px" }}
                     variant="contained"
+                    fullWidth
                   >
-                    Save Payment{" "}
+                    Save Payment
                   </Button>
                 </Grid>
-              </Grid>{" "}
+              </Grid>
             </>
           )}
         </Box>

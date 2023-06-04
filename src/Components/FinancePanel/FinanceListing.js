@@ -11,6 +11,7 @@ import {
   get_finance_agreements_inProcess,
   get_finance_agreements_approved,
   get_deposit_amount,
+  get_finance_agreements_terminated,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import FinanceTable from "./FinanceDataTable";
@@ -32,58 +33,32 @@ function FinanceListing() {
   const [data, setData] = useState([]);
 
   const getData = async (id) => {
-    const response = await get_finance_agreements(id);
-    if(response.status === 200)
-    {
-      // console.log(response.data)
-      setData(response.data.agreement);
-    
+    try {
+      let response ;
+      if(type === "total-ag"){
+        response = await get_finance_agreements(id);
+      }else if(type === "in-procces-ag"){
+        response = await get_finance_agreements_inProcess(id);
+      }else if (type === "approved-ag"){
+        response = await get_finance_agreements_approved(id);
+      }else if (type === "terminated-ag"){
+        response = await get_finance_agreements_terminated(id);
+      }
+
+      if(response.status === 200)
+      {
+        setData(response.data.agreement);
+      
+      }
+    } catch (error) {
+      console.log(error)
     }
+   
   };
 
 
-
-  async function getInprocessAg(id){
-   try {
-    const response = await get_finance_agreements_inProcess(id);
-    if(response.status === 200)
-    {
-      // console.log(response.data)
-      setData(response.data.agreement);
-    
-    }
-   } catch (error) {
-    console.log(error)
-   }
-  }
-
-
-  //approved agreements
-  async function get_approved_agreements(id){
-    try {
-     const response = await get_finance_agreements_approved(id);
-     if(response.status === 200)
-     {
-       // console.log(response.data)
-       setData(response.data.agreement);
-     
-     }
-    } catch (error) {
-     console.log(error)
-    }
-   }
-
- 
-
   useEffect(() => {
-    if(type === "total-ag"){
-      getData(finance_ID);
-    }else if(type === "in-procces-ag"){
-      getInprocessAg(finance_ID)
-    }else if (type === "approved-ag"){
-      get_approved_agreements(finance_ID)
-    }
-    
+    getData(finance_ID);
   }, [type]);
 
 useEffect(()=>{
@@ -118,7 +93,8 @@ useEffect(()=>{
 
   //search
   async function SearchAPi(id, searchValue) {
-      const search = await get_search_finance_agreements(id, searchValue);
+      const search = await get_search_finance_agreements(id, {searchValue,type});
+      
       setData(Object.values(search.data.agreement));
   }
 

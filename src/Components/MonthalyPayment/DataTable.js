@@ -169,7 +169,7 @@ function DataTable({rows}) {
               </Button>
             </Grid>
           )}
-          {((e.row.status === "Hold" || e.row.status === "Pending") && e.row.gst !== "---") && (
+          {((e.row.status === "Pending") && e.row.gst !== "---") && (
             <Grid item xs={6}>
               <Button
                 variant="contained"
@@ -194,7 +194,7 @@ function DataTable({rows}) {
               </Button>
             </Grid>
           )}
-          {((e.row.status === "Hold" || e.row.status === "Pending")&& e.row.gst === "---") && (
+          {(( e.row.status === "Pending")&& e.row.gst === "---") && (
             <Grid item xs={6}>
               <Button
                 variant="contained"
@@ -417,7 +417,7 @@ function DataTable({rows}) {
   function handleHold() {
     ids.map(async (id) => {
       const send = await sendMonthyPaymentForword(id, {
-        status: "Hold",
+        status: "Pending",
         manager_id: auth.id,
       });
       console.log(send.data.success);

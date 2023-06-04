@@ -1,6 +1,5 @@
 import React from "react";
 import HamburgerMenu from "../HamburgerMenu";
-import { useNavigate } from "react-router-dom";
 
 function HamburgerManager() {
 
@@ -14,6 +13,7 @@ function HamburgerManager() {
         { text: "Renewal ", navigateTo: "/renewal" },
         { text: "Landlord List", navigateTo: "/list-landlord" },
         { text: "Old Agreement ", navigateTo: "/old-listing/old-ag" },
+        { text: "Terminated", navigateTo: "/listing/terminated-ag" },
       ]}
       monthly={[
         { text: "In-Process", navigateTo: "/monthly-payment/in-process" },

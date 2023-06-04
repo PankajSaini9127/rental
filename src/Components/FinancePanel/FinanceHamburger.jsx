@@ -9,7 +9,7 @@ function FinanceHamburger() {
     misReports= {[      
       { text: "Rental MIS Reports", navigateTo: "/rental-mis-reports" },
       { text:"Graph Reports",navigateTo:"/graph-reports"},
-      {text:"Rent Paid Schedule",navigateTo:"/rent-paid-schedule"}
+      {text:"Rent Paid Schedule",navigateTo:"/rent-paid-schedule"},
     ]}
     navigateHome={"finance-dashboard"}
     monthlyBtn="true"
@@ -22,6 +22,7 @@ function FinanceHamburger() {
         text: "Approved",
         navigateTo: "/finance-listing/approved-ag",
       },
+      { text: "Terminated", navigateTo: "/finance-listing/terminated-ag" },
       { text: "Landlord List", navigateTo: "/list-landlord" },
 
     ]}

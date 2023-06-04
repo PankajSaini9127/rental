@@ -10,6 +10,7 @@ import {
   get_srm_agreements,
   get_srm_agreements_approved,
   get_srm_agreements_total,
+  get_srm_terminated_agreements,
 } from "../../Services/Services";
 import { useSelector } from "react-redux";
 import { Box } from "@mui/system";
@@ -32,38 +33,32 @@ function SrManagerListing() {
   console.log(data);
 
   const getData = async (id) => {
-    const response = await get_srm_agreements(id);
+    try {
+      let response ;
+    if(type === "in-procces-ag"){
+      response = await get_srm_agreements(id);
+    }else if(type === "approved-ag"){
+      response = await get_srm_agreements_approved(id);
+    }else if(type === "total-ag"){
+      response = await get_srm_agreements_total(id);
+    }else if (type === "terminated-ag") {
+      response = await get_srm_terminated_agreements(id);
+    }
+
     if (response.status === 200) {
       setData(response.data);
     }
+
+    } catch (error) {
+      console.log(error)
+    }
+    
+   
   };
 
-  async function getApprovedagreements (id){
-    try {
-      const response = await get_srm_agreements_approved(id);
-    if (response.status === 200) {
-      setData(response.data);
-    }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  
 
-  //total agreements\
-  async function get_all_total_Ag (id){
-    try {
-      const response = await get_srm_agreements_total(id);
-    if (response.status === 200) {
-      setData(response.data);
-    }
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
-  //  console.log(data)
-
-  //  data.ids = data.ids.reverse()
 
   const rows = data.ids.map((item) => {
     return {
@@ -92,22 +87,30 @@ function SrManagerListing() {
 
   //search
   async function SearchAPi(id, searchValue) {
-    console.log(id, searchValue);
-    const search = await get_search_srmanager(id, searchValue);
-    // setAgreement(search.data.agreement)
-    setData(search.data);
-    console.log(search.data);
+    try {
+      let search ;
+     
+      if(type === "in-procces-ag"){
+        search = await get_search_srmanager(id, {searchValue,type:"in-procces-ag"});
+      }else if(type === "approved-ag"){
+        search = await get_search_srmanager(id, {searchValue,type:"approved-ag"});
+      }else if(type === "total-ag"){
+        search = await get_search_srmanager(id, {searchValue,type:"total-ag"});
+      }else if (type === "terminated-ag") {
+        search = await get_search_srmanager(id, {searchValue,type:"terminated-ag"});
+      }
+
+      if(search.status === 200){
+        setData(search.data);
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    
   }
 
   useEffect(() => {
-    if(type === "in-procces-ag"){
-      getData(login_srm_id);
-    }else if(type === "approved-ag"){
-      getApprovedagreements(login_srm_id)
-    }else if(type === "total-ag"){
-      get_all_total_Ag(login_srm_id)
-    }
- 
+    getData(login_srm_id);
   }, [refresh,type]);
 
   function handleSerachChange(e) {
@@ -115,7 +118,6 @@ function SrManagerListing() {
     setsearchValue(e.target.value);
   }
 
-  const navigate = useNavigate();
 
   return (
     <>
