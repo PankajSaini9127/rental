@@ -762,7 +762,7 @@ function ManagerApproval() {
                   >
                     <DataFieldStyle
                       field={"Remark"}
-                      href={agreement[ids[0]].remark}
+                      value={agreement[ids[0]].remark}
                     />
                   </Grid>
                 )}

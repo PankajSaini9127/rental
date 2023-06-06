@@ -584,7 +584,7 @@ export default function MonthalyRentView() {
                       <Grid item xs={12} container sx={{ mt: 4 }}>
                         <DataFieldStyle
                           field={"Remark"}
-                          value={agreement[ids[0]].remark}
+                          value={agreement[ids[0]].remark !== '""' && agreement[ids[0]].remark}
                         />
                       </Grid>
                     )}

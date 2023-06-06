@@ -833,9 +833,6 @@ function FinanceApproval() {
                   value={agreement.assets}
                 />
               </Grid>
-              <Grid item container xs={10} sx={{ mt: 5 }}>
-                <DataFieldStyle field={"Remark"} value={agreement.remark} />
-              </Grid>
 
               {(agreement.status === "Terminated By Operations" || agreement.status === "Approved for Termination") && (
                 <>
@@ -876,7 +873,7 @@ function FinanceApproval() {
                         />
                         <DataFieldStyle
                           field="Rent Amount"
-                          value={row.rent}
+                          value={parseFloat(row.rent).toFixed(2)}
                         />
                         <DataFieldStyle
                           field="Status"
@@ -897,7 +894,7 @@ function FinanceApproval() {
                       />
                       <DataFieldStyle
                         field="Remark"
-                        value={recovery.adjustmentAmountRemark}
+                        value={recovery.adjustmentAmountRemark  !== `'""'` && recovery.adjustmentAmountRemark } 
                       />
                     </Grid>
 
@@ -908,7 +905,7 @@ function FinanceApproval() {
                       />
                       <DataFieldStyle
                         field="Remark"
-                        value={recovery.expansesRemark}
+                        value={recovery.expansesRemark !== '""' && recovery.expansesRemark }
                       />
                     </Grid>
 
@@ -919,7 +916,7 @@ function FinanceApproval() {
                       />
                       <DataFieldStyle
                         field="Remark"
-                        value={recovery.otherRemark}
+                        value={recovery.otherRemark  !== '""' && recovery.otherRemark}
                       />
                     </Grid>
                     <Grid item xs={12} container sx={{ gap: "2rem", mt: 2 }}>

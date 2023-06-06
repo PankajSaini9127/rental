@@ -59,9 +59,11 @@ function SrManagerDashboard() {
 
   return (
     <>
+    
       <Stack sx={{ flexWrap: "noWrap", flexDirection: "row" }}>
-        <SRMHamburger />
+      <SRMHamburger />
         <Grid container sx={{ justifyContent: "center" }}>
+    
           <Grid
             item
             xs={12}

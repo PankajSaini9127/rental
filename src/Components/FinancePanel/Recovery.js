@@ -42,7 +42,9 @@ function UploadInvoice() {
 
   const [history, setHistory] = useState([]);
   const [balance, setBalance] = useState([]);
-  const navigate = useNavigate();
+
+  const  [disableSubmitBtn, setDisableSubmit] = useState(false);
+  
   const { id } = useParams();
   const theme = useTheme();
 
@@ -69,14 +71,6 @@ function UploadInvoice() {
       setHistory([]);
     }
   }
-
-  const disablePastDate = () => {
-    const today = new Date();
-    const dd = String(today.getDate() + 0).padStart(2, "0");
-    const mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-    const yyyy = today.getFullYear();
-    return yyyy + "-" + mm + "-" + dd;
-  };
 
   // const [ferror, setError] = useState(true);
   const [data, setData] = useState({
@@ -115,11 +109,13 @@ function UploadInvoice() {
 
     validate(data);
     if (validate(data)) {
+      setDisableSubmit(true)
       let res = await insertRecoveryLog(data);
 
       if (res.status === 200) {
         if (balance.balance - balance.total === parseInt(data.receivedAmount)) {
           //checking the agreement status to Terminated
+        
           let res2 = await send_to_bhu({ status: "Terminated" }, id);
          let  update_payment = await update_payment_status(id,{status:"Paid"});
           if (res2.status === 200 && update_payment.data.success) {
@@ -131,6 +127,7 @@ function UploadInvoice() {
               })
             );
             window.location.reload();
+            setDisableSubmit(false)
           }
         } else {
           console.log(balance.balance - balance.total, data.receivedAmount);
@@ -332,6 +329,7 @@ function UploadInvoice() {
                     sx={{ borderRadius: "50px", padding: "12px" }}
                     variant="contained"
                     fullWidth
+                    disabled={disableSubmitBtn ? true : false}
                   >
                     Save Payment
                   </Button>

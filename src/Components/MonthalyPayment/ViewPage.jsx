@@ -317,14 +317,6 @@ function ViewPage() {
                 </Grid>
 
                 <Grid item md={10}>
-                  {agreement[ids[0]].status === "Paid" && (
-                    <Grid container sx={{ mb: 2, mt: 4 }}>
-                      <DataFieldStyle
-                        field={"Payment Date"}
-                        value={agreement[ids[0]].paymentDate}
-                      />
-                    </Grid>
-                  )}
 
                   {(agreement[ids[0]].status === "Paid" &&  agreement[ids[0]].utr_number !== null )&& (
                     <Grid container sx={{ mb: 2 }}>
@@ -428,7 +420,7 @@ function ViewPage() {
                       <Grid item xs={12} container sx={{ mt: 4 }}>
                         <DataFieldStyle
                           field={"Remark"}
-                          value={agreement[ids[0]].remark}
+                          value={agreement[ids[0]].remark !== '""' && agreement[ids[0]].remark}
                         />
                       </Grid>
                     )}

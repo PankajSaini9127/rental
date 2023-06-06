@@ -741,7 +741,8 @@ return(
                 parms.row.status === "Sent Back From BUH Termination"||
                 parms.row.status === "Sent Back From Operations Termination"||
                 parms.row.status === "Sent Back From Finance Team Termination" ||
-                parms.row.status === "Sent Back From Finance Team")
+                parms.row.status === "Sent Back From Finance Team" ||
+                parms.row.status === "Terminated" )
             ) {
               cellClass.push("red statusCell");
             }

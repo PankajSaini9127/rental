@@ -314,7 +314,8 @@ function OperationsTable({ rows }) {
               ||parms.row.status === "Terminated By Manager"
               ||parms.row.status === "Terminated By Sr Manager"
               ||parms.row.status === "Terminated By Operations"
-              ||parms.row.status === "Approved for Termination"             
+              ||parms.row.status === "Approved for Termination" 
+              ||  parms.row.status === "Terminated"            
               )
             ) {
               cellClass.push("red statusCell");

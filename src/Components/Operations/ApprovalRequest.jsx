@@ -918,7 +918,7 @@ function ApprovalRequest() {
                         />
                         <DataFieldStyle
                           field="Rent Amount"
-                          value={row.rent}
+                          value={parseFloat(row.rent).toFixed(2)}
                         />
                         <DataFieldStyle
                           field="Status"
@@ -938,7 +938,7 @@ function ApprovalRequest() {
                         />
                         <DataFieldStyle
                           field="Remark"
-                          value={recovery.adjustmentAmountRemark}
+                          value={recovery.adjustmentAmountRemark  !== `'""'` && recovery.adjustmentAmountRemark }
                         />
                       </Grid>
 
@@ -949,7 +949,7 @@ function ApprovalRequest() {
                         />
                         <DataFieldStyle
                           field="Remark"
-                          value={recovery.expansesRemark}
+                          value={recovery.expansesRemark !== '""' && recovery.expansesRemark }
                         />
                       </Grid>
 
@@ -960,7 +960,7 @@ function ApprovalRequest() {
                         />
                         <DataFieldStyle
                           field="Remark"
-                          value={recovery.otherRemark}
+                          value={recovery.otherRemark  !== '""' && recovery.otherRemark}
                         />
                       </Grid>
                       <Grid item xs={12} container sx={{ gap: "2rem", mt: 2 }}>

@@ -966,7 +966,7 @@ function SrManagerApproval() {
                         />
                         <DataFieldStyle
                           field="Rent Amount"
-                          value={row.rent}
+                          value={parseFloat(row.rent).toFixed(2)}
                         />
                         <DataFieldStyle
                           field="Status"
@@ -988,8 +988,9 @@ function SrManagerApproval() {
                         />
                         <DataFieldStyle
                           field="Remark"
-                          value={recovery.adjustmentAmountRemark}
+                          value={recovery.adjustmentAmountRemark  !== `'""'` && recovery.adjustmentAmountRemark }
                         />
+                        {console.log(recovery.adjustmentAmountRemark)}
                       </Grid>
 
                       <Grid container sx={{ gap: "2rem", mt: 2 }}>
@@ -999,7 +1000,7 @@ function SrManagerApproval() {
                         />
                         <DataFieldStyle
                           field="Remark"
-                          value={recovery.expansesRemark}
+                          value={recovery.expansesRemark !== '""' && recovery.expansesRemark }
                         />
                       </Grid>
 
@@ -1010,7 +1011,7 @@ function SrManagerApproval() {
                         />
                         <DataFieldStyle
                           field="Remark"
-                          value={recovery.otherRemark}
+                          value={recovery.otherRemark  !== '""' && recovery.otherRemark}
                         />
                       </Grid>
                       <Grid item xs={12} container sx={{ gap: "2rem", mt: 2 }}>
